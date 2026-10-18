@@ -354,9 +354,15 @@ html{-webkit-text-size-adjust:100%}
 .nav button:hover{opacity:1}
 .nav button[aria-selected="true"]{opacity:1;background:var(--bg);color:var(--ink)}
 .nav button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
-.subnav{display:flex;gap:6px;flex-wrap:wrap;background:var(--bg);padding:8px 0 0}
+.subnav{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;background:var(--bg);padding:8px 0 0}
+.subnav::-webkit-scrollbar{display:none}
+.subnav .pill{flex:0 0 auto}
+.subnav:has(> :nth-child(5)) .pill{padding:6px 8px;font-size:13px;letter-spacing:.01em}
+.subnav:has(> :nth-child(5)){gap:4px}
+/* when the pill row is wider than the screen, the right edge fades until you reach the end */
+.subnav.scrolls:not(.atend){-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent)}
 .subnav[hidden]{display:none}
-.pill{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:6px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+.pill{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:6px 11px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
 .pill[aria-selected="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 .pill:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 header.top{box-shadow:0 2px 10px rgba(0,0,0,.12)}
@@ -491,8 +497,15 @@ details.drug[open]>summary{border-bottom:1px solid var(--line)}
 .dg-grid ul{padding-left:16px;font-size:13px;gap:2px}
 
 /* dosages: a section like the others; the study-facing doses only, math and extras behind the chips */
-.dg-tools{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
-.dg-tools .chip{min-height:32px;padding:4px 9px;font-size:12.5px;white-space:nowrap}
+.dg-tools{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:10px -28px 0 0;padding-bottom:1px}
+.dg-tools::-webkit-scrollbar{display:none}
+.dg-tools .chip{min-height:32px;padding:4px 8px;font-size:12.5px;white-space:nowrap;flex:0 0 auto}
+.dg-tools .chip.icon{padding:4px 9px}
+.dg-tools .chip.icon svg{width:17px;height:17px;display:block;fill:currentColor;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.dg-tools .chip.icon svg .w{fill:none}
+.dg-tools .chip.icon svg .s{fill:none}
+.dg-tools .chip.icon[aria-pressed="true"] svg .s{fill:currentColor}
+.dg-tools.scrolls:not(.atend){-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 34px),transparent)}
 details.drug:not([open]) .dg-tools{display:none}
 details.drug{overflow:clip}
 details.drug[open]>summary{position:sticky;top:calc(var(--hdr,48px) + env(safe-area-inset-top,0px));z-index:6;background:var(--surface);box-shadow:0 6px 14px -10px rgba(0,0,0,.35)}
@@ -788,6 +801,77 @@ body.wbopen{overflow:hidden}
 .splash.ending .splash-t{opacity:1;transform:translateY(-50%)}
 .splash.plain .splash-t{letter-spacing:.08em}
 @media (prefers-reduced-motion:reduce){.splash canvas,.splash-t{transition:none}}
+
+/* lessons: a path of drugs, each with a five-segment ring; the round itself takes the whole screen */
+.lhead h2{margin:4px 0 6px;font-family:var(--display);font-size:30px;font-weight:700;line-height:1}
+.lstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.lstats .k{background:var(--surface);border:1px solid var(--line)}
+.lstats b{font-family:var(--display);font-size:24px;font-weight:700;line-height:1.1}
+.lcontinue{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--amber-soft);border:1px solid var(--amber);border-radius:10px;padding:12px 14px;margin:0 0 12px}
+.lcontinue b{display:block;font-family:var(--display);font-size:20px;font-weight:600;line-height:1.1}
+.lcontinue .lns,.lnode .lns{font-size:13px;color:var(--muted);display:block}
+.lfilter{display:flex;gap:8px;align-items:center;margin:10px 0 12px;flex-wrap:wrap}
+.lfilter input{flex:1 1 140px;min-width:0;font:inherit;font-size:14px;padding:8px 12px;min-height:36px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink)}
+.lpath{display:grid;gap:10px}
+.lnode{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.lnode.going{border-color:var(--teal)}
+.lnode.done{border-color:var(--amber)}
+.lnode .lnt{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;text-align:left;min-width:0;cursor:pointer}
+.lnode b{font-family:var(--display);font-size:19px;font-weight:600;display:block;line-height:1.1}
+.lnode .btn{padding:8px 14px;min-height:40px;font-size:14px}
+.ring .off{stroke:var(--line)} .ring .on{stroke:var(--teal)} .ring.done .on{stroke:var(--amber)}
+.ring .rn{fill:var(--ink);font-family:var(--display);font-weight:700} .ring.done .rn{fill:var(--amber)}
+.llv{grid-column:1/-1;display:grid;gap:6px;border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+.llvb{appearance:none;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;text-align:left;cursor:pointer}
+.llvb b{font-size:15px;font-family:var(--body);font-weight:600;display:block;line-height:1.2} .llvb small{display:block;color:var(--muted);font-size:12px}
+.llvb .lnum{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;background:var(--surface-2);color:var(--muted)}
+.llvb.done .lnum{background:var(--teal);color:var(--teal-ink)} .llvb.next .lnum{background:var(--amber);color:#1a1208}
+.llvb .lgo{font-family:var(--display);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px;color:var(--teal)}
+.llvb:disabled{opacity:.5;cursor:default}
+body.lessonopen{overflow:hidden}
+.lesson{position:fixed;inset:0;z-index:58;background:var(--bg);display:grid;grid-template-rows:auto 1fr auto}
+.lesson[hidden]{display:none}
+.ltop{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px}
+.lx{appearance:none;border:0;background:none;font-size:30px;line-height:1;color:var(--muted);width:40px;height:40px;cursor:pointer;border-radius:50%}
+.lx:active{background:var(--surface-2)}
+.lbar{flex:1;height:14px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.lbar i{display:block;height:100%;width:0;background:var(--good);border-radius:999px;transition:width .4s cubic-bezier(.2,.7,.2,1)}
+.lxp{font-family:var(--display);font-weight:700;color:var(--amber);min-width:56px;text-align:right;font-size:16px}
+.lbody{overflow:auto;padding:6px 16px 28px;-webkit-overflow-scrolling:touch}
+.lq .eyebrow{color:var(--teal)}
+.lprompt{font-family:var(--display);font-size:25px;line-height:1.12;margin:6px 0 18px;font-weight:600}
+.lopts{display:grid;gap:10px}
+.lopt{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.35;transition:background .12s,border-color .12s,transform .08s}
+.lopt:active{transform:translateY(2px);border-bottom-width:2px;margin-bottom:2px}
+.lopt .ln{flex:0 0 26px;height:26px;border:1.5px solid var(--line);border-radius:6px;display:grid;place-items:center;font-family:var(--display);font-size:13px;color:var(--muted)}
+.lopt.on{border-color:var(--teal);background:var(--surface-2)} .lopt.on .ln{border-color:var(--teal);color:var(--teal)}
+.lopt.good{border-color:var(--good);background:var(--good-soft)} .lopt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.lopt.done{opacity:.4;border-style:dashed;border-bottom-width:2px}
+.lopt:disabled{cursor:default}
+.ltf{grid-template-columns:1fr 1fr} .ltf .lopt{justify-content:center;font-family:var(--display);font-size:22px;font-weight:600;padding:18px}
+.ltype{display:flex;gap:10px;align-items:center}
+.ltype input{flex:1;min-width:0;font-family:var(--mono);font-size:24px;font-weight:600;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.ltype input:focus{outline:none;border-color:var(--teal)} .ltype input.good{border-color:var(--good);background:var(--good-soft)} .ltype input.bad{border-color:var(--bad);background:var(--bad-soft)}
+.ltype .unit{font-family:var(--mono);font-weight:600;font-size:17px;white-space:nowrap}
+.lmatch{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lcol{display:grid;gap:10px;align-content:start} .lcol .lopt{min-height:60px;align-items:center;font-size:14px;line-height:1.3}
+.lbuilt{min-height:60px;border-bottom:2px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;padding:6px 0 10px;margin-bottom:18px;border-radius:0}
+.lbuilt.good{border-color:var(--good)} .lbuilt.bad{border-color:var(--bad)}
+.lbank{display:flex;flex-wrap:wrap;gap:8px}
+.ltile{appearance:none;font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:10px;padding:8px 12px;cursor:pointer;line-height:1.3}
+.ltile.ghost{visibility:hidden}
+.lfoot{border-top:1px solid var(--line);padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:10px;background:var(--surface);transition:background .2s}
+.lfoot.good{background:var(--good-soft);border-color:var(--good)} .lfoot.bad{background:var(--bad-soft);border-color:var(--bad)}
+.lmsg:empty{display:none} .lmsg{display:grid;gap:4px;font-size:14px;line-height:1.4}
+.lmsg b:first-child{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.1} .lfoot.good .lmsg b:first-child{color:var(--good)} .lfoot.bad .lmsg b:first-child{color:var(--bad)}
+.lmsg .lans{font-family:var(--mono);font-size:14px} .lmsg .lexpl{color:var(--muted)} .lmsg .note{font-size:12px}
+.lbtns{display:flex;gap:10px} .lbtns .btn{flex:1} .lbtns .btn[hidden]{display:none}
+.lend{text-align:center;padding:26px 0 10px;display:grid;justify-items:center;gap:6px}
+.lend .big{font-family:var(--display);font-size:38px;font-weight:700;line-height:1.05}
+.lend .lsum{margin:0;color:var(--muted);max-width:32ch}
+.lend .lstats{width:100%;margin-top:14px}
+.lperfect{font-family:var(--display);font-size:20px;font-weight:700;color:var(--amber);margin:8px 0 0}
+@media (min-width:700px){.lesson{grid-template-columns:minmax(0,720px);justify-content:center}.lesson>*{width:100%}}
 </style>
 </head>
 <body>
@@ -846,12 +930,13 @@ body.wbopen{overflow:hidden}
     <div class="statcards"><div class="k"><b class="num" id="t-due">0</b><span>cards due</span></div><div class="k"><b class="num" id="t-new">0</b><span>cards never seen</span></div><div class="k"><b class="num" id="t-overall">0</b><span>quiz, last 20 each</span></div></div>
   </div>
   <div class="plan" id="today-plan">
-    <div class="planhead"><div><span class="eyebrow">Today's session</span><h2>Four things, about ten minutes</h2></div><div class="planprog"><b id="t-prog">0 / 4</b><button type="button" class="btn amber" id="t-run">Run what's left</button></div></div>
+    <div class="planhead"><div><span class="eyebrow">Today's session</span><h2>Five things, about twelve minutes</h2></div><div class="planprog"><b id="t-prog">0 / 5</b><button type="button" class="btn amber" id="t-run">Run what's left</button></div></div>
     <div class="plancards">
       <button type="button" class="pcard" id="t-flash"><span class="pnum">1</span><span class="ptitle">Flash cards</span><span class="tsub"></span><span class="pdesc">Cold numbers, doses and rules, spaced so each one comes back right before you'd lose it.</span></button>
       <button type="button" class="pcard" id="t-quiz"><span class="pnum">2</span><span class="ptitle">Weak-spot quiz</span><span class="tsub"></span><span class="pdesc">Five timed questions drawn from wherever you've been missing.</span></button>
       <button type="button" class="pcard" id="t-mcq"><span class="pnum">3</span><span class="ptitle">Drug check</span><span class="tsub"></span><span class="pdesc">Three registry-style questions from the drug profiles.</span></button>
       <button type="button" class="pcard" id="t-scen"><span class="pnum">4</span><span class="ptitle">Scenario task</span><span class="tsub"></span><span class="pdesc">One casualty, and at least one step answered.</span></button>
+      <button type="button" class="pcard" id="t-lesson"><span class="pnum">5</span><span class="ptitle">Drug lesson</span><span class="tsub"></span><span class="pdesc">One short round on the drug you are learning: pick, type, match, build the line.</span></button>
     </div>
     <button type="button" class="btn alt" id="t-install" hidden>Install on this phone</button>
   </div>
@@ -1055,6 +1140,39 @@ body.wbopen{overflow:hidden}
   <div class="drugchips" id="tk-cats"></div>
   <div class="tricks" id="tricks"></div>
 </section>
+<!-- ================= LESSONS: learn one drug at a time, in short rounds ================= -->
+<section class="panel" id="panel-lesson" hidden>
+  <div class="lhead">
+    <span class="eyebrow">Lessons</span>
+    <h2>Learn a drug</h2>
+    <p class="intro">Five short lessons per drug: identify it, know when it is used, learn the adult doses, then the pediatric doses and timing, then a checkpoint. Each round is a handful of quick exercises. Miss one and it comes back before the round ends.</p>
+  </div>
+  <div class="lstats">
+    <div class="k"><span class="eyebrow">XP today</span><b class="num" id="ls-xp">0</b></div>
+    <div class="k"><span class="eyebrow">Day streak</span><b class="num" id="ls-streak">0</b></div>
+    <div class="k"><span class="eyebrow">Mastered</span><b class="num" id="ls-done">0</b></div>
+  </div>
+  <div class="lcontinue" id="l-continue" hidden></div>
+  <div class="lfilter">
+    <button type="button" class="chip" id="lf-study" aria-pressed="true">Study set</button>
+    <button type="button" class="chip" id="lf-all" aria-pressed="false">All drugs</button>
+    <input type="search" id="lf-q" placeholder="Find a drug" aria-label="Find a drug" autocomplete="off">
+  </div>
+  <div class="lpath" id="lpath"></div>
+</section>
+<!-- lesson runner: full screen while a round is open -->
+<div class="lesson" id="lesson" hidden aria-modal="true" role="dialog" aria-label="Lesson">
+  <div class="ltop">
+    <button type="button" class="lx" id="l-close" aria-label="Close lesson">&times;</button>
+    <div class="lbar" aria-hidden="true"><i id="l-bar"></i></div>
+    <span class="lxp num" id="l-xp">0 XP</span>
+  </div>
+  <div class="lbody" id="l-body"></div>
+  <div class="lfoot" id="l-foot">
+    <div class="lmsg" id="l-msg"></div>
+    <div class="lbtns"><button type="button" class="btn alt" id="l-skip">Skip</button><button type="button" class="btn amber" id="l-check" disabled>Check</button></div>
+  </div>
+</div>
 <!-- ================= QUIZ ================= -->
 <section class="panel" id="panel-quiz" hidden>
   <div class="quizwrap">
@@ -1250,8 +1368,8 @@ body.wbopen{overflow:hidden}
     if(SET.sound){ try{ audio=audio||new (window.AudioContext||window.webkitAudioContext)(); const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=ok?880:220; g.gain.value=0.05; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(ok?0.08:0.18)); }catch(e){} }
   }
   // two-level navigation
-  const NAV={today:["today"],learn:["methods","rules","ref","tricks"],drill:["quiz","scen","exam","tests"],drugs:["drugs"],more:["progress","proctor","settings"]};
-  const LABEL={today:"Today",methods:"Methods",rules:"Rules",ref:"Reference",tricks:"Tricks",quiz:"Quiz",scen:"Scenarios",exam:"Exam",tests:"Tests",drugs:"Drugs",progress:"Progress",proctor:"Proctor",settings:"Settings"};
+  const NAV={today:["today"],learn:["methods","rules","ref","tricks"],drill:["lesson","quiz","scen","exam","tests"],drugs:["drugs"],more:["progress","proctor","settings"]};
+  const LABEL={today:"Today",methods:"Methods",rules:"Rules",ref:"Reference",tricks:"Tricks",lesson:"Lessons",quiz:"Quiz",scen:"Scenarios",exam:"Exam",tests:"Tests",drugs:"Drugs",progress:"Progress",proctor:"Proctor",settings:"Settings"};
   const ALLP=Object.values(NAV).flat();
   function groupOf(id){ return Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
   let curPanel=null;
@@ -1261,7 +1379,7 @@ body.wbopen{overflow:hidden}
   // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
-    const SEL="details.drug,details.trick,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*";
+    const SEL="details.drug,details.trick,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*,.lnode,.lstats .k,.lcontinue";
     // enter when the block crosses a line 12% above the bottom edge; leave only once it is fully off screen, so nothing flickers at the line
     const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
     const out=new IntersectionObserver(es=>{ es.forEach(e=>{ if(!e.isIntersecting&&e.boundingClientRect.height>0) e.target.classList.remove("in"); }); },{rootMargin:"60px 0px 60px 0px",threshold:0});
@@ -1275,7 +1393,7 @@ body.wbopen{overflow:hidden}
   function showPanel(id){
     if(!ALLP.includes(id)) id="today"; const g=groupOf(id);
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
-    const sub=$("subnav"); const items=NAV[g]; sub.hidden=items.length<2; sub.innerHTML=items.map(p=>`<button type="button" class="pill" data-p="${p}" aria-selected="${p===id?"true":"false"}">${LABEL[p]}</button>`).join("");
+    const sub=$("subnav"); const items=NAV[g]; sub.hidden=items.length<2; sub.innerHTML=items.map(p=>`<button type="button" class="pill" data-p="${p}" aria-selected="${p===id?"true":"false"}">${LABEL[p]}</button>`).join(""); (window.requestAnimationFrame||setTimeout)(()=>{ const over=sub.scrollWidth>sub.clientWidth+2; sub.classList.toggle("scrolls",over); sub.classList.toggle("atend",!over||sub.scrollLeft+sub.clientWidth>=sub.scrollWidth-2); const on=sub.querySelector('.pill[aria-selected="true"]'); if(on&&over) on.scrollIntoView({inline:"nearest",block:"nearest"}); });
     ALLP.forEach(p=>{ const el=$("panel-"+p); if(!el) return; const was=el.hidden; el.hidden=p!==id; if(p===id&&was){ el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); } });
     replayCascade(document.getElementById("panel-"+id));
     curPanel=id; store.set("mm-panel",id); document.dispatchEvent(new CustomEvent("panel",{detail:id})); try{ history.replaceState(null,"","#"+id); }catch(e){} window.scrollTo({top:0,behavior:"instant"});
@@ -1283,9 +1401,10 @@ body.wbopen{overflow:hidden}
   }
   document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(NAV[b.dataset.g][0])));
   $("subnav").addEventListener("click",e=>{ const b=e.target.closest(".pill"); if(b) showPanel(b.dataset.p); });
+  $("subnav").addEventListener("scroll",()=>{ const sub=$("subnav"); sub.classList.toggle("atend",sub.scrollLeft+sub.clientWidth>=sub.scrollWidth-2); },{passive:true});
   // swipe between top-level groups on touch screens
   (function swipe(){ let x0=null,y0=null; const groups=Object.keys(NAV); const main=document.querySelector("main");
-    main.addEventListener("touchstart",e=>{ if(e.target.closest("input,select,textarea,.tblwrap,.drawer,.exbar")) return; x0=e.touches[0].clientX; y0=e.touches[0].clientY; },{passive:true});
+    main.addEventListener("touchstart",e=>{ if(e.target.closest("input,select,textarea,.tblwrap,.drawer,.exbar,.lesson,.wb")) return; x0=e.touches[0].clientX; y0=e.touches[0].clientY; },{passive:true});
     main.addEventListener("touchend",e=>{ if(x0==null) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; x0=null; if(Math.abs(dx)>80&&Math.abs(dy)<50){ const gi=groups.indexOf(groupOf(curPanel)); const ni=dx<0?gi+1:gi-1; if(ni>=0&&ni<groups.length) showPanel(NAV[groups[ni]][0]); } },{passive:true}); })();
   document.addEventListener("keydown",e=>{ if(e.key==="/"&&!e.target.closest("input,textarea,select")){ e.preventDefault(); $("calc-open").click(); } });
   // ---------- short rules ----------
@@ -1767,6 +1886,7 @@ body.wbopen{overflow:hidden}
     const dash=t=>tight(t);
     const shortL=l=>{ for(const [re,rep] of SHORT) l=l.replace(re,rep); return l; };
     const shortT=t=>{ for(const [re,rep] of TSHORT) t=t.replace(re,rep); return t; };
+    window.DUI={shortL,shortT,RT_LABEL,doseLine};
     const RT_SHORT={"IV":"IV","IO":"IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"Oral","Oral, chewed":"Oral","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
     const isTiming=t=>/^(Peak|Duration)\b/i.test(t);
     const shortTime=v=>v.replace(/\bminutes?\b/g,"min").replace(/\bseconds?\b/g,"s").replace(/\bhours?\b/g,"hr");
@@ -1795,7 +1915,7 @@ body.wbopen{overflow:hidden}
           <div class="dg-main"><div class="dg-name"><h3>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}<span class="studytag">Study set</span></div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${tight(d.quick.dose.replace(/\.$/,""))}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
-        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
+        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen icon" data-listen="${d.id}" aria-label="Listen to this card" title="Listen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7"/><path class="w" d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><button type="button" class="chip icon" data-study="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="In my study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="s" d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button><button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
         <div class="dg-body">
           <div class="how"><span class="eyebrow">How it works</span>${howBlock(d)}</div>
           <div class="dg-grid">
@@ -1841,7 +1961,7 @@ body.wbopen{overflow:hidden}
     const applyLayers=()=>{ markTrees(); const m=!!store.get("mm-showmath",false), i=!!store.get("mm-showinfo",false); root.querySelectorAll("details.drug").forEach(x=>{ x.classList.toggle("showmath",m); x.classList.toggle("showinfo",i); }); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",m?"true":"false")); root.querySelectorAll("[data-info]").forEach(x=>x.setAttribute("aria-pressed",i?"true":"false")); };
     function render(){
       const list=visible();
-      root.innerHTML=list.length?list.map(card).join(""):`<p class="note">${studyOnly?"Your study set is empty. Open a drug and tap Study.":"No drug matches."}</p>`;
+      root.innerHTML=list.length?list.map(card).join(""):`<p class="note">${studyOnly?"Your study set is empty. Open a drug and tap the star.":"No drug matches."}</p>`;
       $("drug-count").textContent=list.length+" of "+DRUGS.length;
       setStudyBtn();
       renderDoses();
@@ -1849,6 +1969,7 @@ body.wbopen{overflow:hidden}
       // the tool chips live inside the summary so they stay pinned; their clicks must not toggle the card
       root.querySelectorAll(".dg-tools").forEach(t=>t.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; e.preventDefault(); e.stopPropagation();
         if(b.hasAttribute("data-math")){ store.set("mm-showmath",!store.get("mm-showmath",false)); applyLayers(); }
+        else if(b.hasAttribute("data-lesson")){ if(window.openLesson) openLesson(b.dataset.lesson); }
         else if(b.hasAttribute("data-info")){ store.set("mm-showinfo",!store.get("mm-showinfo",false)); applyLayers(); }
         else if(b.dataset.listen){ if(window.ttsStart) ttsStart([b.dataset.listen],0); }
         else if(b.dataset.study){ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); } }));
@@ -1857,8 +1978,12 @@ body.wbopen{overflow:hidden}
       root.querySelectorAll("details.drug").forEach(d=>d.addEventListener("toggle",()=>{
         if(!d.open){ if(d.dataset.auto){ delete d.dataset.auto; return; } requestAnimationFrame(()=>scrollToCard(d)); return; }
         root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o!==d){ o.dataset.auto="1"; o.open=false; } }); const id=d.id.replace("drug-",""); if(!seenD[id]){ seenD[id]=Date.now(); store.set("mm-seenDrugs",seenD); document.dispatchEvent(new CustomEvent("drugseen")); }
-        requestAnimationFrame(()=>scrollToCard(d));
+        requestAnimationFrame(()=>{ scrollToCard(d); fitTools(d); });
       }));
+      // the tool chips sit on one line; when they are wider than the card the row scrolls and its right edge fades until the end
+      function fitTools(d){ const t=d.querySelector(".dg-tools"); if(!t) return; const over=t.scrollWidth>t.clientWidth+2; t.classList.toggle("scrolls",over); t.classList.toggle("atend",!over||t.scrollLeft+t.clientWidth>=t.scrollWidth-2); }
+      root.addEventListener("scroll",e=>{ const t=e.target; if(t.classList&&t.classList.contains("dg-tools")) t.classList.toggle("atend",t.scrollLeft+t.clientWidth>=t.scrollWidth-2); },true);
+      window.addEventListener("resize",()=>root.querySelectorAll("details.drug[open]").forEach(fitTools));
     }
     q.addEventListener("input",render); fil.addEventListener("change",render);
     studyBtn.addEventListener("click",()=>{ if(!study.size){ studyBtn.textContent="Study set is empty"; setTimeout(setStudyBtn,1500); return; } studyOnly=!studyOnly; render(); });
@@ -2681,24 +2806,209 @@ body.wbopen{overflow:hidden}
   let days=store.get("mm-days",[]);
   const today=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
   function markActive(){ const t=today(); if(!days.includes(t)){ days.push(t); days=days.slice(-400); store.set("mm-days",days); renderToday(); } }
+  window.markActive=markActive;
   function dayStreak(){ let n=0; const d=new Date(); for(;;){ const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); if(days.includes(k)){ n++; d.setDate(d.getDate()-1); } else if(n===0&&k===today()){ d.setDate(d.getDate()-1); } else break; } return n; }
-  let sess=store.get("mm-sess",{}); if(sess.d!==today()) sess={d:today(),flash:false,quiz:false,mcq:false,scen:false};
+  window.dayStreak=dayStreak;
+  let sess=store.get("mm-sess",{}); if(sess.d!==today()) sess={d:today(),flash:false,quiz:false,mcq:false,scen:false,lesson:false};
   function saveSess(){ store.set("mm-sess",sess); renderToday(); }
   function renderToday(){
     const {due,fresh}=dueCards(); $("t-streak").textContent=dayStreak(); $("t-due").textContent=due.length; $("t-new").textContent=fresh.length;
     const o=typeof overall==="function"?overall():{r:null}; $("t-overall").textContent=o.r==null?"no rounds yet":Math.round(o.r*100)+"%";
-    [["flash","Flash cards",`${Math.min(due.length||3,8)} due`],["quiz","Weak-spot quiz","5 questions"],["mcq","Drug check","3 questions"],["scen","One scenario task",""]].forEach(([k,label,sub])=>{ const el=$("t-"+k); el.classList.toggle("done",!!sess[k]); el.querySelector(".tsub").textContent=sub; });
-    const done=["flash","quiz","mcq","scen"].filter(k=>sess[k]).length; $("t-prog").textContent=`${done} / 4`; $("t-prog").parentElement.classList.toggle("alldone",done===4);
+    [["flash","Flash cards",`${Math.min(due.length||3,8)} due`],["quiz","Weak-spot quiz","5 questions"],["mcq","Drug check","3 questions"],["scen","One scenario task",""],["lesson","Drug lesson","one round"]].forEach(([k,label,sub])=>{ const el=$("t-"+k); el.classList.toggle("done",!!sess[k]); el.querySelector(".tsub").textContent=sub; });
+    const done=["flash","quiz","mcq","scen","lesson"].filter(k=>sess[k]).length; $("t-prog").textContent=`${done} / 5`; $("t-prog").parentElement.classList.toggle("alldone",done===5);
     const last=days.slice(-14); const cal=[]; for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); cal.push(`<i class="${days.includes(k)?"on":""}" title="${k}"></i>`); } $("t-cal").innerHTML=cal.join("");
   }
   const doFlash=cb=>{ const {due}=dueCards(); runFlash(Math.min(Math.max(due.length,3),8),()=>{ sess.flash=true; markActive(); saveSess(); cb&&cb(); }); };
   const doQuiz=cb=>{ window.onRoundDone=()=>{ sess.quiz=true; saveSess(); showPanel("today"); cb&&cb(); }; startQuiz(5); };
   const doMCQ=cb=>{ runMiniMCQ(3,()=>{ sess.mcq=true; markActive(); saveSess(); showPanel("today"); cb&&cb(); },1); };
   const doScen=cb=>{ window.onScenTask=()=>{ sess.scen=true; markActive(); saveSess(); window.onScenTask=null; cb&&cb(); }; showPanel("scen"); const all=[...document.querySelectorAll("details.scen:not(.mine)")]; if(all.length){ all.forEach(d=>d.open=false); const d=all[Math.floor(Math.random()*all.length)]; d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } };
+  const doLesson=cb=>{ if(!window.nextLesson){ cb&&cb(); return; } window.onLessonDone=()=>{ sess.lesson=true; saveSess(); cb&&cb(); }; nextLesson(); };
+  document.addEventListener("lesson",()=>{ if(!sess.lesson){ sess.lesson=true; saveSess(); } });
+  $("t-lesson").addEventListener("click",()=>doLesson());
   $("t-flash").addEventListener("click",()=>doFlash()); $("t-quiz").addEventListener("click",()=>doQuiz()); $("t-mcq").addEventListener("click",()=>doMCQ()); $("t-scen").addEventListener("click",()=>doScen());
-  $("t-run").addEventListener("click",()=>{ const chain=[]; if(!sess.flash) chain.push(doFlash); if(!sess.quiz) chain.push(doQuiz); if(!sess.mcq) chain.push(doMCQ); if(!sess.scen) chain.push(doScen); const run=()=>{ const f=chain.shift(); if(f) f(run); else showPanel("today"); }; run(); });
+  $("t-run").addEventListener("click",()=>{ const chain=[]; if(!sess.flash) chain.push(doFlash); if(!sess.quiz) chain.push(doQuiz); if(!sess.mcq) chain.push(doMCQ); if(!sess.scen) chain.push(doScen); if(!sess.lesson) chain.push(doLesson); const run=()=>{ const f=chain.shift(); if(f) f(run); else showPanel("today"); }; run(); });
   document.addEventListener("study",renderToday); document.addEventListener("settings",renderToday);
   renderToday();
+  // ---------- lessons: learn one drug the way a language app teaches a word; short rounds, instant feedback, misses come back ----------
+  (function lessons(){
+    const root=$("lpath"); if(!root||typeof DRUGS==="undefined"||!window.DUI) return;
+    const LEVELS=[
+      {k:"identify",n:"Identify it",d:"Class, trade names, how it works"},
+      {k:"uses",n:"When to use it",d:"Indications, cautions, routes"},
+      {k:"adult",n:"Adult doses",d:"Every adult dose line, typed from memory"},
+      {k:"peds",n:"Peds and timing",d:"Pediatric doses, onset, how fast it goes in"},
+      {k:"check",n:"Checkpoint",d:"Everything mixed. 80% first try to pass"}];
+    const KEY="mm-dl", PASS=.8;
+    let S=store.get(KEY,{drugs:{},xp:{}}); if(!S.drugs) S.drugs={}; if(!S.xp) S.xp={};
+    const save=()=>store.set(KEY,S);
+    const dayKey=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+    const prog=id=>S.drugs[id]||(S.drugs[id]={lvl:0,xp:0,last:0});
+    const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+    const pick=a=>a[Math.floor(Math.random()*a.length)];
+    const uniq=a=>{ const seen=new Set(), out=[]; a.forEach(x=>{ if(x==null||x==="") return; const k=String(x).toLowerCase(); if(!seen.has(k)){ seen.add(k); out.push(x); } }); return out; };
+    const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+    const lc=s=>String(s).charAt(0).toLowerCase()+String(s).slice(1);
+    const short=d=>d.name.replace(/\s*\(.*\)/,"");
+    const SUF={perkg:"/kg",infkg:"/kg/min",infkghr:"/kg/hr",infmin:"/min",infhr:"/hr",fixed:""};
+    const rng=(lo,hi)=>lo===hi?fmt(lo,3):fmt(lo,3)+" to "+fmt(hi,3);
+    const unitOf=ds=>ds.unit+(SUF[ds.kind]||"");
+    const dstr=ds=>tight(rng(ds.lo,ds.hi)+" "+unitOf(ds));
+    const rt=ds=>DUI.RT_LABEL[ds.route||"IV/IO"]||ds.route||"IV / IO";
+    const use=ds=>DUI.shortL(ds.l);
+    const when=ds=>ds.t?tight(DUI.shortT(ds.t)):"";
+    const shortTime=v=>String(v).replace(/\bminutes?\b/g,"min").replace(/\bseconds?\b/g,"s").replace(/\bhours?\b/g,"hr");
+    const numDoses=d=>(d.doses||[]).filter(x=>x.kind!=="text"&&x.kind!=null);
+    const adultD=d=>numDoses(d).filter(x=>x.pop==="adult"), pedsD=d=>numDoses(d).filter(x=>x.pop==="peds");
+    const others=d=>DRUGS.filter(x=>x.id!==d.id);
+    const line=(d,ds)=>`${use(ds)}: ${dstr(ds)} ${rt(ds)}${ds.t?", "+when(ds):""}${ds.max&&!/\bmax\b/i.test(ds.t||"")?", max "+tight(fmt(ds.max,3)+" "+ds.unit):""}`;
+    const scaleWrong=(ds,f)=>{ f=f||pick([10,.1,2,.5]); return tight(rng(ds.lo*f,ds.hi*f)+" "+unitOf(ds)); };
+    // n distinct entries of field f from other drugs, never one the drug itself has
+    const foreign=(d,f,n,own)=>{ const mine=new Set((own||d[f]||[]).map(x=>String(x).toLowerCase())); return uniq(shuffle(others(d)).flatMap(o=>o[f]||[]).filter(x=>!mine.has(String(x).toLowerCase()))).slice(0,n); };
+    const foreignQ=(d,k,n)=>uniq(shuffle(others(d)).map(o=>o.quick&&o.quick[k]).filter(x=>x&&x!==d.quick[k])).slice(0,n);
+    const foreignDose=(d,ds,n)=>uniq(shuffle(others(d)).flatMap(o=>numDoses(o)).filter(x=>x.unit===ds.unit&&x.kind===ds.kind).map(dstr).filter(x=>x!==dstr(ds))).slice(0,n);
+
+    // ----- exercise factories; each returns null when the data cannot support it -----
+    const mc=(prompt,ok,wrongs,expl,tag)=>{ wrongs=uniq(wrongs).filter(w=>String(w).toLowerCase()!==String(ok).toLowerCase()).slice(0,3); if(!ok||wrongs.length<2) return null; return {type:"mc",tag:tag||"Pick one",prompt,options:shuffle([{t:ok,ok:true}].concat(wrongs.map(t=>({t,ok:false})))),answer:ok,expl}; };
+    const sel=(prompt,oks,wrongs,expl)=>{ oks=uniq(oks); wrongs=uniq(wrongs).filter(w=>!oks.some(o=>String(o).toLowerCase()===String(w).toLowerCase())).slice(0,4); if(!oks.length||wrongs.length<2) return null; return {type:"select",tag:"Tap all that apply",prompt,options:shuffle(oks.map(t=>({t,ok:true})).concat(wrongs.map(t=>({t,ok:false})))),answer:oks.join("; "),expl}; };
+    const tf=(stmt,ok,expl)=>({type:"tf",tag:"True or false",prompt:stmt,ok,answer:ok?"True":"False",expl});
+    const typ=(prompt,unit,lo,hi,expl)=>({type:"type",tag:"Type the dose",prompt,unit,lo,hi,answer:tight(rng(lo,hi)+" "+unit),expl});
+    const match=(prompt,pairs)=>{ const seen=new Set(), out=[]; pairs.forEach(p=>{ if(!p||!p[0]||!p[1]) return; const k=String(p[1]).toLowerCase(), l=String(p[0]).toLowerCase(); if(seen.has("r"+k)||seen.has("l"+l)) return; seen.add("r"+k); seen.add("l"+l); out.push(p); }); if(out.length<3) return null; return {type:"match",tag:"Match the pairs",prompt,pairs:out.slice(0,5),answer:out.map(p=>p[0]+" = "+p[1]).join("; "),expl:""}; };
+    const tiles=(prompt,answer,distract,expl)=>{ answer=answer.filter(Boolean); const bank=uniq(answer.concat(distract)); if(answer.length<3||bank.length<answer.length+1) return null; return {type:"tiles",tag:"Build the line",prompt,seq:answer,bank:shuffle(bank),answer:answer.join(" \u00b7 "),expl}; };
+
+    // ----- level generators -----
+    const G={};
+    G.identify=d=>{ const n=short(d), ex=[];
+      ex.push(mc(`What class of drug is ${n}?`,d.cls[0],foreign(d,"cls",3),`${n}: ${d.cls.join(", ")}.`));
+      if(d.brands&&d.brands.length) ex.push(mc(`Which of these is a trade name for ${n}?`,pick(d.brands),foreign(d,"brands",3),`${n} is sold as ${d.brands.join(", ")}.`));
+      ex.push(mc(`How does ${n} work?`,d.quick.moa,foreignQ(d,"moa",3),d.quick.moa,"Mechanism"));
+      const wc=foreign(d,"cls",1)[0]; if(wc) ex.push(Math.random()<.5?tf(`${n} is a ${lc(d.cls[0])}.`,true,`${n}: ${d.cls.join(", ")}.`):tf(`${n} is a ${lc(wc)}.`,false,`${n} is a ${lc(d.cls[0])}.`));
+      ex.push(match("Match each drug to its class",[[n,d.cls[0]]].concat(shuffle(others(d)).map(o=>[short(o),o.cls[0]]))));
+      const adv=(d.adverse||[]).filter(a=>!/^none/i.test(a)); if(adv.length) ex.push(mc(`Which is an adverse effect of ${n}?`,pick(adv),foreign(d,"adverse",3,adv),`${n} adverse effects: ${adv.join(", ")}.`,"Adverse effects"));
+      if(d.cls.length>1) ex.push(sel(`Tap every class ${n} belongs to`,d.cls.slice(0,3),foreign(d,"cls",3),`${n}: ${d.cls.join(", ")}.`));
+      const wm=foreignQ(d,"moa",1)[0]; if(wm) ex.push(tf(`${n}: ${lc(wm)}`,false,`That is another drug. ${n}: ${lc(d.quick.moa)}`));
+      return ex.filter(Boolean); };
+    G.uses=d=>{ const n=short(d), ex=[];
+      ex.push(sel(`Tap everything ${n} is given for`,shuffle(d.ind).slice(0,3),foreign(d,"ind",4),`${n}: ${d.ind.join("; ")}.`));
+      if(d.contra&&d.contra.length) ex.push(mc(`Which is a contraindication for ${n}?`,pick(d.contra),foreign(d,"contra",3),`${n} contraindications: ${d.contra.join("; ")}.`,"Cautions"));
+      ex.push(mc(`Key consideration for ${n}?`,d.quick.key,foreignQ(d,"key",3),d.quick.key,"Key consideration"));
+      const wk=foreignQ(d,"key",1)[0]; ex.push(Math.random()<.5||!wk?tf(`${n}: ${d.quick.key}`,true,d.quick.key):tf(`${n}: ${wk}`,false,`That belongs to another drug. ${n}: ${d.quick.key}`));
+      const rts=uniq(numDoses(d).map(rt)); const wrongR=shuffle(uniq(Object.values(DUI.RT_LABEL)).filter(r=>!rts.includes(r))).slice(0,3); if(rts.length) ex.push(mc(`Which route is ${n} given by?`,pick(rts),wrongR,`${n} routes: ${rts.join(", ")}.`,"Routes"));
+      ex.push(match("Match each indication to its drug",[[pick(d.ind),n]].concat(shuffle(others(d)).map(o=>[pick(o.ind),short(o)]))));
+      ex.push(mc(`${n} is indicated for which of these?`,pick(d.ind),foreign(d,"ind",3),`${n}: ${d.ind.join("; ")}.`,"Indications"));
+      if(d.contra&&d.contra.length>1) ex.push(sel(`Tap every contraindication for ${n}`,shuffle(d.contra).slice(0,3),foreign(d,"contra",3),`${n}: ${d.contra.join("; ")}.`));
+      return ex.filter(Boolean); };
+    const doseSet=(d,rows,pop)=>{ const n=short(d), ex=[]; if(!rows.length) return ex;
+      rows.slice(0,4).forEach(ds=>ex.push(typ(`${n}, ${pop} ${rt(ds)}, ${lc(use(ds))}. What is the dose?`,unitOf(ds),ds.lo,ds.hi,line(d,ds))));
+      if(rows.length>=3) ex.push(match(`${n}, ${pop}: match each use to its dose`,rows.map(ds=>[use(ds)+" ("+rt(ds)+")",dstr(ds)])));
+      else ex.push(match(`Match each ${pop} dose to its drug and use`,[[n+": "+use(rows[0]),dstr(rows[0])]].concat(shuffle(others(d)).map(o=>{ const r=(pop==="adult"?adultD(o):pedsD(o))[0]; return r?[short(o)+": "+use(r),dstr(r)]:null; }))));
+      const t1=pick(rows); ex.push(tiles(`Build the ${pop} dose line for ${n}: use, dose, route${t1.t?", timing":""}`,[use(t1),dstr(t1),rt(t1)].concat(t1.t?[when(t1)]:[]),uniq(rows.filter(x=>x!==t1).flatMap(x=>[dstr(x),rt(x),when(x)]).concat([scaleWrong(t1)],foreignDose(d,t1,2),shuffle(uniq(Object.values(DUI.RT_LABEL)).filter(r=>r!==rt(t1))).slice(0,1))).slice(0,5),line(d,t1)));
+      const t2=pick(rows); ex.push(Math.random()<.5?tf(`${n}, ${pop} ${lc(use(t2))}: ${dstr(t2)} ${rt(t2)}.`,true,line(d,t2)):tf(`${n}, ${pop} ${lc(use(t2))}: ${scaleWrong(t2)} ${rt(t2)}.`,false,line(d,t2)));
+      const isHow=t=>t&&/over|push|slow|rapid|q\d|every|repeat|per |min|sec|titrat|infus|neb|spray|drip|flush|bolus/i.test(t)&&!/^max\b/i.test(t); const timed=rows.filter(x=>isHow(x.t)); if(timed.length){ const t=pick(timed); const wrongT=uniq(shuffle(DRUGS.flatMap(o=>numDoses(o).map(x=>x.t))).filter(x=>isHow(x)&&x!==t.t).map(x=>tight(DUI.shortT(x)))).filter(x=>x!==when(t)).slice(0,3); ex.push(mc(`${n}, ${lc(use(t))} by ${rt(t)}: how is it given?`,when(t),wrongT,line(d,t),"Timing")); }
+      const t3=pick(rows); ex.push(mc(`${n}, ${pop} ${lc(use(t3))} by ${rt(t3)}. Dose?`,dstr(t3),uniq([scaleWrong(t3,10),scaleWrong(t3,.1)].concat(foreignDose(d,t3,2))),line(d,t3),"Dose"));
+      return ex.filter(Boolean); };
+    G.adult=d=>doseSet(d,adultD(d),"adult");
+    G.peds=d=>{ const n=short(d); let ex=doseSet(d,pedsD(d),"pediatric");
+      const on=uniq((d.onset||[]).map(shortTime)); if(on.length){ const o=pick(on); const w=uniq(shuffle(others(d).flatMap(x=>x.onset||[])).map(shortTime)).filter(x=>!on.includes(x)).slice(0,3); ex.push(mc(`Onset of ${n}?`,tight(o),w.map(tight),`${n} onset: ${on.map(tight).join("; ")}.`,"Onset")); }
+      const mx=numDoses(d).filter(x=>x.max); if(mx.length){ const ds=pick(mx); ex.push(typ(`${n}, ${ds.pop==="peds"?"pediatric":"adult"} ${lc(use(ds))}: maximum single dose?`,ds.unit,ds.max,ds.max,`Max ${tight(fmt(ds.max,3)+" "+ds.unit)}. ${line(d,ds)}`)); }
+      if(!pedsD(d).length){ ex=ex.concat(shuffle(doseSet(d,adultD(d),"adult")).slice(0,4)); if(d.peds&&d.peds.length) ex.push(mc(`${n}, pediatric dose?`,tight(d.peds[0]),uniq(shuffle(others(d)).flatMap(o=>o.peds||[]).map(tight)).slice(0,3),`${n} pediatric: ${d.peds.map(tight).join("; ")}.`,"Pediatric")); }
+      return ex.filter(Boolean); };
+    G.check=d=>shuffle([].concat(G.identify(d),G.uses(d),G.adult(d),G.peds(d)));
+    function build(d,lvl){ const key=LEVELS[Math.min(lvl,4)].k; let ex=shuffle(G[key](d)); const want=key==="check"?10:8; if(ex.length<5&&key!=="check") ex=ex.concat(shuffle(G.check(d)).filter(e=>!ex.some(x=>x.prompt===e.prompt))); return ex.slice(0,want); }
+
+    // ----- the round -----
+    const ov=$("lesson"), body=$("l-body"), foot=$("l-foot"), msg=$("l-msg"), btn=$("l-check"), skip=$("l-skip"), bar=$("l-bar"), xpEl=$("l-xp");
+    let L=null, ui=null;
+    const setBar=()=>{ bar.style.width=(L?Math.round(100*L.done/L.total):0)+"%"; xpEl.textContent=(L?L.xp:0)+" XP"; };
+    function open(d,lvl){ const ex=build(d,lvl); if(!ex.length) return; L={d,lvl,queue:ex.map(e=>({e,retry:0})),done:0,total:ex.length,xp:0,first:0,misses:0,cur:null,t0:Date.now(),ended:false}; ov.hidden=false; document.body.classList.add("lessonopen"); setBar(); next(); }
+    function close(){ ov.hidden=true; document.body.classList.remove("lessonopen"); L=null; ui=null; render(); }
+    function next(){ if(!L.queue.length){ finish(); return; } L.cur=L.queue.shift(); foot.className="lfoot"; foot.dataset.graded="0"; leaving=false; msg.innerHTML=""; btn.textContent="Check"; btn.disabled=true; btn.hidden=false; skip.hidden=false; show(L.cur.e); body.scrollTop=0; }
+    function stage(html){ body.innerHTML=`<div class="lq cascade"><span class="eyebrow">${L.cur.e.tag}</span><h3 class="lprompt">${esc(L.cur.e.prompt)}</h3>${html}</div>`; }
+    function show(e){ ui={};
+      if(e.type==="mc"||e.type==="select"){ stage(`<div class="lopts">${e.options.map((o,i)=>`<button type="button" class="lopt" data-i="${i}"><span class="ln">${i+1}</span><span>${esc(o.t)}</span></button>`).join("")}</div>`); ui.sel=new Set();
+        body.querySelectorAll(".lopt").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.i; if(e.type==="mc"){ ui.sel=new Set([i]); body.querySelectorAll(".lopt").forEach(x=>x.classList.toggle("on",+x.dataset.i===i)); } else { ui.sel.has(i)?ui.sel.delete(i):ui.sel.add(i); b.classList.toggle("on",ui.sel.has(i)); } btn.disabled=!ui.sel.size; })); }
+      else if(e.type==="tf"){ stage(`<div class="lopts ltf"><button type="button" class="lopt" data-v="1">True</button><button type="button" class="lopt" data-v="0">False</button></div>`); ui.v=null;
+        body.querySelectorAll(".lopt").forEach(b=>b.addEventListener("click",()=>{ ui.v=b.dataset.v==="1"; body.querySelectorAll(".lopt").forEach(x=>x.classList.toggle("on",x===b)); btn.disabled=false; })); }
+      else if(e.type==="type"){ stage(`<div class="ltype"><input type="text" inputmode="decimal" id="l-in" placeholder="dose" autocomplete="off" autocorrect="off" aria-label="Dose"><span class="unit">${esc(e.unit)}</span></div><p class="note">A range goes in as low-high, like 0.5-1.</p>`);
+        const inp=$("l-in"); inp.addEventListener("input",()=>{ btn.disabled=!inp.value.trim(); }); inp.addEventListener("keydown",ev=>{ if(ev.key==="Enter"&&!btn.disabled){ ev.preventDefault(); btn.click(); } }); setTimeout(()=>inp.focus(),80); }
+      else if(e.type==="match"){ const L2=e.pairs.map((p,i)=>({t:p[0],i})), R=shuffle(e.pairs.map((p,i)=>({t:p[1],i}))); ui.l=null; ui.r=null; ui.slips=0; ui.left=e.pairs.length;
+        stage(`<div class="lmatch"><div class="lcol">${L2.map(x=>`<button type="button" class="lopt" data-side="l" data-i="${x.i}">${esc(x.t)}</button>`).join("")}</div><div class="lcol">${R.map(x=>`<button type="button" class="lopt" data-side="r" data-i="${x.i}">${esc(x.t)}</button>`).join("")}</div></div>`);
+        skip.hidden=true; btn.hidden=true;
+        body.querySelectorAll(".lopt").forEach(b=>b.addEventListener("click",()=>{ if(b.classList.contains("done")) return; const side=b.dataset.side; body.querySelectorAll(`.lopt[data-side=${side}]`).forEach(x=>x.classList.remove("on")); b.classList.add("on"); ui[side]=b;
+          if(ui.l&&ui.r){ const a=ui.l,c=ui.r; ui.l=ui.r=null; if(a.dataset.i===c.dataset.i){ [a,c].forEach(x=>{ x.classList.remove("on"); x.classList.add("done"); x.disabled=true; }); ui.left--; if(!ui.left) grade(ui.slips<=1,ui.slips?`Matched, with ${ui.slips} slip${ui.slips>1?"s":""}.`:"All matched, no slips."); } else { ui.slips++; [a,c].forEach(x=>{ x.classList.remove("on"); x.classList.add("bad"); }); setTimeout(()=>[a,c].forEach(x=>x.classList.remove("bad")),420); try{ feedback(false); }catch(x){} } } })); }
+      else if(e.type==="tiles"){ ui.built=[]; stage(`<div class="lbuilt" id="l-built"></div><div class="lbank" id="l-bank">${e.bank.map((t,i)=>`<button type="button" class="ltile" data-i="${i}">${esc(t)}</button>`).join("")}</div>`);
+        const built=$("l-built"), bank=$("l-bank"); const draw=()=>{ built.innerHTML=ui.built.map(i=>`<button type="button" class="ltile" data-i="${i}">${esc(e.bank[i])}</button>`).join(""); bank.querySelectorAll(".ltile").forEach(b=>b.classList.toggle("ghost",ui.built.includes(+b.dataset.i))); btn.disabled=!ui.built.length; };
+        bank.addEventListener("click",ev=>{ const b=ev.target.closest(".ltile"); if(!b||b.classList.contains("ghost")) return; ui.built.push(+b.dataset.i); draw(); });
+        built.addEventListener("click",ev=>{ const b=ev.target.closest(".ltile"); if(!b) return; ui.built=ui.built.filter(i=>i!==+b.dataset.i); draw(); }); }
+    }
+    const near=(a,b)=>Math.abs(a-b)<=Math.max(1e-9,Math.abs(b)*1e-6);
+    function parseNums(s){ return (String(s).replace(/,/g,"").replace(/\u2013|\u2014|\bto\b/g,"-").match(/\d*\.?\d+/g)||[]).map(Number); }
+    function check(){ const e=L.cur.e; let ok=false, note="";
+      if(e.type==="mc"){ const i=[...ui.sel][0]; ok=!!(e.options[i]&&e.options[i].ok); body.querySelectorAll(".lopt").forEach(b=>{ const o=e.options[+b.dataset.i]; b.disabled=true; if(o.ok) b.classList.add("good"); else if(ui.sel.has(+b.dataset.i)) b.classList.add("bad"); }); }
+      else if(e.type==="select"){ ok=e.options.every((o,i)=>o.ok===ui.sel.has(i)); body.querySelectorAll(".lopt").forEach(b=>{ const i=+b.dataset.i, o=e.options[i]; b.disabled=true; if(o.ok) b.classList.add("good"); else if(ui.sel.has(i)) b.classList.add("bad"); }); }
+      else if(e.type==="tf"){ ok=ui.v===e.ok; body.querySelectorAll(".lopt").forEach(b=>{ b.disabled=true; const v=b.dataset.v==="1"; if(v===e.ok) b.classList.add("good"); else if(v===ui.v) b.classList.add("bad"); }); }
+      else if(e.type==="type"){ const v=parseNums($("l-in").value); $("l-in").disabled=true; if(v.length>=2){ const a=Math.min(v[0],v[1]), b=Math.max(v[0],v[1]); ok=near(a,e.lo)&&near(b,e.hi); } else if(v.length===1){ ok=near(v[0],e.lo)||near(v[0],e.hi); if(ok&&e.lo!==e.hi) note=`That is ${near(v[0],e.lo)?"the low end":"the top"} of the range, ${e.answer}.`; } $("l-in").classList.add(ok?"good":"bad"); }
+      else if(e.type==="tiles"){ const got=ui.built.map(i=>e.bank[i]); ok=got.length===e.seq.length&&got.every((t,i)=>t===e.seq[i]); $("l-built").classList.add(ok?"good":"bad"); }
+      grade(ok,note);
+    }
+    function grade(ok,note){ const c=L.cur, e=c.e; try{ feedback(ok); }catch(x){}
+      if(ok){ L.done++; const gain=c.retry?5:10; L.xp+=gain; if(!c.retry) L.first++; }
+      else { L.misses++; if(c.retry<1) L.queue.push({e,retry:c.retry+1}); else L.done++; }
+      foot.className="lfoot "+(ok?"good":"bad"); foot.dataset.graded="1"; foot.dataset.ok=ok?"good":"bad";
+      msg.innerHTML=ok?`<b>${c.retry?"Got it this time":pick(["Correct","Nice","Right","Good"])}</b>${note?`<div>${esc(note)}</div>`:""}${e.expl&&e.type!=="match"&&e.expl!==e.answer?`<div class="lexpl">${esc(e.expl)}</div>`:""}`
+                     :`<b>${c.retry?"Still not it":"Not quite"}</b><div>Answer: <b class="lans">${esc(e.answer)}</b></div>${e.expl&&e.expl!==e.answer?`<div class="lexpl">${esc(e.expl)}</div>`:""}${c.retry<1?`<div class="note">It comes back before the round ends.</div>`:""}`;
+      btn.textContent="Continue"; btn.disabled=false; btn.hidden=false; skip.hidden=true; setBar(); body.querySelectorAll(".lopt,.ltile").forEach(b=>{ if(e.type!=="match") b.disabled=true; });
+      btn.focus();
+    }
+    function finish(){ L.ended=true; const P=prog(L.d.id); const acc=L.total?L.first/L.total:0; const isCheck=L.lvl===4, learning=L.lvl===P.lvl&&P.lvl<5; const passed=!isCheck||acc>=PASS;
+      if(learning&&passed) P.lvl++; P.xp+=L.xp; P.last=Date.now(); S.xp[dayKey()]=(S.xp[dayKey()]||0)+L.xp; save(); try{ markActive(); }catch(e){}
+      try{ document.dispatchEvent(new CustomEvent("lesson",{detail:{id:L.d.id,lvl:L.lvl,xp:L.xp,passed}})); }catch(e){} if(typeof window.onLessonDone==="function"){ const cb=window.onLessonDone; window.onLessonDone=null; setTimeout(cb,0); }
+      const secs=Math.round((Date.now()-L.t0)/1000); const lv=LEVELS[Math.min(L.lvl,4)];
+      body.innerHTML=`<div class="lend cascade">${ring(P.lvl,96)}<span class="eyebrow">${learning&&passed?(P.lvl>=5?"Mastered":"Lesson complete"):(isCheck&&!passed?"Checkpoint not passed":"Review complete")}</span><div class="big">${esc(short(L.d))}</div><p class="lsum">${lv.n}${isCheck&&!passed?`. You need ${Math.round(PASS*100)}% first try and got ${Math.round(acc*100)}%. Run it again.`:learning&&passed&&P.lvl<5?`. Next up: ${LEVELS[P.lvl].n}.`:P.lvl>=5?`. Every lesson done. Reviews keep it fresh.`:""}</p>
+        <div class="lstats"><div class="k"><span class="eyebrow">XP</span><b class="num">+${L.xp}</b></div><div class="k"><span class="eyebrow">First try</span><b class="num">${Math.round(acc*100)}%</b></div><div class="k"><span class="eyebrow">Time</span><b class="num">${secs<60?secs+" s":Math.floor(secs/60)+"m "+(secs%60)+"s"}</b></div></div>
+        ${L.misses===0?`<p class="lperfect">Perfect round.</p>`:""}</div>`;
+      foot.className="lfoot"; foot.dataset.graded="0"; msg.innerHTML=""; skip.hidden=true; btn.textContent=P.lvl<5?(isCheck&&!passed?"Run it again":"Next lesson"):"Review again"; btn.disabled=false; body.scrollTop=0;
+    }
+    let leaving=false;
+    const canCheck=()=>!!(ui&&((ui.sel&&ui.sel.size)||ui.v!=null||(ui.built&&ui.built.length)||($("l-in")&&$("l-in").value.trim())));
+    function askLeave(){ leaving=true; foot.className="lfoot"; msg.innerHTML=`<b>Leave this round?</b><div>What you answered in it is not kept.</div>`; btn.textContent="Leave"; btn.disabled=false; skip.hidden=false; skip.textContent="Keep going"; }
+    function stay(){ leaving=false; msg.innerHTML=""; skip.textContent="Skip"; const graded=foot.dataset.graded==="1"; btn.textContent=graded?"Continue":"Check"; btn.disabled=graded?false:!canCheck(); skip.hidden=graded||L.cur.e.type==="match"; if(graded) foot.className="lfoot "+foot.dataset.ok; }
+    btn.addEventListener("click",()=>{ if(!L) return; if(leaving){ leaving=false; close(); return; } if(L.ended){ const d=L.d; open(d,Math.min(prog(d.id).lvl,4)); return; } if(foot.dataset.graded==="1") next(); else check(); });
+    skip.addEventListener("click",()=>{ if(!L||L.ended) return; if(leaving){ stay(); return; } const e=L.cur.e; body.querySelectorAll(".lopt").forEach(b=>{ b.disabled=true; const i=b.dataset.i; if(e.type==="mc"||e.type==="select"){ if(e.options[+i]&&e.options[+i].ok) b.classList.add("good"); } else if(e.type==="tf"&&(b.dataset.v==="1")===e.ok) b.classList.add("good"); }); if(e.type==="type"){ $("l-in").disabled=true; } grade(false,""); });
+    $("l-close").addEventListener("click",()=>{ if(!L||L.ended){ close(); return; } if(leaving){ stay(); return; } askLeave(); });
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&L) $("l-close").click(); });
+
+    // ----- the path -----
+    function ring(lvl,size){ const r=(size-8)/2, C=2*Math.PI*r, seg=C/5, gap=Math.min(6,seg*.18); const done=lvl>=5;
+      return `<svg class="ring${done?" done":""}" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" aria-label="${done?"Mastered":lvl+" of 5 lessons"}">${[0,1,2,3,4].map(i=>`<circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="${(seg-gap).toFixed(2)} ${(C-seg+gap).toFixed(2)}" stroke-dashoffset="${(-i*seg).toFixed(2)}" transform="rotate(-90 ${size/2} ${size/2})" class="${i<lvl?"on":"off"}"/>`).join("")}<text x="50%" y="50%" dy=".36em" text-anchor="middle" class="rn" font-size="${Math.round(size*.36)}">${done?"★":lvl}</text></svg>`; }
+    let mode=store.get("mm-dlmode",(window.studyIds&&studyIds().length)?"study":"all"), q="";
+    const state=d=>{ const P=S.drugs[d.id]; if(!P||!P.lvl) return "new"; return P.lvl>=5?"done":"going"; };
+    function render(){ if(!root) return;
+      const todayXp=S.xp[dayKey()]||0; $("ls-xp").textContent=todayXp; try{ $("ls-streak").textContent=dayStreak(); }catch(e){} $("ls-done").textContent=DRUGS.filter(d=>state(d)==="done").length;
+      const hasStudy=window.studyIds&&studyIds().length>0; if(mode==="study"&&!hasStudy) mode="all";
+      $("lf-study").setAttribute("aria-pressed",mode==="study"?"true":"false"); $("lf-all").setAttribute("aria-pressed",mode==="all"?"true":"false"); $("lf-study").disabled=!hasStudy;
+      let list=(mode==="study"?DRUGS.filter(d=>inStudy(d.id)):DRUGS).filter(d=>!q||(d.name+" "+(d.brands||[]).join(" ")+" "+d.cls.join(" ")).toLowerCase().includes(q));
+      const ord={going:0,new:1,done:2}; list=list.slice().sort((a,b)=>ord[state(a)]-ord[state(b)]||((S.drugs[b.id]||{}).last||0)-((S.drugs[a.id]||{}).last||0)||a.name.localeCompare(b.name));
+      const recent=DRUGS.filter(d=>state(d)==="going").sort((a,b)=>S.drugs[b.id].last-S.drugs[a.id].last)[0]; const cont=$("l-continue");
+      if(recent){ const P=S.drugs[recent.id]; cont.hidden=false; cont.innerHTML=`<div><span class="eyebrow">Continue</span><b>${esc(short(recent))}</b><span class="lns">Lesson ${P.lvl+1} of 5: ${LEVELS[P.lvl].n}</span></div><button type="button" class="btn amber" data-start="${recent.id}">Go</button>`; } else cont.hidden=true;
+      root.innerHTML=list.length?list.map(d=>{ const P=S.drugs[d.id]||{lvl:0,xp:0}; const st=state(d); const lv=Math.min(P.lvl,4);
+        return `<div class="lnode ${st}" data-id="${d.id}">${ring(P.lvl,48)}<button type="button" class="lnt" data-open="${d.id}" aria-expanded="false"><b>${esc(d.name)}</b><span class="lns">${st==="done"?`Mastered. ${P.xp} XP`:st==="going"?`Lesson ${P.lvl+1} of 5: ${LEVELS[lv].n}`:LEVELS[0].n+" first"}</span></button><button type="button" class="btn ${st==="going"?"amber":st==="done"?"alt":""}" data-start="${d.id}">${st==="going"?"Continue":st==="done"?"Review":"Start"}</button>
+          <div class="llv" hidden>${LEVELS.map((l,i)=>`<button type="button" class="llvb ${i<P.lvl?"done":i===P.lvl?"next":"locked"}" data-lvl="${i}" data-id="${d.id}" ${i>P.lvl&&P.lvl<5?"disabled":""}><span class="lnum">${i<P.lvl?"✓":i+1}</span><span><b>${l.n}</b><small>${l.d}</small></span><span class="lgo">${i<P.lvl?"Practice":i===P.lvl?"Start":""}</span></button>`).join("")}</div></div>`; }).join("")
+        :`<p class="note">${mode==="study"?"Nothing in your study set matches.":"No drug matches."}</p>`;
+    }
+    root.addEventListener("click",e=>{ const s=e.target.closest("[data-start]"); if(s){ const d=DRUGS.find(x=>x.id===s.dataset.start); if(d) open(d,Math.min(prog(d.id).lvl,4)); return; }
+      const l=e.target.closest(".llvb"); if(l&&!l.disabled){ const d=DRUGS.find(x=>x.id===l.dataset.id); if(d) open(d,+l.dataset.lvl); return; }
+      const o=e.target.closest("[data-open]"); if(o){ const node=o.closest(".lnode"); const lv=node.querySelector(".llv"); lv.hidden=!lv.hidden; o.setAttribute("aria-expanded",lv.hidden?"false":"true"); node.classList.toggle("open",!lv.hidden); } });
+    $("l-continue").addEventListener("click",e=>{ const s=e.target.closest("[data-start]"); if(s){ const d=DRUGS.find(x=>x.id===s.dataset.start); if(d) open(d,Math.min(prog(d.id).lvl,4)); } });
+    $("lf-study").addEventListener("click",()=>{ mode="study"; store.set("mm-dlmode",mode); render(); });
+    $("lf-all").addEventListener("click",()=>{ mode="all"; store.set("mm-dlmode",mode); render(); });
+    $("lf-q").addEventListener("input",()=>{ q=$("lf-q").value.trim().toLowerCase(); render(); });
+    document.addEventListener("study",render); document.addEventListener("panel",e=>{ if(e.detail==="lesson") render(); });
+    // the next thing to learn: the drug you were in the middle of, else the first unmastered drug in the study pool
+    window.nextLesson=()=>{ const going=DRUGS.filter(d=>state(d)==="going").sort((a,b)=>S.drugs[b.id].last-S.drugs[a.id].last)[0]; const pool=(window.studyPool?studyPool():DRUGS); const d=going||pool.find(x=>state(x)!=="done")||pool[0]||DRUGS[0]; showPanel("lesson"); open(d,Math.min(prog(d.id).lvl,4)); };
+    window.openLesson=id=>{ const d=DRUGS.find(x=>x.id===id); if(!d) return; showPanel("lesson"); open(d,Math.min(prog(d.id).lvl,4)); };
+    window.__LESSON={build,G,LEVELS,state:()=>L};
+    render();
+  })();
   // ---------- settings panel ----------
   (function settings(){
     const bind=(id,key)=>{ const el=$(id); el.setAttribute("aria-pressed",SET[key]?"true":"false"); el.addEventListener("click",()=>{ SET[key]=!SET[key]; saveSet(); el.setAttribute("aria-pressed",SET[key]?"true":"false"); if(key==="haptics"&&SET[key]) feedback(true); if(key==="sound"&&SET[key]) feedback(true); document.dispatchEvent(new CustomEvent("settings")); }); };
@@ -3151,12 +3461,14 @@ body.wbopen{overflow:hidden}
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
   (function splash(){ const sp=document.getElementById("splash"); if(!sp) return; const cv=document.getElementById("splash-cv"), title=sp.querySelector(".splash-t"); const quick=(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)||!window.MedicMathParticles||!cv; let h=null, done=false;
     let textShape=-1;
-    const out=()=>{ if(done) return; done=true; const wait=sp.classList.contains("ending")?500:1400; if(textShape>=0){ title.style.transition="opacity .6s ease"; title.style.opacity="1"; } sp.classList.add("ending"); setTimeout(()=>{ sp.classList.add("out"); setTimeout(()=>{ sp.remove(); try{ h&&h.destroy(); }catch(e){} },520); },wait); };
+    const out=()=>{ if(done) return; done=true; const wait=(sp.classList.contains("ending")||+cv.style.opacity===0)?500:1400; if(textShape>=0){ title.style.transition="opacity .6s ease"; title.style.opacity="1"; cv.style.transition="opacity .6s ease,filter .6s ease"; cv.style.opacity="0"; } sp.classList.add("ending"); setTimeout(()=>{ sp.classList.add("out"); setTimeout(()=>{ sp.remove(); try{ h&&h.destroy(); }catch(e){} },520); },wait); };
     if(quick){ sp.classList.add("plain"); setTimeout(out,250); return; }
     const P=MedicMathParticles;
-    const addText=font=>{ if(P.shapes>3) return; if(P.addTextTarget("MEDIC MATH",font)){ textShape=P.shapes-1; const r=cv.getBoundingClientRect(); title.style.fontFamily=font; title.style.fontSize=(P.textSize/600*Math.min(r.width,r.height))+"px"; title.style.transition="none"; title.style.transform="translateY(-50%)"; title.style.opacity="0"; } };
-    // the crisp title follows the glyphs: each frame its opacity is the engine's own settle curve for the text shape, so it is fully in the instant the last particles land; the particles then hold a beat and fizzle
-    const onFrame=t=>{ if(done||textShape<0) return; const p=P.settled(t,textShape); title.style.opacity=p.toFixed(3); if(p>=1&&t>=P.step*textShape+.3&&!sp.classList.contains("ending")) sp.classList.add("ending"); };
+    const addText=font=>{ if(P.shapes>3) return; if(P.addTextTarget("MEDIC MATH",font)){ textShape=P.shapes-1; const r=cv.getBoundingClientRect(); title.style.fontFamily=font; title.style.fontSize=(P.textSize/600*Math.min(r.width,r.height))+"px"; title.style.transition="none"; title.style.transform="translateY(-50%)"; title.style.opacity="0"; cv.style.transition="none"; } };
+    // crossfade, driven per frame from the engine clock: the glyphs land at `land`; the crisp title rises over the last third of their approach and is fully in just after they settle, while the glyph word fades to nothing underneath it
+    const sm=x=>{ x=Math.max(0,Math.min(1,x)); return x*x*(3-2*x); };
+    const onFrame=t=>{ if(done||textShape<0) return; const land=P.step*textShape; const ti=sm((t-(land-.3))/.5), co=1-sm((t-(land-.05))/.85);
+      title.style.opacity=ti.toFixed(3); cv.style.opacity=co.toFixed(3); cv.style.filter=co<1?`blur(${(5*(1-co)).toFixed(1)}px)`:""; cv.style.transform=co<1?`scale(${(1+.03*(1-co)).toFixed(3)})`:""; };
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
     try{ h=P.mount(cv,{background:false,loop:false,onFrame,onComplete:()=>setTimeout(out,250)}); }catch(e){ out(); return; }
     let added=false; const go=f=>{ if(added) return; added=true; addText(f); };
