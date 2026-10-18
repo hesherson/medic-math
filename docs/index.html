@@ -499,32 +499,31 @@ details.drug:not(.showmath) .dm{display:none!important}
 .ptline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:4px}
 .ptline b{font-family:var(--display);font-size:17px;color:var(--amber)}
 .ptline .chip{min-height:28px;padding:3px 10px;font-size:12px}
-.dosetable{display:grid;gap:6px}
+.dosetable{display:grid;gap:8px}
 .popgrp{display:grid;gap:2px}
-.pophead{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--teal);margin:6px 0 0}
-.pophead::after{content:"";flex:1 1 auto;height:1px;background:var(--line)}
-.popgrp.peds .pophead{color:var(--amber)}
-.rtgrp{display:grid}
-.rthead{margin-top:8px;padding-bottom:2px}
-.rt{display:inline-block;font-family:var(--display);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;line-height:1.3;padding:2px 9px;border-radius:4px;background:var(--surface);border:1.5px solid var(--teal);color:var(--teal);white-space:nowrap}
-.popgrp.peds .rt{border-color:var(--amber);color:var(--amber)}
-.drow{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:2px 12px;padding:7px 0;border-top:1px solid var(--line);align-items:start}
-.rthead+.drow{border-top:0}
-.drow.text{grid-template-columns:1fr}
-.du{min-width:0}
-.du b{display:block;font-size:14px;font-weight:600;line-height:1.3}
-.du span{display:block;font-size:12.5px;color:var(--muted);margin-top:1px;line-height:1.4}
-.du .why{color:var(--muted);font-style:italic}
-.dv{text-align:right;min-width:0}
-.dv b{display:block;font-family:var(--mono);font-size:14px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
-.dv span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
-.drow.bag .dv b{font-family:var(--display);font-size:15px}
-.dm{grid-column:1/-1;font-family:var(--mono);font-size:11.5px;line-height:1.45;color:var(--teal);background:var(--surface);border-radius:4px;padding:5px 8px;margin-top:3px;overflow-wrap:anywhere}
-.dnote{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin-top:2px}
+.poplabel{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);margin-top:4px}
+.popgrp:first-child .poplabel{margin-top:0}
+ul.dlist{padding-left:18px;display:grid;gap:6px;font-size:13px}
+.rtname{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+.popgrp.peds .rtname{color:var(--amber)}
+ul.tree{list-style:none;padding:0;margin:2px 0 0 -11px;display:block;--branch:color-mix(in srgb,var(--muted) 55%,transparent)}
+li.tnode{position:relative;padding:4px 0 4px 24px;font-size:13.5px;line-height:1.45}
+li.tnode::before{content:"";position:absolute;left:0;top:-5px;width:15px;height:calc(.72em + 9px);border-left:1.5px solid var(--branch);border-bottom:1.5px solid var(--branch);border-bottom-left-radius:9px}
+li.tnode:not(:last-child)::after{content:"";position:absolute;left:0;top:calc(.72em + 4px);bottom:-5px;border-left:1.5px solid var(--branch)}
+li.tnode .use{font-weight:600;color:var(--ink)}
+li.tnode .use::after{content:":"}
+li.tnode .dose b{font-family:var(--mono);font-weight:600;color:var(--ink);white-space:nowrap}
+li.tnode .dose{color:var(--ink)}
+li.tnode .wkg,li.tnode .sub{display:block;font-size:12.5px;color:var(--muted);line-height:1.4}
+li.tnode .aft{color:var(--muted)}
+li.tnode.bag .dose b{white-space:normal;font-family:var(--display);font-size:14.5px}
+li.tnode .aft::before{content:"\00b7\00a0";color:var(--muted)}
+li.tnode .tag{margin:0 4px 0 2px;vertical-align:1px}
+li.tnode .why{font-style:italic}
+.dm{display:block;font-family:var(--mono);font-size:11.5px;line-height:1.45;color:var(--teal);background:var(--surface);border-radius:4px;padding:5px 8px;margin-top:3px;overflow-wrap:anywhere}
+.dnote{font-size:12.5px;color:var(--muted);margin-top:2px}
 .tag{display:inline-block;vertical-align:middle;font-style:normal;font-family:var(--display);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:0 6px;border-radius:999px;background:var(--amber-soft);color:var(--amber);margin-left:6px}
 .kc{font-size:14px}
-.orow{display:flex;gap:10px;align-items:center;padding:5px 0;font-size:14px;border-top:1px solid var(--line)}
-.orow:first-of-type{border-top:0}
 .studytag{display:none;font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--amber);color:#1a1208}
 details.drug.instudy .studytag{display:inline-block}
 .drugchips{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -653,6 +652,11 @@ details.method[open]>summary::after{content:"\2212"}
 .nw{white-space:nowrap}
 body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
 @media (max-width:600px){ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(228px + env(safe-area-inset-bottom,0px))} .ttsctl #tts-stop{margin-left:auto} }
+
+/* reveal on scroll */
+.reveal{opacity:0}
+.reveal.in{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1}.reveal.in{animation:none}}
 </style>
 </head>
 <body>
@@ -706,7 +710,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   </div>
   <div class="plan" id="today-plan">
     <div class="planhead"><div><span class="eyebrow">Today's session</span><h2>Four things, about ten minutes</h2></div><div class="planprog"><b id="t-prog">0 / 4</b><button type="button" class="btn amber" id="t-run">Run what's left</button></div></div>
-    <div class="plancards cascade">
+    <div class="plancards">
       <button type="button" class="pcard" id="t-flash"><span class="pnum">1</span><span class="ptitle">Flash cards</span><span class="tsub"></span><span class="pdesc">Cold numbers, doses and rules, spaced so each one comes back right before you'd lose it.</span></button>
       <button type="button" class="pcard" id="t-quiz"><span class="pnum">2</span><span class="ptitle">Weak-spot quiz</span><span class="tsub"></span><span class="pdesc">Five timed questions drawn from wherever you've been missing.</span></button>
       <button type="button" class="pcard" id="t-mcq"><span class="pnum">3</span><span class="ptitle">Drug check</span><span class="tsub"></span><span class="pdesc">Three registry-style questions from the drug profiles.</span></button>
@@ -719,13 +723,13 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
 <!-- ================= METHODS ================= -->
 <section class="panel" id="panel-methods" hidden>
   <div class="introrow"><p class="intro">Find the job you need to do, open it, and the formula and the moves are inside, each with a worked number on the line. The last move is always the same: run it backwards to make sure you land where you started. The example picker swaps in a different drug every time.</p><button type="button" class="chip" id="teach" aria-pressed="false">Teach mode</button></div>
-  <div class="methods cascade" id="methods"></div>
+  <div class="methods" id="methods"></div>
 </section>
 
 <!-- ================= RULES ================= -->
 <section class="panel" id="panel-rules" hidden>
   <p class="intro">One line each, with the single example that proves it, meant to be read cold in the minutes before a lane.</p>
-  <div class="rules cascade" id="rules"></div>
+  <div class="rules" id="rules"></div>
 </section>
 
 <!-- ================= SCENARIOS ================= -->
@@ -733,7 +737,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   <p class="intro">One casualty, several methods in a row, the way it happens. Answer each step; a miss shows the work, and some misses change the patient. Weights and vitals are in the vignette.</p>
   <div class="gate" id="scen-gate" hidden>Strict gates are on. Scenarios unlock when the quiz runs 70% or better over the last 20 answers. Turn it off in Settings if you want them now.</div>
   <div class="prbanner" id="pr-banner" hidden></div>
-  <div class="scens cascade" id="scen"></div>
+  <div class="scens" id="scen"></div>
   <details class="sec sbwrap"><summary><h2>Build your own</h2><span class="tagline">saved in this browser</span></summary>
     <div class="body">
       <form id="sb-form" class="sbform">
@@ -758,7 +762,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     <div class="formulas"><code>% = g ÷ total mL × 100</code><code>g = % × total mL ÷ 100</code><code>% × 10 = mg/mL</code></div>
   </div>
 
-  <div class="refgrid cascade">
+  <div class="refgrid">
 
     <section class="rcard">
       <header><span class="eyebrow">Labels</span><h2>Read the vial</h2><p class="lead">Total drug over total volume. Say the mg/mL before you draw.</p></header>
@@ -1059,7 +1063,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     <div class="drugbar"><input type="search" id="drug-q" placeholder="Search drug, brand, class, indication" aria-label="Search drugs"><select id="drug-filter" aria-label="Filter by class"></select></div>
     <div class="drugchips"><button type="button" class="chip" id="drug-study" aria-pressed="false">Study set · 0</button><button type="button" class="chip" id="drug-listen">Listen to these</button><span class="note" id="drug-count"></span></div>
   </div>
-  <div class="druglist cascade" id="druglist"></div>
+  <div class="druglist" id="druglist"></div>
   <p class="note">Source: WVFD Drug Profiles, based on AHA, ACLS and PALS common practice with AZDHS and JB Learning content. Training reference. Verify against your current protocol.</p>
 </section>
 
@@ -1172,6 +1176,15 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   // cascade and fade animations replay every time something is shown, not only on first render
   window.replayCascade=root=>{ if(!root) return; const list=(root.classList&&root.classList.contains("cascade")?[root]:[]).concat([...root.querySelectorAll(".cascade")]); list.forEach(c=>{ c.classList.remove("cascade"); void c.offsetWidth; c.classList.add("cascade"); }); };
   document.addEventListener("toggle",e=>{ const d=e.target; if(d&&d.tagName==="DETAILS"&&d.open) replayCascade(d); },true);
+  // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
+  (function reveal(){
+    if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
+    const SEL="details.drug,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*";
+    const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } else if(e.intersectionRatio===0&&e.boundingClientRect.height>0){ e.target.classList.remove("in"); } }); },{rootMargin:"0px 0px -5% 0px",threshold:[0,0.02]});
+    const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); } }); };
+    mark(document);
+    new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) mark(n); }))).observe(document.body,{childList:true,subtree:true});
+  })();
   (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const set=()=>{ try{ document.documentElement.style.setProperty("--hdr",Math.round(h.getBoundingClientRect().height)+"px"); }catch(e){} }; set(); if(window.ResizeObserver) new ResizeObserver(set).observe(h); window.addEventListener("resize",set); })();
   function showPanel(id){
     if(!ALLP.includes(id)) id="today"; const g=groupOf(id);
@@ -1615,8 +1628,8 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     const RT_SHORT={"IV":"IV","IO":"IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"Oral","Oral, chewed":"Oral","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
     function onsetRows(d){
       if(!d.onset.length) return `<p class="note">None listed</p>`;
-      const fallback=(()=>{ const r=d.routes.map(x=>RT_SHORT[x]||x); const iv=r.filter(x=>x==="IV"||x==="IO"); const rest=r.filter(x=>x!=="IV"&&x!=="IO"); return (iv.length?["IV / IO"]:[]).concat(rest).slice(0,3).join(" · "); })();
-      return d.onset.map(o=>{ const m=/^((?:IV\/IO\/ET\/infusion|IV\/IO|IM\/IN|IV|IM|IN|ET|Rectal))\s+(.*)$/.exec(o); const rt=m?m[1].replace("IV/IO/ET/infusion","IV / IO / ET / drip").replace("IV/IO","IV / IO").replace("IM/IN","IM / IN"):fallback; const txt=m?m[2]:o; return `<div class="orow"><span class="rt">${rt}</span><span>${txt.charAt(0).toUpperCase()+txt.slice(1)}</span></div>`; }).join("");
+      const fallback=(()=>{ const r=d.routes.map(x=>RT_SHORT[x]||x); const iv=r.filter(x=>x==="IV"||x==="IO"); const rest=r.filter(x=>x!=="IV"&&x!=="IO"); return (iv.length?["IV / IO"]:[]).concat(rest).slice(0,3).join(", "); })();
+      return `<ul>${d.onset.map(o=>{ const m=/^((?:IV\/IO\/ET\/infusion|IV\/IO|IM\/IN|IV|IM|IN|ET|Rectal))\s+(.*)$/.exec(o); const rt=m?m[1].replace("IV/IO/ET/infusion","IV / IO / ET / drip").replace("IV/IO","IV / IO").replace("IM/IN","IM / IN"):fallback; const txt=m?m[2]:o; return `<li><span class="rtname">${rt}</span> ${txt.charAt(0).toUpperCase()+txt.slice(1)}</li>`; }).join("")}</ul>`;
     }
     function card(d){
       const hasDose=d.doses.length>0, inS=study.has(d.id);
@@ -1625,7 +1638,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${d.quick.dose.replace(/\.$/,"")}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div></div>
         </div>
         <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
-        <div class="dg-body cascade">
+        <div class="dg-body">
           <div class="how"><span class="eyebrow">How it works</span><p>${d.how||d.quick.moa}</p></div>
           <div class="dg-grid">
             ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
@@ -1640,22 +1653,22 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
           </div>
         </div></details>`;
     }
-    const bagRow=b=>`<div class="drow bag info"><div class="du"><b>Standard bag${b.tag?` <i class="tag">${b.tag}</i>`:""}</b><span>${b.use}${b.alt?" "+b.alt:""}</span><span class="why">${b.why}</span></div><div class="dv"><b>${b.mix}</b><span>${b.conc}</span></div></div>`;
-    function row(d,ds,kg){
+    const bagNode=b=>`<li class="tnode bag info"><span class="use">Standard bag</span>${b.tag?`<i class="tag">${b.tag}</i>`:""} <span class="dose"><b>${b.mix}</b>, ${b.conc}</span><span class="sub">${b.use}${b.alt?" "+b.alt:""}</span><span class="sub why">${b.why}</span></li>`;
+    function node(d,ds,kg){
       const extra=ds.tag?" info":"";
-      if(ds.kind==="text") return `<div class="drow text${extra}"><div class="du"><b>${ds.l}${tag(ds.tag)}</b><span>${ds.t||""}</span></div></div>`;
+      if(ds.kind==="text") return `<li class="tnode${extra}"><span class="use">${ds.l}</span>${tag(ds.tag)} <span class="dose">${ds.t||""}</span></li>`;
       const r=doseLine(d,ds,kg);
-      const detail=[ds.t,ds.max?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
-      return `<div class="drow${extra}"><div class="du"><b>${ds.l}${tag(ds.tag)}</b>${detail?`<span>${detail}</span>`:""}</div><div class="dv"><b>${r.dose}</b>${r.calc?`<span class="info">${r.calc}</span>`:""}</div>${r.how?`<div class="dm">${r.how}</div>`:""}${ds.note?`<div class="dnote">${ds.note}</div>`:""}</div>`;
+      const after=[ds.t,ds.max?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
+      return `<li class="tnode${extra}"><span class="use">${ds.l}</span>${tag(ds.tag)} <span class="dose"><b>${r.dose}</b>${after?` <span class="aft">${after}</span>`:""}</span>${r.calc?`<span class="wkg info">${r.calc}</span>`:""}${ds.note?`<span class="sub">${ds.note}</span>`:""}${r.how?`<div class="dm">${r.how}</div>`:""}</li>`;
     }
     function doseBlock(d,kg){
       return [["adult","Adult"],["peds","Pediatric"]].map(([p,pl])=>{
         const rows=d.doses.filter(x=>x.pop===p); if(!rows.length) return "";
         const groups=RT_ORDER.filter(rt=>rows.some(x=>(x.route||"IV/IO")===rt));
-        const bags=(p==="adult"&&d.bags)?d.bags.map(bagRow).join(""):"";
+        const bags=(p==="adult"&&d.bags)?d.bags.map(bagNode).join(""):"";
         const hasInf=groups.includes("Infusion");
         const allInfo=rows.every(x=>x.tag);
-        return `<div class="popgrp ${p}${allInfo?" info":""}"><div class="pophead">${pl}</div>${groups.map(rt=>{ const rr=rows.filter(x=>(x.route||"IV/IO")===rt); const gi=rr.every(x=>x.tag); return `<div class="rtgrp${gi?" info":""}"><div class="rthead"><span class="rt">${RT_LABEL[rt]||rt}</span></div>${rr.map(ds=>row(d,ds,kg)).join("")}${rt==="Infusion"?bags:""}</div>`; }).join("")}${!hasInf&&bags?`<div class="rtgrp info"><div class="rthead"><span class="rt">Mixing</span></div>${bags}</div>`:""}</div>`;
+        return `<div class="popgrp ${p}${allInfo?" info":""}"><div class="poplabel">${pl}</div><ul class="dlist">${groups.map(rt=>{ const rr=rows.filter(x=>(x.route||"IV/IO")===rt); const gi=rr.every(x=>x.tag); return `<li class="rtitem${gi?" info":""}"><span class="rtname">${RT_LABEL[rt]||rt}</span><ul class="tree">${rr.map(ds=>node(d,ds,kg)).join("")}${rt==="Infusion"?bags:""}</ul></li>`; }).join("")}${!hasInf&&bags?`<li class="rtitem info"><span class="rtname">Mixing</span><ul class="tree">${bags}</ul></li>`:""}</ul></div>`;
       }).join("");
     }
     function renderDoses(){ document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); }); }
