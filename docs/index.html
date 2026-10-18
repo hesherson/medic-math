@@ -484,19 +484,32 @@ details.drug[open]>summary{border-bottom:1px solid var(--line)}
 .dg-grid section{background:var(--surface-2);border-radius:6px;padding:10px 12px}
 .dg-grid ul{padding-left:16px;font-size:13px;gap:2px}
 
-/* dosages: a section like the others; math and mL hidden until asked for */
-.dg-tools{display:flex;gap:6px;flex-wrap:wrap}
+/* dosages: a section like the others; the study-facing doses only, math and extras behind the chips */
+.dg-tools{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.dg-tools .chip{min-height:32px;padding:4px 9px;font-size:12.5px;white-space:nowrap}
+details.drug:not([open]) .dg-tools{display:none}
+details.drug{overflow:clip}
+details.drug[open]>summary{position:sticky;top:calc(var(--hdr,48px) + env(safe-area-inset-top,0px));z-index:6;background:var(--surface);box-shadow:0 6px 14px -10px rgba(0,0,0,.35)}
+details.drug[open] .dg-facts{display:none}
+details.drug[open] .dg-head{grid-template-columns:1fr}
 .dg-grid .dosesec{grid-column:1/-1}
+details.drug:not(.showinfo) .info{display:none!important}
+details.drug:not(.showmath) .dm{display:none!important}
+.info,.dm{animation:fade .3s ease-out}
 .ptline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:4px}
 .ptline b{font-family:var(--display);font-size:17px;color:var(--amber)}
 .ptline .chip{min-height:28px;padding:3px 10px;font-size:12px}
-.dosetable{display:grid;gap:10px}
+.dosetable{display:grid;gap:6px}
 .popgrp{display:grid;gap:2px}
-.pophead{display:inline-block;justify-self:start;font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 9px;border-radius:4px;background:var(--teal);color:var(--teal-ink);margin:4px 0 2px}
-.popgrp.peds .pophead{background:var(--amber);color:#1a1208}
+.pophead{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--teal);margin:6px 0 0}
+.pophead::after{content:"";flex:1 1 auto;height:1px;background:var(--line)}
+.popgrp.peds .pophead{color:var(--amber)}
 .rtgrp{display:grid}
-.rthead{font-family:var(--display);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:8px;padding-bottom:2px}
+.rthead{margin-top:8px;padding-bottom:2px}
+.rt{display:inline-block;font-family:var(--display);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;line-height:1.3;padding:2px 9px;border-radius:4px;background:var(--surface);border:1.5px solid var(--teal);color:var(--teal);white-space:nowrap}
+.popgrp.peds .rt{border-color:var(--amber);color:var(--amber)}
 .drow{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:2px 12px;padding:7px 0;border-top:1px solid var(--line);align-items:start}
+.rthead+.drow{border-top:0}
 .drow.text{grid-template-columns:1fr}
 .du{min-width:0}
 .du b{display:block;font-size:14px;font-weight:600;line-height:1.3}
@@ -506,11 +519,12 @@ details.drug[open]>summary{border-bottom:1px solid var(--line)}
 .dv b{display:block;font-family:var(--mono);font-size:14px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .dv span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
 .drow.bag .dv b{font-family:var(--display);font-size:15px}
-.dm{grid-column:1/-1;display:none;font-family:var(--mono);font-size:11.5px;line-height:1.45;color:var(--teal);background:var(--surface);border-radius:4px;padding:5px 8px;margin-top:3px;overflow-wrap:anywhere}
-.dg-body.showmath .dm{display:block}
+.dm{grid-column:1/-1;font-family:var(--mono);font-size:11.5px;line-height:1.45;color:var(--teal);background:var(--surface);border-radius:4px;padding:5px 8px;margin-top:3px;overflow-wrap:anywhere}
 .dnote{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin-top:2px}
 .tag{display:inline-block;vertical-align:middle;font-style:normal;font-family:var(--display);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:0 6px;border-radius:999px;background:var(--amber-soft);color:var(--amber);margin-left:6px}
 .kc{font-size:14px}
+.orow{display:flex;gap:10px;align-items:center;padding:5px 0;font-size:14px;border-top:1px solid var(--line)}
+.orow:first-of-type{border-top:0}
 .studytag{display:none;font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--amber);color:#1a1208}
 details.drug.instudy .studytag{display:inline-block}
 .drugchips{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -590,6 +604,8 @@ body.focus .quizwrap{max-width:720px;margin:0 auto}
   details.drug>summary{padding:12px 40px 12px 14px}
   .dg-body{padding:12px 12px 16px}
   .ttsbar{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  details.drug[open]>summary{padding-top:10px;padding-bottom:10px}
+  details.drug[open] .dg-cls{display:none}
   .calcfab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .mrow{grid-template-columns:1fr 1.5fr auto auto}
   .mcw{display:none}
@@ -1153,11 +1169,16 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   const ALLP=Object.values(NAV).flat();
   function groupOf(id){ return Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
   let curPanel=null;
+  // cascade and fade animations replay every time something is shown, not only on first render
+  window.replayCascade=root=>{ if(!root) return; const list=(root.classList&&root.classList.contains("cascade")?[root]:[]).concat([...root.querySelectorAll(".cascade")]); list.forEach(c=>{ c.classList.remove("cascade"); void c.offsetWidth; c.classList.add("cascade"); }); };
+  document.addEventListener("toggle",e=>{ const d=e.target; if(d&&d.tagName==="DETAILS"&&d.open) replayCascade(d); },true);
+  (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const set=()=>{ try{ document.documentElement.style.setProperty("--hdr",Math.round(h.getBoundingClientRect().height)+"px"); }catch(e){} }; set(); if(window.ResizeObserver) new ResizeObserver(set).observe(h); window.addEventListener("resize",set); })();
   function showPanel(id){
     if(!ALLP.includes(id)) id="today"; const g=groupOf(id);
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
     const sub=$("subnav"); const items=NAV[g]; sub.hidden=items.length<2; sub.innerHTML=items.map(p=>`<button type="button" class="pill" data-p="${p}" aria-selected="${p===id?"true":"false"}">${LABEL[p]}</button>`).join("");
     ALLP.forEach(p=>{ const el=$("panel-"+p); if(!el) return; const was=el.hidden; el.hidden=p!==id; if(p===id&&was){ el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); } });
+    replayCascade(document.getElementById("panel-"+id));
     curPanel=id; store.set("mm-panel",id); document.dispatchEvent(new CustomEvent("panel",{detail:id})); try{ history.replaceState(null,"","#"+id); }catch(e){} window.scrollTo({top:0,behavior:"instant"});
     document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false");
   }
@@ -1375,7 +1396,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["2 mg increments over 2 minutes"],peds:["IV/IO 0.2 to 0.3 mg/kg","IM 0.1 to 2 mg/kg (as printed)","Rectal 0.2 to 0.5 mg/kg"],special:["Peak IV/IO 15 minutes, IM 30 to 45 minutes","Duration 15 to 60 minutes"],
       quick:{moa:"Enhances GABA; sedation and anticonvulsant.",ind:"Seizures, anxiety, sedation.",dose:"5 to 10 mg IV/IM.",key:"Respiratory depression."},
       how:"Diazepam binds to the benzodiazepine site on the GABA-A receptor and makes the receptor respond more strongly to GABA, the brain's main inhibitory transmitter. More chloride flows into neurons, they become harder to fire, and the result is sedation, muscle relaxation, less anxiety and a higher seizure threshold. It is lipid soluble so it crosses into the brain quickly by IV, but it is absorbed poorly and unpredictably IM, which is why midazolam is preferred by that route. The same inhibition in the brainstem depresses breathing, especially with opioids or alcohol on board.",
-      doses:[{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"per increment over 2 min; repeat to effect"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.2,hi:0.3,unit:"mg",route:"IV/IO"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.2,hi:0.5,unit:"mg",route:"Rectal"},{l:"Seizure",pop:"peds",kind:"text",route:"IM",t:"The profile prints 0.1 to 2 mg/kg, which looks like a misprint. Check local protocol before using the IM route."}],stocks:[{l:"10 mg / 2 mL",c:5,u:"mg"}]},
+      doses:[{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"per increment over 2 min; repeat to effect"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.2,hi:0.3,unit:"mg",route:"IV/IO"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.2,hi:0.5,unit:"mg",route:"Rectal"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.1,hi:0.2,unit:"mg",route:"IM"}],stocks:[{l:"10 mg / 2 mL",c:5,u:"mg"}]},
     {id:"diltiazem",name:"Diltiazem",brands:["Cardizem"],cls:["Calcium channel blocker","Antidysrhythmic"],supply:["Vial"],
       moa:["Slows calcium influx across myocardial cell membranes","Slows SA and AV node conduction","Slows ventricular rate in atrial fibrillation and flutter"],ind:["Atrial fibrillation with rapid ventricular rate","Atrial flutter with rapid ventricular rate","SVT, second line to adenosine"],contra:["Known hypersensitivity","Hypotension","Myocardial infarction","Cardiogenic shock","Ventricular tachycardia","Second and third degree heart block","Wolff-Parkinson-White syndrome","Not recommended for pediatric patients"],adverse:["Hypotension","Dysrhythmias","Bradycardia"],routes:["IV","IO","Infusion"],onset:["2 to 5 minutes"],
       adult:["0.25 mg/kg (usually 20 mg) over 2 minutes","May repeat 0.35 mg/kg (usually 25 mg) in 15 minutes","Infusion 5 to 15 mg/hour"],peds:[],special:["Decrease dose for the elderly","Consider calcium chloride pretreatment","Peak 7 minutes, duration 1 to 3 hours","Pump when possible"],
@@ -1591,35 +1612,41 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     fil.innerHTML=`<option value="">All classes</option>`+classes.map(c=>`<option>${c}</option>`).join("");
     const li=(arr)=>arr.length?`<ul>${arr.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p class="note">None listed</p>`;
     const tag=t=>t?`<i class="tag">${t}</i>`:"";
+    const RT_SHORT={"IV":"IV","IO":"IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"Oral","Oral, chewed":"Oral","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
+    function onsetRows(d){
+      if(!d.onset.length) return `<p class="note">None listed</p>`;
+      const fallback=(()=>{ const r=d.routes.map(x=>RT_SHORT[x]||x); const iv=r.filter(x=>x==="IV"||x==="IO"); const rest=r.filter(x=>x!=="IV"&&x!=="IO"); return (iv.length?["IV / IO"]:[]).concat(rest).slice(0,3).join(" · "); })();
+      return d.onset.map(o=>{ const m=/^((?:IV\/IO\/ET\/infusion|IV\/IO|IM\/IN|IV|IM|IN|ET|Rectal))\s+(.*)$/.exec(o); const rt=m?m[1].replace("IV/IO/ET/infusion","IV / IO / ET / drip").replace("IV/IO","IV / IO").replace("IM/IN","IM / IN"):fallback; const txt=m?m[2]:o; return `<div class="orow"><span class="rt">${rt}</span><span>${txt.charAt(0).toUpperCase()+txt.slice(1)}</span></div>`; }).join("");
+    }
     function card(d){
       const hasDose=d.doses.length>0, inS=study.has(d.id);
       return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
           <div class="dg-main"><div class="dg-name"><h3>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}<span class="studytag">Study set</span></div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${d.quick.dose.replace(/\.$/,"")}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div></div>
-        </div></summary>
+        </div>
+        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
         <div class="dg-body cascade">
-          <div class="dg-tools"><button type="button" class="chip" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">${inS?"In study set":"Add to study set"}</button>${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button>`:""}${d.stocks.length?`<button type="button" class="chip" data-vials>Show vials</button>`:""}</div>
-          <div class="vials" hidden>${d.stocks.map(s=>`<figure>${stockToVial(d,s)}<figcaption>${s.l}</figcaption></figure>`).join("")}</div>
           <div class="how"><span class="eyebrow">How it works</span><p>${d.how||d.quick.moa}</p></div>
           <div class="dg-grid">
-            ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
+            ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
             <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>
             <section><h4>Standard supply</h4>${li(d.supply)}</section>
             <section><h4>Mechanism of action</h4>${li(d.moa)}</section>
             <section><h4>Indications</h4>${li(d.ind)}</section>
             <section><h4>Contraindications</h4>${li(d.contra)}</section>
             <section><h4>Adverse reactions</h4>${li(d.adverse)}</section>
-            <section><h4>Onset</h4>${li(d.onset)}</section>
+            <section><h4>Onset</h4>${onsetRows(d)}</section>
             <section><h4>Special considerations</h4>${li(d.special)}</section>
           </div>
         </div></details>`;
     }
-    const bagRow=b=>`<div class="drow bag"><div class="du"><b>Standard bag${b.tag?` <i class="tag">${b.tag}</i>`:""}</b><span>${b.use}${b.alt?" "+b.alt:""}</span><span class="why">${b.why}</span></div><div class="dv"><b>${b.mix}</b><span>${b.conc}</span></div></div>`;
+    const bagRow=b=>`<div class="drow bag info"><div class="du"><b>Standard bag${b.tag?` <i class="tag">${b.tag}</i>`:""}</b><span>${b.use}${b.alt?" "+b.alt:""}</span><span class="why">${b.why}</span></div><div class="dv"><b>${b.mix}</b><span>${b.conc}</span></div></div>`;
     function row(d,ds,kg){
-      if(ds.kind==="text") return `<div class="drow text"><div class="du"><b>${ds.l}${tag(ds.tag)}</b><span>${ds.t||""}</span></div></div>`;
+      const extra=ds.tag?" info":"";
+      if(ds.kind==="text") return `<div class="drow text${extra}"><div class="du"><b>${ds.l}${tag(ds.tag)}</b><span>${ds.t||""}</span></div></div>`;
       const r=doseLine(d,ds,kg);
-      const detail=[ds.t,ds.max&&ds.kind==="perkg"?`max ${fmt(ds.max,3)} ${ds.unit}`:"",ds.max&&ds.kind==="fixed"?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
-      return `<div class="drow"><div class="du"><b>${ds.l}${tag(ds.tag)}</b>${detail?`<span>${detail}</span>`:""}</div><div class="dv"><b>${r.dose}</b>${r.calc?`<span>${r.calc}</span>`:""}</div>${r.how?`<div class="dm">${r.how}</div>`:""}${ds.note?`<div class="dnote">${ds.note}</div>`:""}</div>`;
+      const detail=[ds.t,ds.max?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
+      return `<div class="drow${extra}"><div class="du"><b>${ds.l}${tag(ds.tag)}</b>${detail?`<span>${detail}</span>`:""}</div><div class="dv"><b>${r.dose}</b>${r.calc?`<span class="info">${r.calc}</span>`:""}</div>${r.how?`<div class="dm">${r.how}</div>`:""}${ds.note?`<div class="dnote">${ds.note}</div>`:""}</div>`;
     }
     function doseBlock(d,kg){
       return [["adult","Adult"],["peds","Pediatric"]].map(([p,pl])=>{
@@ -1627,7 +1654,8 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
         const groups=RT_ORDER.filter(rt=>rows.some(x=>(x.route||"IV/IO")===rt));
         const bags=(p==="adult"&&d.bags)?d.bags.map(bagRow).join(""):"";
         const hasInf=groups.includes("Infusion");
-        return `<div class="popgrp ${p}"><div class="pophead">${pl}</div>${groups.map(rt=>`<div class="rtgrp"><div class="rthead">${RT_LABEL[rt]||rt}</div>${rows.filter(x=>(x.route||"IV/IO")===rt).map(ds=>row(d,ds,kg)).join("")}${rt==="Infusion"?bags:""}</div>`).join("")}${!hasInf&&bags?`<div class="rtgrp"><div class="rthead">Mixing</div>${bags}</div>`:""}</div>`;
+        const allInfo=rows.every(x=>x.tag);
+        return `<div class="popgrp ${p}${allInfo?" info":""}"><div class="pophead">${pl}</div>${groups.map(rt=>{ const rr=rows.filter(x=>(x.route||"IV/IO")===rt); const gi=rr.every(x=>x.tag); return `<div class="rtgrp${gi?" info":""}"><div class="rthead"><span class="rt">${RT_LABEL[rt]||rt}</span></div>${rr.map(ds=>row(d,ds,kg)).join("")}${rt==="Infusion"?bags:""}</div>`; }).join("")}${!hasInf&&bags?`<div class="rtgrp info"><div class="rthead"><span class="rt">Mixing</span></div>${bags}</div>`:""}</div>`;
       }).join("");
     }
     function renderDoses(){ document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); }); }
@@ -1637,19 +1665,21 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     function setStudyBtn(){ studyBtn.textContent=`Study set · ${study.size}`; studyBtn.setAttribute("aria-pressed",studyOnly?"true":"false"); if(!study.size&&studyOnly){ studyOnly=false; studyBtn.setAttribute("aria-pressed","false"); } }
     function visible(){ const term=q.value.trim().toLowerCase(), c=fil.value; return DRUGS.filter(d=>(!studyOnly||study.has(d.id))&&(!c||d.cls.includes(c))&&(!term||[d.name,...d.brands,...d.cls,...d.ind].join(" ").toLowerCase().includes(term))); }
     window.visibleDrugIds=()=>visible().map(d=>d.id);
+    const applyLayers=()=>{ const m=!!store.get("mm-showmath",false), i=!!store.get("mm-showinfo",false); root.querySelectorAll("details.drug").forEach(x=>{ x.classList.toggle("showmath",m); x.classList.toggle("showinfo",i); }); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",m?"true":"false")); root.querySelectorAll("[data-info]").forEach(x=>x.setAttribute("aria-pressed",i?"true":"false")); };
     function render(){
       const list=visible();
-      root.innerHTML=list.length?list.map(card).join(""):`<p class="note">${studyOnly?"Your study set is empty. Open a drug and tap Add to study set.":"No drug matches."}</p>`;
+      root.innerHTML=list.length?list.map(card).join(""):`<p class="note">${studyOnly?"Your study set is empty. Open a drug and tap Study.":"No drug matches."}</p>`;
       $("drug-count").textContent=list.length+" of "+DRUGS.length;
       setStudyBtn();
       renderDoses();
-      const showMath=!!store.get("mm-showmath",false);
-      root.querySelectorAll(".dg-body").forEach(b=>{ b.classList.toggle("showmath",showMath); const m=b.querySelector("[data-math]"); if(m) m.setAttribute("aria-pressed",showMath?"true":"false"); });
-      root.querySelectorAll("[data-math]").forEach(b=>b.addEventListener("click",()=>{ const now=!(store.get("mm-showmath",false)); store.set("mm-showmath",now); root.querySelectorAll(".dg-body").forEach(x=>x.classList.toggle("showmath",now)); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",now?"true":"false")); }));
-      root.querySelectorAll("[data-vials]").forEach(b=>b.addEventListener("click",()=>{ const v=b.closest(".dg-body").querySelector(".vials"); v.hidden=!v.hidden; b.textContent=v.hidden?"Show vials":"Hide vials"; }));
+      applyLayers();
+      // the tool chips live inside the summary so they stay pinned; their clicks must not toggle the card
+      root.querySelectorAll(".dg-tools").forEach(t=>t.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; e.preventDefault(); e.stopPropagation();
+        if(b.hasAttribute("data-math")){ store.set("mm-showmath",!store.get("mm-showmath",false)); applyLayers(); }
+        else if(b.hasAttribute("data-info")){ store.set("mm-showinfo",!store.get("mm-showinfo",false)); applyLayers(); }
+        else if(b.dataset.listen){ if(window.ttsStart) ttsStart([b.dataset.listen],0); }
+        else if(b.dataset.study){ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); } }));
       root.querySelectorAll("[data-ptopen]").forEach(b=>b.addEventListener("click",()=>{ window.scrollTo({top:0,behavior:"smooth"}); $("pt-pop").hidden=false; setTimeout(()=>$("pt-kg").focus(),300); }));
-      root.querySelectorAll("[data-study]").forEach(b=>b.addEventListener("click",()=>{ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); b.textContent=on?"In study set":"Add to study set"; $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); }));
-      root.querySelectorAll("[data-listen]").forEach(b=>b.addEventListener("click",()=>{ if(window.ttsStart) ttsStart([b.dataset.listen],0); }));
       let seenD=store.get("mm-seenDrugs",{});
       root.querySelectorAll("details.drug").forEach(d=>d.addEventListener("toggle",()=>{
         if(d.open){ root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o!==d) o.open=false; }); const id=d.id.replace("drug-",""); if(!seenD[id]){ seenD[id]=Date.now(); store.set("mm-seenDrugs",seenD); document.dispatchEvent(new CustomEvent("drugseen")); } }
@@ -2558,7 +2588,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       if(d.brands.length&&!quiz) P.push({sub:"Drug",t:`Also called ${d.brands.join(", or ")}.`});
       push("Class",`Class: ${d.cls.join(", ")}.`,"What class is it?",3000);
       push("Indications",`Indications: ${d.ind.join(". ")}.`,"What is it for?",5000);
-      const ad=d.doses.filter(x=>x.pop==="adult"), pd=d.doses.filter(x=>x.pop==="peds");
+      const ad=d.doses.filter(x=>x.pop==="adult"&&!x.tag), pd=d.doses.filter(x=>x.pop==="peds"&&!x.tag);
       if(ad.length) push("Adult dosing",`Adult dosing. ${ad.map(doseSay).join(". ")}.`,"Adult dose?",6000);
       if(pd.length) push("Pediatric dosing",`Pediatric dosing. ${pd.map(doseSay).join(". ")}.`,"Pediatric dose?",5000);
       if(d.contra.length) push("Contraindications",`Contraindications: ${d.contra.join(". ")}.`,"Contraindications?",5000);
