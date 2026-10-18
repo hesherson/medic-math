@@ -156,13 +156,10 @@ table.zebra th{border-bottom:2px solid var(--line)}
 .extable tr.cur td{background:var(--amber-soft)}
 .extable tr[data-j]{cursor:pointer}
 .extable td.res{color:var(--teal);font-weight:500}
-.board{display:none;background:var(--amber-soft);border-left:4px solid var(--amber);padding:10px 14px;border-radius:0 6px 6px 0;font-size:14px;gap:6px}
 .board ol{padding-left:18px}
 .board code{font-family:var(--mono);font-size:13px}
 .board .bf{display:block;font-family:var(--display);font-weight:600;font-size:17px;line-height:1.3;background:var(--teal);color:var(--teal-ink);padding:8px 12px;border-radius:5px;white-space:normal;overflow-wrap:anywhere}
 .board .br{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.3}
-body.teach .board{display:grid}
-body.teach .steps .math{display:none}
 body.teach .extable{display:none}
 /* mastery */
 .mastery{display:grid;gap:6px}
@@ -195,7 +192,9 @@ body.teach .extable{display:none}
 .sb-task input{font:inherit;font-size:14px;min-height:40px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);min-width:0}
 .sb-task .btn{grid-column:1/-1;justify-self:start}
 /* calculator drawer */
-.calcfab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:52px;height:52px;border-radius:50%;border:0;background:var(--amber);color:#1a1208;font-family:var(--display);font-size:26px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;z-index:30}
+.calcfab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--amber);color:#1a1208;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;z-index:30;touch-action:none;user-select:none;-webkit-user-select:none}
+.calcfab svg{width:30px;height:30px;fill:currentColor;transition:transform .2s}
+.calcfab[aria-expanded="true"] svg{transform:rotate(45deg)}
 .calcfab:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:31}
 .drawer{position:fixed;top:0;right:0;height:100%;width:min(340px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:32;transform:translateX(102%);transition:transform .22s ease;display:flex;flex-direction:column;gap:10px;padding-top:calc(12px + env(safe-area-inset-top,0px));padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-left:14px;padding-right:calc(14px + env(safe-area-inset-right,0px));overflow-y:auto}
@@ -303,7 +302,7 @@ details.method>summary:hover,details.sec>summary:hover,details.scen>summary:hove
 .clock{transition:color .2s}
 .calcfab{transition:transform .15s,box-shadow .15s}
 .calcfab:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
-.calcfab[aria-expanded="true"]{transform:rotate(90deg)}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 /* phone */
 html{-webkit-text-size-adjust:100%}
@@ -705,6 +704,60 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
 .tricks mark{background:var(--amber-soft);color:inherit;border-radius:2px;padding:0 1px}
 .tricks .mgroup{margin-top:10px}
 .tricks.grouped .tk-cat{display:none}
+
+/* sticky teach bar and teaching script */
+.stickybar{position:sticky;top:calc(var(--hdr,48px) + env(safe-area-inset-top,0px));z-index:5;background:var(--bg);padding:8px 0;margin:0 0 10px;display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--line)}
+.stickybar .note{font-size:12.5px;line-height:1.35}
+.stickybar .chip{white-space:nowrap;flex:0 0 auto}
+#teach[aria-pressed="true"]{background:var(--amber);color:#1a1208;border-color:var(--amber)}
+body.teach .steps{display:none}
+.board{display:none;gap:10px;background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px}
+body.teach .board{display:grid}
+.board .tb{display:grid;gap:3px}
+.board .tl{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:700}
+.board .bf{margin:0}
+.board .tsteps{list-style:none;padding:0;margin:0;display:grid;gap:10px;counter-reset:ts}
+.board .tsteps li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:3px 10px;counter-increment:ts;background:var(--surface);border-radius:8px;padding:10px 12px}
+.board .tsteps li::before{content:counter(ts);grid-row:1/5;width:24px;height:24px;border-radius:50%;background:var(--amber);color:#1a1208;font-family:var(--display);font-weight:700;font-size:14px;display:grid;place-items:center}
+.board .tsteps .tl,.board .tsteps p{grid-column:2}
+.board .tsay{font-size:15px}
+.board .twrite{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.35;white-space:pre-line;color:var(--ink)}
+.board .tn{color:var(--muted);font-size:13px}
+
+/* tool wheel */
+.wheel{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;z-index:30;pointer-events:none}
+.wtool{position:absolute;left:4px;top:4px;width:48px;height:48px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:grid;place-items:center;gap:0;cursor:pointer;transform:translate(0,0) scale(.2);opacity:0;transition:transform .25s cubic-bezier(.2,.7,.2,1),opacity .2s;pointer-events:none}
+.wtool svg{width:22px;height:22px;fill:var(--teal)}
+.wtool span{position:absolute;top:50%;right:54px;transform:translateY(-50%);font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink);background:var(--surface);padding:1px 6px;border-radius:4px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.wheel.open .wtool{opacity:1;pointer-events:auto}
+.wheel.open .wtool[data-tool="calc"]{transform:translate(-78px,0) scale(1);transition-delay:0s}
+.wtool[data-tool="calc"] span{top:auto;right:auto;bottom:-22px;left:50%;transform:translateX(-50%)}
+.wheel.open .wtool[data-tool="board"]{transform:translate(-56px,-56px) scale(1);transition-delay:.04s}
+.wheel.open .wtool[data-tool="listen"]{transform:translate(0,-78px) scale(1);transition-delay:.08s}
+.wtool.hot,.wtool:hover{background:var(--amber)}
+.wtool.hot svg,.wtool:hover svg{fill:#1a1208}
+body:has(.ttsbar:not([hidden])) .wheel{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
+@media (max-width:600px){ .wheel{bottom:calc(84px + env(safe-area-inset-bottom,0px))} body:has(.ttsbar:not([hidden])) .wheel{bottom:calc(228px + env(safe-area-inset-bottom,0px))} }
+body.focus .wheel{display:none}
+
+/* whiteboard */
+.wb{position:fixed;inset:0;z-index:34;background:var(--surface);display:grid;grid-template-rows:auto 1fr;padding-top:env(safe-area-inset-top,0px)}
+.wb[hidden]{display:none}
+.wb-top{display:grid;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--bg)}
+.wb-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wb-colors{display:flex;gap:6px;margin-left:auto}
+.wb-c{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:var(--c);cursor:pointer;padding:0}
+.wb-c.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface) inset}
+.wb-width{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);flex:1 1 160px}
+.wb-width input{flex:1 1 80px;accent-color:var(--amber)}
+.wb-width b{min-width:20px;text-align:right;color:var(--ink)}
+.wb-row .chip{min-height:34px}
+.wb-row .btn{min-height:34px;padding:6px 12px}
+#wb-canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;background-color:var(--surface);background-image:linear-gradient(to right,color-mix(in srgb,var(--line) 55%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--line) 55%,transparent) 1px,transparent 1px);background-size:24px 24px}
+body.wbopen{overflow:hidden}
+
+/* listen stands out */
+.chip.listen,#drug-listen{background:var(--amber);color:#1a1208;border-color:var(--amber);font-weight:600}
 </style>
 </head>
 <body>
@@ -770,7 +823,8 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
 </section>
 <!-- ================= METHODS ================= -->
 <section class="panel" id="panel-methods" hidden>
-  <div class="introrow"><p class="intro">Find the job you need to do, open it, and the formula and the moves are inside, each with a worked number on the line. The last move is always the same: run it backwards to make sure you land where you started. The example picker swaps in a different drug every time.</p><button type="button" class="chip" id="teach" aria-pressed="false">Teach mode</button></div>
+  <p class="intro">Find the job you need to do, open it, and the formula and the moves are inside, each with a worked number on the line. The last move is always the same: run it backwards to make sure you land where you started. The example picker swaps in a different drug every time.</p>
+  <div class="stickybar"><button type="button" class="chip" id="teach" aria-pressed="false">Teach mode</button><span class="note" id="teach-note">Turns the open method into a script you can run with a student, using the example that is picked.</span></div>
   <div class="methods" id="methods"></div>
 </section>
 
@@ -1102,7 +1156,19 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
 
 <footer>Reference doses are standard published ranges and the WVFD profile set. Verify every number against local protocol before use.</footer>
 </main>
-<button class="calcfab" id="calc-open" type="button" aria-label="Open calculator" aria-expanded="false">=</button>
+<div class="wheel" id="wheel">
+  <button type="button" class="wtool" data-tool="calc" aria-label="Calculator"><svg viewBox="0 0 24 24"><path d="M5 3h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v4h12V5zm0 6v2h3v-2zm5 0v2h3v-2zm5 0v2h2v-2zM6 15v2h3v-2zm5 0v2h3v-2zm5 0v4h2v-4zM6 19v2h8v-2z"/></svg><span>Calc</span></button>
+  <button type="button" class="wtool" data-tool="board" aria-label="Whiteboard"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zm17.7-10.2a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></svg><span>Board</span></button>
+  <button type="button" class="wtool" data-tool="listen" aria-label="Listen"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><span>Listen</span></button>
+</div>
+<button class="calcfab" id="calc-open" type="button" aria-label="Tools" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></button>
+<div class="wb" id="wb" hidden>
+  <div class="wb-top">
+    <div class="wb-row"><span class="eyebrow">Whiteboard</span><div class="wb-colors" id="wb-colors"></div></div>
+    <div class="wb-row"><label class="wb-width">Pen <input type="range" id="wb-width" min="1" max="24" step="1" value="4" aria-label="Pen width"><b id="wb-wv" class="num">4</b></label><button type="button" class="chip" id="wb-eraser" aria-pressed="false">Eraser</button><button type="button" class="chip" id="wb-undo">Undo</button><button type="button" class="chip" id="wb-clear">Clear</button><button type="button" class="btn alt" id="wb-close">Close</button></div>
+  </div>
+  <canvas id="wb-canvas" aria-label="Drawing surface"></canvas>
+</div>
 <div class="backdrop" id="calc-backdrop" hidden></div>
 <aside class="drawer" id="drawer" aria-label="Calculator" aria-hidden="true">
   <div class="dhead"><span class="eyebrow">Calculator</span><button class="btn alt" type="button" id="calc-close">Close</button></div>
@@ -1687,7 +1753,7 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
           <div class="dg-main"><div class="dg-name"><h3>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}<span class="studytag">Study set</span></div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${d.quick.dose.replace(/\.$/,"")}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
-        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
+        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
         <div class="dg-body">
           <div class="how"><span class="eyebrow">How it works</span>${howBlock(d)}</div>
           <div class="dg-grid">
@@ -1879,17 +1945,23 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
         <div class="mbody cascade">
         <div class="mform"><code class="mf">${m.formula}</code>${m.rule?`<div class="mrule">${m.rule}</div>`:""}</div>
         ${whenRest?`<p class="when">${m.when}</p>`:""}
-        <div class="board"><span class="eyebrow">Board script</span><p>Write the formula on the board:</p><code class="bf">${m.formula}</code><p>Say the rule:</p><p class="br">${m.rule}</p><ol>${m.steps.map(s=>`<li>${s}</li>`).join("")}</ol><p>Give them <b>${m.ex[0].n}</b> and have them fill every line out loud. Then pick the next example and check.</p></div>
+        <div class="board"></div>
         <div class="expick"><div class="expick-top"><span class="sect">Pick an example</span><span class="excount"><b>1</b> of ${m.ex.length}</span></div><div class="exbar"><button type="button" class="btn alt exnav" data-d="-1" aria-label="Previous example">&lsaquo;</button><select class="exsel" aria-label="Example">${m.ex.map((e,j)=>`<option value="${j}">${e.n}</option>`).join("")}</select><button type="button" class="btn alt exnav" data-d="1" aria-label="Next example">&rsaquo;</button></div></div>
         <ol class="steps">${m.steps.map((s,k)=>`<li><div class="say">${s}</div><div class="math" data-k="${k}">${mathLines(first[k]||"")}</div></li>`).join("")}</ol></div>`;
-      const maths=d.querySelectorAll(".math"), sel=d.querySelector(".exsel"), cnt=d.querySelector(".excount b");
-      const stepsEl=d.querySelector(".steps"); const show=j=>{ j=(j+m.ex.length)%m.ex.length; sel.value=j; cnt.textContent=j+1; const v=m.vals(m.ex[j]); maths.forEach((el,k)=>{ el.textContent=mathLines(v[k]||""); }); stepsEl.querySelectorAll("li").forEach(li=>{ li.style.animation="none"; void li.offsetWidth; li.style.animation=""; }); };
+      const maths=d.querySelectorAll(".math"), sel=d.querySelector(".exsel"), cnt=d.querySelector(".excount b"), board=d.querySelector(".board");
+      const lastAsk=/^Ask/.test(m.steps[m.steps.length-1]);
+      const teachHTML=j=>{ const e=m.ex[j], v=m.vals(e); return `<span class="eyebrow">Teach it with ${e.n}</span>
+        <div class="tb"><span class="tl">Write on the board</span><code class="bf">${m.formula}</code></div>
+        <div class="tb"><span class="tl">Say the rule</span><p class="br">${m.rule}</p></div>
+        <ol class="tsteps">${m.steps.map((st,k)=>{ const ask=lastAsk&&k===m.steps.length-1; return `<li><span class="tl">${ask?"Ask them":"Say"}</span><p class="tsay">${st.replace(/^Ask:\s*/,"")}</p><span class="tl">${ask?"They should get":"Write"}</span><p class="twrite">${mathLines(v[k]||"")}</p></li>`; }).join("")}</ol>
+        <p class="tn">Then pick the next example, hand them the marker, and stay quiet while they run every line out loud.</p>`; };
+      const stepsEl=d.querySelector(".steps"); const show=j=>{ j=(j+m.ex.length)%m.ex.length; sel.value=j; cnt.textContent=j+1; board.innerHTML=teachHTML(j); const v=m.vals(m.ex[j]); maths.forEach((el,k)=>{ el.textContent=mathLines(v[k]||""); }); stepsEl.querySelectorAll("li").forEach(li=>{ li.style.animation="none"; void li.offsetWidth; li.style.animation=""; }); };
       sel.addEventListener("change",()=>show(+sel.value));
       d.querySelectorAll(".exnav").forEach(b=>b.addEventListener("click",()=>show(+sel.value+(+b.dataset.d))));
       show(0);
       root.appendChild(d);
     });
-    const tb=$("teach"); const setTeach=on=>{ document.body.classList.toggle("teach",on); tb.setAttribute("aria-pressed",on?"true":"false"); store.set("mm-teach",on); };
+    const tb=$("teach"); const setTeach=on=>{ document.body.classList.toggle("teach",on); tb.setAttribute("aria-pressed",on?"true":"false"); tb.textContent=on?"Teach mode on":"Teach mode"; $("teach-note").textContent=on?"Each open method is now a script: what to write, what to say, what they should get. Pick a different example to change the numbers.":"Turns the open method into a script you can run with a student, using the example that is picked."; store.set("mm-teach",on); };
     tb.addEventListener("click",()=>setTeach(!document.body.classList.contains("teach")));
     setTeach(!!store.get("mm-teach",false));
   })();
@@ -2730,10 +2802,10 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
   })();
   // ---------- calculator drawer ----------
   (function calc(){
-    const drawer=$("drawer"), expr=$("dexpr"), res=$("dres"), hist=$("dhist"), fab=$("calc-open"), back=$("calc-backdrop");
+    const drawer=$("drawer"), expr=$("dexpr"), res=$("dres"), hist=$("dhist"), back=$("calc-backdrop");
     let open=false, history=store.get("mm-calc",[]);
-    function setOpen(v){ open=v; drawer.classList.toggle("open",v); drawer.setAttribute("aria-hidden",v?"false":"true"); fab.setAttribute("aria-expanded",v?"true":"false"); back.hidden=!v;  }
-    fab.addEventListener("click",()=>setOpen(!open)); $("calc-close").addEventListener("click",()=>setOpen(false)); back.addEventListener("click",()=>setOpen(false));
+    function setOpen(v){ open=v; drawer.classList.toggle("open",v); drawer.setAttribute("aria-hidden",v?"false":"true"); back.hidden=!v; }
+    window.openCalc=()=>setOpen(true); $("calc-close").addEventListener("click",()=>setOpen(false)); back.addEventListener("click",()=>setOpen(false));
     document.addEventListener("keydown",e=>{ if(!open) return; if(e.key==="Escape"){ setOpen(false); return; } if(e.target&&/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)&&e.target!==expr) return; if(/^[0-9.+\-*/()]$/.test(e.key)){ e.preventDefault(); expr.value+=e.key==="*"?"×":e.key==="/"?"÷":e.key; live(); } else if(e.key==="Backspace"){ e.preventDefault(); expr.value=expr.value.slice(0,-1); live(); } else if(e.key==="Enter"||e.key==="="){ e.preventDefault(); commit(); } else if(e.key==="Delete"){ expr.value=""; live(); } });
     // safe evaluator: tokens, shunting-yard, no eval
     function evaluate(s){
@@ -2762,6 +2834,62 @@ details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
     function renderHist(){ hist.innerHTML=history.map((h,i)=>`<button type="button" data-i="${i}"><span class="he">${h.e}</span><span class="hv num">${show(h.v)}</span></button>`).join(""); }
     hist.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; expr.value=show(history[+b.dataset.i].v).replace(/,/g,""); live(); });
     renderHist();
+  })();
+  // ---------- tool wheel: tap to fan out, or press and hold, slide to a tool, release ----------
+  (function wheel(){
+    const fab=$("calc-open"), wheel=$("wheel"); if(!fab||!wheel) return;
+    let open=false, holdT=null, holding=false;
+    const setOpen=v=>{ open=v; wheel.classList.toggle("open",v); fab.setAttribute("aria-expanded",v?"true":"false"); };
+    function activate(tool){
+      setOpen(false);
+      if(tool==="calc"&&window.openCalc) openCalc();
+      else if(tool==="board"&&window.openBoard) openBoard();
+      else if(tool==="listen"){ if(!window.ttsStart) return; const openCard=document.querySelector("details.drug[open]"); if(openCard) ttsStart([openCard.id.replace("drug-","")],0); else { if(!document.getElementById("panel-drugs")||document.getElementById("panel-drugs").hidden) showPanel("drugs"); const ids=window.visibleDrugIds?visibleDrugIds():[]; if(ids.length) ttsStart(ids,0); } }
+    }
+    const toolAt=(x,y)=>{ const el=document.elementFromPoint(x,y); return el&&el.closest?el.closest(".wtool"):null; };
+    fab.addEventListener("pointerdown",e=>{ e.preventDefault(); holding=false; try{ fab.setPointerCapture(e.pointerId); }catch(x){} holdT=setTimeout(()=>{ holding=true; setOpen(true); feedback(true); },220); });
+    fab.addEventListener("pointermove",e=>{ if(!holding) return; const t=toolAt(e.clientX,e.clientY); wheel.querySelectorAll(".wtool").forEach(b=>b.classList.toggle("hot",b===t)); });
+    fab.addEventListener("pointerup",e=>{ clearTimeout(holdT); if(holding){ const t=toolAt(e.clientX,e.clientY); wheel.querySelectorAll(".wtool").forEach(b=>b.classList.remove("hot")); if(t) activate(t.dataset.tool); else setOpen(false); holding=false; } else setOpen(!open); });
+    fab.addEventListener("pointercancel",()=>{ clearTimeout(holdT); holding=false; });
+    fab.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); setOpen(!open); } });
+    wheel.addEventListener("click",e=>{ const b=e.target.closest(".wtool"); if(b) activate(b.dataset.tool); });
+    document.addEventListener("pointerdown",e=>{ if(open&&!e.target.closest("#wheel,#calc-open")) setOpen(false); });
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&open) setOpen(false); });
+  })();
+
+  // ---------- whiteboard: pen, eraser, undo, grid; the drawing survives close and reopen ----------
+  (function board(){
+    const wrap=$("wb"), cv=$("wb-canvas"); if(!wrap||!cv||typeof cv.getContext!=="function") return;
+    const ctx=cv.getContext("2d"); let drawing=false, pts=[], undo=[], eraser=false, width=+store.get("mm-wbw",4)||4, colorKey=store.get("mm-wbc","ink"), dirty=false;
+    const COLORS=[["ink",null,"Ink"],["teal","#1E5A6E","Teal"],["amber","#D9822B","Amber"],["red","#C0392B","Red"],["green","#2E7D4F","Green"],["blue","#2A7FB8","Blue"],["purple","#6C4AB6","Purple"]];
+    const ink=()=>getComputedStyle(document.body).color;
+    const color=()=>{ const c=COLORS.find(x=>x[0]===colorKey); return c&&c[1]?c[1]:ink(); };
+    const colorsEl=$("wb-colors");
+    function drawColors(){ colorsEl.innerHTML=COLORS.map(([k,c,l])=>`<button type="button" class="wb-c${k===colorKey&&!eraser?" on":""}" data-c="${k}" aria-label="${l}" style="--c:${c||ink()}"></button>`).join(""); }
+    colorsEl.addEventListener("click",e=>{ const b=e.target.closest(".wb-c"); if(!b) return; colorKey=b.dataset.c; eraser=false; $("wb-eraser").setAttribute("aria-pressed","false"); store.set("mm-wbc",colorKey); drawColors(); });
+    const wIn=$("wb-width"), wV=$("wb-wv"); wIn.value=width; wV.textContent=width;
+    wIn.addEventListener("input",()=>{ width=+wIn.value; wV.textContent=width; store.set("mm-wbw",width); });
+    $("wb-eraser").addEventListener("click",()=>{ eraser=!eraser; $("wb-eraser").setAttribute("aria-pressed",eraser?"true":"false"); drawColors(); });
+    function dpr(){ return window.devicePixelRatio||1; }
+    function size(){ const r=cv.getBoundingClientRect(); const W=Math.round(r.width*dpr()), H=Math.round(r.height*dpr()); if(!W||!H||(cv.width===W&&cv.height===H)) return; let img=null; try{ if(cv.width&&cv.height) img=ctx.getImageData(0,0,cv.width,cv.height); }catch(e){} cv.width=W; cv.height=H; ctx.setTransform(dpr(),0,0,dpr(),0,0); ctx.lineCap="round"; ctx.lineJoin="round"; if(img) ctx.putImageData(img,0,0); }
+    function snapshot(){ try{ undo.push(ctx.getImageData(0,0,cv.width,cv.height)); if(undo.length>24) undo.shift(); }catch(e){} }
+    $("wb-undo").addEventListener("click",()=>{ const im=undo.pop(); if(!im) return; ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); ctx.putImageData(im,0,0); ctx.restore(); dirty=true; });
+    $("wb-clear").addEventListener("click",()=>{ snapshot(); ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); ctx.restore(); dirty=true; });
+    const pos=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; };
+    function stroke(){ if(pts.length<2) return; ctx.save(); ctx.globalCompositeOperation=eraser?"destination-out":"source-over"; ctx.strokeStyle=color(); ctx.lineWidth=eraser?width*3:width; ctx.beginPath(); const n=pts.length; if(n===2){ ctx.moveTo(pts[0].x,pts[0].y); ctx.lineTo(pts[1].x,pts[1].y); } else { const a=pts[n-3], b=pts[n-2], c=pts[n-1]; const m1={x:(a.x+b.x)/2,y:(a.y+b.y)/2}, m2={x:(b.x+c.x)/2,y:(b.y+c.y)/2}; ctx.moveTo(m1.x,m1.y); ctx.quadraticCurveTo(b.x,b.y,m2.x,m2.y); } ctx.stroke(); ctx.restore(); }
+    cv.addEventListener("pointerdown",e=>{ e.preventDefault(); cv.setPointerCapture(e.pointerId); snapshot(); drawing=true; const p=pos(e); pts=[p]; ctx.save(); ctx.globalCompositeOperation=eraser?"destination-out":"source-over"; ctx.fillStyle=color(); ctx.beginPath(); ctx.arc(p.x,p.y,(eraser?width*3:width)/2,0,Math.PI*2); ctx.fill(); ctx.restore(); dirty=true; });
+    cv.addEventListener("pointermove",e=>{ if(!drawing) return; const list=e.getCoalescedEvents?e.getCoalescedEvents():[e]; list.forEach(ev=>{ pts.push(pos(ev)); stroke(); }); });
+    const end=()=>{ drawing=false; pts=[]; };
+    cv.addEventListener("pointerup",end); cv.addEventListener("pointercancel",end);
+    function save(){ if(!dirty) return; try{ store.set("mm-wb",cv.toDataURL("image/png")); }catch(e){} dirty=false; }
+    let restored=false;
+    function restore(){ if(restored) return; restored=true; const d=store.get("mm-wb",null); if(!d) return; const im=new Image(); im.onload=()=>{ ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(im,0,0,cv.width,cv.height); ctx.restore(); }; im.src=d; }
+    window.openBoard=()=>{ wrap.hidden=false; document.body.classList.add("wbopen"); drawColors(); requestAnimationFrame(()=>{ size(); restore(); }); };
+    const close=()=>{ save(); wrap.hidden=true; document.body.classList.remove("wbopen"); };
+    $("wb-close").addEventListener("click",close);
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!wrap.hidden) close(); });
+    window.addEventListener("resize",()=>{ if(!wrap.hidden) size(); });
+    window.addEventListener("pagehide",save);
   })();
 
   // ---------- boot ----------
