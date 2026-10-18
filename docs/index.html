@@ -688,6 +688,23 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
 @keyframes revealUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .reveal.in{animation:revealUp .6s cubic-bezier(.2,.7,.2,1) both}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1}.reveal.in{animation:none}}
+
+/* tricks */
+.tricks{display:grid;gap:8px}
+details.trick{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.trick>summary{list-style:none;cursor:pointer;padding:11px 40px 11px 14px;position:relative;display:grid;gap:3px}
+details.trick>summary::-webkit-details-marker{display:none}
+details.trick>summary::after{content:"+";position:absolute;right:14px;top:8px;font-family:var(--display);font-size:22px;font-weight:600;color:var(--muted)}
+details.trick[open]>summary::after{content:"\2212"}
+details.trick>summary:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;border-radius:8px}
+details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
+.tk-cat{font-family:var(--display);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:700}
+.tk-body{padding:0 14px 14px;display:grid;gap:8px;animation:rise .25s ease-out}
+.tk-x{font-size:14.5px;line-height:1.5}
+.tk-w{font-size:13px;color:var(--muted);border-left:3px solid var(--amber);padding-left:10px}
+.tricks mark{background:var(--amber-soft);color:inherit;border-radius:2px;padding:0 1px}
+.tricks .mgroup{margin-top:10px}
+.tricks.grouped .tk-cat{display:none}
 </style>
 </head>
 <body>
@@ -941,86 +958,13 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   </div>
 </section>
 
-<!-- ================= CALCULATORS ================= -->
-<section class="panel" id="panel-calc" hidden>
-  <div class="calcgrid cascade">
-
-    <div class="calc">
-      <h3>Dilution <span class="tagline">grams in a volume</span></h3>
-      <div class="fields">
-        <div class="field"><label for="dil-g">Grams added</label><input type="number" id="dil-g" value="25" step="0.5" min="0"></div>
-        <div class="field"><label for="dil-bag">Bag mL</label><input type="number" id="dil-bag" value="250" step="10" min="0"></div>
-        <div class="field"><label for="dil-waste">Wasted mL</label><input type="number" id="dil-waste" value="50" step="10" min="0"></div>
-        <div class="field"><label for="dil-add">Added mL</label><input type="number" id="dil-add" value="50" step="10" min="0"></div>
-      </div>
-      <div class="out"><span class="eyebrow">Result</span><div class="val" id="dil-val">D10</div><div class="work" id="dil-work"></div></div>
-    </div>
-
-    <div class="calc">
-      <h3>Label to mg <span class="tagline">percent or ratio × volume</span></h3>
-      <div class="fields">
-        <div class="field"><label for="lab-type">Label</label><select id="lab-type"><option value="pct">Percent</option><option value="ratio">Ratio 1:X</option></select></div>
-        <div class="field"><label for="lab-val" id="lab-val-label">Percent</label><input type="number" id="lab-val" value="2" step="0.1" min="0"></div>
-        <div class="field"><label for="lab-ml">mL drawn</label><input type="number" id="lab-ml" value="5" step="0.5" min="0"></div>
-      </div>
-      <div class="out"><span class="eyebrow">Result</span><div class="val" id="lab-out">100 mg</div><div class="work" id="lab-work"></div></div>
-    </div>
-
-    <div class="calc">
-      <h3>Draw-up <span class="tagline">mg/kg to mL</span></h3>
-      <div class="fields">
-        <div class="field"><label for="dr-kg">Weight kg</label><input type="number" id="dr-kg" value="80" step="1" min="0"></div>
-        <div class="field"><label for="dr-dose">Dose per kg</label><input type="number" id="dr-dose" value="1.2" step="0.1" min="0"></div>
-        <div class="field"><label for="dr-stock">Stock per mL</label><input type="number" id="dr-stock" value="10" step="1" min="0"></div>
-        <div class="field"><label for="dr-unit">Unit</label><select id="dr-unit"><option>mg</option><option>mcg</option></select></div>
-      </div>
-      <div class="out"><span class="eyebrow">Draw</span><div class="val" id="dr-out">9.6 mL</div><div class="work" id="dr-work"></div></div>
-    </div>
-
-    <div class="calc">
-      <h3>Infusion <span class="tagline">mcg/kg/min to mL/hr</span></h3>
-      <div class="fields">
-        <div class="field"><label for="inf-kg">Weight kg</label><input type="number" id="inf-kg" value="80" step="1" min="0"></div>
-        <div class="field"><label for="inf-rate">mcg/kg/min</label><input type="number" id="inf-rate" value="100" step="1" min="0"></div>
-        <div class="field"><label for="inf-mg">Bag mg</label><input type="number" id="inf-mg" value="1000" step="10" min="0"></div>
-        <div class="field"><label for="inf-ml">Bag mL</label><input type="number" id="inf-ml" value="100" step="10" min="0"></div>
-      </div>
-      <div class="out"><span class="eyebrow">Pump</span><div class="val" id="inf-out">48 mL/hr</div><div class="work" id="inf-work"></div></div>
-    </div>
-
-    <div class="calc">
-      <h3>Drip <span class="tagline">gravity set</span></h3>
-      <div class="fields">
-        <div class="field"><label for="gt-ml">Volume mL</label><input type="number" id="gt-ml" value="1000" step="50" min="0"></div>
-        <div class="field"><label for="gt-min">Minutes</label><input type="number" id="gt-min" value="480" step="15" min="1"></div>
-        <div class="field"><label for="gt-set">gtt/mL</label><select id="gt-set"><option>10</option><option>15</option><option>20</option><option>60</option></select></div>
-      </div>
-      <div class="out"><span class="eyebrow">Rate</span><div class="val" id="gt-out">21 gtt/min</div><div class="work" id="gt-work"></div></div>
-    </div>
-
-    <div class="calc" style="grid-column:1/-1">
-      <h3>Oxygen delivery <span class="tagline">slide the bleed in</span></h3>
-      <div class="fields" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
-        <div class="field"><label for="o2-co">CO <span class="num" id="o2-co-v">5.0</span> L/min</label><input type="range" id="o2-co" min="1" max="8" step="0.1" value="5"></div>
-        <div class="field"><label for="o2-hb">Hb <span class="num" id="o2-hb-v">15</span> g/dL</label><input type="range" id="o2-hb" min="3" max="18" step="0.5" value="15"></div>
-        <div class="field"><label for="o2-sat">SaO2 <span class="num" id="o2-sat-v">98</span>%</label><input type="range" id="o2-sat" min="60" max="100" step="1" value="98"></div>
-        <div class="field"><label for="o2-kg">Weight <span class="num" id="o2-kg-v">80</span> kg</label><input type="range" id="o2-kg" min="40" max="140" step="5" value="80"></div>
-      </div>
-      <div class="out">
-        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:baseline">
-          <div><span class="eyebrow">CaO2</span><div class="val" id="o2-cao2">20.0</div><div class="work">mL/dL</div></div>
-          <div><span class="eyebrow">DO2</span><div class="val" id="o2-do2">1000</div><div class="work">mL/min</div></div>
-          <div><span class="eyebrow">Indexed</span><div class="val" id="o2-do2kg">12.5</div><div class="work">mL/kg/min</div></div>
-        </div>
-        <div class="bar" id="o2-bar"><i></i><b style="left:33%"></b></div>
-        <div class="legend"><span>0</span><span>critical zone 4 to 8 mL/kg/min</span><span>15</span></div>
-        <div class="work" id="o2-work"></div>
-      </div>
-    </div>
-
-  </div>
+<!-- ================= TRICKS ================= -->
+<section class="panel" id="panel-tricks" hidden>
+  <div class="introrow"><p class="intro">Mnemonics, sayings and rules of thumb. Search anything, filter by category, and tap a card to see what it stands for and why it matters.</p><button type="button" class="chip" id="tk-expand" aria-pressed="false">Expand all</button></div>
+  <div class="drugbar"><input type="search" id="tk-q" placeholder="Search tricks, letters, drugs, topics" aria-label="Search tricks"><select id="tk-sort" aria-label="Sort"><option value="cat">Grouped by category</option><option value="az">A to Z</option></select></div>
+  <div class="drugchips" id="tk-cats"></div>
+  <div class="tricks" id="tricks"></div>
 </section>
-
 <!-- ================= QUIZ ================= -->
 <section class="panel" id="panel-quiz" hidden>
   <div class="quizwrap">
@@ -1200,8 +1144,8 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     if(SET.sound){ try{ audio=audio||new (window.AudioContext||window.webkitAudioContext)(); const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=ok?880:220; g.gain.value=0.05; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(ok?0.08:0.18)); }catch(e){} }
   }
   // two-level navigation
-  const NAV={today:["today"],learn:["methods","rules","ref","calc"],drill:["quiz","scen","exam","tests"],drugs:["drugs"],more:["progress","proctor","settings"]};
-  const LABEL={today:"Today",methods:"Methods",rules:"Rules",ref:"Reference",calc:"Calculators",quiz:"Quiz",scen:"Scenarios",exam:"Exam",tests:"Tests",drugs:"Drugs",progress:"Progress",proctor:"Proctor",settings:"Settings"};
+  const NAV={today:["today"],learn:["methods","rules","ref","tricks"],drill:["quiz","scen","exam","tests"],drugs:["drugs"],more:["progress","proctor","settings"]};
+  const LABEL={today:"Today",methods:"Methods",rules:"Rules",ref:"Reference",tricks:"Tricks",quiz:"Quiz",scen:"Scenarios",exam:"Exam",tests:"Tests",drugs:"Drugs",progress:"Progress",proctor:"Proctor",settings:"Settings"};
   const ALLP=Object.values(NAV).flat();
   function groupOf(id){ return Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
   let curPanel=null;
@@ -1211,7 +1155,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
-    const SEL="details.drug,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*";
+    const SEL="details.drug,details.trick,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*";
     // enter when the block crosses a line 12% above the bottom edge; leave only once it is fully off screen, so nothing flickers at the line
     const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
     const out=new IntersectionObserver(es=>{ es.forEach(e=>{ if(!e.isIntersecting&&e.boundingClientRect.height>0) e.target.classList.remove("in"); }); },{rootMargin:"60px 0px 60px 0px",threshold:0});
@@ -1238,58 +1182,6 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     main.addEventListener("touchstart",e=>{ if(e.target.closest("input,select,textarea,.tblwrap,.drawer,.exbar")) return; x0=e.touches[0].clientX; y0=e.touches[0].clientY; },{passive:true});
     main.addEventListener("touchend",e=>{ if(x0==null) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; x0=null; if(Math.abs(dx)>80&&Math.abs(dy)<50){ const gi=groups.indexOf(groupOf(curPanel)); const ni=dx<0?gi+1:gi-1; if(ni>=0&&ni<groups.length) showPanel(NAV[groups[ni]][0]); } },{passive:true}); })();
   document.addEventListener("keydown",e=>{ if(e.key==="/"&&!e.target.closest("input,textarea,select")){ e.preventDefault(); $("calc-open").click(); } });
-  // ---------- calculators ----------
-  const num=id=>parseFloat($(id).value)||0;
-  function calcDil(){
-    const g=num("dil-g"), total=num("dil-bag")-num("dil-waste")+num("dil-add");
-    const pct=total>0?g/total*100:0;
-    $("dil-val").textContent="D"+fmt(pct,1);
-    $("dil-work").textContent=`${fmt(g)} g / ${fmt(total,0)} mL × 100 = ${fmt(pct,2)}%  (${fmt(pct*10,0)} mg/mL)`;
-  }
-  function calcLab(){
-    const t=$("lab-type").value, v=num("lab-val"), ml=num("lab-ml");
-    $("lab-val-label").textContent=t==="pct"?"Percent":"X in 1:X";
-    let mgml, how;
-    if(t==="pct"){ mgml=v*10; how=`${fmt(v)}% × 10 = ${fmt(mgml)} mg/mL`; }
-    else { mgml=v>0?1000/v:0; how=`1000 / ${fmt(v,0)} = ${fmt(mgml,3)} mg/mL`; }
-    const mg=mgml*ml;
-    $("lab-out").textContent=(mg<1?fmt(mg*1000,0)+" mcg":fmt(mg,2)+" mg");
-    $("lab-work").textContent=`${how}; × ${fmt(ml)} mL = ${fmt(mg,3)} mg`;
-  }
-  function calcDraw(){
-    const kg=num("dr-kg"), d=num("dr-dose"), s=num("dr-stock"), u=$("dr-unit").value;
-    const dose=kg*d, ml=s>0?dose/s:0;
-    $("dr-out").textContent=fmt(ml,2)+" mL";
-    $("dr-work").textContent=`${fmt(d)} ${u}/kg × ${fmt(kg,0)} kg = ${fmt(dose)} ${u}; ÷ ${fmt(s)} ${u}/mL = ${fmt(ml,2)} mL`;
-  }
-  function calcInf(){
-    const kg=num("inf-kg"), r=num("inf-rate"), mg=num("inf-mg"), ml=num("inf-ml");
-    const conc=ml>0?mg*1000/ml:0, perMin=r*kg, perHr=perMin*60, rate=conc>0?perHr/conc:0;
-    $("inf-out").textContent=fmt(rate,1)+" mL/hr";
-    $("inf-work").textContent=`bag ${fmt(mg,0)} mg / ${fmt(ml,0)} mL = ${fmt(conc,0)} mcg/mL; ${fmt(r)} × ${fmt(kg,0)} = ${fmt(perMin,0)} mcg/min; × 60 = ${fmt(perHr,0)} mcg/hr; ÷ ${fmt(conc,0)} = ${fmt(rate,1)} mL/hr  (${fmt(r*60/1000,2)} mg/kg/hr)`;
-  }
-  function calcGtt(){
-    const ml=num("gt-ml"), min=num("gt-min"), set=num("gt-set");
-    const g=min>0?ml*set/min:0;
-    $("gt-out").textContent=fmt(Math.round(g),0)+" gtt/min";
-    $("gt-work").textContent=`${fmt(ml,0)} mL × ${set} gtt/mL = ${fmt(ml*set,0)} gtt; ÷ ${fmt(min,0)} min = ${fmt(g,1)}`;
-  }
-  function calcO2(){
-    const co=num("o2-co"), hb=num("o2-hb"), sat=num("o2-sat")/100, kg=num("o2-kg");
-    $("o2-co-v").textContent=co.toFixed(1); $("o2-hb-v").textContent=hb; $("o2-sat-v").textContent=Math.round(sat*100); $("o2-kg-v").textContent=kg;
-    const cao2=1.34*hb*sat+0.003*95, do2=co*cao2*10, idx=do2/kg;
-    $("o2-cao2").textContent=fmt(cao2,1); $("o2-do2").textContent=fmt(do2,0); $("o2-do2kg").textContent=fmt(idx,1);
-    const bar=$("o2-bar"); bar.querySelector("i").style.width=Math.min(100,idx/15*100)+"%"; bar.classList.toggle("bad",idx<8);
-    $("o2-work").textContent=`CaO2 = 1.34 × ${hb} × ${sat.toFixed(2)} + 0.003 × 95 = ${fmt(cao2,1)}; DO2 = ${co.toFixed(1)} × ${fmt(cao2,1)} × 10 = ${fmt(do2,0)} mL/min; ÷ ${kg} kg = ${fmt(idx,1)} mL/kg/min` + (idx<4?". Below critical: supply dependent, lactate rising.":idx<8?". In the critical zone.":". Above critical.");
-  }
-  const wire=(ids,fn)=>{ ids.forEach(id=>$(id).addEventListener("input",fn)); fn(); };
-  wire(["dil-g","dil-bag","dil-waste","dil-add"],calcDil);
-  wire(["lab-type","lab-val","lab-ml"],calcLab);
-  wire(["dr-kg","dr-dose","dr-stock","dr-unit"],calcDraw);
-  wire(["inf-kg","inf-rate","inf-mg","inf-ml"],calcInf);
-  wire(["gt-ml","gt-min","gt-set"],calcGtt);
-  wire(["o2-co","o2-hb","o2-sat","o2-kg"],calcO2);
-
   // ---------- short rules ----------
   const RULES=[
     {g:"Cold numbers",cold:true,items:[
@@ -1366,6 +1258,106 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       root.appendChild(d);
     });
   })();
+  // ---------- tricks: mnemonics, sayings and rules of thumb ----------
+  // c = category, t = the hook, x = what it expands to, w = why it matters or how to use it
+  const TRICKS=[
+    // med math
+    {c:"Med math",t:"Percent is grams per 100 mL",x:"2% = 2 g in 100 mL. D50 = 50 g in 100 mL.",w:"Every dilution and label question starts here."},
+    {c:"Med math",t:"Percent × 10 = mg/mL",x:"2% lidocaine = 20 mg/mL. 10% calcium chloride = 100 mg/mL. 0.9% saline = 9 mg/mL.",w:"Skips the grams step entirely."},
+    {c:"Med math",t:"1:1,000 is 1 mg/mL. Every extra zero divides by 10.",x:"1:1,000 = 1 mg/mL. 1:10,000 = 0.1 mg/mL. 1:100,000 = 0.01 mg/mL.",w:"IM epi comes from the 1 mg/mL vial; IV push from the 0.1 mg/mL syringe."},
+    {c:"Med math",t:"Desired over Have, times Volume",x:"mL to give = (dose you want ÷ dose in the container) × mL in the container.",w:"The one formula that covers every syringe draw."},
+    {c:"Med math",t:"Dose first, volume second",x:"Work out the mg before you ever think about mL.",w:"Most draw-up errors come from jumping straight to mL."},
+    {c:"Med math",t:"Kill the units one at a time",x:"mcg/kg/min × kg kills the kg. × 60 kills the minutes. ÷ mcg/mL kills the mcg. What is left is mL/hr.",w:"Weight-based drips without memorising a formula."},
+    {c:"Med math",t:"60-drop set: drops per minute equals mL per hour",x:"On a microdrip (60 gtt/mL), 30 mL/hr is 30 gtt/min.",w:"No calculation at all for the most common peds set."},
+    {c:"Med math",t:"Macro sets: 10, 15, 20",x:"gtt/min = mL × gtt/mL ÷ minutes. A 1,000 mL bag over 8 hours on a 15 set is 31 gtt/min.",w:"Memorise the set on your rig."},
+    {c:"Med math",t:"Pounds to kilograms: halve it, take off 10%",x:"220 lb: half is 110, minus 11 is 99. Real answer 100 kg.",w:"Close enough for any field dose; exact is ÷ 2.2."},
+    {c:"Med math",t:"Peds weight: age × 2 + 8",x:"A 6-year-old is about 20 kg. Over 10 years use age × 3 + 7.",w:"When there is no tape and no scale."},
+    {c:"Med math",t:"Waste what you add",x:"To make D10 from one D50 amp: waste 50 mL from a 250 mL bag, add the 50 mL amp. 25 g in 250 mL = 10%.",w:"Skip the waste and you have D8.3, which is not what the order said."},
+    {c:"Med math",t:"Same bag, same numbers",x:"Norepi and epi drips are both 4 mg in 250 mL = 16 mcg/mL. Dopamine 400 mg in 250 mL = 1,600 mcg/mL. Lidocaine 2 g in 500 mL = 4 mg/mL.",w:"Learn the standard bags once and most pump math becomes a lookup."},
+    {c:"Med math",t:"Estimate first, then calculate",x:"0.8 × 80: 0.8 is nearly 1, so expect something just under 80. Answer 64.",w:"Catches a decimal slip before it reaches the patient."},
+    {c:"Med math",t:"Check it backwards",x:"Take your mL, multiply by the concentration, and you should land on the ordered dose.",w:"Thirty seconds that catches almost every error."},
+    // pharmacology
+    {c:"Pharmacology",t:"The six rights",x:"Right patient, drug, dose, route, time, documentation.",w:"Say them out loud before every push."},
+    {c:"Pharmacology",t:"LEAN",x:"Lidocaine, Epinephrine, Atropine, Naloxone: the drugs that can go down the ET tube at 2 to 2.5 times the IV dose in 10 mL saline.",w:"Last resort when there is no IV or IO."},
+    {c:"Pharmacology",t:"6, 12, 12 and slam it",x:"Adenosine: 6 mg rapid push, then 12 mg, with a 20 mL flush hard behind each. Half-life is seconds.",w:"A slow push never reaches the heart."},
+    {c:"Pharmacology",t:"300 then 150",x:"Amiodarone in arrest: 300 mg, then 150 mg if VF or pulseless VT persists.",w:"Lidocaine is 1 to 1.5 mg/kg then half that."},
+    {c:"Pharmacology",t:"1 mg every 3 to 5, max 3",x:"Atropine for symptomatic bradycardia: 1 mg, repeat every 3 to 5 min, stop at 3 mg.",w:"Below 0.5 mg it can slow the heart further."},
+    {c:"Pharmacology",t:"More zeros, more dilute, IV",x:"Epi 1:1,000 is IM. Epi 1:10,000 is IV push. Same milligram, ten times the volume.",w:"The concentration mix-up that causes real harm."},
+    {c:"Pharmacology",t:"Name endings",x:"-olol beta blocker. -pril ACE inhibitor. -sartan ARB. -dipine calcium blocker. -statin cholesterol. -pam / -lam benzodiazepine. -caine local anesthetic. -mab antibody. -prazole acid reducer.",w:"Read a med list in seconds."},
+    {c:"Pharmacology",t:"SLUDGEM",x:"Salivation, Lacrimation, Urination, Defecation, GI upset, Emesis, Miosis: cholinergic excess (organophosphates, nerve agents).",w:"Atropine until the secretions dry up. DUMBELS is the same list."},
+    {c:"Pharmacology",t:"Hot as a hare, blind as a bat, dry as a bone, red as a beet, mad as a hatter",x:"Anticholinergic toxidrome: fever, dilated pupils, dry skin, flushing, delirium.",w:"Sympathomimetics look similar but the patient is sweating."},
+    {c:"Pharmacology",t:"Pinpoint, slow, sleepy",x:"Opioid triad: miosis, respiratory depression, decreased level of consciousness.",w:"Naloxone to breathing, not to waking."},
+    {c:"Pharmacology",t:"Sedation is not analgesia",x:"A midazolam-only patient still feels everything. Treat pain with an analgesic, agitation with a sedative.",w:"Ketamine does both at the right doses."},
+    {c:"Pharmacology",t:"Fluids before pressors",x:"In hypovolemia, a vasopressor squeezes an empty tank. Fill it first.",w:"Norepinephrine is for the vasodilated patient who is already full."},
+    {c:"Pharmacology",t:"Push-dose pressor",x:"1 mL of 1:10,000 epi into 9 mL saline = 10 mcg/mL. Give 0.5 to 2 mL (5 to 20 mcg) every 2 to 5 min.",w:"Bridges the gap while the drip is mixed."},
+    {c:"Pharmacology",t:"Never mix bicarb with calcium",x:"They precipitate in the line. Flush between them.",w:"Bicarb also inactivates catecholamines."},
+    {c:"Pharmacology",t:"Sugar before benzos",x:"Check a glucose in every seizure and every altered patient before you reach for midazolam.",w:"A benzo will stop a hypoglycemic seizure and hide the cause."},
+    // ecg and cardiology
+    {c:"Cardiology",t:"300, 150, 100, 75, 60, 50",x:"Count big boxes between two R waves: 1 box = 300, 2 = 150, 3 = 100, 4 = 75, 5 = 60, 6 = 50.",w:"Rate at a glance on a regular rhythm."},
+    {c:"Cardiology",t:"Six-second strip × 10",x:"Count the QRS complexes in 30 big boxes and multiply by 10.",w:"Works when the rhythm is irregular."},
+    {c:"Cardiology",t:"Longer, longer, longer, drop",x:"Second-degree type I (Wenckebach): PR interval stretches until a beat drops.",w:"Usually benign; watch and transport."},
+    {c:"Cardiology",t:"Some drop out",x:"Second-degree type II (Mobitz II): PR constant, beats drop without warning.",w:"Pace early; it can become complete block."},
+    {c:"Cardiology",t:"Ps and Qs don't agree",x:"Third-degree block: P waves march on their own, QRS marches on its own, no relationship.",w:"Pacing and atropine will likely not help; pace or push epi or dopamine."},
+    {c:"Cardiology",t:"Stable gets drugs, unstable gets electricity",x:"Any tachycardia with hypotension, altered mentation, chest pain or pulmonary edema gets synchronised cardioversion.",w:"Do not spend ten minutes on adenosine in a crashing patient."},
+    {c:"Cardiology",t:"Torsades gets magnesium",x:"Polymorphic VT with a twisting axis: 1 to 2 g magnesium sulfate.",w:"Amiodarone can make it worse."},
+    {c:"Cardiology",t:"Hs and Ts",x:"Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/hyperkalemia, Hypothermia. Tension pneumothorax, Tamponade, Toxins, Thrombosis (coronary and pulmonary).",w:"Run them out loud in every PEA and asystole."},
+    {c:"Cardiology",t:"Inferior, anterior, lateral",x:"II, III, aVF = inferior (right coronary). V1 to V4 = anterior and septal (LAD). I, aVL, V5, V6 = lateral (circumflex).",w:"Inferior MI: think right ventricle, go easy on nitro, give fluid."},
+    {c:"Cardiology",t:"PAILS",x:"Reciprocal changes: Posterior shows in Anterior, Anterior in Inferior, Inferior in Lateral, Lateral in Inferior, Septal in Posterior.",w:"Reciprocal depression makes a borderline STEMI real."},
+    {c:"Cardiology",t:"Beck's triad",x:"Muffled heart tones, JVD, hypotension (narrowing pulse pressure): cardiac tamponade.",w:"Needs a needle or a knife, not fluid alone."},
+    {c:"Cardiology",t:"Right ventricle: nitro drops the floor",x:"Inferior STEMI with ST elevation in V4R is preload dependent. Nitro and morphine can crash the pressure.",w:"Fluid bolus first."},
+    // airway
+    {c:"Airway",t:"LEMON",x:"Look externally, Evaluate 3-3-2, Mallampati, Obstruction, Neck mobility: predicts a hard intubation.",w:"Decide before the paralytic, not after."},
+    {c:"Airway",t:"MOANS",x:"Mask seal, Obesity, Age over 55, No teeth, Stiff lungs: predicts hard bag-mask ventilation.",w:"Two-person BVM and an airway adjunct early."},
+    {c:"Airway",t:"RODS",x:"Restricted mouth opening, Obstruction, Distorted airway, Stiff lungs: predicts a hard supraglottic airway.",w:"Have the plan B ready before plan A fails."},
+    {c:"Airway",t:"DOPE",x:"Displacement, Obstruction, Pneumothorax, Equipment: the four reasons a tubed patient deteriorates.",w:"Work the list in order; pull off the vent and bag by hand first."},
+    {c:"Airway",t:"SOAP ME",x:"Suction, Oxygen, Airway equipment, Pharmacology, Monitoring, End-tidal: RSI set-up checklist.",w:"Lay it all out and say it aloud."},
+    {c:"Airway",t:"Sat 90 means PaO2 60",x:"The oxyhemoglobin curve falls off a cliff below 90%. Preoxygenate to 95% or better before any attempt.",w:"Desaturation is fast once it starts."},
+    {c:"Airway",t:"BURP",x:"Backward, Upward, Rightward Pressure on the larynx to bring the cords into view.",w:"Different from cricoid pressure, which is for regurgitation."},
+    {c:"Airway",t:"ET tube size in kids: age ÷ 4 + 4",x:"A 4-year-old takes a 5.0 uncuffed (4.5 cuffed). Depth is 3 × tube size at the lip.",w:"Little finger width is a rough cross-check."},
+    // trauma
+    {c:"Trauma",t:"MARCH",x:"Massive hemorrhage, Airway, Respiration, Circulation, Hypothermia and Head injury.",w:"Bleeding first, every time."},
+    {c:"Trauma",t:"XABCDE",x:"eXsanguinating hemorrhage, Airway, Breathing, Circulation, Disability, Exposure.",w:"The civilian version of MARCH."},
+    {c:"Trauma",t:"DCAP-BTLS",x:"Deformities, Contusions, Abrasions, Punctures, Burns, Tenderness, Lacerations, Swelling.",w:"What you are looking and feeling for on every body region."},
+    {c:"Trauma",t:"GCS: 4, 5, 6",x:"Eyes out of 4, Verbal out of 5, Motor out of 6. Minimum 3, maximum 15. Under 8, protect the airway.",w:"Motor score alone predicts outcome best."},
+    {c:"Trauma",t:"Rule of nines",x:"Adult: head 9, each arm 9, each leg 18, front torso 18, back 18, groin 1. Child: head 18, legs 14 each.",w:"The patient's palm, fingers included, is about 1%."},
+    {c:"Trauma",t:"Parkland: 4 × kg × %BSA",x:"Burn fluids over 24 hours, half in the first 8 hours from the time of the burn. 80 kg, 30% burn: 9,600 mL; 4,800 mL in 8 hours.",w:"Newer guidance uses 2 to 3 mL/kg/%; follow local protocol."},
+    {c:"Trauma",t:"TXA inside 3 hours",x:"Tranexamic acid 1 g over 10 min, then 1 g over 8 hours, started within 3 hours of injury.",w:"After 3 hours it may do harm."},
+    {c:"Trauma",t:"The lethal triad",x:"Hypothermia, acidosis, coagulopathy feed each other.",w:"Keep them warm; a cold trauma patient does not clot."},
+    {c:"Trauma",t:"90, 90, 35",x:"Head injury targets: SBP over 90 (110 in older guidance), SpO2 over 90, EtCO2 35 to 45.",w:"A single hypotensive or hypoxic episode doubles mortality in TBI."},
+    {c:"Trauma",t:"Cushing's triad",x:"Rising blood pressure, falling heart rate, irregular breathing: brain herniation.",w:"Briefly hyperventilate to EtCO2 30 to 35 and go."},
+    {c:"Trauma",t:"Permissive hypotension",x:"In penetrating torso trauma without head injury, aim for a radial pulse or SBP about 80 to 90, not normal.",w:"Pushing pressure up pops the clot."},
+    // assessment
+    {c:"Assessment",t:"SAMPLE",x:"Signs and symptoms, Allergies, Medications, Past history, Last oral intake, Events leading up.",w:"The history you can take in the back of a moving truck."},
+    {c:"Assessment",t:"OPQRST",x:"Onset, Provocation, Quality, Radiation, Severity, Time.",w:"Chest pain and abdominal pain both."},
+    {c:"Assessment",t:"AVPU",x:"Alert, responds to Voice, responds to Pain, Unresponsive.",w:"Faster than a GCS for the first 30 seconds."},
+    {c:"Assessment",t:"AEIOU-TIPS",x:"Alcohol, Epilepsy, Insulin, Overdose, Uremia, Trauma, Infection, Psychiatric, Stroke: causes of altered mental status.",w:"Check the sugar before anything else on the list."},
+    {c:"Assessment",t:"BE-FAST",x:"Balance, Eyes, Face, Arms, Speech, Time: stroke screen.",w:"Last known well is the single most useful time you will record."},
+    {c:"Assessment",t:"Pale, cool, diaphoretic",x:"Catecholamine release in compensated shock: the skin tells you before the blood pressure does.",w:"A normal pressure with this skin is still shock."},
+    {c:"Assessment",t:"Kids crash late",x:"A child compensates with heart rate for a long time, then falls off a cliff. Hypotension is a late and ominous sign.",w:"Minimum SBP in a child: 70 + 2 × age."},
+    {c:"Assessment",t:"Kussmaul vs Cheyne-Stokes",x:"Kussmaul: deep, fast, regular (acidosis, DKA). Cheyne-Stokes: crescendo-decrescendo with pauses (brain injury, end of life).",w:"The breathing pattern names the problem."},
+    // ob and peds
+    {c:"OB & peds",t:"APGAR",x:"Appearance, Pulse, Grimace, Activity, Respirations. Scored 0 to 2 each at 1 and 5 minutes.",w:"Do not delay resuscitation to score it."},
+    {c:"OB & peds",t:"30 seconds, 30 seconds, 30 seconds",x:"Newborn: dry, warm, stimulate for 30 s; if HR under 100 or apneic, PPV for 30 s; if HR under 60 after good ventilation, compressions 3:1.",w:"Ventilation fixes most newborns."},
+    {c:"OB & peds",t:"4-2-1 maintenance fluids",x:"4 mL/kg/hr for the first 10 kg, 2 for the next 10, 1 for every kg after. A 25 kg child: 40 + 20 + 5 = 65 mL/hr.",w:"Maintenance, not resuscitation. Boluses are 20 mL/kg."},
+    {c:"OB & peds",t:"Peds fluid bolus: 20, 20, 20",x:"20 mL/kg isotonic, reassess, repeat up to three times. 10 mL/kg if cardiac or neonate.",w:"Push-pull with a syringe; gravity is too slow."},
+    {c:"OB & peds",t:"Minimum SBP: 70 + 2 × age",x:"A 5-year-old should run at least 80 systolic.",w:"Below that is decompensated shock."},
+    {c:"OB & peds",t:"Postpartum hemorrhage: 500 mL",x:"Blood loss over 500 mL at delivery or in the first 24 hours. Fundal massage first, then oxytocin 10 units IM or 10 to 40 mU/min.",w:"Keep the baby at the breast; it releases oxytocin."},
+    {c:"OB & peds",t:"Magnesium for the seizing pregnant patient",x:"Eclampsia: 4 to 6 g over 10 to 20 min, then 1 to 2 g/hr. Benzos only if magnesium fails.",w:"Watch respirations and reflexes; calcium reverses it."},
+    // toxicology
+    {c:"Toxicology",t:"Wide QRS plus overdose: bicarb",x:"Tricyclic overdose widens the QRS. Sodium bicarbonate 1 mEq/kg narrows it.",w:"Seizures and VT follow if you wait."},
+    {c:"Toxicology",t:"Calcium, glucagon, insulin",x:"Calcium channel blocker and beta blocker overdose: calcium chloride, glucagon, then high-dose insulin with glucose.",w:"Atropine rarely works here."},
+    {c:"Toxicology",t:"Cyanide: smoke, soot, sudden collapse",x:"Enclosed-space fire victim with altered mentation or hypotension: hydroxocobalamin 5 g over 15 min.",w:"Do not wait for a lab level."},
+    {c:"Toxicology",t:"Naloxone to breathing, not to waking",x:"Titrate to a respiratory rate over 10, not to a fight. 0.4 mg increments IV, 2 mg IN.",w:"A fully awake withdrawal patient vomits and pulls lines."},
+    {c:"Toxicology",t:"Charcoal: one hour, awake, not caustic",x:"1 g/kg only if the ingestion was within an hour, the airway is protected, and it was not an acid, alkali or hydrocarbon.",w:"Aspirated charcoal is a disaster."},
+    // sayings
+    {c:"Sayings",t:"Treat the patient, not the monitor",x:"A normal-looking rhythm with no pulse is still an arrest. A scary rhythm in a talking patient is a stable patient.",w:"Hands and eyes before numbers."},
+    {c:"Sayings",t:"All bleeding stops eventually",x:"Your job is to make it stop before the patient does.",w:"Tourniquet high and tight, then reassess."},
+    {c:"Sayings",t:"When in doubt, go back to the top of the algorithm",x:"Pulse? Breathing? Airway? Start again rather than guess at the next step.",w:"Resets a crew that has lost the thread."},
+    {c:"Sayings",t:"Slow is smooth, smooth is fast",x:"The medic who checks the label twice gives the drug once.",w:"Speed comes from no do-overs."},
+    {c:"Sayings",t:"If you didn't write it down, it didn't happen",x:"Times, doses, responses, who ordered what.",w:"The chart is your only witness."},
+    {c:"Sayings",t:"The sickest patient is the quiet one",x:"The child who stops crying, the asthmatic who stops wheezing, the drunk who stops fighting.",w:"Silence is a vital sign."},
+    {c:"Sayings",t:"Say the number out loud",x:"Read the concentration on the vial and the dose you are about to give to your partner before you push it.",w:"Closed-loop confirmation catches tenfold errors."}
+  ];
   // ---------- drug library (WVFD Drug Profiles) ----------
   // doses: kind fixed | perkg | infkg (mcg/kg/min) | infmin (per minute, no kg) | infhr (per hour, no kg); c = stock concentration in the dose unit per mL
   const DRUGS=[
@@ -1386,7 +1378,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["6 mg RAPID bolus over 1 to 3 seconds, 20 mL saline flush","No response in 1 to 2 minutes: 12 mg RAPID bolus, 20 mL flush"],peds:["0.1 mg/kg (up to 6 mg) RAPID bolus, 5 to 10 mL flush","No response in 1 to 2 minutes: 0.2 mg/kg (up to 12 mg)"],special:["Constant cardiac monitoring during administration"],
       quick:{moa:"Temporarily blocks AV node conduction.",ind:"SVT.",dose:"6 mg rapid IV push, then 12 mg if needed.",key:"May cause brief asystole; monitor continuously."},
       how:"Adenosine acts on A1 receptors in the AV node, opening potassium channels and slowing calcium entry, which briefly stops conduction through the node. Most SVTs are re-entry loops that run through the AV node, so a few seconds of block breaks the loop and lets the sinus node take over. Red cells and the vessel lining take it up almost instantly, giving it a half-life under ten seconds, which is why it has to be slammed in as a rapid push with a flush right behind it, and why the pause, flushing and chest pressure it causes are over in moments. It will not convert atrial fibrillation or flutter because those rhythms do not depend on the AV node.",
-      doses:[{l:"SVT, first",pop:"adult",kind:"fixed",lo:6,hi:6,unit:"mg",route:"IV/IO",t:"rapid push over 1 to 3 s, then a 20 mL flush"},{l:"SVT, second",pop:"adult",kind:"fixed",lo:12,hi:12,unit:"mg",route:"IV/IO",t:"if no response in 1 to 2 min; rapid push, 20 mL flush"},{l:"SVT, first",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:6,route:"IV/IO",t:"rapid push, 5 to 10 mL flush"},{l:"SVT, second",pop:"peds",kind:"perkg",lo:0.2,hi:0.2,unit:"mg",max:12,route:"IV/IO",t:"if no response in 1 to 2 min"}],stocks:[{l:"6 mg / 2 mL",c:3,u:"mg"},{l:"12 mg / 4 mL",c:3,u:"mg"}]},
+      doses:[{l:"SVT, initial dose",pop:"adult",kind:"fixed",lo:6,hi:6,unit:"mg",route:"IV/IO",t:"rapid push over 1 to 3 s, then a 20 mL flush"},{l:"SVT, second dose",pop:"adult",kind:"fixed",lo:12,hi:12,unit:"mg",route:"IV/IO",t:"if no response in 1 to 2 min; rapid push, 20 mL flush"},{l:"SVT, initial dose",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:6,route:"IV/IO",t:"rapid push, 5 to 10 mL flush"},{l:"SVT, second dose",pop:"peds",kind:"perkg",lo:0.2,hi:0.2,unit:"mg",max:12,route:"IV/IO",t:"if no response in 1 to 2 min"}],stocks:[{l:"6 mg / 2 mL",c:3,u:"mg"},{l:"12 mg / 4 mL",c:3,u:"mg"}]},
     {id:"albuterol",name:"Albuterol sulfate",brands:["Proventil","Ventolin"],cls:["Sympathomimetic","Bronchodilator","Beta2 agonist"],supply:["Premixed unit dose"],
       moa:["Relaxes bronchial smooth muscle, bronchodilation"],ind:["Asthma","Bronchospasm with chronic bronchitis and emphysema","Hyperkalemia"],contra:["Known hypersensitivity"],adverse:["Tachycardia","Hypertension","Dysrhythmias"],routes:["Nebulized"],onset:["5 to 15 minutes"],
       adult:["2.5 mg in 3 mL saline via small volume nebulizer","2.5 mg in 3 mL saline in-line with BVM"],peds:[],special:[],
@@ -1398,7 +1390,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["Cardiac arrest: 300 mg","No response: 150 mg over 3 to 5 minutes","Tachydysrhythmias: 150 mg in 250 mL over 10 minutes"],peds:["VF: 5 mg/kg, may repeat every 5 minutes twice, max 300 mg","VT: 5 mg/kg over 20 minutes, may repeat twice"],special:["Peak effect 10 minutes","Duration variable"],
       quick:{moa:"Prolongs repolarization, decreases cardiac excitability.",ind:"VT, VF.",dose:"300 mg IV/IO in arrest, 150 mg for stable VT.",key:"Avoid in bradycardia or heart block."},
       how:"Amiodarone blocks potassium channels, which lengthens repolarization and the refractory period in every part of the heart, and it also blocks sodium and calcium channels and has some beta-blocking effect. A longer refractory period makes it harder for a re-entrant ventricular circuit to keep running, which is why it is the drug for shock-refractory VF and pulseless VT and for stable wide-complex tachycardia. The same effects slow the sinus node and AV conduction and relax vessels, so bradycardia, heart block and hypotension are the trade, and it is given slowly whenever there is a pulse.",
-      bags:[{mix:"150 mg in 250 mL",conc:"0.6 mg/mL",use:"Stable VT: the whole bag over 10 minutes.",why:"One 150 mg syringe, one small bag, one time."},{mix:"900 mg in 500 mL",conc:"1.8 mg/mL",use:"Maintenance 1 mg/min for 6 hours (33 mL/hr), then 0.5 mg/min (17 mL/hr).",why:"Six syringes in a 500 mL bag; the rates stay low and the bag lasts the day.",tag:"hospital"}],doses:[{l:"Cardiac arrest, first",pop:"adult",kind:"fixed",lo:300,hi:300,unit:"mg",route:"IV/IO",t:"push"},{l:"Cardiac arrest, second",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"IV/IO",t:"if no response; over 3 to 5 min"},{l:"Stable wide-complex tachycardia",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"Infusion",t:"into 250 mL, run over 10 min"},{l:"Maintenance, first 6 hr",pop:"adult",kind:"infmin",lo:1,hi:1,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"Maintenance, next 18 hr",pop:"adult",kind:"infmin",lo:0.5,hi:0.5,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"VF or pulseless VT",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"IV/IO",t:"may repeat every 5 min, twice"},{l:"VT with a pulse",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"Infusion",t:"over 20 min, may repeat twice"}],stocks:[{l:"150 mg / 3 mL",c:50,u:"mg"},{l:"900 mg / 500 mL (1.8 mg/mL)",c:1.8,u:"mg",bag:true}]},
+      bags:[{mix:"150 mg in 250 mL",conc:"0.6 mg/mL",use:"Stable VT: the whole bag over 10 minutes.",why:"One 150 mg syringe, one small bag, one time."},{mix:"900 mg in 500 mL",conc:"1.8 mg/mL",use:"Maintenance 1 mg/min for 6 hours (33 mL/hr), then 0.5 mg/min (17 mL/hr).",why:"Six syringes in a 500 mL bag; the rates stay low and the bag lasts the day.",tag:"hospital"}],doses:[{l:"Cardiac arrest, initial dose",pop:"adult",kind:"fixed",lo:300,hi:300,unit:"mg",route:"IV/IO",t:"push"},{l:"Cardiac arrest, second dose",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"IV/IO",t:"if no response; over 3 to 5 min"},{l:"Stable wide-complex tachycardia",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"Infusion",t:"into 250 mL, run over 10 min"},{l:"Maintenance, first 6 hr",pop:"adult",kind:"infmin",lo:1,hi:1,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"Maintenance, next 18 hr",pop:"adult",kind:"infmin",lo:0.5,hi:0.5,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"VF or pulseless VT",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"IV/IO",t:"may repeat every 5 min, twice"},{l:"VT with a pulse",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"Infusion",t:"over 20 min, may repeat twice"}],stocks:[{l:"150 mg / 3 mL",c:50,u:"mg"},{l:"900 mg / 500 mL (1.8 mg/mL)",c:1.8,u:"mg",bag:true}]},
     {id:"atropine",name:"Atropine sulfate",brands:[],cls:["Anticholinergic","Parasympathetic blocker","Antidote"],supply:["Prefilled syringe","Vial"],
       moa:["Blocks the action of acetylcholine","Increases the heart rate","Reverses cholinergic poisoning"],ind:["Hemodynamically significant bradycardia","Organophosphate poisoning","Carbamate poisoning","Nerve agent exposure"],contra:["Known hypersensitivity","Tachycardia","Hypothermia-induced bradycardia"],adverse:["Tachycardia","Palpitations","Flushed, hot, dry skin","Dizziness"],routes:["IV","IO","ET"],onset:["Immediate"],
       adult:["Bradycardia: 1 mg, repeat every 3 to 5 minutes to max 3 mg","Organophosphate, carbamate, nerve agent: 1 to 4 mg, may double every 5 minutes","ET: 2 to 2.5 mg diluted in 10 mL saline"],peds:["Bradycardia: 0.02 mg/kg, repeat every 3 to 5 minutes, max 1 mg child, 2 mg adolescent","Organophosphate: 0.03 to 0.05 mg/kg every 10 to 20 minutes"],special:["Consider transcutaneous pacing for refractory bradycardia"],
@@ -1410,7 +1402,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["0.5 to 1 mg (quick card)"],peds:[],special:[],
       quick:{moa:"Loop diuretic, promotes diuresis.",ind:"Pulmonary edema, CHF.",dose:"0.5 to 1 mg IV.",key:"Monitor electrolytes and kidney function."},
       how:"Bumetanide is a loop diuretic. It blocks the sodium-potassium-chloride transporter in the thick ascending loop of Henle, so the kidney can no longer reabsorb that salt and water follows it out as urine. In pulmonary edema from heart failure the aim is to shed volume and lower the pressure backing up into the lungs, and a mild venodilating effect helps before the diuresis starts. Potassium leaves with the sodium, hence hypokalemia, and in a patient who is already dry it drops the pressure further.",
-      doses:[{l:"Pulmonary edema, CHF",pop:"adult",kind:"fixed",lo:0.5,hi:1,unit:"mg",route:"IV/IO",t:"or IM"}],stocks:[{l:"1 mg / 4 mL",c:0.25,u:"mg"}]},
+      doses:[{l:"Pulmonary edema, CHF",pop:"adult",kind:"fixed",lo:0.5,hi:1,unit:"mg",route:"IV/IO"},{l:"Pulmonary edema, CHF",pop:"adult",kind:"fixed",lo:0.5,hi:1,unit:"mg",route:"IM"}],stocks:[{l:"1 mg / 4 mL",c:0.25,u:"mg"}]},
     {id:"cacl",name:"Calcium chloride",brands:[],cls:["Electrolyte"],supply:["Prefilled syringe"],
       moa:["Increases intracellular calcium levels","Increases myocardial contractility"],ind:["Hyperkalemia","Acute hypocalcemia","Calcium channel blocker overdose","Beta-blocker overdose"],contra:["None in the emergency setting"],adverse:["Extravasation may cause tissue necrosis","Syncope","Asystole","Bradycardia","Dysrhythmias","Nausea","Vomiting"],routes:["IV","IO"],onset:["1 to 3 minutes"],
       adult:["500 to 1000 mg (0.5 to 1 g)","May repeat in 10 minutes"],peds:["0.2 to 0.25 mL/kg of 10% solution (20 to 25 mg/kg)"],special:[],
@@ -1451,13 +1443,13 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["0.25 mg/kg (usually 20 mg) over 2 minutes","May repeat 0.35 mg/kg (usually 25 mg) in 15 minutes","Infusion 5 to 15 mg/hour"],peds:[],special:["Decrease dose for the elderly","Consider calcium chloride pretreatment","Peak 7 minutes, duration 1 to 3 hours","Pump when possible"],
       quick:{moa:"Calcium channel blocker, slows AV node.",ind:"Atrial fibrillation with RVR.",dose:"0.25 mg/kg IV.",key:"Avoid in hypotension or heart failure."},
       how:"Diltiazem is a non-dihydropyridine calcium channel blocker that acts mainly on the heart. Blocking L-type calcium channels in the SA and AV nodes slows how fast they fire and conduct, so fewer atrial impulses reach the ventricles, which is how it controls the rate in atrial fibrillation and flutter without converting them. It also reduces contractility and relaxes vessels, so it drops blood pressure and is dangerous in cardiogenic shock. In WPW it can speed conduction down the accessory pathway, and in VT it can cause collapse, which is why a wide-complex rhythm never gets diltiazem.",
-      bags:[{mix:"125 mg in 125 mL (premix)",conc:"1 mg/mL",use:"5 to 15 mg/hr is 5 to 15 mL/hr.",why:"At 1 mg/mL the pump rate is the dose. Nothing to calculate."}],doses:[{l:"A-fib with RVR, first",pop:"adult",kind:"perkg",lo:0.25,hi:0.25,unit:"mg",route:"IV/IO",t:"over 2 min (usually 20 mg)"},{l:"A-fib with RVR, second",pop:"adult",kind:"perkg",lo:0.35,hi:0.35,unit:"mg",route:"IV/IO",t:"15 min later if needed (usually 25 mg)"},{l:"Maintenance after conversion",pop:"adult",kind:"infhr",lo:5,hi:15,unit:"mg",route:"Infusion",stock:1}],stocks:[{l:"25 mg / 5 mL",c:5,u:"mg"},{l:"125 mg / 125 mL bag",c:1,u:"mg",bag:true}]},
+      bags:[{mix:"125 mg in 125 mL (premix)",conc:"1 mg/mL",use:"5 to 15 mg/hr is 5 to 15 mL/hr.",why:"At 1 mg/mL the pump rate is the dose. Nothing to calculate."}],doses:[{l:"A-fib with RVR, initial dose",pop:"adult",kind:"perkg",lo:0.25,hi:0.25,unit:"mg",route:"IV/IO",t:"over 2 min (usually 20 mg)"},{l:"A-fib with RVR, second dose",pop:"adult",kind:"perkg",lo:0.35,hi:0.35,unit:"mg",route:"IV/IO",t:"15 min later if needed (usually 25 mg)"},{l:"Maintenance after conversion",pop:"adult",kind:"infhr",lo:5,hi:15,unit:"mg",route:"Infusion",stock:1}],stocks:[{l:"25 mg / 5 mL",c:5,u:"mg"},{l:"125 mg / 125 mL bag",c:1,u:"mg",bag:true}]},
     {id:"diphenhydramine",name:"Diphenhydramine",brands:["Benadryl"],cls:["Antihistamine","Anticholinergic"],supply:["Vial","Prefilled syringe"],
       moa:["Blocks H1 histamine receptors","Reverses phenothiazine extrapyramidal reactions"],ind:["Allergic reaction","Anaphylaxis","Phenothiazine reaction with extrapyramidal symptoms"],contra:["Known hypersensitivity"],adverse:["Hypotension","Dysrhythmias","Sedation","Euphoria"],routes:["IV","IO","IM"],onset:["15 to 30 minutes"],
       adult:["Allergic reaction or anaphylaxis: 25 to 50 mg","Extrapyramidal reaction: 10 to 50 mg"],peds:["1 to 1.25 mg/kg"],special:["Peak 1 hour, duration 6 to 8 hours"],
       quick:{moa:"H1 blocker.",ind:"Allergic reactions, anaphylaxis.",dose:"25 to 50 mg IV/IM.",key:"Drowsiness."},
       how:"Diphenhydramine blocks H1 histamine receptors, so the histamine released by mast cells in an allergic reaction can no longer drive the hives, itching, flushing and some of the swelling. It does not reverse airway obstruction or hypotension, which run on other mediators and need epinephrine; it treats the skin and mucosal symptoms and helps keep them from returning. It also blocks muscarinic receptors, which is why it reverses the dystonic reactions caused by phenothiazine antiemetics and antipsychotics, and why it sedates and dries the patient.",
-      doses:[{l:"Allergic reaction, anaphylaxis",pop:"adult",kind:"fixed",lo:25,hi:50,unit:"mg",route:"IV/IO",t:"or IM"},{l:"Extrapyramidal reaction",pop:"adult",kind:"fixed",lo:10,hi:50,unit:"mg",route:"IV/IO",t:"or IM"},{l:"Allergic reaction, anaphylaxis",pop:"peds",kind:"perkg",lo:1,hi:1.25,unit:"mg",max:50,route:"IV/IO",t:"or IM"}],stocks:[{l:"50 mg / 1 mL",c:50,u:"mg"}]},
+      doses:[{l:"Allergic reaction, anaphylaxis",pop:"adult",kind:"fixed",lo:25,hi:50,unit:"mg",route:"IV/IO"},{l:"Allergic reaction, anaphylaxis",pop:"adult",kind:"fixed",lo:25,hi:50,unit:"mg",route:"IM"},{l:"Extrapyramidal reaction",pop:"adult",kind:"fixed",lo:10,hi:50,unit:"mg",route:"IV/IO"},{l:"Extrapyramidal reaction",pop:"adult",kind:"fixed",lo:10,hi:50,unit:"mg",route:"IM"},{l:"Allergic reaction, anaphylaxis",pop:"peds",kind:"perkg",lo:1,hi:1.25,unit:"mg",max:50,route:"IV/IO"},{l:"Allergic reaction, anaphylaxis",pop:"peds",kind:"perkg",lo:1,hi:1.25,unit:"mg",max:50,route:"IM"}],stocks:[{l:"50 mg / 1 mL",c:50,u:"mg"}]},
     {id:"dopamine",name:"Dopamine",brands:["Intropin"],cls:["Sympathomimetic","Vasopressor"],supply:["Premix bag"],
       moa:["Increases heart rate","Increases contractility","Increases blood pressure","Increases preload"],ind:["Cardiogenic shock","Hemodynamically significant bradycardia","Hemodynamically significant hypotension"],contra:["Hemodynamically significant hypovolemic shock"],adverse:["Extravasation may cause tissue necrosis","Increased myocardial oxygen demand","Tachycardia","Hypertension","Dysrhythmias","Dyspnea"],routes:["Infusion"],onset:["1 to 4 minutes"],
       adult:["Infusion 5 to 20 mcg/kg/min","2 to 5: negligible beta response","5 to 10: beta, chronotropic and inotropic","10 to 20: alpha, vasoconstriction","Over 20: heart rate and oxygen demand climb"],peds:[],special:["Peak 5 to 10 minutes","Pump when possible"],
@@ -1481,7 +1473,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["25 to 50 mcg","Max 200 mcg"],peds:["1 to 2 mcg/kg","Max 50 mcg"],special:["Peak 3 to 5 minutes","Duration 30 to 60 minutes","100 mcg fentanyl is about 10 mg morphine"],
       quick:{moa:"Opioid agonist.",ind:"Severe pain.",dose:"25 to 100 mcg IV/IM/IN.",key:"Respiratory depression."},
       how:"Fentanyl is a synthetic opioid roughly a hundred times as potent as morphine by weight. It binds mu opioid receptors in the spinal cord and brain, blocking pain transmission and changing how pain is perceived, with onset in a minute or two and a duration of about half an hour. Because it releases very little histamine it causes less hypotension than morphine, which makes it the usual choice in trauma. The same receptors in the brainstem blunt the response to carbon dioxide, so respiratory depression is the danger, and a large fast dose can cause chest wall rigidity.",
-      doses:[{l:"Pain",pop:"adult",kind:"fixed",lo:25,hi:50,unit:"mcg",max:200,route:"IV/IO",t:"or IM; repeat to effect, max 200 mcg"},{l:"Pain",pop:"peds",kind:"perkg",lo:1,hi:2,unit:"mcg",max:50,route:"IV/IO",t:"or IM; max 50 mcg"}],stocks:[{l:"100 mcg / 2 mL",c:50,u:"mcg"},{l:"250 mcg / 5 mL",c:50,u:"mcg"}]},
+      doses:[{l:"Pain",pop:"adult",kind:"fixed",lo:25,hi:50,unit:"mcg",max:200,route:"IV/IO",t:"repeat to effect, max 200 mcg"},{l:"Pain",pop:"adult",kind:"fixed",lo:25,hi:50,unit:"mcg",max:200,route:"IM",t:"repeat to effect, max 200 mcg"},{l:"Pain",pop:"peds",kind:"perkg",lo:1,hi:2,unit:"mcg",max:50,route:"IV/IO",t:"max 50 mcg"},{l:"Pain",pop:"peds",kind:"perkg",lo:1,hi:2,unit:"mcg",max:50,route:"IM",t:"max 50 mcg"}],stocks:[{l:"100 mcg / 2 mL",c:50,u:"mcg"},{l:"250 mcg / 5 mL",c:50,u:"mcg"}]},
     {id:"furosemide",name:"Furosemide",brands:["Lasix"],cls:["Loop diuretic"],supply:["Prefilled syringe","Vial"],
       moa:["Inhibits reabsorption of sodium and chloride in the kidneys","Increases urine output"],ind:["Pulmonary edema","Congestive heart failure"],contra:["Hemodynamically significant hypotension","Hemodynamically significant hypovolemia"],adverse:["Hypovolemia","Hypokalemia"],routes:["IV","IO"],onset:["5 to 10 minutes"],
       adult:["Already prescribed: double the total daily dose (usually 40 to 80 mg)","Not prescribed: 0.5 to 1 mg/kg (usually 30 to 40 mg)"],peds:["1 mg/kg"],special:["Peak 20 to 30 minutes","Duration 3 to 6 hours"],
@@ -1517,13 +1509,13 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["VF and pulseless VT: 1 to 1.5 mg/kg, repeat 0.5 to 0.75 mg/kg every 3 to 5 minutes, max 3 mg/kg","Ventricular dysrhythmias with a pulse: 1 to 1.5 mg/kg, repeat 0.5 to 0.75 in 5 to 10 minutes, max 3 mg/kg","Maintenance infusion 2 to 4 mg/min","ET: 2 to 2.5 times the bolus in 10 mL saline"],peds:["VF and pulseless VT: 1 mg/kg, repeat once in 3 to 5 minutes","With a pulse: 1 mg/kg, repeat in 5 to 10 minutes, max 3 mg/kg","Maintenance infusion 20 to 50 mcg/kg/min"],special:["Decrease dose for the elderly and liver disease","Peak 5 to 10 minutes, duration 10 to 20 minutes","Pump when possible"],
       quick:{moa:"Sodium channel blocker, reduces ventricular arrhythmias.",ind:"VT, VF.",dose:"1 to 1.5 mg/kg IV.",key:"Watch for toxicity: seizures, CNS depression."},
       how:"Lidocaine blocks fast sodium channels, which slows the upstroke of the action potential in ventricular muscle and Purkinje fibers, most of all in damaged, rapidly firing tissue, so ectopic ventricular beats and re-entrant VT are suppressed while normal conduction is left largely alone. It is the alternative to amiodarone for shock-refractory VF and pulseless VT. The liver clears it, so the dose comes down in the elderly and in liver disease, and toxicity shows first in the brain as drowsiness, confusion, tingling and seizures. As a local anesthetic the same sodium channel block stops pain signals in the nerve.",
-      bags:[{mix:"2 g in 500 mL (premix)",conc:"4 mg/mL",use:"1 to 4 mg/min is 15 to 60 mL/hr.",why:"Each mg/min is 15 mL/hr on this bag, so the rate is 15 times the dose."}],doses:[{l:"VF, pulseless VT, first",pop:"adult",kind:"perkg",lo:1,hi:1.5,unit:"mg",route:"IV/IO",t:"max total 3 mg/kg"},{l:"VF, pulseless VT, repeat",pop:"adult",kind:"perkg",lo:0.5,hi:0.75,unit:"mg",route:"IV/IO",t:"every 3 to 5 min (5 to 10 min with a pulse); max 3 mg/kg"},{l:"No vascular access",pop:"adult",kind:"text",route:"ET",t:"2 to 2.5 times the IV bolus, in 10 mL saline."},{l:"Maintenance after conversion",pop:"adult",kind:"infmin",lo:2,hi:4,unit:"mg",route:"Infusion",stock:1},{l:"VF, pulseless VT",pop:"peds",kind:"perkg",lo:1,hi:1,unit:"mg",route:"IV/IO",t:"repeat once in 3 to 5 min (5 to 10 with a pulse); max 3 mg/kg"},{l:"Maintenance",pop:"peds",kind:"infkg",lo:20,hi:50,unit:"mcg",route:"Infusion",stock:2}],stocks:[{l:"100 mg / 5 mL prefilled (2%)",c:20,u:"mg"},{l:"2 g / 500 mL premix (4 mg/mL)",c:4,u:"mg",bag:true},{l:"2 g / 500 mL premix (4000 mcg/mL)",c:4000,u:"mcg",bag:true}]},
+      bags:[{mix:"2 g in 500 mL (premix)",conc:"4 mg/mL",use:"1 to 4 mg/min is 15 to 60 mL/hr.",why:"Each mg/min is 15 mL/hr on this bag, so the rate is 15 times the dose."}],doses:[{l:"VF, pulseless VT, initial dose",pop:"adult",kind:"perkg",lo:1,hi:1.5,unit:"mg",route:"IV/IO",t:"max total 3 mg/kg"},{l:"VF, pulseless VT, repeat dose",pop:"adult",kind:"perkg",lo:0.5,hi:0.75,unit:"mg",route:"IV/IO",t:"every 3 to 5 min (5 to 10 min with a pulse); max 3 mg/kg"},{l:"No vascular access",pop:"adult",kind:"text",route:"ET",t:"2 to 2.5 times the IV bolus, in 10 mL saline."},{l:"Maintenance after conversion",pop:"adult",kind:"infmin",lo:2,hi:4,unit:"mg",route:"Infusion",stock:1},{l:"VF, pulseless VT",pop:"peds",kind:"perkg",lo:1,hi:1,unit:"mg",route:"IV/IO",t:"repeat once in 3 to 5 min (5 to 10 with a pulse); max 3 mg/kg"},{l:"Maintenance",pop:"peds",kind:"infkg",lo:20,hi:50,unit:"mcg",route:"Infusion",stock:2}],stocks:[{l:"100 mg / 5 mL prefilled (2%)",c:20,u:"mg"},{l:"2 g / 500 mL premix (4 mg/mL)",c:4,u:"mg",bag:true},{l:"2 g / 500 mL premix (4000 mcg/mL)",c:4000,u:"mcg",bag:true}]},
     {id:"lorazepam",name:"Lorazepam",brands:["Ativan"],cls:["Benzodiazepine","Anticonvulsant","Sedative","Hypnotic"],supply:["Vial"],
       moa:["Sedation via the limbic system, thalamus and cortex","Binds GABA benzodiazepine receptors","Raises the seizure threshold","Antianxiety effect"],ind:["Seizure activity","Status epilepticus","Procedural sedation for intubation and cardioversion","Chemical restraint for agitated delirium","Severe anxiety"],contra:["Known hypersensitivity"],adverse:["Sedation","Transient amnesia","Respiratory depression","Respiratory arrest","Bradycardia","Hypotension"],routes:["IV","IO","IM"],onset:["IV/IO 1 to 5 minutes","IM 15 to 30 minutes"],
       adult:["Seizure IV/IO: 2 to 5 mg over 2 minutes","Seizure IM: 2 to 5 mg","Procedural sedation IV/IO: 2 mg over 2 minutes","Procedural sedation IM: 4 mg","Max 10 mg"],peds:["Seizure IV/IO/IM: 0.05 to 0.1 mg/kg over 2 minutes, max 4 mg"],special:["Longer sedation in the elderly","Peak IV under 15 minutes, IM 2 to 3 hours","Duration 6 to 8 hours"],
       quick:{moa:"Enhances GABA; sedation and anticonvulsant.",ind:"Seizures, anxiety, sedation.",dose:"1 to 2 mg IV/IM.",key:"Respiratory depression."},
       how:"Lorazepam enhances GABA-A receptor activity, increasing chloride flow into neurons so they are harder to excite, which stops seizures, calms agitation and causes sedation and amnesia. It is less lipid soluble than diazepam, so it enters the brain a little more slowly but stays there longer, giving a longer anti-seizure effect, which is why it is often preferred in status epilepticus. It is absorbed reliably IM. Respiratory depression and hypotension are the main risks, particularly combined with opioids or alcohol.",
-      doses:[{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:5,unit:"mg",max:10,route:"IV/IO",t:"over 2 min; max 10 mg total"},{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:5,unit:"mg",max:10,route:"IM",t:"max 10 mg total"},{l:"Procedural sedation",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"over 2 min"},{l:"Procedural sedation",pop:"adult",kind:"fixed",lo:4,hi:4,unit:"mg",route:"IM"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.05,hi:0.1,unit:"mg",max:4,route:"IV/IO",t:"over 2 min, or IM; max 4 mg"}],stocks:[{l:"2 mg / 1 mL",c:2,u:"mg"},{l:"4 mg / 1 mL",c:4,u:"mg"}]},
+      doses:[{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:5,unit:"mg",max:10,route:"IV/IO",t:"over 2 min; max 10 mg total"},{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:5,unit:"mg",max:10,route:"IM",t:"max 10 mg total"},{l:"Procedural sedation",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"over 2 min"},{l:"Procedural sedation",pop:"adult",kind:"fixed",lo:4,hi:4,unit:"mg",route:"IM"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.05,hi:0.1,unit:"mg",max:4,route:"IV/IO",t:"over 2 min; max 4 mg"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.05,hi:0.1,unit:"mg",max:4,route:"IM",t:"max 4 mg"}],stocks:[{l:"2 mg / 1 mL",c:2,u:"mg"},{l:"4 mg / 1 mL",c:4,u:"mg"}]},
     {id:"magnesium",name:"Magnesium sulfate",brands:[],cls:["Electrolyte","Anti-inflammatory","Tocolytic"],supply:["Vial"],
       moa:["Decreases ventricular irritability","Decreases acetylcholine release","Uterine relaxation","Bronchodilation","Raises the seizure threshold in eclampsia"],ind:["Seizures of toxemia of pregnancy","Pre-eclampsia and eclampsia","Pre-term labor","Torsades de Pointes","VF and pulseless VT refractory to amiodarone or lidocaine","Reactive airway conditions"],contra:["Hemodynamically significant heart block"],adverse:["CNS depression","Drowsiness","Hypotension","Respiratory depression","Dysrhythmias"],routes:["IV","IO","Infusion"],onset:["Immediate"],
       adult:["Torsades: 1 to 2 g in 50 to 100 mL over 5 minutes, may repeat 1 to 2 g over 1 hour","Pre-term labor, pre-eclampsia, eclampsia: 3 to 6 g in 100 mL over 10 to 20 minutes","Maintenance infusion 1 to 4 g/hour","Reactive airway: 2 g in 50 mL over 5 to 10 minutes","Cardiac arrest: 1 to 2 g IV/IO over 1 to 2 minutes"],peds:["Reactive airway: 25 to 50 mg/kg over 15 to 30 minutes, max 2 g"],special:["Duration 1 hour","Pump when possible"],
@@ -1541,19 +1533,19 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["Seizure IV/IO: 0.1 mg/kg, max 4 mg","Seizure IM: 0.2 mg/kg, max 10 mg","Chemical restraint IV/IO or IM: 0.1 mg/kg"],peds:["Seizure IV/IO: 0.1 mg/kg","Seizure IM: 0.2 mg/kg","Max 10 mg"],special:["Decrease dose for the elderly, liver and kidney disease","Peak IV 3 to 5 minutes, IM 30 to 60 minutes","Duration IV under 2 hours, IM 1 to 6 hours"],
       quick:{moa:"Enhances GABA; sedation and anticonvulsant.",ind:"Seizures, procedural sedation.",dose:"2 to 5 mg IV/IM.",key:"Respiratory depression."},
       how:"Midazolam is a short-acting benzodiazepine. It enhances GABA-A receptor activity so neurons are harder to excite, which stops seizures within minutes, sedates, and produces amnesia for the event. It is water soluble, so it is absorbed well IM and across the nasal mucosa, which is why it is the benzodiazepine for a seizing patient without IV access. The dose-related risk is respiratory depression and hypotension, more so in the elderly and alongside opioids.",
-      doses:[{l:"Seizure",pop:"adult",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:4,route:"IV/IO",t:"max 4 mg"},{l:"Seizure",pop:"adult",kind:"perkg",lo:0.2,hi:0.2,unit:"mg",max:10,route:"IM",t:"max 10 mg"},{l:"Chemical restraint",pop:"adult",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",route:"IV/IO",t:"or IM"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:10,route:"IV/IO",t:"max 10 mg"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.2,hi:0.2,unit:"mg",max:10,route:"IM",t:"max 10 mg"}],stocks:[{l:"10 mg / 2 mL (5 mg/mL)",c:5,u:"mg"},{l:"5 mg / 5 mL (1 mg/mL)",c:1,u:"mg"}]},
+      doses:[{l:"Seizure",pop:"adult",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:4,route:"IV/IO",t:"max 4 mg"},{l:"Seizure",pop:"adult",kind:"perkg",lo:0.2,hi:0.2,unit:"mg",max:10,route:"IM",t:"max 10 mg"},{l:"Chemical restraint",pop:"adult",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",route:"IV/IO"},{l:"Chemical restraint",pop:"adult",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",route:"IM"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:10,route:"IV/IO",t:"max 10 mg"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.2,hi:0.2,unit:"mg",max:10,route:"IM",t:"max 10 mg"}],stocks:[{l:"10 mg / 2 mL (5 mg/mL)",c:5,u:"mg"},{l:"5 mg / 5 mL (1 mg/mL)",c:1,u:"mg"}]},
     {id:"morphine",name:"Morphine sulfate",brands:[],cls:["Narcotic analgesic","Narcotic agonist"],supply:["Vial","Ampule"],
       moa:["Analgesia by CNS depression","Depresses brainstem respiratory centers","Decreases venous return, preload and afterload"],ind:["Pain management","Chest pain suggestive of acute coronary syndrome","Acute cardiogenic pulmonary edema"],contra:["Known hypersensitivity","Head injury","Decreased level of consciousness","Hemodynamically significant hypotension"],adverse:["CNS depression","Respiratory depression","Respiratory arrest","Hypotension"],routes:["IV","IO","IM"],onset:["IV/IO immediate","IM 10 to 30 minutes"],
       adult:["1 to 4 mg increments over 1 to 5 minutes"],peds:["0.1 to 0.2 mg/kg"],special:["Peak IV 20 minutes, IM 30 to 60 minutes","Duration IV 2 to 4 hours, IM 4 to 5 hours","Reversed by naloxone","Crosses the placenta"],
       quick:{moa:"Opioid agonist.",ind:"Severe pain, chest pain in MI.",dose:"2 to 10 mg IV/IM.",key:"Respiratory depression and hypotension."},
       how:"Morphine binds mu opioid receptors in the spinal cord and brain, blocking the transmission of pain and the emotional response to it. It also triggers histamine release and dilates veins, which lowers preload; that is useful in cardiogenic pulmonary edema and in ischemic chest pain, where it reduces the heart's workload and the anxiety that drives oxygen demand, and harmful in a patient who is hypotensive or hypovolemic. Respiratory depression comes from blunting the brainstem's response to carbon dioxide, and naloxone reverses it.",
-      doses:[{l:"Pain",pop:"adult",kind:"fixed",lo:1,hi:4,unit:"mg",route:"IV/IO",t:"per increment over 1 to 5 min, or IM; titrate"},{l:"Pain",pop:"peds",kind:"perkg",lo:0.1,hi:0.2,unit:"mg",route:"IV/IO",t:"or IM"}],stocks:[{l:"10 mg / 1 mL",c:10,u:"mg"},{l:"4 mg / 1 mL",c:4,u:"mg"}]},
+      doses:[{l:"Pain",pop:"adult",kind:"fixed",lo:1,hi:4,unit:"mg",route:"IV/IO",t:"per increment over 1 to 5 min; titrate"},{l:"Pain",pop:"adult",kind:"fixed",lo:1,hi:4,unit:"mg",route:"IM",t:"per increment; titrate"},{l:"Pain",pop:"peds",kind:"perkg",lo:0.1,hi:0.2,unit:"mg",route:"IV/IO"},{l:"Pain",pop:"peds",kind:"perkg",lo:0.1,hi:0.2,unit:"mg",route:"IM"}],stocks:[{l:"10 mg / 1 mL",c:10,u:"mg"},{l:"4 mg / 1 mL",c:4,u:"mg"}]},
     {id:"naloxone",name:"Naloxone",brands:["Narcan"],cls:["Narcotic antagonist"],supply:["Prefilled syringe"],
       moa:["Competitive antagonist at opiate receptors","Reverses narcotic CNS and respiratory depression"],ind:["Narcotic and synthetic analgesic overdose: morphine, heroin, oxycodone, methadone, codeine, fentanyl, hydrocodone, hydromorphone"],contra:["None in the emergency setting"],adverse:["Withdrawal: confusion, hypotension, tachycardia, hypertension, dysrhythmias"],routes:["IV","IM","IO","ET","IN"],onset:["IV/IO under 2 minutes","IM/IN 2 to 10 minutes"],
       adult:["2 mg, may repeat every 2 minutes","ET: 4 mg in 10 mL saline","IN: 1 mg each nostril with a MAD, may repeat every 2 minutes"],peds:["0.1 mg/kg (up to 2 mg), may repeat every 2 minutes","ET: 2 to 4 mg in 3 to 5 mL saline","IN: 1 mg each nostril"],special:["Peak IV under 2 minutes, IM/IN 2 to 10 minutes","Duration 20 minutes to 2 hours"],
       quick:{moa:"Opioid antagonist.",ind:"Opioid overdose with respiratory depression.",dose:"0.4 to 2 mg IV/IM/IN.",key:"Withdrawal in dependent patients."},
       how:"Naloxone is a pure opioid antagonist. It competes for the same mu receptors as morphine, heroin or fentanyl, binds more tightly, and displaces them, so respiratory drive returns within a couple of minutes. It has no effect of its own in someone without opioids on board. Its duration, 20 minutes to 2 hours, is shorter than most opioids, so the patient can slide back into respiratory depression after it wears off and needs watching or repeat doses. In a dependent patient it precipitates withdrawal, so the goal is adequate breathing rather than full wakefulness.",
-      doses:[{l:"Opioid overdose",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"or IM; may repeat every 2 min"},{l:"Opioid overdose",pop:"adult",kind:"fixed",lo:1,hi:1,unit:"mg",route:"IN",t:"per nostril with a MAD; may repeat every 2 min"},{l:"No vascular access",pop:"adult",kind:"fixed",lo:4,hi:4,unit:"mg",route:"ET",t:"in 10 mL saline"},{l:"Opioid overdose",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:2,route:"IV/IO",t:"or IM; may repeat every 2 min"},{l:"Opioid overdose",pop:"peds",kind:"fixed",lo:1,hi:1,unit:"mg",route:"IN",t:"per nostril"},{l:"No vascular access",pop:"peds",kind:"fixed",lo:2,hi:4,unit:"mg",route:"ET",t:"in 3 to 5 mL saline"}],stocks:[{l:"2 mg / 2 mL",c:1,u:"mg"},{l:"0.4 mg / 1 mL",c:0.4,u:"mg"}]},
+      doses:[{l:"Opioid overdose",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"may repeat every 2 min"},{l:"Opioid overdose",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IM",t:"may repeat every 2 min"},{l:"Opioid overdose",pop:"adult",kind:"fixed",lo:1,hi:1,unit:"mg",route:"IN",t:"per nostril with a MAD; may repeat every 2 min"},{l:"No vascular access",pop:"adult",kind:"fixed",lo:4,hi:4,unit:"mg",route:"ET",t:"in 10 mL saline"},{l:"Opioid overdose",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:2,route:"IV/IO",t:"may repeat every 2 min"},{l:"Opioid overdose",pop:"peds",kind:"perkg",lo:0.1,hi:0.1,unit:"mg",max:2,route:"IM",t:"may repeat every 2 min"},{l:"Opioid overdose",pop:"peds",kind:"fixed",lo:1,hi:1,unit:"mg",route:"IN",t:"per nostril"},{l:"No vascular access",pop:"peds",kind:"fixed",lo:2,hi:4,unit:"mg",route:"ET",t:"in 3 to 5 mL saline"}],stocks:[{l:"2 mg / 2 mL",c:1,u:"mg"},{l:"0.4 mg / 1 mL",c:0.4,u:"mg"}]},
     {id:"nitroglycerin",name:"Nitroglycerin",brands:["Nitro-Bid","Nitrolingual","Nitrostat"],cls:["Vasodilator","Antianginal","Nitrate"],supply:["Tablet","Spray"],
       moa:["Relaxes vascular smooth muscle","Dilates coronary arteries","Decreases workload, oxygen demand, preload and afterload"],ind:["Chest pain suggestive of acute coronary syndrome","Congestive heart failure with pulmonary edema"],contra:["Hemodynamically significant hypotension","Hypovolemia","Erectile dysfunction medication in the previous 48 hours (sildenafil, tadalafil, vardenafil, other PDE-5 inhibitors)","Not recommended for pediatric patients"],adverse:["Hypotension","Tachycardia","Headache"],routes:["Sublingual"],onset:["1 to 3 minutes"],
       adult:["Tablet 0.4 mg or single spray 0.4 mg","May repeat in 3 to 5 minutes twice"],peds:[],special:["Peak 5 to 10 minutes","Duration 20 to 30 minutes"],
@@ -1576,7 +1568,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       adult:["4 to 8 mg oral, IV or IO"],peds:["4 to 14 years: 4 mg, max 4 mg"],special:["Peak 1.5 to 2 hours"],
       quick:{moa:"Blocks serotonin receptors.",ind:"Nausea, vomiting.",dose:"4 mg IV/IM.",key:"Watch the QT interval."},
       how:"Ondansetron blocks serotonin 5-HT3 receptors on the vagal nerve endings in the gut and in the chemoreceptor trigger zone of the brainstem, the two inputs that most often start the vomiting reflex. It does not sedate and does not cause the dystonic reactions of the older antiemetics. It can lengthen the QT interval, which matters in patients already on QT-prolonging drugs or with electrolyte problems.",
-      doses:[{l:"Nausea, vomiting",pop:"adult",kind:"fixed",lo:4,hi:8,unit:"mg",route:"IV/IO",t:"or IM"},{l:"Nausea, vomiting",pop:"adult",kind:"fixed",lo:4,hi:8,unit:"mg",route:"PO",t:"ODT on the tongue",stock:1},{l:"Nausea, 4 to 14 yr",pop:"peds",kind:"fixed",lo:4,hi:4,unit:"mg",route:"IV/IO",t:"or PO; max 4 mg"}],stocks:[{l:"4 mg / 2 mL",c:2,u:"mg"},{l:"4 mg ODT",c:4,u:"mg",tab:true}]},
+      doses:[{l:"Nausea, vomiting",pop:"adult",kind:"fixed",lo:4,hi:8,unit:"mg",route:"IV/IO"},{l:"Nausea, vomiting",pop:"adult",kind:"fixed",lo:4,hi:8,unit:"mg",route:"IM"},{l:"Nausea, vomiting",pop:"adult",kind:"fixed",lo:4,hi:8,unit:"mg",route:"PO",t:"ODT on the tongue",stock:1},{l:"Nausea, 4 to 14 yr",pop:"peds",kind:"fixed",lo:4,hi:4,unit:"mg",route:"IV/IO",t:"max 4 mg"},{l:"Nausea, 4 to 14 yr",pop:"peds",kind:"fixed",lo:4,hi:4,unit:"mg",route:"PO",t:"max 4 mg"}],stocks:[{l:"4 mg / 2 mL",c:2,u:"mg"},{l:"4 mg ODT",c:4,u:"mg",tab:true}]},
     {id:"oralglucose",name:"Oral glucose",brands:["Glutose","Insta-Glucose"],cls:["Carbohydrate","Hyperglycemic"],supply:["Tube of gel"],
       moa:["Increases blood glucose"],ind:["Hypoglycemia"],contra:["Cannot protect the airway","Nausea and vomiting"],adverse:["Nausea","Vomiting"],routes:["Buccal","Sublingual"],onset:["Variable"],
       adult:["15 to 50 g, may repeat"],peds:["5 to 50 g, may repeat"],special:[],
@@ -1664,6 +1656,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     const tag=t=>t?`<i class="tag">${t}</i>`:"";
     const SHORT=[[/VF, pulseless VT/,"VF / pulseless VT"],[/VF or pulseless VT/,"VF / pulseless VT"],[/VT with a pulse/,"VT w/ pulse"],[/A-fib with RVR/,"AFib w/ rapid rate"],[/Stable wide-complex tachycardia/,"Stable wide-complex tachy"],[/Cardiac arrest, no vascular access/,"Arrest, no IV/IO"],[/No vascular access/,"No IV/IO"],[/Anaphylaxis, severe bronchospasm/,"Anaphylaxis / bronchospasm"],[/Reactive airway, anaphylaxis/,"Reactive airway / anaphylaxis"],[/Hyperkalemia, CCB overdose/,"Hyperkalemia / calcium blocker OD"],[/Opioid overdose/,"Opioid OD"],[/Pulmonary edema, CHF/,"Pulmonary edema / CHF"],[/Pulmonary edema, not on furosemide/,"Pulmonary edema, no home furosemide"],[/Pulmonary edema, already on it/,"Pulmonary edema, on home furosemide"],[/Organophosphate, nerve agent/,"Organophosphate / nerve agent"],[/Acidosis, hyperkalemia, TCA overdose/,"Acidosis / hyperkalemia / tricyclic OD"],[/Acidosis, as 4.2%/,"Acidosis, 4.2% strength"],[/Eclampsia, pre-term labor/,"Eclampsia / pre-term labor"],[/Allergic reaction, anaphylaxis/,"Allergic reaction / anaphylaxis"],[/Sedation, chemical restraint/,"Sedation / chemical restraint"],[/Sedation, RSI/,"RSI induction / sedation"],[/Hypoglycemia, able to swallow/,"Hypoglycemia, can swallow"],[/Hypoglycemia, no IV access/,"Hypoglycemia, no IV"],[/Nausea, vomiting/,"Nausea / vomiting"],[/Nausea, 4 to 14 yr/,"Nausea / vomiting, 4 to 14 yr"],[/Chest pain, pulmonary edema/,"Chest pain / pulmonary edema"],[/Shock, symptomatic bradycardia/,"Shock / symptomatic bradycardia"],[/Bradycardia or hypotension/,"Bradycardia / hypotension"],[/Poisoning, within 1 hr/,"Poisoning, under 1 hr"],[/Under 20 kg, or 5 yr and younger/,"Under 20 kg or 5 yr and under"],[/Over 20 kg, or over 5 yr/,"Over 20 kg or over 5 yr"],[/Hypoxia, distress, arrest/,"Hypoxia / distress / arrest"],[/Maintenance after conversion/,"Maintenance drip"],[/Acute coronary syndrome/,"ACS"]];
     const TSHORT=[[/every (\d+) to (\d+) min/g,"q$1-$2 min"],[/every (\d+) min/g,"q$1 min"],[/every (\d+) to (\d+) s\b/g,"q$1-$2 s"],[/rapid push over 1 to 3 s, then a 20 mL flush/,"rapid push 1 to 3 s, 20 mL flush"],[/if no response in (\d+) to (\d+) min; rapid push, 20 mL flush/,"no response in $1-$2 min; rapid push, 20 mL flush"],[/if no response in (\d+) to (\d+) min/,"no response in $1-$2 min"],[/if no response; /,"no response; "],[/titrate to effect/,"titrate"],[/while the drip is set up/,"while the drip is mixed"]];
+    const dash=t=>String(t).replace(/(\d)\s+to\s+(\d)/g,"$1-$2");
     const shortL=l=>{ for(const [re,rep] of SHORT) l=l.replace(re,rep); return l; };
     const shortT=t=>{ for(const [re,rep] of TSHORT) t=t.replace(re,rep); return t; };
     const RT_SHORT={"IV":"IV","IO":"IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"Oral","Oral, chewed":"Oral","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
@@ -1682,7 +1675,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       const groups=[]; items.forEach(it=>(it.rt==null?drugGroups:[it.rt]).forEach(g=>{ if(!groups.includes(g)) groups.push(g); }));
       groups.sort((a,b)=>(RT_ORDER.indexOf(a)+1||99)-(RT_ORDER.indexOf(b)+1||99));
       const forGroup=g=>items.filter(it=>it.rt===g||(it.rt==null&&drugGroups.includes(g)&&!items.some(x=>x.rt===g&&x.k===it.k)));
-      return `<ul class="dlist">${groups.map(g=>`<li class="rtitem"><span class="rtname">${RT_LABEL[g]||g}</span><ul class="tree">${forGroup(g).map(it=>`<li class="tnode"><div class="l1"><span class="use">${it.k}</span><span class="lead"></span><span class="dose">${shortTime(it.v)}</span></div></li>`).join("")}</ul></li>`).join("")}</ul>`;
+      return `<ul class="dlist">${groups.map(g=>`<li class="rtitem"><span class="rtname">${RT_LABEL[g]||g}</span><ul class="tree">${forGroup(g).map(it=>`<li class="tnode"><div class="l1"><span class="use">${it.k}</span><span class="lead"></span><span class="dose">${dash(shortTime(it.v))}</span></div></li>`).join("")}</ul></li>`).join("")}</ul>`;
     }
     function howBlock(d){
       const t=d.how||d.quick.moa; const parts=t.replace(/([.!?])\s+(?=[A-Z])/g,"$1\n").split("\n").filter(Boolean);
@@ -1716,8 +1709,8 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       const extra=ds.tag?" info":"";
       if(ds.kind==="text") return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span></div><span class="sub">${ds.t||""}</span></li>`;
       const r=doseLine(d,ds,kg);
-      const after=[ds.t?shortT(ds.t):"",ds.max?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
-      return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span><span class="lead"></span><span class="dose">${r.dose}</span></div>${after?`<span class="aft">${after}</span>`:""}${r.calc?`<span class="wkg info">${r.calc}</span>`:""}${ds.note?`<span class="sub">${ds.note}</span>`:""}${mathBlock(r.steps)}</li>`;
+      const after=[ds.t?shortT(ds.t):"",ds.max&&!/\bmax\b/i.test(ds.t||"")?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
+      return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span><span class="lead"></span><span class="dose">${dash(r.dose)}</span></div>${after?`<span class="aft">${dash(after)}</span>`:""}${r.calc?`<span class="wkg info">${dash(r.calc)}</span>`:""}${ds.note?`<span class="sub">${ds.note}</span>`:""}${mathBlock(r.steps)}</li>`;
     }
     function doseBlock(d,kg){
       return [["adult","Adult"],["peds","Pediatric"]].map(([p,pl])=>{
@@ -2554,6 +2547,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   const CARDS=(()=>{ const c=[]; const cold=RULES.find(g=>g.cold); cold.items.forEach((it,i)=>c.push({id:"cold"+i,f:it[1],b:it[0],src:"Cold number"}));
     DRUGS.forEach(d=>{ c.push({id:"dd-"+d.id,f:`Dose: ${d.name}`,b:d.quick.dose,src:"Drug card",ref:d.id}); c.push({id:"dk-"+d.id,f:`Key consideration: ${d.name}`,b:d.quick.key,src:"Drug card",ref:d.id}); c.push({id:"dc-"+d.id,f:`Class: ${d.name}`,b:d.cls.join(", "),src:"Drug card",ref:d.id}); if(d.contra.length) c.push({id:"dx-"+d.id,f:`Contraindications: ${d.name}`,b:d.contra.join("; "),src:"Drug card",ref:d.id}); });
     RULES.filter(g=>!g.cold).forEach((g,gi)=>g.items.forEach((it,i)=>c.push({id:"rule"+gi+"-"+i,f:it[1],b:it[0],src:"Rule: "+g.g})));
+    TRICKS.forEach((t,i)=>c.push({id:"tk"+i,f:t.t,b:t.x,src:"Trick: "+t.c}));
     return c; })();
   let srs=store.get("mm-srs",{});
   const DAY=86400000;
@@ -2630,6 +2624,30 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     $("pr-abort").addEventListener("click",()=>{ run=null; store.set("mm-proctor",null); banner(); document.querySelectorAll("details.scen").forEach(d=>d.hidden=false); });
     $("cv-parse").addEventListener("click",()=>{ const rows=$("cv-in").value.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{ const p=l.split("|"); if(p.length<8||p[0]!=="PILLAR-MM") return {bad:l}; const ok=hash(p.slice(0,7).join("|"))===p[7]; return {code:p[1],name:p[2],date:p[3],score:p[4],time:p[5],missed:p[6],ok}; }); $("cv-out").innerHTML=`<div class="tblwrap"><table class="zebra"><tr><th>Student</th><th>Code</th><th>Date</th><th class="num">Score</th><th class="num">Time</th><th>Missed</th><th></th></tr>${rows.map(r=>r.bad?`<tr><td colspan="7" class="note">Unreadable: ${r.bad}</td></tr>`:`<tr><td>${r.name}</td><td>${r.code}</td><td>${r.date}</td><td class="num">${r.score}</td><td class="num">${r.time}</td><td>${r.missed}</td><td>${r.ok?'<span class="pass">verified</span>':'<span class="fail">edited</span>'}</td></tr>`).join("")}</table></div>`; });
     banner();
+  })();
+  // ---------- tricks page: search, category filter, sort, expand ----------
+  (function tricksUI(){
+    const root=$("tricks"), q=$("tk-q"), sort=$("tk-sort"), cats=$("tk-cats"), ex=$("tk-expand");
+    if(!root) return;
+    const CATS=[...new Set(TRICKS.map(t=>t.c))];
+    let cat=store.get("mm-tkcat",""), open=false;
+    const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+    const hi=(s,term)=>{ s=esc(s); if(!term) return s; const re=new RegExp("("+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"); return s.replace(re,"<mark>$1</mark>"); };
+    function chips(){ cats.innerHTML=[["","All"],...CATS.map(c=>[c,c])].map(([v,l])=>`<button type="button" class="chip" data-cat="${v}" aria-pressed="${cat===v?"true":"false"}">${l}</button>`).join("")+`<span class="note" id="tk-count"></span>`; }
+    function card(t,term){ return `<details class="trick" data-cat="${t.c}"${open?" open":""}><summary><span class="tk-cat">${t.c}</span><h3>${hi(t.t,term)}</h3></summary><div class="tk-body"><p class="tk-x">${hi(t.x,term)}</p>${t.w?`<p class="tk-w">${hi(t.w,term)}</p>`:""}</div></details>`; }
+    function render(){
+      const term=q.value.trim().toLowerCase();
+      let list=TRICKS.filter(t=>(!cat||t.c===cat)&&(!term||(t.t+" "+t.x+" "+(t.w||"")+" "+t.c).toLowerCase().includes(term)));
+      root.classList.toggle("grouped",sort.value!=="az");
+      if(sort.value==="az"){ list=list.slice().sort((a,b)=>a.t.localeCompare(b.t)); root.innerHTML=list.map(t=>card(t,term)).join(""); }
+      else { root.innerHTML=CATS.filter(c=>list.some(t=>t.c===c)).map(c=>`<h2 class="mgroup">${c}</h2>`+list.filter(t=>t.c===c).map(t=>card(t,term)).join("")).join(""); }
+      if(!list.length) root.innerHTML=`<p class="note">Nothing matches. Try a letter of the mnemonic or the drug name.</p>`;
+      $("tk-count").textContent=list.length+" of "+TRICKS.length;
+    }
+    chips(); render();
+    cats.addEventListener("click",e=>{ const b=e.target.closest("[data-cat]"); if(!b) return; cat=b.dataset.cat; store.set("mm-tkcat",cat); chips(); render(); });
+    q.addEventListener("input",render); sort.addEventListener("change",render);
+    ex.addEventListener("click",()=>{ open=!open; ex.setAttribute("aria-pressed",open?"true":"false"); ex.textContent=open?"Collapse all":"Expand all"; root.querySelectorAll("details.trick").forEach(d=>d.open=open); });
   })();
   // ---------- spoken drug cards: read a card, or quiz by ear with pauses for recall ----------
   (function tts(){
