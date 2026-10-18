@@ -512,16 +512,17 @@ details.drug:not(.showmath) .dm{display:none!important}
 .popgrp:first-child .poplabel{margin-top:0}
 ul.dlist{list-style:none;padding-left:0;display:grid;gap:6px;font-size:13px}
 li.rtitem{position:relative;padding-left:18px}
-li.rtitem::before{content:"";position:absolute;left:4px;top:.58em;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+li.rtitem::before{content:"";position:absolute;left:4px;top:7px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.rtname{display:block;line-height:20px}
 .popgrp.peds li.rtitem::before{background:var(--amber)}
 .rtname{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
 .popgrp.peds .rtname{color:var(--amber)}
-ul.tree{list-style:none;padding:0;margin:1px 0 0 -11.75px;display:block;position:relative}
+ul.tree{list-style:none;padding:0;margin:0 0 0 -11.75px;display:block;position:relative}
 li.tnode{position:relative;padding:3px 0 3px 26px;font-size:13px;line-height:1.45}
 li.tnode::before{content:"";position:absolute;left:0;top:-5px;bottom:-5px;border-left:1.5px solid var(--branch)}
-li.tnode.first::before{top:-10px}
+li.tnode.first::before{top:-8px}
 li.tnode.last::before{bottom:auto;height:calc(.72em + 0px)}
-li.tnode.first.last::before{height:calc(.72em + 5px)}
+li.tnode.first.last::before{height:calc(.72em + 3px)}
 li.tnode::after{content:"";position:absolute;left:0;top:calc(.72em - 5px);width:18px;height:8px;border-left:1.5px solid var(--branch);border-bottom:1.5px solid var(--branch);border-bottom-left-radius:8px}
 li.tnode .l1{display:flex;align-items:baseline;gap:6px}
 li.tnode .use{font-weight:600;color:var(--ink);min-width:0;overflow-wrap:anywhere}
@@ -726,16 +727,16 @@ body.teach .board{display:grid}
 
 /* tool wheel */
 .wheel{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;z-index:30;pointer-events:none}
-.wtool{position:absolute;left:4px;top:4px;width:48px;height:48px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:grid;place-items:center;gap:0;cursor:pointer;transform:translate(0,0) scale(.2);opacity:0;transition:transform .25s cubic-bezier(.2,.7,.2,1),opacity .2s;pointer-events:none}
-.wtool svg{width:22px;height:22px;fill:var(--teal)}
-.wtool span{position:absolute;top:50%;right:54px;transform:translateY(-50%);font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink);background:var(--surface);padding:1px 6px;border-radius:4px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.wtool{position:absolute;left:0;top:0;width:56px;height:56px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;cursor:pointer;transform:translate(0,0) scale(.2);opacity:0;transition:transform .25s cubic-bezier(.2,.7,.2,1),opacity .2s;pointer-events:none}
+.wtool svg{width:20px;height:20px;fill:var(--teal)}
+.wtool span{font-family:var(--display);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink);line-height:1;white-space:nowrap}
 .wheel.open .wtool{opacity:1;pointer-events:auto}
-.wheel.open .wtool[data-tool="calc"]{transform:translate(-78px,0) scale(1);transition-delay:0s}
-.wtool[data-tool="calc"] span{top:auto;right:auto;bottom:-22px;left:50%;transform:translateX(-50%)}
-.wheel.open .wtool[data-tool="board"]{transform:translate(-56px,-56px) scale(1);transition-delay:.04s}
-.wheel.open .wtool[data-tool="listen"]{transform:translate(0,-78px) scale(1);transition-delay:.08s}
+.wheel.open .wtool[data-tool="calc"]{transform:translate(-84px,0) scale(1);transition-delay:0s}
+.wheel.open .wtool[data-tool="board"]{transform:translate(-60px,-60px) scale(1);transition-delay:.04s}
+.wheel.open .wtool[data-tool="listen"]{transform:translate(0,-84px) scale(1);transition-delay:.08s}
 .wtool.hot,.wtool:hover{background:var(--amber)}
 .wtool.hot svg,.wtool:hover svg{fill:#1a1208}
+.wtool.hot span,.wtool:hover span{color:#1a1208}
 body:has(.ttsbar:not([hidden])) .wheel{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
 @media (max-width:600px){ .wheel{bottom:calc(84px + env(safe-area-inset-bottom,0px))} body:has(.ttsbar:not([hidden])) .wheel{bottom:calc(228px + env(safe-area-inset-bottom,0px))} }
 body.focus .wheel{display:none}
@@ -753,14 +754,57 @@ body.focus .wheel{display:none}
 .wb-width b{min-width:20px;text-align:right;color:var(--ink)}
 .wb-row .chip{min-height:34px}
 .wb-row .btn{min-height:34px;padding:6px 12px}
+#wb-canvas.moving{cursor:grab}
+.wb-hint{font-size:12px}
 #wb-canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;background-color:var(--surface);background-image:linear-gradient(to right,color-mix(in srgb,var(--line) 55%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--line) 55%,transparent) 1px,transparent 1px);background-size:24px 24px}
 body.wbopen{overflow:hidden}
 
 /* listen stands out */
 .chip.listen,#drug-listen{background:var(--amber);color:#1a1208;border-color:var(--amber);font-weight:600}
+
+/* tricks: letter lines and small graphics */
+.tk-lines{padding-left:18px;display:grid;gap:4px;font-size:14px;line-height:1.45}
+.tk-lines b{font-family:var(--display);font-weight:700;color:var(--teal);letter-spacing:.02em}
+.tkg{width:100%;height:auto;max-width:420px;display:block;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--ink)}
+.tkg .g{stroke:var(--line);stroke-width:.5;opacity:.6;fill:none}
+.tkg .l{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tkg .l.dash{stroke-dasharray:3 3;opacity:.7;stroke-width:1.2}
+.tkg .dot{fill:var(--amber)}
+.tkg .t{font-family:var(--body);font-size:10px;fill:var(--muted)}
+.tkg .t.b{font-family:var(--display);font-weight:700;font-size:11px;fill:var(--ink);letter-spacing:.04em}
+.tkg .c{fill:var(--surface-2);stroke:var(--line)}
+.tkg .c.inf{fill:color-mix(in srgb,var(--amber) 55%,var(--surface))}
+.tkg .c.ant{fill:color-mix(in srgb,var(--teal) 55%,var(--surface))}
+.tkg .c.lat{fill:color-mix(in srgb,var(--good) 50%,var(--surface))}
+.tkg .fig *{fill:var(--surface-2);stroke:var(--muted);stroke-width:1}
+.tkg .fig .fill{fill:color-mix(in srgb,var(--bad) 60%,var(--surface));stroke:none}
+
+/* splash: a heart pushing blood round two loops */
+.splash{position:fixed;inset:0;z-index:60;background:var(--teal);display:grid;place-content:center;justify-items:center;gap:14px;transition:opacity .45s ease}
+.splash.out{opacity:0;pointer-events:none}
+.splash .circ{width:140px;height:140px}
+.splash .vessel{fill:none;stroke:rgba(255,255,255,.22);stroke-width:7;stroke-linecap:round}
+.splash .flow{fill:none;stroke-width:5;stroke-linecap:round;stroke-dasharray:14 26;animation:flow 1.6s linear infinite}
+.splash .flow.art{stroke:#F2B8A8}
+.splash .flow.ven{stroke:#9ED0E6;animation-direction:reverse}
+.splash .heart{fill:#E9573F;transform-origin:100px 92px;animation:beat 1.1s ease-in-out infinite}
+.splash-t{font-family:var(--display);font-size:26px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;opacity:.95}
+@keyframes flow{to{stroke-dashoffset:-80}}
+@keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.12)}28%{transform:scale(1)}42%{transform:scale(1.08)}60%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.splash .flow,.splash .heart{animation:none}}
 </style>
 </head>
 <body>
+<div class="splash" id="splash" aria-hidden="true">
+  <svg viewBox="0 0 200 200" class="circ">
+    <path class="vessel" d="M100 62 C60 62 30 40 30 20 C30 6 44 2 56 10 C66 17 76 30 100 34 C124 30 134 17 144 10 C156 2 170 6 170 20 C170 40 140 62 100 62 Z"/>
+    <path class="vessel" d="M100 118 C48 118 20 150 20 176 C20 192 40 198 56 190 C72 182 84 160 100 156 C116 160 128 182 144 190 C160 198 180 192 180 176 C180 150 152 118 100 118 Z"/>
+    <path class="flow art" d="M100 118 C48 118 20 150 20 176 C20 192 40 198 56 190 C72 182 84 160 100 156 C116 160 128 182 144 190 C160 198 180 192 180 176 C180 150 152 118 100 118 Z"/>
+    <path class="flow ven" d="M100 62 C60 62 30 40 30 20 C30 6 44 2 56 10 C66 17 76 30 100 34 C124 30 134 17 144 10 C156 2 170 6 170 20 C170 40 140 62 100 62 Z"/>
+    <path class="heart" d="M100 122 C84 108 64 96 64 80 C64 68 74 62 84 64 C92 66 98 72 100 78 C102 72 108 66 116 64 C126 62 136 68 136 80 C136 96 116 108 100 122 Z"/>
+  </svg>
+  <div class="splash-t">Medic Math</div>
+</div>
 <header class="top"><div class="inner">
   <div class="row">
     <h1>Medic Math</h1>
@@ -1164,8 +1208,8 @@ body.wbopen{overflow:hidden}
 <button class="calcfab" id="calc-open" type="button" aria-label="Tools" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></button>
 <div class="wb" id="wb" hidden>
   <div class="wb-top">
-    <div class="wb-row"><span class="eyebrow">Whiteboard</span><div class="wb-colors" id="wb-colors"></div></div>
-    <div class="wb-row"><label class="wb-width">Pen <input type="range" id="wb-width" min="1" max="24" step="1" value="4" aria-label="Pen width"><b id="wb-wv" class="num">4</b></label><button type="button" class="chip" id="wb-eraser" aria-pressed="false">Eraser</button><button type="button" class="chip" id="wb-undo">Undo</button><button type="button" class="chip" id="wb-clear">Clear</button><button type="button" class="btn alt" id="wb-close">Close</button></div>
+    <div class="wb-row"><span class="eyebrow">Whiteboard</span><span class="note wb-hint">Two fingers move the canvas</span><div class="wb-colors" id="wb-colors"></div></div>
+    <div class="wb-row"><label class="wb-width">Pen <input type="range" id="wb-width" min="1" max="24" step="1" value="4" aria-label="Pen width"><b id="wb-wv" class="num">4</b></label><button type="button" class="chip" id="wb-eraser" aria-pressed="false">Eraser</button><button type="button" class="chip" id="wb-move" aria-pressed="false">Move</button><button type="button" class="chip" id="wb-undo">Undo</button><button type="button" class="chip" id="wb-clear">Clear</button><button type="button" class="btn alt" id="wb-close">Close</button></div>
   </div>
   <canvas id="wb-canvas" aria-label="Drawing surface"></canvas>
 </div>
@@ -1325,93 +1369,95 @@ body.wbopen{overflow:hidden}
     });
   })();
   // ---------- tricks: mnemonics, sayings and rules of thumb ----------
-  // c = category, t = the hook, x = what it expands to, w = why it matters or how to use it
+  // c = category, t = the hook, x = what it expands to (a string, or one line per letter), w = why it matters, g = graphic key
   const TRICKS=[
     // med math
     {c:"Med math",t:"Percent is grams per 100 mL",x:"2% = 2 g in 100 mL. D50 = 50 g in 100 mL.",w:"Every dilution and label question starts here."},
     {c:"Med math",t:"Percent × 10 = mg/mL",x:"2% lidocaine = 20 mg/mL. 10% calcium chloride = 100 mg/mL. 0.9% saline = 9 mg/mL.",w:"Skips the grams step entirely."},
-    {c:"Med math",t:"1:1,000 is 1 mg/mL. Every extra zero divides by 10.",x:"1:1,000 = 1 mg/mL. 1:10,000 = 0.1 mg/mL. 1:100,000 = 0.01 mg/mL.",w:"IM epi comes from the 1 mg/mL vial; IV push from the 0.1 mg/mL syringe."},
+    {c:"Med math",t:"1:1,000 is 1 mg/mL. Every extra zero divides by 10.",x:["1:1,000: 1 mg/mL","1:10,000: 0.1 mg/mL","1:100,000: 0.01 mg/mL"],w:"IM epi comes from the 1 mg/mL vial; IV push from the 0.1 mg/mL syringe.",g:"epivials"},
     {c:"Med math",t:"Desired over Have, times Volume",x:"mL to give = (dose you want ÷ dose in the container) × mL in the container.",w:"The one formula that covers every syringe draw."},
     {c:"Med math",t:"Dose first, volume second",x:"Work out the mg before you ever think about mL.",w:"Most draw-up errors come from jumping straight to mL."},
-    {c:"Med math",t:"Kill the units one at a time",x:"mcg/kg/min × kg kills the kg. × 60 kills the minutes. ÷ mcg/mL kills the mcg. What is left is mL/hr.",w:"Weight-based drips without memorising a formula."},
+    {c:"Med math",t:"Kill the units one at a time",x:["× kg: kills the kg","× 60: kills the minutes","÷ mcg/mL: kills the mcg","What is left is mL/hr"],w:"Weight-based drips without memorising a formula."},
     {c:"Med math",t:"60-drop set: drops per minute equals mL per hour",x:"On a microdrip (60 gtt/mL), 30 mL/hr is 30 gtt/min.",w:"No calculation at all for the most common peds set."},
     {c:"Med math",t:"Macro sets: 10, 15, 20",x:"gtt/min = mL × gtt/mL ÷ minutes. A 1,000 mL bag over 8 hours on a 15 set is 31 gtt/min.",w:"Memorise the set on your rig."},
     {c:"Med math",t:"Pounds to kilograms: halve it, take off 10%",x:"220 lb: half is 110, minus 11 is 99. Real answer 100 kg.",w:"Close enough for any field dose; exact is ÷ 2.2."},
     {c:"Med math",t:"Peds weight: age × 2 + 8",x:"A 6-year-old is about 20 kg. Over 10 years use age × 3 + 7.",w:"When there is no tape and no scale."},
     {c:"Med math",t:"Waste what you add",x:"To make D10 from one D50 amp: waste 50 mL from a 250 mL bag, add the 50 mL amp. 25 g in 250 mL = 10%.",w:"Skip the waste and you have D8.3, which is not what the order said."},
-    {c:"Med math",t:"Same bag, same numbers",x:"Norepi and epi drips are both 4 mg in 250 mL = 16 mcg/mL. Dopamine 400 mg in 250 mL = 1,600 mcg/mL. Lidocaine 2 g in 500 mL = 4 mg/mL.",w:"Learn the standard bags once and most pump math becomes a lookup."},
+    {c:"Med math",t:"Same bag, same numbers",x:["Norepi and epi: 4 mg in 250 mL = 16 mcg/mL","Dopamine: 400 mg in 250 mL = 1,600 mcg/mL","Lidocaine: 2 g in 500 mL = 4 mg/mL","Diltiazem: 125 mg in 125 mL = 1 mg/mL"],w:"Learn the standard bags once and most pump math becomes a lookup."},
     {c:"Med math",t:"Estimate first, then calculate",x:"0.8 × 80: 0.8 is nearly 1, so expect something just under 80. Answer 64.",w:"Catches a decimal slip before it reaches the patient."},
     {c:"Med math",t:"Check it backwards",x:"Take your mL, multiply by the concentration, and you should land on the ordered dose.",w:"Thirty seconds that catches almost every error."},
     // pharmacology
-    {c:"Pharmacology",t:"The six rights",x:"Right patient, drug, dose, route, time, documentation.",w:"Say them out loud before every push."},
-    {c:"Pharmacology",t:"LEAN",x:"Lidocaine, Epinephrine, Atropine, Naloxone: the drugs that can go down the ET tube at 2 to 2.5 times the IV dose in 10 mL saline.",w:"Last resort when there is no IV or IO."},
+    {c:"Pharmacology",t:"The six rights",x:["Right patient","Right drug","Right dose","Right route","Right time","Right documentation"],w:"Say them out loud before every push."},
+    {c:"Pharmacology",t:"LEAN",x:["L: Lidocaine","E: Epinephrine","A: Atropine","N: Naloxone"],w:"The drugs that can go down the ET tube at 2 to 2.5 times the IV dose in 10 mL saline. Last resort when there is no IV or IO."},
     {c:"Pharmacology",t:"6, 12, 12 and slam it",x:"Adenosine: 6 mg rapid push, then 12 mg, with a 20 mL flush hard behind each. Half-life is seconds.",w:"A slow push never reaches the heart."},
     {c:"Pharmacology",t:"300 then 150",x:"Amiodarone in arrest: 300 mg, then 150 mg if VF or pulseless VT persists.",w:"Lidocaine is 1 to 1.5 mg/kg then half that."},
     {c:"Pharmacology",t:"1 mg every 3 to 5, max 3",x:"Atropine for symptomatic bradycardia: 1 mg, repeat every 3 to 5 min, stop at 3 mg.",w:"Below 0.5 mg it can slow the heart further."},
-    {c:"Pharmacology",t:"More zeros, more dilute, IV",x:"Epi 1:1,000 is IM. Epi 1:10,000 is IV push. Same milligram, ten times the volume.",w:"The concentration mix-up that causes real harm."},
-    {c:"Pharmacology",t:"Name endings",x:"-olol beta blocker. -pril ACE inhibitor. -sartan ARB. -dipine calcium blocker. -statin cholesterol. -pam / -lam benzodiazepine. -caine local anesthetic. -mab antibody. -prazole acid reducer.",w:"Read a med list in seconds."},
-    {c:"Pharmacology",t:"SLUDGEM",x:"Salivation, Lacrimation, Urination, Defecation, GI upset, Emesis, Miosis: cholinergic excess (organophosphates, nerve agents).",w:"Atropine until the secretions dry up. DUMBELS is the same list."},
-    {c:"Pharmacology",t:"Hot as a hare, blind as a bat, dry as a bone, red as a beet, mad as a hatter",x:"Anticholinergic toxidrome: fever, dilated pupils, dry skin, flushing, delirium.",w:"Sympathomimetics look similar but the patient is sweating."},
-    {c:"Pharmacology",t:"Pinpoint, slow, sleepy",x:"Opioid triad: miosis, respiratory depression, decreased level of consciousness.",w:"Naloxone to breathing, not to waking."},
+    {c:"Pharmacology",t:"More zeros, more dilute, IV",x:"Epi 1:1,000 is IM. Epi 1:10,000 is IV push. Same milligram, ten times the volume.",w:"The concentration mix-up that causes real harm.",g:"epivials"},
+    {c:"Pharmacology",t:"Name endings",x:["-olol: beta blocker","-pril: ACE inhibitor","-sartan: ARB","-dipine: calcium channel blocker","-statin: cholesterol","-pam / -lam: benzodiazepine","-caine: local anesthetic","-prazole: acid reducer","-mab: monoclonal antibody"],w:"Read a med list in seconds."},
+    {c:"Pharmacology",t:"SLUDGEM",x:["S: Salivation","L: Lacrimation","U: Urination","D: Defecation","G: GI upset","E: Emesis","M: Miosis"],w:"Cholinergic excess (organophosphates, nerve agents). Atropine until the secretions dry up. DUMBELS is the same list."},
+    {c:"Pharmacology",t:"Hot as a hare, blind as a bat, dry as a bone, red as a beet, mad as a hatter",x:["Hot as a hare: fever","Blind as a bat: dilated pupils","Dry as a bone: no sweat","Red as a beet: flushed","Mad as a hatter: delirium"],w:"Anticholinergic toxidrome. Sympathomimetics look similar but the patient is sweating."},
+    {c:"Pharmacology",t:"Pinpoint, slow, sleepy",x:["Pinpoint pupils","Slow or absent breathing","Sleepy, decreased level of consciousness"],w:"Opioid triad. Naloxone to breathing, not to waking."},
     {c:"Pharmacology",t:"Sedation is not analgesia",x:"A midazolam-only patient still feels everything. Treat pain with an analgesic, agitation with a sedative.",w:"Ketamine does both at the right doses."},
     {c:"Pharmacology",t:"Fluids before pressors",x:"In hypovolemia, a vasopressor squeezes an empty tank. Fill it first.",w:"Norepinephrine is for the vasodilated patient who is already full."},
-    {c:"Pharmacology",t:"Push-dose pressor",x:"1 mL of 1:10,000 epi into 9 mL saline = 10 mcg/mL. Give 0.5 to 2 mL (5 to 20 mcg) every 2 to 5 min.",w:"Bridges the gap while the drip is mixed."},
+    {c:"Pharmacology",t:"Push-dose pressor",x:["Take 1 mL of 1:10,000 epi","Add 9 mL saline: 10 mcg/mL","Give 0.5 to 2 mL (5 to 20 mcg) every 2 to 5 min"],w:"Bridges the gap while the drip is mixed."},
     {c:"Pharmacology",t:"Never mix bicarb with calcium",x:"They precipitate in the line. Flush between them.",w:"Bicarb also inactivates catecholamines."},
     {c:"Pharmacology",t:"Sugar before benzos",x:"Check a glucose in every seizure and every altered patient before you reach for midazolam.",w:"A benzo will stop a hypoglycemic seizure and hide the cause."},
     // ecg and cardiology
-    {c:"Cardiology",t:"300, 150, 100, 75, 60, 50",x:"Count big boxes between two R waves: 1 box = 300, 2 = 150, 3 = 100, 4 = 75, 5 = 60, 6 = 50.",w:"Rate at a glance on a regular rhythm."},
+    {c:"Cardiology",t:"300, 150, 100, 75, 60, 50",x:["1 big box between R waves: 300","2 boxes: 150","3 boxes: 100","4 boxes: 75","5 boxes: 60","6 boxes: 50"],w:"Rate at a glance on a regular rhythm.",g:"rate"},
     {c:"Cardiology",t:"Six-second strip × 10",x:"Count the QRS complexes in 30 big boxes and multiply by 10.",w:"Works when the rhythm is irregular."},
-    {c:"Cardiology",t:"Longer, longer, longer, drop",x:"Second-degree type I (Wenckebach): PR interval stretches until a beat drops.",w:"Usually benign; watch and transport."},
-    {c:"Cardiology",t:"Some drop out",x:"Second-degree type II (Mobitz II): PR constant, beats drop without warning.",w:"Pace early; it can become complete block."},
-    {c:"Cardiology",t:"Ps and Qs don't agree",x:"Third-degree block: P waves march on their own, QRS marches on its own, no relationship.",w:"Pacing and atropine will likely not help; pace or push epi or dopamine."},
+    {c:"Cardiology",t:"Longer, longer, longer, drop",x:"Second-degree type I (Wenckebach): the PR interval stretches beat by beat until a QRS drops out, then the cycle starts over.",w:"Usually benign; watch and transport.",g:"wenck"},
+    {c:"Cardiology",t:"Some drop out",x:"Second-degree type II (Mobitz II): the PR interval stays the same, and QRS complexes drop without warning.",w:"Pace early; it can become complete block.",g:"mobitz2"},
+    {c:"Cardiology",t:"Ps and Qs don't agree",x:"Third-degree block: P waves march at their own rate, QRS complexes march at a slower rate, and the two never line up.",w:"Atropine rarely helps; pace, or push epi or dopamine.",g:"chb"},
     {c:"Cardiology",t:"Stable gets drugs, unstable gets electricity",x:"Any tachycardia with hypotension, altered mentation, chest pain or pulmonary edema gets synchronised cardioversion.",w:"Do not spend ten minutes on adenosine in a crashing patient."},
-    {c:"Cardiology",t:"Torsades gets magnesium",x:"Polymorphic VT with a twisting axis: 1 to 2 g magnesium sulfate.",w:"Amiodarone can make it worse."},
-    {c:"Cardiology",t:"Hs and Ts",x:"Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/hyperkalemia, Hypothermia. Tension pneumothorax, Tamponade, Toxins, Thrombosis (coronary and pulmonary).",w:"Run them out loud in every PEA and asystole."},
-    {c:"Cardiology",t:"Inferior, anterior, lateral",x:"II, III, aVF = inferior (right coronary). V1 to V4 = anterior and septal (LAD). I, aVL, V5, V6 = lateral (circumflex).",w:"Inferior MI: think right ventricle, go easy on nitro, give fluid."},
-    {c:"Cardiology",t:"PAILS",x:"Reciprocal changes: Posterior shows in Anterior, Anterior in Inferior, Inferior in Lateral, Lateral in Inferior, Septal in Posterior.",w:"Reciprocal depression makes a borderline STEMI real."},
-    {c:"Cardiology",t:"Beck's triad",x:"Muffled heart tones, JVD, hypotension (narrowing pulse pressure): cardiac tamponade.",w:"Needs a needle or a knife, not fluid alone."},
+    {c:"Cardiology",t:"Torsades gets magnesium",x:"Polymorphic VT whose QRS height twists around the baseline: 1 to 2 g magnesium sulfate.",w:"Amiodarone can make it worse.",g:"torsades"},
+    {c:"Cardiology",t:"Hs and Ts",x:["H: Hypovolemia","H: Hypoxia","H: Hydrogen ion (acidosis)","H: Hypo / hyperkalemia","H: Hypothermia","T: Tension pneumothorax","T: Tamponade","T: Toxins","T: Thrombosis, coronary","T: Thrombosis, pulmonary"],w:"Run them out loud in every PEA and asystole."},
+    {c:"Cardiology",t:"Inferior, anterior, lateral",x:["II, III, aVF: inferior (right coronary)","V1 to V4: septal and anterior (LAD)","I, aVL, V5, V6: lateral (circumflex)"],w:"Inferior MI: think right ventricle, go easy on nitro, give fluid.",g:"leads"},
+    {c:"Cardiology",t:"PAILS",x:["P: Posterior shows reciprocal change in Anterior","A: Anterior in Inferior","I: Inferior in Lateral","L: Lateral in Inferior","S: Septal in Posterior"],w:"Reciprocal depression makes a borderline STEMI real."},
+    {c:"Cardiology",t:"Beck's triad",x:["Muffled heart tones","JVD","Hypotension with a narrowing pulse pressure"],w:"Cardiac tamponade. Needs a needle or a knife, not fluid alone."},
     {c:"Cardiology",t:"Right ventricle: nitro drops the floor",x:"Inferior STEMI with ST elevation in V4R is preload dependent. Nitro and morphine can crash the pressure.",w:"Fluid bolus first."},
     // airway
-    {c:"Airway",t:"LEMON",x:"Look externally, Evaluate 3-3-2, Mallampati, Obstruction, Neck mobility: predicts a hard intubation.",w:"Decide before the paralytic, not after."},
-    {c:"Airway",t:"MOANS",x:"Mask seal, Obesity, Age over 55, No teeth, Stiff lungs: predicts hard bag-mask ventilation.",w:"Two-person BVM and an airway adjunct early."},
-    {c:"Airway",t:"RODS",x:"Restricted mouth opening, Obstruction, Distorted airway, Stiff lungs: predicts a hard supraglottic airway.",w:"Have the plan B ready before plan A fails."},
-    {c:"Airway",t:"DOPE",x:"Displacement, Obstruction, Pneumothorax, Equipment: the four reasons a tubed patient deteriorates.",w:"Work the list in order; pull off the vent and bag by hand first."},
-    {c:"Airway",t:"SOAP ME",x:"Suction, Oxygen, Airway equipment, Pharmacology, Monitoring, End-tidal: RSI set-up checklist.",w:"Lay it all out and say it aloud."},
-    {c:"Airway",t:"Sat 90 means PaO2 60",x:"The oxyhemoglobin curve falls off a cliff below 90%. Preoxygenate to 95% or better before any attempt.",w:"Desaturation is fast once it starts."},
-    {c:"Airway",t:"BURP",x:"Backward, Upward, Rightward Pressure on the larynx to bring the cords into view.",w:"Different from cricoid pressure, which is for regurgitation."},
-    {c:"Airway",t:"ET tube size in kids: age ÷ 4 + 4",x:"A 4-year-old takes a 5.0 uncuffed (4.5 cuffed). Depth is 3 × tube size at the lip.",w:"Little finger width is a rough cross-check."},
+    {c:"Airway",t:"LEMON",x:["L: Look externally","E: Evaluate 3-3-2 (fingers in the mouth, chin to hyoid, hyoid to thyroid)","M: Mallampati score","O: Obstruction or obesity","N: Neck mobility"],w:"Predicts a hard intubation. Decide before the paralytic, not after."},
+    {c:"Airway",t:"HEAVEN",x:["H: Hypoxemia (sat under 93% before the attempt)","E: Extremes of size (small child, obesity)","A: Anatomic disruption or obstruction","V: Vomit, blood or fluid in the airway","E: Exsanguination or severe anemia","N: Neck mobility limited"],w:"Built for emergency airways rather than the OR. Any letter present means plan for the hard airway, pick the most experienced hands, and have suction and the backup device out."},
+    {c:"Airway",t:"MOANS",x:["M: Mask seal (beard, blood, deformity)","O: Obesity or obstruction","A: Age over 55","N: No teeth","S: Stiff lungs (asthma, COPD, pregnancy)"],w:"Predicts hard bag-mask ventilation. Two-person BVM and an airway adjunct early."},
+    {c:"Airway",t:"RODS",x:["R: Restricted mouth opening","O: Obstruction","D: Distorted airway","S: Stiff lungs"],w:"Predicts a hard supraglottic airway. Have plan B ready before plan A fails."},
+    {c:"Airway",t:"DOPE",x:["D: Displacement of the tube","O: Obstruction (secretions, kink, biting)","P: Pneumothorax","E: Equipment (vent, oxygen, circuit)"],w:"The four reasons a tubed patient deteriorates. Pull off the vent and bag by hand while you work the list."},
+    {c:"Airway",t:"SOAP ME",x:["S: Suction","O: Oxygen","A: Airway equipment, plus backups","P: Pharmacology drawn up","M: Monitoring","E: End-tidal CO2"],w:"RSI set-up checklist. Lay it all out and say it aloud."},
+    {c:"Airway",t:"Sat 90 means PaO2 60",x:"The oxyhemoglobin curve falls off a cliff below 90%. Preoxygenate to 95% or better before any attempt.",w:"Desaturation is fast once it starts.",g:"o2curve"},
+    {c:"Airway",t:"BURP",x:["B: Backward","U: Upward","R: Rightward","P: Pressure on the larynx"],w:"Brings the cords into view. Different from cricoid pressure, which is for regurgitation."},
+    {c:"Airway",t:"ET tube size in kids: age ÷ 4 + 4",x:"A 4-year-old takes a 5.0 uncuffed (4.5 cuffed). Depth at the lip is 3 × the tube size.",w:"Little finger width is a rough cross-check."},
+    // breathing patterns
+    {c:"Assessment",t:"Kussmaul vs Cheyne-Stokes vs Biot's",x:["Kussmaul: deep, fast, regular. Acidosis, DKA.","Cheyne-Stokes: breaths grow then shrink, then a pause, over and over. Brain injury, heart failure, end of life.","Biot's: clusters of equal breaths broken by sudden irregular pauses. Brainstem injury, opioid toxicity."],w:"The shape of the breathing names the problem before any number does.",g:"breathing"},
     // trauma
-    {c:"Trauma",t:"MARCH",x:"Massive hemorrhage, Airway, Respiration, Circulation, Hypothermia and Head injury.",w:"Bleeding first, every time."},
-    {c:"Trauma",t:"XABCDE",x:"eXsanguinating hemorrhage, Airway, Breathing, Circulation, Disability, Exposure.",w:"The civilian version of MARCH."},
-    {c:"Trauma",t:"DCAP-BTLS",x:"Deformities, Contusions, Abrasions, Punctures, Burns, Tenderness, Lacerations, Swelling.",w:"What you are looking and feeling for on every body region."},
-    {c:"Trauma",t:"GCS: 4, 5, 6",x:"Eyes out of 4, Verbal out of 5, Motor out of 6. Minimum 3, maximum 15. Under 8, protect the airway.",w:"Motor score alone predicts outcome best."},
-    {c:"Trauma",t:"Rule of nines",x:"Adult: head 9, each arm 9, each leg 18, front torso 18, back 18, groin 1. Child: head 18, legs 14 each.",w:"The patient's palm, fingers included, is about 1%."},
+    {c:"Trauma",t:"MARCH",x:["M: Massive hemorrhage","A: Airway","R: Respiration","C: Circulation","H: Hypothermia and Head injury"],w:"Bleeding first, every time."},
+    {c:"Trauma",t:"XABCDE",x:["X: eXsanguinating hemorrhage","A: Airway","B: Breathing","C: Circulation","D: Disability","E: Exposure"],w:"The civilian version of MARCH."},
+    {c:"Trauma",t:"DCAP-BTLS",x:["D: Deformities","C: Contusions","A: Abrasions","P: Punctures","B: Burns","T: Tenderness","L: Lacerations","S: Swelling"],w:"What you are looking and feeling for on every body region."},
+    {c:"Trauma",t:"GCS: 4, 5, 6",x:["Eyes: out of 4","Verbal: out of 5","Motor: out of 6","Minimum 3, maximum 15. Under 8, protect the airway."],w:"Motor score alone predicts outcome best."},
+    {c:"Trauma",t:"Rule of nines",x:["Head: 9","Each arm: 9","Front of torso: 18","Back of torso: 18","Each leg: 18","Groin: 1","Child: head 18, each leg 14"],w:"The patient's palm, fingers included, is about 1%.",g:"nines"},
     {c:"Trauma",t:"Parkland: 4 × kg × %BSA",x:"Burn fluids over 24 hours, half in the first 8 hours from the time of the burn. 80 kg, 30% burn: 9,600 mL; 4,800 mL in 8 hours.",w:"Newer guidance uses 2 to 3 mL/kg/%; follow local protocol."},
     {c:"Trauma",t:"TXA inside 3 hours",x:"Tranexamic acid 1 g over 10 min, then 1 g over 8 hours, started within 3 hours of injury.",w:"After 3 hours it may do harm."},
-    {c:"Trauma",t:"The lethal triad",x:"Hypothermia, acidosis, coagulopathy feed each other.",w:"Keep them warm; a cold trauma patient does not clot."},
-    {c:"Trauma",t:"90, 90, 35",x:"Head injury targets: SBP over 90 (110 in older guidance), SpO2 over 90, EtCO2 35 to 45.",w:"A single hypotensive or hypoxic episode doubles mortality in TBI."},
-    {c:"Trauma",t:"Cushing's triad",x:"Rising blood pressure, falling heart rate, irregular breathing: brain herniation.",w:"Briefly hyperventilate to EtCO2 30 to 35 and go."},
+    {c:"Trauma",t:"The lethal triad",x:["Hypothermia","Acidosis","Coagulopathy"],w:"Each one feeds the other two. Keep them warm; a cold trauma patient does not clot."},
+    {c:"Trauma",t:"90, 90, 35",x:["SBP over 90 (110 in older guidance)","SpO2 over 90","EtCO2 35 to 45"],w:"Head injury targets. A single hypotensive or hypoxic episode doubles mortality in TBI."},
+    {c:"Trauma",t:"Cushing's triad",x:["Blood pressure rising (widening pulse pressure)","Heart rate falling","Breathing irregular"],w:"Brain herniation. Briefly hyperventilate to EtCO2 30 to 35 and go.",g:"cushing"},
     {c:"Trauma",t:"Permissive hypotension",x:"In penetrating torso trauma without head injury, aim for a radial pulse or SBP about 80 to 90, not normal.",w:"Pushing pressure up pops the clot."},
     // assessment
-    {c:"Assessment",t:"SAMPLE",x:"Signs and symptoms, Allergies, Medications, Past history, Last oral intake, Events leading up.",w:"The history you can take in the back of a moving truck."},
-    {c:"Assessment",t:"OPQRST",x:"Onset, Provocation, Quality, Radiation, Severity, Time.",w:"Chest pain and abdominal pain both."},
-    {c:"Assessment",t:"AVPU",x:"Alert, responds to Voice, responds to Pain, Unresponsive.",w:"Faster than a GCS for the first 30 seconds."},
-    {c:"Assessment",t:"AEIOU-TIPS",x:"Alcohol, Epilepsy, Insulin, Overdose, Uremia, Trauma, Infection, Psychiatric, Stroke: causes of altered mental status.",w:"Check the sugar before anything else on the list."},
-    {c:"Assessment",t:"BE-FAST",x:"Balance, Eyes, Face, Arms, Speech, Time: stroke screen.",w:"Last known well is the single most useful time you will record."},
+    {c:"Assessment",t:"SAMPLE",x:["S: Signs and symptoms","A: Allergies","M: Medications","P: Past history","L: Last oral intake","E: Events leading up"],w:"The history you can take in the back of a moving truck."},
+    {c:"Assessment",t:"OPQRST",x:["O: Onset","P: Provocation and palliation","Q: Quality","R: Radiation","S: Severity","T: Time"],w:"Chest pain and abdominal pain both."},
+    {c:"Assessment",t:"AVPU",x:["A: Alert","V: responds to Voice","P: responds to Pain","U: Unresponsive"],w:"Faster than a GCS for the first 30 seconds."},
+    {c:"Assessment",t:"AEIOU-TIPS",x:["A: Alcohol","E: Epilepsy","I: Insulin","O: Overdose","U: Uremia","T: Trauma","I: Infection","P: Psychiatric","S: Stroke"],w:"Causes of altered mental status. Check the sugar before anything else on the list."},
+    {c:"Assessment",t:"BE-FAST",x:["B: Balance","E: Eyes","F: Face","A: Arms","S: Speech","T: Time"],w:"Stroke screen. Last known well is the single most useful time you will record."},
     {c:"Assessment",t:"Pale, cool, diaphoretic",x:"Catecholamine release in compensated shock: the skin tells you before the blood pressure does.",w:"A normal pressure with this skin is still shock."},
     {c:"Assessment",t:"Kids crash late",x:"A child compensates with heart rate for a long time, then falls off a cliff. Hypotension is a late and ominous sign.",w:"Minimum SBP in a child: 70 + 2 × age."},
-    {c:"Assessment",t:"Kussmaul vs Cheyne-Stokes",x:"Kussmaul: deep, fast, regular (acidosis, DKA). Cheyne-Stokes: crescendo-decrescendo with pauses (brain injury, end of life).",w:"The breathing pattern names the problem."},
     // ob and peds
-    {c:"OB & peds",t:"APGAR",x:"Appearance, Pulse, Grimace, Activity, Respirations. Scored 0 to 2 each at 1 and 5 minutes.",w:"Do not delay resuscitation to score it."},
-    {c:"OB & peds",t:"30 seconds, 30 seconds, 30 seconds",x:"Newborn: dry, warm, stimulate for 30 s; if HR under 100 or apneic, PPV for 30 s; if HR under 60 after good ventilation, compressions 3:1.",w:"Ventilation fixes most newborns."},
-    {c:"OB & peds",t:"4-2-1 maintenance fluids",x:"4 mL/kg/hr for the first 10 kg, 2 for the next 10, 1 for every kg after. A 25 kg child: 40 + 20 + 5 = 65 mL/hr.",w:"Maintenance, not resuscitation. Boluses are 20 mL/kg."},
+    {c:"OB & peds",t:"APGAR",x:["A: Appearance","P: Pulse","G: Grimace","A: Activity","R: Respirations","Scored 0 to 2 each, at 1 and 5 minutes"],w:"Do not delay resuscitation to score it."},
+    {c:"OB & peds",t:"30 seconds, 30 seconds, 30 seconds",x:["Dry, warm, stimulate: 30 s","HR under 100 or apneic: PPV for 30 s","HR under 60 after good ventilation: compressions 3:1"],w:"Ventilation fixes most newborns."},
+    {c:"OB & peds",t:"4-2-1 maintenance fluids",x:["4 mL/kg/hr for the first 10 kg","2 mL/kg/hr for the next 10 kg","1 mL/kg/hr for every kg after","25 kg child: 40 + 20 + 5 = 65 mL/hr"],w:"Maintenance, not resuscitation. Boluses are 20 mL/kg.",g:"fourtwoone"},
     {c:"OB & peds",t:"Peds fluid bolus: 20, 20, 20",x:"20 mL/kg isotonic, reassess, repeat up to three times. 10 mL/kg if cardiac or neonate.",w:"Push-pull with a syringe; gravity is too slow."},
     {c:"OB & peds",t:"Minimum SBP: 70 + 2 × age",x:"A 5-year-old should run at least 80 systolic.",w:"Below that is decompensated shock."},
     {c:"OB & peds",t:"Postpartum hemorrhage: 500 mL",x:"Blood loss over 500 mL at delivery or in the first 24 hours. Fundal massage first, then oxytocin 10 units IM or 10 to 40 mU/min.",w:"Keep the baby at the breast; it releases oxytocin."},
     {c:"OB & peds",t:"Magnesium for the seizing pregnant patient",x:"Eclampsia: 4 to 6 g over 10 to 20 min, then 1 to 2 g/hr. Benzos only if magnesium fails.",w:"Watch respirations and reflexes; calcium reverses it."},
     // toxicology
     {c:"Toxicology",t:"Wide QRS plus overdose: bicarb",x:"Tricyclic overdose widens the QRS. Sodium bicarbonate 1 mEq/kg narrows it.",w:"Seizures and VT follow if you wait."},
-    {c:"Toxicology",t:"Calcium, glucagon, insulin",x:"Calcium channel blocker and beta blocker overdose: calcium chloride, glucagon, then high-dose insulin with glucose.",w:"Atropine rarely works here."},
+    {c:"Toxicology",t:"Calcium, glucagon, insulin",x:["Calcium chloride","Glucagon","High-dose insulin with glucose"],w:"Calcium channel blocker and beta blocker overdose, in that order. Atropine rarely works here."},
     {c:"Toxicology",t:"Cyanide: smoke, soot, sudden collapse",x:"Enclosed-space fire victim with altered mentation or hypotension: hydroxocobalamin 5 g over 15 min.",w:"Do not wait for a lab level."},
     {c:"Toxicology",t:"Naloxone to breathing, not to waking",x:"Titrate to a respiratory rate over 10, not to a fight. 0.4 mg increments IV, 2 mg IN.",w:"A fully awake withdrawal patient vomits and pulls lines."},
     {c:"Toxicology",t:"Charcoal: one hour, awake, not caustic",x:"1 g/kg only if the ingestion was within an hour, the airway is protected, and it was not an acid, alkali or hydrocarbon.",w:"Aspirated charcoal is a disaster."},
@@ -2619,7 +2665,7 @@ body.wbopen{overflow:hidden}
   const CARDS=(()=>{ const c=[]; const cold=RULES.find(g=>g.cold); cold.items.forEach((it,i)=>c.push({id:"cold"+i,f:it[1],b:it[0],src:"Cold number"}));
     DRUGS.forEach(d=>{ c.push({id:"dd-"+d.id,f:`Dose: ${d.name}`,b:d.quick.dose,src:"Drug card",ref:d.id}); c.push({id:"dk-"+d.id,f:`Key consideration: ${d.name}`,b:d.quick.key,src:"Drug card",ref:d.id}); c.push({id:"dc-"+d.id,f:`Class: ${d.name}`,b:d.cls.join(", "),src:"Drug card",ref:d.id}); if(d.contra.length) c.push({id:"dx-"+d.id,f:`Contraindications: ${d.name}`,b:d.contra.join("; "),src:"Drug card",ref:d.id}); });
     RULES.filter(g=>!g.cold).forEach((g,gi)=>g.items.forEach((it,i)=>c.push({id:"rule"+gi+"-"+i,f:it[1],b:it[0],src:"Rule: "+g.g})));
-    TRICKS.forEach((t,i)=>c.push({id:"tk"+i,f:t.t,b:t.x,src:"Trick: "+t.c}));
+    TRICKS.forEach((t,i)=>c.push({id:"tk"+i,f:t.t,b:Array.isArray(t.x)?t.x.join("<br>"):t.x,src:"Trick: "+t.c}));
     return c; })();
   let srs=store.get("mm-srs",{});
   const DAY=86400000;
@@ -2697,19 +2743,41 @@ body.wbopen{overflow:hidden}
     $("cv-parse").addEventListener("click",()=>{ const rows=$("cv-in").value.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{ const p=l.split("|"); if(p.length<8||p[0]!=="PILLAR-MM") return {bad:l}; const ok=hash(p.slice(0,7).join("|"))===p[7]; return {code:p[1],name:p[2],date:p[3],score:p[4],time:p[5],missed:p[6],ok}; }); $("cv-out").innerHTML=`<div class="tblwrap"><table class="zebra"><tr><th>Student</th><th>Code</th><th>Date</th><th class="num">Score</th><th class="num">Time</th><th>Missed</th><th></th></tr>${rows.map(r=>r.bad?`<tr><td colspan="7" class="note">Unreadable: ${r.bad}</td></tr>`:`<tr><td>${r.name}</td><td>${r.code}</td><td>${r.date}</td><td class="num">${r.score}</td><td class="num">${r.time}</td><td>${r.missed}</td><td>${r.ok?'<span class="pass">verified</span>':'<span class="fail">edited</span>'}</td></tr>`).join("")}</table></div>`; });
     banner();
   })();
-  // ---------- tricks page: search, category filter, sort, expand ----------
+  // ---------- tricks page: search, category filter, sort, expand, small graphics ----------
   (function tricksUI(){
     const root=$("tricks"), q=$("tk-q"), sort=$("tk-sort"), cats=$("tk-cats"), ex=$("tk-expand");
     if(!root) return;
     const CATS=[...new Set(TRICKS.map(t=>t.c))];
     let cat=store.get("mm-tkcat",""), open=false;
-    const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+    const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
     const hi=(s,term)=>{ s=esc(s); if(!term) return s; const re=new RegExp("("+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"); return s.replace(re,"<mark>$1</mark>"); };
+    // ---- graphics: hand-drawn strips, all in currentColor so they follow the theme
+    const svg=(w,h,inner,cls)=>`<svg class="tkg ${cls||""}" viewBox="0 0 ${w} ${h}" role="img">${inner}</svg>`;
+    const gridBg=(w,h,step)=>{ let g=""; for(let x=0;x<=w;x+=step) g+=`M${x} 0V${h}`; for(let y=0;y<=h;y+=step) g+=`M0 ${y}H${w}`; return `<path d="${g}" class="g"/>`; };
+    const ecgPath=(w,base,events)=>{ let d=`M0 ${base}`; events.slice().sort((a,b)=>a.x-b.x).forEach(ev=>{ if(ev.t==="p") d+=` L${ev.x-6} ${base} Q${ev.x} ${base-9} ${ev.x+6} ${base}`; else d+=` L${ev.x-4} ${base} L${ev.x-2} ${base+4} L${ev.x} ${base-26} L${ev.x+2} ${base+8} L${ev.x+4} ${base} L${ev.x+10} ${base} Q${ev.x+16} ${base-8} ${ev.x+22} ${base}`; }); return d+` L${w} ${base}`; };
+    const strip=(w,h,events,labels)=>svg(w,h,gridBg(w,h,10)+`<path class="l" d="${ecgPath(w,h*0.62,events)}"/>`+(labels||[]).map(l=>`<text x="${l.x}" y="${l.y}" class="t">${l.s}</text>`).join(""));
+    const wave=(w,base,fn,x0,x1)=>{ let d=""; for(let x=x0||0;x<=(x1||w);x+=2){ d+=(d?" L":"M")+x+" "+(base-fn(x)).toFixed(1); } return d; };
+    const GFX={
+      wenck:()=>strip(360,70,[{t:"p",x:24},{t:"q",x:38},{t:"p",x:92},{t:"q",x:112},{t:"p",x:164},{t:"q",x:190},{t:"p",x:238},{t:"p",x:292},{t:"q",x:306}],[{x:30,y:14,s:"PR"},{x:96,y:14,s:"longer"},{x:166,y:14,s:"longer"},{x:228,y:14,s:"dropped"}]),
+      mobitz2:()=>strip(360,70,[{t:"p",x:24},{t:"q",x:38},{t:"p",x:92},{t:"q",x:106},{t:"p",x:160},{t:"p",x:228},{t:"q",x:242},{t:"p",x:296},{t:"q",x:310}],[{x:20,y:14,s:"same PR"},{x:138,y:14,s:"dropped"},{x:220,y:14,s:"same PR"}]),
+      chb:()=>strip(360,70,[{t:"p",x:14},{t:"p",x:62},{t:"p",x:110},{t:"p",x:158},{t:"p",x:206},{t:"p",x:254},{t:"p",x:302},{t:"p",x:350},{t:"q",x:40},{t:"q",x:170},{t:"q",x:300}],[{x:10,y:14,s:"P waves march"},{x:190,y:66,s:"QRS marches slower"}]),
+      torsades:()=>svg(360,70,gridBg(360,70,10)+`<path class="l" d="${wave(360,35,x=>24*Math.sin(x/60)*Math.sin(x/4.2))}"/>`),
+      rate:()=>svg(360,70,gridBg(360,70,10)+`<path class="l" d="${ecgPath(360,44,[{t:"q",x:20},{t:"q",x:70},{t:"q",x:170},{t:"q",x:320}])}"/><text x="38" y="14" class="t">1 box: 300</text><text x="105" y="14" class="t">2 boxes: 150</text><text x="225" y="14" class="t">3 boxes: 100</text>`),
+      breathing:()=>svg(360,156,gridBg(360,156,10)+`<text x="4" y="11" class="t">Kussmaul: deep, fast, regular</text><path class="l" d="${wave(360,34,x=>14*Math.sin(x/7))}"/>`+`<text x="4" y="63" class="t">Cheyne-Stokes: grows, shrinks, pauses</text><path class="l" d="${wave(360,86,x=>{ const e=Math.sin(x/38); return e>0?14*e*Math.sin(x/5.5):0; })}"/>`+`<text x="4" y="115" class="t">Biot's: equal breaths, sudden irregular pauses</text><path class="l" d="${wave(360,140,x=>{ const on=(x<70)||(x>112&&x<182)||(x>240&&x<300); return on?12*Math.abs(Math.sin(x/5.5)):0; })}"/>`),
+      o2curve:()=>svg(360,130,gridBg(360,130,10)+`<path class="l" d="${wave(300,110,x=>{ const p=x/3; return 98/(1+Math.pow(26/Math.max(p,1),2.7)); },20,300)}" transform="translate(20 0)"/><path class="l dash" d="M${20+60*3} 110 V${110-90} H20"/><circle cx="${20+60*3}" cy="${110-90}" r="4" class="dot"/><text x="${20+60*3+6}" y="${110-90-6}" class="t">PaO2 60 = sat 90</text><text x="150" y="126" class="t">PaO2</text><text x="2" y="14" class="t">SpO2</text><text x="230" y="40" class="t">flat up here</text><text x="60" y="100" class="t">cliff</text>`),
+      leads:()=>{ const cell=(x,y,l,c)=>`<rect x="${x}" y="${y}" width="50" height="26" rx="4" class="c ${c}"/><text x="${x+25}" y="${y+17}" text-anchor="middle" class="t b">${l}</text>`; return svg(360,124,cell(4,4,"I","lat")+cell(58,4,"aVR","")+cell(112,4,"V1","ant")+cell(166,4,"V4","ant")+cell(4,34,"II","inf")+cell(58,34,"aVL","lat")+cell(112,34,"V2","ant")+cell(166,34,"V5","lat")+cell(4,64,"III","inf")+cell(58,64,"aVF","inf")+cell(112,64,"V3","ant")+cell(166,64,"V6","lat")+`<rect x="230" y="10" width="12" height="12" class="c inf"/><text x="248" y="20" class="t">Inferior (RCA)</text><rect x="230" y="40" width="12" height="12" class="c ant"/><text x="248" y="50" class="t">Anterior (LAD)</text><rect x="230" y="70" width="12" height="12" class="c lat"/><text x="248" y="80" class="t">Lateral (Cx)</text><text x="4" y="112" class="t">Neighbouring leads light up together; the far wall shows the mirror image.</text>`); },
+      nines:()=>svg(360,170,`<g class="fig"><circle cx="90" cy="22" r="14"/><rect x="66" y="40" width="48" height="60" rx="6"/><rect x="38" y="42" width="22" height="58" rx="8"/><rect x="120" y="42" width="22" height="58" rx="8"/><rect x="68" y="104" width="20" height="58" rx="7"/><rect x="92" y="104" width="20" height="58" rx="7"/></g><text x="90" y="26" text-anchor="middle" class="t b">9</text><text x="90" y="74" text-anchor="middle" class="t b">18</text><text x="49" y="74" text-anchor="middle" class="t b">9</text><text x="131" y="74" text-anchor="middle" class="t b">9</text><text x="78" y="138" text-anchor="middle" class="t b">18</text><text x="102" y="138" text-anchor="middle" class="t b">18</text><text x="170" y="30" class="t">Front shown. Back of torso is another 18.</text><text x="170" y="50" class="t">Groin 1. Palm with fingers about 1.</text><text x="170" y="80" class="t b">Child</text><text x="170" y="98" class="t">Head 18, each leg 14,</text><text x="170" y="114" class="t">arms and torso unchanged.</text>`),
+      epivials:()=>svg(360,120,`<g class="fig"><rect x="30" y="30" width="40" height="70" rx="6"/><rect x="40" y="18" width="20" height="12"/><rect x="31" y="90" width="38" height="9" class="fill"/></g><text x="50" y="112" text-anchor="middle" class="t b">1 mL</text><text x="84" y="46" class="t b">1:1,000</text><text x="84" y="62" class="t">1 mg in 1 mL</text><text x="84" y="78" class="t">IM, anaphylaxis</text><g class="fig"><rect x="200" y="30" width="40" height="70" rx="6"/><rect x="210" y="18" width="20" height="12"/><rect x="201" y="34" width="38" height="65" class="fill"/></g><text x="220" y="112" text-anchor="middle" class="t b">10 mL</text><text x="254" y="46" class="t b">1:10,000</text><text x="254" y="62" class="t">1 mg in 10 mL</text><text x="254" y="78" class="t">IV push, arrest</text>`),
+      cushing:()=>svg(360,110,gridBg(360,110,10)+`<path class="l" d="M10 40 L120 30 L240 18 L350 10"/><text x="12" y="20" class="t">Blood pressure rising</text><path class="l" d="M10 60 L120 66 L240 78 L350 88"/><text x="12" y="104" class="t">Heart rate falling</text><path class="l" d="${wave(350,56,x=>{ const seg=Math.floor(x/60)%3; return seg===1?0:6*Math.sin(x/(seg===0?4:9)); },10,350)}" transform="translate(0 46)" opacity=".7"/>`),
+      fourtwoone:()=>svg(360,90,`<rect x="10" y="20" width="100" height="40" rx="4" class="c inf"/><text x="60" y="38" text-anchor="middle" class="t b">first 10 kg</text><text x="60" y="54" text-anchor="middle" class="t">4 mL/kg/hr</text><rect x="120" y="20" width="100" height="40" rx="4" class="c ant"/><text x="170" y="38" text-anchor="middle" class="t b">next 10 kg</text><text x="170" y="54" text-anchor="middle" class="t">2 mL/kg/hr</text><rect x="230" y="20" width="120" height="40" rx="4" class="c lat"/><text x="290" y="38" text-anchor="middle" class="t b">every kg after</text><text x="290" y="54" text-anchor="middle" class="t">1 mL/kg/hr</text><text x="10" y="82" class="t">25 kg: 40 + 20 + 5 = 65 mL/hr</text>`)
+    };
+    const lines=(x,term)=>Array.isArray(x)?`<ul class="tk-lines">${x.map(l=>{ const m=/^([A-Za-z0-9&\/\-]{1,6}|[^:]{1,34}):\s(.*)$/.exec(l); return m?`<li><b>${hi(m[1],term)}</b> ${hi(m[2],term)}</li>`:`<li>${hi(l,term)}</li>`; }).join("")}</ul>`:`<p class="tk-x">${hi(x,term)}</p>`;
     function chips(){ cats.innerHTML=[["","All"],...CATS.map(c=>[c,c])].map(([v,l])=>`<button type="button" class="chip" data-cat="${v}" aria-pressed="${cat===v?"true":"false"}">${l}</button>`).join("")+`<span class="note" id="tk-count"></span>`; }
-    function card(t,term){ return `<details class="trick" data-cat="${t.c}"${open?" open":""}><summary><span class="tk-cat">${t.c}</span><h3>${hi(t.t,term)}</h3></summary><div class="tk-body"><p class="tk-x">${hi(t.x,term)}</p>${t.w?`<p class="tk-w">${hi(t.w,term)}</p>`:""}</div></details>`; }
+    function card(t,term){ return `<details class="trick" data-cat="${t.c}"${open?" open":""}><summary><span class="tk-cat">${t.c}</span><h3>${hi(t.t,term)}</h3></summary><div class="tk-body">${lines(t.x,term)}${t.g&&GFX[t.g]?GFX[t.g]():""}${t.w?`<p class="tk-w">${hi(t.w,term)}</p>`:""}</div></details>`; }
+    const flat=t=>t.t+" "+(Array.isArray(t.x)?t.x.join(" "):t.x)+" "+(t.w||"")+" "+t.c;
     function render(){
       const term=q.value.trim().toLowerCase();
-      let list=TRICKS.filter(t=>(!cat||t.c===cat)&&(!term||(t.t+" "+t.x+" "+(t.w||"")+" "+t.c).toLowerCase().includes(term)));
+      let list=TRICKS.filter(t=>(!cat||t.c===cat)&&(!term||flat(t).toLowerCase().includes(term)));
       root.classList.toggle("grouped",sort.value!=="az");
       if(sort.value==="az"){ list=list.slice().sort((a,b)=>a.t.localeCompare(b.t)); root.innerHTML=list.map(t=>card(t,term)).join(""); }
       else { root.innerHTML=CATS.filter(c=>list.some(t=>t.c===c)).map(c=>`<h2 class="mgroup">${c}</h2>`+list.filter(t=>t.c===c).map(t=>card(t,term)).join("")).join(""); }
@@ -2857,44 +2925,60 @@ body.wbopen{overflow:hidden}
     document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&open) setOpen(false); });
   })();
 
-  // ---------- whiteboard: pen, eraser, undo, grid; the drawing survives close and reopen ----------
+  // ---------- whiteboard: vector strokes on a pannable surface; two fingers move the canvas ----------
   (function board(){
     const wrap=$("wb"), cv=$("wb-canvas"); if(!wrap||!cv||typeof cv.getContext!=="function") return;
-    const ctx=cv.getContext("2d"); let drawing=false, pts=[], undo=[], eraser=false, width=+store.get("mm-wbw",4)||4, colorKey=store.get("mm-wbc","ink"), dirty=false;
+    const ctx=cv.getContext("2d");
+    let strokes=[], cur=null, view={x:0,y:0}, pointers=new Map(), panning=false, panLast=null, lifted=true, moveMode=false, dirty=false;
+    let eraser=false, width=+store.get("mm-wbw",4)||4, colorKey=store.get("mm-wbc","ink");
+    try{ const saved=store.get("mm-wbv",null); if(saved&&Array.isArray(saved.s)){ strokes=saved.s; if(saved.v) view=saved.v; } }catch(e){}
     const COLORS=[["ink",null,"Ink"],["teal","#1E5A6E","Teal"],["amber","#D9822B","Amber"],["red","#C0392B","Red"],["green","#2E7D4F","Green"],["blue","#2A7FB8","Blue"],["purple","#6C4AB6","Purple"]];
     const ink=()=>getComputedStyle(document.body).color;
-    const color=()=>{ const c=COLORS.find(x=>x[0]===colorKey); return c&&c[1]?c[1]:ink(); };
+    const colorOf=k=>{ const c=COLORS.find(x=>x[0]===k); return c&&c[1]?c[1]:ink(); };
     const colorsEl=$("wb-colors");
     function drawColors(){ colorsEl.innerHTML=COLORS.map(([k,c,l])=>`<button type="button" class="wb-c${k===colorKey&&!eraser?" on":""}" data-c="${k}" aria-label="${l}" style="--c:${c||ink()}"></button>`).join(""); }
     colorsEl.addEventListener("click",e=>{ const b=e.target.closest(".wb-c"); if(!b) return; colorKey=b.dataset.c; eraser=false; $("wb-eraser").setAttribute("aria-pressed","false"); store.set("mm-wbc",colorKey); drawColors(); });
     const wIn=$("wb-width"), wV=$("wb-wv"); wIn.value=width; wV.textContent=width;
     wIn.addEventListener("input",()=>{ width=+wIn.value; wV.textContent=width; store.set("mm-wbw",width); });
-    $("wb-eraser").addEventListener("click",()=>{ eraser=!eraser; $("wb-eraser").setAttribute("aria-pressed",eraser?"true":"false"); drawColors(); });
-    function dpr(){ return window.devicePixelRatio||1; }
-    function size(){ const r=cv.getBoundingClientRect(); const W=Math.round(r.width*dpr()), H=Math.round(r.height*dpr()); if(!W||!H||(cv.width===W&&cv.height===H)) return; let img=null; try{ if(cv.width&&cv.height) img=ctx.getImageData(0,0,cv.width,cv.height); }catch(e){} cv.width=W; cv.height=H; ctx.setTransform(dpr(),0,0,dpr(),0,0); ctx.lineCap="round"; ctx.lineJoin="round"; if(img) ctx.putImageData(img,0,0); }
-    function snapshot(){ try{ undo.push(ctx.getImageData(0,0,cv.width,cv.height)); if(undo.length>24) undo.shift(); }catch(e){} }
-    $("wb-undo").addEventListener("click",()=>{ const im=undo.pop(); if(!im) return; ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); ctx.putImageData(im,0,0); ctx.restore(); dirty=true; });
-    $("wb-clear").addEventListener("click",()=>{ snapshot(); ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); ctx.restore(); dirty=true; });
-    const pos=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; };
-    function stroke(){ if(pts.length<2) return; ctx.save(); ctx.globalCompositeOperation=eraser?"destination-out":"source-over"; ctx.strokeStyle=color(); ctx.lineWidth=eraser?width*3:width; ctx.beginPath(); const n=pts.length; if(n===2){ ctx.moveTo(pts[0].x,pts[0].y); ctx.lineTo(pts[1].x,pts[1].y); } else { const a=pts[n-3], b=pts[n-2], c=pts[n-1]; const m1={x:(a.x+b.x)/2,y:(a.y+b.y)/2}, m2={x:(b.x+c.x)/2,y:(b.y+c.y)/2}; ctx.moveTo(m1.x,m1.y); ctx.quadraticCurveTo(b.x,b.y,m2.x,m2.y); } ctx.stroke(); ctx.restore(); }
-    cv.addEventListener("pointerdown",e=>{ e.preventDefault(); cv.setPointerCapture(e.pointerId); snapshot(); drawing=true; const p=pos(e); pts=[p]; ctx.save(); ctx.globalCompositeOperation=eraser?"destination-out":"source-over"; ctx.fillStyle=color(); ctx.beginPath(); ctx.arc(p.x,p.y,(eraser?width*3:width)/2,0,Math.PI*2); ctx.fill(); ctx.restore(); dirty=true; });
-    cv.addEventListener("pointermove",e=>{ if(!drawing) return; const list=e.getCoalescedEvents?e.getCoalescedEvents():[e]; list.forEach(ev=>{ pts.push(pos(ev)); stroke(); }); });
-    const end=()=>{ drawing=false; pts=[]; };
-    cv.addEventListener("pointerup",end); cv.addEventListener("pointercancel",end);
-    function save(){ if(!dirty) return; try{ store.set("mm-wb",cv.toDataURL("image/png")); }catch(e){} dirty=false; }
-    let restored=false;
-    function restore(){ if(restored) return; restored=true; const d=store.get("mm-wb",null); if(!d) return; const im=new Image(); im.onload=()=>{ ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(im,0,0,cv.width,cv.height); ctx.restore(); }; im.src=d; }
-    window.openBoard=()=>{ wrap.hidden=false; document.body.classList.add("wbopen"); drawColors(); requestAnimationFrame(()=>{ size(); restore(); }); };
-    const close=()=>{ save(); wrap.hidden=true; document.body.classList.remove("wbopen"); };
+    $("wb-eraser").addEventListener("click",()=>{ eraser=!eraser; if(eraser) setMove(false); $("wb-eraser").setAttribute("aria-pressed",eraser?"true":"false"); drawColors(); });
+    const setMove=v=>{ moveMode=v; $("wb-move").setAttribute("aria-pressed",v?"true":"false"); cv.classList.toggle("moving",v); };
+    $("wb-move").addEventListener("click",()=>setMove(!moveMode));
+    const dpr=()=>Math.min(2,window.devicePixelRatio||1);
+    function size(){ const r=cv.getBoundingClientRect(); const W=Math.round(r.width*dpr()), H=Math.round(r.height*dpr()); if(W&&H&&(cv.width!==W||cv.height!==H)){ cv.width=W; cv.height=H; } }
+    const grid=()=>{ cv.style.backgroundPosition=`${view.x}px ${view.y}px`; };
+    function setWorld(){ ctx.setTransform(dpr(),0,0,dpr(),view.x*dpr(),view.y*dpr()); ctx.lineCap="round"; ctx.lineJoin="round"; }
+    function pathOf(p){ ctx.beginPath(); if(p.length===1){ ctx.moveTo(p[0].x,p[0].y); ctx.lineTo(p[0].x+0.01,p[0].y); return; } ctx.moveTo(p[0].x,p[0].y); for(let i=1;i<p.length-1;i++){ const m={x:(p[i].x+p[i+1].x)/2,y:(p[i].y+p[i+1].y)/2}; ctx.quadraticCurveTo(p[i].x,p[i].y,m.x,m.y); } ctx.lineTo(p[p.length-1].x,p[p.length-1].y); }
+    function drawStroke(s){ ctx.save(); ctx.globalCompositeOperation=s.e?"destination-out":"source-over"; ctx.strokeStyle=colorOf(s.c); ctx.lineWidth=s.w; pathOf(s.p); ctx.stroke(); ctx.restore(); }
+    function render(){ ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); ctx.restore(); setWorld(); strokes.forEach(drawStroke); if(cur) drawStroke(cur); grid(); }
+    function segment(s){ const p=s.p, n=p.length; if(n<2) return; ctx.save(); ctx.globalCompositeOperation=s.e?"destination-out":"source-over"; ctx.strokeStyle=colorOf(s.c); ctx.lineWidth=s.w; ctx.beginPath(); if(n===2){ ctx.moveTo(p[0].x,p[0].y); ctx.lineTo(p[1].x,p[1].y); } else { const a=p[n-3],b=p[n-2],c=p[n-1]; ctx.moveTo((a.x+b.x)/2,(a.y+b.y)/2); ctx.quadraticCurveTo(b.x,b.y,(b.x+c.x)/2,(b.y+c.y)/2); } ctx.stroke(); ctx.restore(); }
+    const world=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left-view.x,y:e.clientY-r.top-view.y}; };
+    const centroid=()=>{ let x=0,y=0; pointers.forEach(p=>{ x+=p.x; y+=p.y; }); return {x:x/pointers.size,y:y/pointers.size}; };
+    function finish(){ if(cur){ if(cur.p.length) strokes.push(cur); cur=null; dirty=true; } }
+    cv.addEventListener("pointerdown",e=>{ e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(pointers.size>=2){ cur=null; panning=true; panLast=centroid(); render(); return; }
+      if(!lifted) return; lifted=false;
+      if(moveMode){ panning=true; panLast=centroid(); return; }
+      const w=world(e); cur={c:eraser?"ink":colorKey,w:eraser?width*3:width,e:eraser?1:0,p:[w]}; setWorld(); drawStroke(cur); });
+    cv.addEventListener("pointermove",e=>{ if(!pointers.has(e.pointerId)) return; pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(panning){ const c=centroid(); view.x+=c.x-panLast.x; view.y+=c.y-panLast.y; panLast=c; render(); return; }
+      if(!cur) return; const list=e.getCoalescedEvents?e.getCoalescedEvents():[e]; list.forEach(ev=>{ const w=world(ev); const l=cur.p[cur.p.length-1]; if(Math.hypot(w.x-l.x,w.y-l.y)<1.2) return; cur.p.push(w); setWorld(); segment(cur); }); });
+    const up=e=>{ pointers.delete(e.pointerId); if(pointers.size<2&&panning&&!moveMode){ panning=false; dirty=true; } if(pointers.size===0){ panning=false; lifted=true; finish(); } };
+    cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
+    $("wb-undo").addEventListener("click",()=>{ strokes.pop(); dirty=true; render(); });
+    $("wb-clear").addEventListener("click",()=>{ strokes=[]; view={x:0,y:0}; dirty=true; render(); });
+    function save(){ if(!dirty) return; dirty=false; try{ let data={s:strokes,v:view}; let txt=JSON.stringify(data); while(txt.length>900000&&strokes.length){ strokes.shift(); data={s:strokes,v:view}; txt=JSON.stringify(data); } localStorage.setItem("mm-wbv",txt); }catch(e){} }
+    window.openBoard=()=>{ wrap.hidden=false; document.body.classList.add("wbopen"); drawColors(); setMove(false); requestAnimationFrame(()=>{ size(); render(); }); };
+    const close=()=>{ finish(); save(); wrap.hidden=true; document.body.classList.remove("wbopen"); };
     $("wb-close").addEventListener("click",close);
     document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!wrap.hidden) close(); });
-    window.addEventListener("resize",()=>{ if(!wrap.hidden) size(); });
+    window.addEventListener("resize",()=>{ if(!wrap.hidden){ size(); render(); } });
     window.addEventListener("pagehide",save);
   })();
 
   // ---------- boot ----------
   const h0=location.hash.replace("#","");
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
+  (function splash(){ const sp=document.getElementById("splash"); if(!sp) return; const quick=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches; setTimeout(()=>{ sp.classList.add("out"); setTimeout(()=>sp.remove(),500); },quick?200:1500); })();
   if("serviceWorker" in navigator&&location.protocol.startsWith("http")){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }); }
 })();
 </script>
