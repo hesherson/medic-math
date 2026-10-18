@@ -484,45 +484,55 @@ details.drug[open]>summary{border-bottom:1px solid var(--line)}
 .dg-grid section{background:var(--surface-2);border-radius:6px;padding:10px 12px}
 .dg-grid ul{padding-left:16px;font-size:13px;gap:2px}
 
-/* dosages: one block, adult then peds, grouped by route */
-.dosebox{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:12px;background:var(--bg)}
-.ptbanner{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--amber-soft);border-left:4px solid var(--amber);padding:10px 12px;border-radius:0 6px 6px 0;font-size:15px}
-.ptbanner b{font-family:var(--display);font-size:20px;color:var(--amber)}
-.dosetable{display:grid;gap:14px}
-.popgrp{display:grid;gap:8px}
-.pophead{display:inline-block;justify-self:start;font-family:var(--display);font-size:14px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:4px 12px;border-radius:4px;background:var(--teal);color:var(--teal-ink)}
+/* dosages: a section like the others; math and mL hidden until asked for */
+.dg-tools{display:flex;gap:6px;flex-wrap:wrap}
+.dg-grid .dosesec{grid-column:1/-1}
+.ptline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:4px}
+.ptline b{font-family:var(--display);font-size:17px;color:var(--amber)}
+.ptline .chip{min-height:28px;padding:3px 10px;font-size:12px}
+.dosetable{display:grid;gap:10px}
+.popgrp{display:grid;gap:2px}
+.pophead{display:inline-block;justify-self:start;font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 9px;border-radius:4px;background:var(--teal);color:var(--teal-ink);margin:4px 0 2px}
 .popgrp.peds .pophead{background:var(--amber);color:#1a1208}
-.rtgrp{display:grid;gap:6px;border-left:3px solid var(--teal);padding-left:10px}
-.popgrp.peds .rtgrp{border-color:var(--amber)}
-.rthead{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
-.drow{display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:8px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;align-items:start}
-.drow.text{grid-template-columns:minmax(0,1fr) 2fr}
+.rtgrp{display:grid}
+.rthead{font-family:var(--display);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:8px;padding-bottom:2px}
+.drow{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:2px 12px;padding:7px 0;border-top:1px solid var(--line);align-items:start}
+.drow.text{grid-template-columns:1fr}
 .du{min-width:0}
-.du b{display:block;font-size:15px;font-weight:600;line-height:1.3}
-.du span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
-.dd,.dg{display:grid;gap:2px;min-width:0}
-.lbl{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.dd b{font-family:var(--mono);font-size:15px;font-weight:600;overflow-wrap:anywhere}
-.dd .per{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.dg b{font-family:var(--display);font-size:22px;font-weight:700;color:var(--teal);line-height:1.1;overflow-wrap:anywhere}
-.dg b.dim{font-size:14px;color:var(--muted);font-weight:600}
-.dg .stk{font-size:12px;color:var(--muted)}
-.dg .math{display:none;font-family:var(--mono);font-size:11px;color:var(--muted);overflow-wrap:anywhere}
-.dosebox.showmath .dg .math{display:block}
-.dnote{grid-column:1/-1;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
-.dt{font-size:14px;line-height:1.45}
-.tag{display:inline-block;font-style:normal;font-family:var(--display);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--amber-soft);color:var(--amber);margin-top:4px}
-.bag{background:var(--surface);border:1px solid var(--teal);border-radius:8px;padding:10px 12px;display:grid;gap:6px}
-.bagh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.bagh .sect{margin:0}
-.bagh .tag{margin:0}
-.bagmix{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
-.bagmix b{font-family:var(--display);font-size:20px;font-weight:700;line-height:1.15}
-.bagmix .num{font-size:14px;color:var(--teal);font-weight:600}
-.bagalt{font-size:13px;color:var(--muted)}
-.baguse{font-size:14px}
-.bagwhy{font-size:13px;color:var(--muted)}
+.du b{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.du span{display:block;font-size:12.5px;color:var(--muted);margin-top:1px;line-height:1.4}
+.du .why{color:var(--muted);font-style:italic}
+.dv{text-align:right;min-width:0}
+.dv b{display:block;font-family:var(--mono);font-size:14px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.dv span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+.drow.bag .dv b{font-family:var(--display);font-size:15px}
+.dm{grid-column:1/-1;display:none;font-family:var(--mono);font-size:11.5px;line-height:1.45;color:var(--teal);background:var(--surface);border-radius:4px;padding:5px 8px;margin-top:3px;overflow-wrap:anywhere}
+.dg-body.showmath .dm{display:block}
+.dnote{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin-top:2px}
+.tag{display:inline-block;vertical-align:middle;font-style:normal;font-family:var(--display);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:0 6px;border-radius:999px;background:var(--amber-soft);color:var(--amber);margin-left:6px}
+.kc{font-size:14px}
+.studytag{display:none;font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--amber);color:#1a1208}
+details.drug.instudy .studytag{display:inline-block}
+.drugchips{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.drugchips .note{margin-left:auto}
+.chip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 
+/* spoken cards */
+.ttsbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:10px 12px;display:grid;gap:8px;z-index:29;animation:rise .25s ease-out}
+.ttsbar[hidden]{display:none}
+.ttsrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ttsinfo{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0}
+.ttsinfo b{font-family:var(--display);font-size:19px;font-weight:700;line-height:1}
+.ttsbar.waiting .ttsinfo .note{color:var(--amber);font-weight:600}
+.ttsctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ttsctl .chip{min-height:40px;white-space:nowrap}
+.ttsbar .timesel{flex:0 0 auto}
+.ttsbar .timesel select{font-size:12px;padding:3px 4px}
+.ttsctl .btn{min-height:40px;padding:6px 10px;flex:0 0 auto;font-size:14px}
+.ttsctl #tts-play{flex:1 1 auto}
+.ttsctl #tts-skip{display:none}
+.ttsbar.waiting #tts-skip{display:inline-flex}
+body.notts [data-listen],body.notts #drug-listen{display:none}
 /* section titles: solid strip so they stand off every background */
 .sect,.dg-grid h4,.quick .eyebrow,.mgroup,.rgroup h2,.rcard>header>.eyebrow{display:inline-block;justify-self:start;font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:3px 10px;border-radius:4px;background:var(--teal);color:var(--teal-ink);margin:0 0 8px;line-height:1.4}
 .mgroup{margin:16px 0 2px;font-size:13px}
@@ -579,11 +589,8 @@ body.focus .quizwrap{max-width:720px;margin:0 auto}
   .dg-name h3{font-size:22px}
   details.drug>summary{padding:12px 40px 12px 14px}
   .dg-body{padding:12px 12px 16px}
-  .dosebox{padding:10px}
-  .drow{grid-template-columns:1fr 1fr;padding:10px}
-  .drow .du{grid-column:1/-1}
-  .drow.text{grid-template-columns:1fr}
-  .dg b{font-size:19px}
+  .ttsbar{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  .calcfab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .mrow{grid-template-columns:1fr 1.5fr auto auto}
   .mcw{display:none}
   .ob h2{font-size:22px}
@@ -628,6 +635,8 @@ details.method[open]>summary::after{content:"\2212"}
 .expick .exbar .btn{min-height:44px;background:var(--surface);border:1px solid var(--line)}
 .mrule{color:var(--ink);border-left:3px solid var(--amber);padding-left:8px}
 .nw{white-space:nowrap}
+body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
+@media (max-width:600px){ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(228px + env(safe-area-inset-bottom,0px))} .ttsctl #tts-stop{margin-left:auto} }
 </style>
 </head>
 <body>
@@ -1031,7 +1040,8 @@ details.method[open]>summary::after{content:"\2212"}
 <section class="panel" id="panel-drugs" hidden>
   <div class="drugtop">
     <div class="introrow"><p class="intro">Every WVFD profile, searchable by name, brand, class or indication. Open a card for the full mechanism and the dosages, grouped by route and worked for the patient weight in the header, with the standard bag for anything that runs as a drip.</p></div>
-    <div class="drugbar"><input type="search" id="drug-q" placeholder="Search drug, brand, class, indication" aria-label="Search drugs"><select id="drug-filter" aria-label="Filter by class"></select><span class="note" id="drug-count"></span></div>
+    <div class="drugbar"><input type="search" id="drug-q" placeholder="Search drug, brand, class, indication" aria-label="Search drugs"><select id="drug-filter" aria-label="Filter by class"></select></div>
+    <div class="drugchips"><button type="button" class="chip" id="drug-study" aria-pressed="false">Study set · 0</button><button type="button" class="chip" id="drug-listen">Listen to these</button><span class="note" id="drug-count"></span></div>
   </div>
   <div class="druglist cascade" id="druglist"></div>
   <p class="note">Source: WVFD Drug Profiles, based on AHA, ACLS and PALS common practice with AZDHS and JB Learning content. Training reference. Verify against your current protocol.</p>
@@ -1073,6 +1083,11 @@ details.method[open]>summary::after{content:"\2212"}
     <div class="setrow"><div><b>Strict gates</b><div class="note">Scenarios lock until the quiz runs 70% over the last 20 answers.</div></div><button type="button" class="chip tog" id="s-strict">On</button></div>
   </div>
   <div class="rcard">
+    <header><span class="eyebrow">Study set</span><h2>Focus on this term's drugs</h2><p class="lead">Open any drug card and tap Add to study set. The Drugs tab can filter to the set, Listen reads it aloud, and with the switch below the flash cards, drug checks and exam questions draw only from it.</p></header>
+    <div class="setrow"><div><b>Practice from the study set only</b><div class="note" id="s-studycount">Nothing in the set yet, so everything is in play.</div></div><button type="button" class="chip tog" id="s-studyonly">On</button></div>
+    <div class="btnrow"><button type="button" class="btn alt" id="s-studygo">Open the set</button><button type="button" class="btn alt danger" id="s-studyclear">Clear the set</button></div>
+  </div>
+  <div class="rcard">
     <header><span class="eyebrow">Install</span><h2>Use it like an app</h2></header>
     <div id="s-how"></div>
     <button type="button" class="btn amber" id="s-install" hidden>Install</button>
@@ -1096,7 +1111,7 @@ details.method[open]>summary::after{content:"\2212"}
 <div class="backdrop" id="calc-backdrop" hidden></div>
 <aside class="drawer" id="drawer" aria-label="Calculator" aria-hidden="true">
   <div class="dhead"><span class="eyebrow">Calculator</span><button class="btn alt" type="button" id="calc-close">Close</button></div>
-  <input class="dexpr" id="dexpr" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0.3 × 70" aria-label="Expression">
+  <input class="dexpr" id="dexpr" type="text" inputmode="none" readonly autocomplete="off" spellcheck="false" placeholder="0.3 × 70" aria-label="Expression">
   <div class="dres" id="dres" aria-live="polite">0</div>
   <div class="dquick">
     <button type="button" data-q="×10">×10</button><button type="button" data-q="÷10">÷10</button><button type="button" data-q="×60">×60</button><button type="button" data-q="÷60">÷60</button>
@@ -1112,6 +1127,10 @@ details.method[open]>summary::after{content:"\2212"}
   <div class="dhist" id="dhist"></div>
 </aside>
 
+<div class="ttsbar" id="ttsbar" hidden aria-live="polite">
+  <div class="ttsrow"><div class="ttsinfo"><span class="eyebrow" id="tts-mode">Reading</span><b id="tts-title"></b><span class="note" id="tts-sub"></span></div><label class="timesel">Speed <select id="tts-rate"><option value="0.8">0.8×</option><option value="1">1×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option></select></label></div>
+  <div class="ttsctl"><button type="button" class="btn alt" id="tts-prev" aria-label="Previous">&lsaquo;</button><button type="button" class="btn amber" id="tts-play">Pause</button><button type="button" class="btn alt" id="tts-skip">Reveal</button><button type="button" class="btn alt" id="tts-next" aria-label="Next">&rsaquo;</button><button type="button" class="chip" id="tts-quiz" aria-pressed="false">Quiz me</button><button type="button" class="btn alt" id="tts-stop">Stop</button></div>
+</div>
 
 <script>
 (function(){
@@ -1121,7 +1140,7 @@ details.method[open]>summary::after{content:"\2212"}
   const store={ get(k,f){ try{ const v=localStorage.getItem(k); return v==null?f:JSON.parse(v);}catch(e){return f;} }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
 
   // ---------- settings, feedback, navigation ----------
-  const SET=Object.assign({haptics:true,sound:false,strict:false},store.get("mm-set",{}));
+  const SET=Object.assign({haptics:true,sound:false,strict:false,studyOnly:true},store.get("mm-set",{}));
   const saveSet=()=>store.set("mm-set",SET);
   let audio=null;
   function feedback(ok){
@@ -1536,24 +1555,29 @@ details.method[open]>summary::after{content:"\2212"}
   function stockToVial(d,s){ const m=/^([^\/(]+?)(?:\s*\/\s*([^(]+?))?(?:\s*\((.*)\))?$/.exec(s.l.trim()); const total=m?(m[1].trim()+(m[2]?" / "+m[2].trim():"")):s.l; const conc=s.tab?"":(fmt(s.c,s.c<1?3:2)+" "+s.u+"/mL"); return vialSVG({name:d.name.replace(/\s*\(.*\)/,""),total,conc:m&&m[3]?m[3]:conc,warn:s.u==="mcg"?"MICROGRAMS":""}); }
 
   // ---------- dose maths ----------
-  // realistic volumes: syringe gradations by size, pump increments for drips
-  function roundDraw(ml){ if(ml<1) return Math.round(ml*100)/100; if(ml<3) return Math.round(ml*10)/10; if(ml<20) return Math.round(ml*2)/2; return Math.round(ml); }
-  function roundRate(r){ return r<10?Math.round(r*10)/10:Math.round(r); }
-  function roundTab(t){ return Math.round(t*2)/2; }
+  // volumes are exact to two decimals; nothing is rounded to a syringe mark
   function doseLine(d,ds,kg){
-    const st=d.stocks[ds.stock!=null?ds.stock:0]; const u=ds.unit; const r=(a,b,dec)=>a===b?fmt(a,dec==null?3:dec):fmt(a,dec==null?3:dec)+" to "+fmt(b,dec==null?3:dec);
-    const drawTxt=(lo,hi)=>{ const a=roundDraw(lo), b=roundDraw(hi); const ex=(Math.abs(a-lo)>0.004||Math.abs(b-hi)>0.004)?` (exact ${r(lo,hi,2)})`:""; return {t:r(a,b,2)+" mL",ex}; };
-    const rateTxt=(lo,hi)=>{ const a=roundRate(lo), b=roundRate(hi); const ex=(Math.abs(a-lo)>0.04||Math.abs(b-hi)>0.04)?` (exact ${r(lo,hi,1)})`:""; return {t:r(a,b,1)+" mL/hr",ex}; };
-    let dose="",vol="",how="";
-    if(ds.kind==="text"){ return {dose:"",vol:"",how:"",stock:""}; }
-    if(ds.kind==="fixed"){ dose=r(ds.lo,ds.hi)+" "+u; if(st&&st.u===u){ if(st.tab){ vol=r(roundTab(ds.lo/st.c),roundTab(ds.hi/st.c),1)+" × "+st.l; how=`${r(ds.lo,ds.hi)} ÷ ${fmt(st.c,3)} ${u} each`; } else { const v=drawTxt(ds.lo/st.c,ds.hi/st.c); vol=v.t; how=`${r(ds.lo,ds.hi)} ÷ ${fmt(st.c,3)} ${u}/mL${v.ex}`; } } }
-    else if(ds.kind==="perkg"){ let lo=ds.lo*kg, hi=ds.hi*kg; let capped=false; if(ds.max){ if(lo>ds.max){lo=ds.max;capped=true;} if(hi>ds.max){hi=ds.max;capped=true;} } dose=r(lo,hi)+" "+u+(capped?" (capped at "+ds.max+")":""); how=`${r(ds.lo,ds.hi)} ${u}/kg × ${fmt(kg,1)} kg`; if(st&&st.u===u){ const v=drawTxt(lo/st.c,hi/st.c); vol=v.t; how+=`; ÷ ${fmt(st.c,3)} ${u}/mL${v.ex}`; } }
-    else if(ds.kind==="infkg"){ dose=r(ds.lo,ds.hi)+" "+u+"/kg/min"; if(st){ const f=x=>x*kg*60/st.c; const v=rateTxt(f(ds.lo),f(ds.hi)); vol=v.t; how=`${r(ds.lo,ds.hi)} × ${fmt(kg,1)} kg × 60 ÷ ${fmt(st.c,0)} ${st.u}/mL${v.ex}`; } }
-    else if(ds.kind==="infkghr"){ dose=r(ds.lo,ds.hi)+" "+u+"/kg/hr"; if(st){ const f=x=>x*kg/st.c; const v=rateTxt(f(ds.lo),f(ds.hi)); vol=v.t; how=`${r(ds.lo,ds.hi)} × ${fmt(kg,1)} kg ÷ ${fmt(st.c,2)} ${st.u}/mL${v.ex}`; } }
-    else if(ds.kind==="infmin"){ dose=r(ds.lo,ds.hi)+" "+u+"/min"; if(st){ const f=x=>x*60/st.c; const v=rateTxt(f(ds.lo),f(ds.hi)); vol=v.t; how=`${r(ds.lo,ds.hi)} × 60 ÷ ${fmt(st.c,3)} ${st.u}/mL${v.ex}`; } }
-    else if(ds.kind==="infhr"){ dose=r(ds.lo,ds.hi)+" "+u+"/hr"; if(st){ const f=x=>x/st.c; const v=rateTxt(f(ds.lo),f(ds.hi)); vol=v.t; how=`${r(ds.lo,ds.hi)} ÷ ${fmt(st.c,3)} ${st.u}/mL${v.ex}`; } }
-    return {dose,vol,how,stock:st?st.l:""};
+    const st=d.stocks[ds.stock!=null?ds.stock:0]; const u=ds.unit;
+    const r=(a,b,dec)=>a===b?fmt(a,dec==null?3:dec):fmt(a,dec==null?3:dec)+" to "+fmt(b,dec==null?3:dec);
+    const stockTxt=st?` of ${st.l}`:"";
+    let dose="",calc="",vol="",how="";
+    if(ds.kind==="text") return {dose:"",calc:"",vol:"",how:"",stock:""};
+    if(ds.kind==="fixed"){ dose=r(ds.lo,ds.hi)+" "+u; if(st&&st.u===u){ if(st.tab){ vol=r(ds.lo/st.c,ds.hi/st.c,2)+" × "+st.l; how=`${r(ds.lo,ds.hi)} ÷ ${fmt(st.c,3)} ${u} each = ${vol}`; } else { vol=r(ds.lo/st.c,ds.hi/st.c,2)+" mL"; how=`${r(ds.lo,ds.hi)} ${u} ÷ ${fmt(st.c,3)} ${u}/mL = ${vol}${stockTxt}`; } } }
+    else if(ds.kind==="perkg"){ let lo=ds.lo*kg, hi=ds.hi*kg; let capped=false; if(ds.max){ if(lo>ds.max){lo=ds.max;capped=true;} if(hi>ds.max){hi=ds.max;capped=true;} } dose=r(ds.lo,ds.hi)+" "+u+"/kg"; calc=r(lo,hi)+" "+u+(capped?" (capped)":"")+" at "+fmt(kg,1)+" kg"; how=`${r(ds.lo,ds.hi)} ${u}/kg × ${fmt(kg,1)} kg = ${r(lo,hi)} ${u}${capped?" after the cap":""}`; if(st&&st.u===u){ vol=r(lo/st.c,hi/st.c,2)+" mL"; how+=`; ÷ ${fmt(st.c,3)} ${u}/mL = ${vol}${stockTxt}`; } }
+    else if(ds.kind==="infkg"){ dose=r(ds.lo,ds.hi)+" "+u+"/kg/min"; calc=r(ds.lo*kg,ds.hi*kg)+" "+u+"/min at "+fmt(kg,1)+" kg"; if(st){ const f=x=>x*kg*60/st.c; vol=r(f(ds.lo),f(ds.hi),2)+" mL/hr"; how=`${r(ds.lo,ds.hi)} × ${fmt(kg,1)} kg × 60 ÷ ${fmt(st.c,0)} ${st.u}/mL = ${vol}${stockTxt}`; } }
+    else if(ds.kind==="infkghr"){ dose=r(ds.lo,ds.hi)+" "+u+"/kg/hr"; calc=r(ds.lo*kg,ds.hi*kg)+" "+u+"/hr at "+fmt(kg,1)+" kg"; if(st){ const f=x=>x*kg/st.c; vol=r(f(ds.lo),f(ds.hi),2)+" mL/hr"; how=`${r(ds.lo,ds.hi)} × ${fmt(kg,1)} kg ÷ ${fmt(st.c,2)} ${st.u}/mL = ${vol}${stockTxt}`; } }
+    else if(ds.kind==="infmin"){ dose=r(ds.lo,ds.hi)+" "+u+"/min"; if(st){ const f=x=>x*60/st.c; vol=r(f(ds.lo),f(ds.hi),2)+" mL/hr"; how=`${r(ds.lo,ds.hi)} × 60 ÷ ${fmt(st.c,3)} ${st.u}/mL = ${vol}${stockTxt}`; } }
+    else if(ds.kind==="infhr"){ dose=r(ds.lo,ds.hi)+" "+u+"/hr"; if(st){ const f=x=>x/st.c; vol=r(f(ds.lo),f(ds.hi),2)+" mL/hr"; how=`${r(ds.lo,ds.hi)} ÷ ${fmt(st.c,3)} ${st.u}/mL = ${vol}${stockTxt}`; } }
+    return {dose,calc,vol,how,stock:st?st.l:""};
   }
+
+  // ---------- study set: the drugs you are focusing on this term ----------
+  let study=new Set(store.get("mm-study",[]));
+  const saveStudy=()=>{ store.set("mm-study",[...study]); document.dispatchEvent(new CustomEvent("study")); };
+  window.studyIds=()=>[...study];
+  window.inStudy=id=>study.has(id);
+  window.clearStudy=()=>{ study=new Set(); saveStudy(); };
+  window.studyPool=()=>(SET.studyOnly!==false&&study.size)?DRUGS.filter(d=>study.has(d.id)):DRUGS;
 
   // ---------- drug library UI ----------
   const RT_ORDER=["IV/IO","IM","IN","ET","Infusion","Neb","PO","SL","Buccal","Rectal","Topical","Inhaled"];
@@ -1561,23 +1585,25 @@ details.method[open]>summary::after{content:"\2212"}
   const FAM=[[/sympathomimetic|vasopressor/i,"#C0392B"],[/antidysrhythmic|calcium channel|antianginal|nitrate|vasodilator/i,"#6C4AB6"],[/benzodiazepine|anticonvulsant|sedative|hypnotic|anesth/i,"#3A5BA0"],[/narcotic analgesic|narcotic agonist|^analgesic|inhaled analgesic/i,"#2A7FB8"],[/antagonist|antidote|adsorbent/i,"#D9822B"],[/electrolyte|alkalizing|buffer/i,"#2E7D4F"],[/bronchodilator|beta2|anticholinergic|parasympathetic/i,"#1E8A8A"],[/corticosteroid|glucocorticoid|anti-inflammatory|antihistamine/i,"#7A8C2E"],[/carbohydrate|hypoglycemic|hyperglycemic|pancreatic/i,"#B23A8A"],[/diuretic/i,"#2A8FA0"],[/platelet|nonsteroidal/i,"#8E3B46"],[/antiemetic/i,"#5B6B7A"],[/hormone|uterine|tocolytic/i,"#A0522D"],[/gas/i,"#607D8B"]];
   function famColor(d){ for(const c of d.cls){ for(const [re,col] of FAM) if(re.test(c)) return col; } return "#1E5A6E"; }
   (function drugsUI(){
-    const root=$("druglist"), q=$("drug-q"), fil=$("drug-filter");
+    const root=$("druglist"), q=$("drug-q"), fil=$("drug-filter"), studyBtn=$("drug-study");
+    let studyOnly=false;
     const classes=[...new Set(DRUGS.flatMap(d=>d.cls))].sort();
     fil.innerHTML=`<option value="">All classes</option>`+classes.map(c=>`<option>${c}</option>`).join("");
     const li=(arr)=>arr.length?`<ul>${arr.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p class="note">None listed</p>`;
-    const rng=(a,b)=>a===b?fmt(a,3):fmt(a,3)+" to "+fmt(b,3);
     const tag=t=>t?`<i class="tag">${t}</i>`:"";
     function card(d){
-      const hasDose=d.doses.length>0;
-      return `<details class="drug" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
-          <div class="dg-main"><div class="dg-name"><h3>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
+      const hasDose=d.doses.length>0, inS=study.has(d.id);
+      return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
+          <div class="dg-main"><div class="dg-name"><h3>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}<span class="studytag">Study set</span></div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${d.quick.dose.replace(/\.$/,"")}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div></div>
         </div></summary>
         <div class="dg-body cascade">
+          <div class="dg-tools"><button type="button" class="chip" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">${inS?"In study set":"Add to study set"}</button>${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button>`:""}${d.stocks.length?`<button type="button" class="chip" data-vials>Show vials</button>`:""}</div>
+          <div class="vials" hidden>${d.stocks.map(s=>`<figure>${stockToVial(d,s)}<figcaption>${s.l}</figcaption></figure>`).join("")}</div>
           <div class="how"><span class="eyebrow">How it works</span><p>${d.how||d.quick.moa}</p></div>
-          <div class="quick"><div><span class="eyebrow">Watch for</span><p>${d.quick.key}</p></div></div>
-          ${hasDose?`<div class="dosebox"><div class="ptbanner"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dg-row"><h4 class="sect">Dosages</h4><div class="chips"><button type="button" class="chip" data-math aria-pressed="false">Show math</button>${d.stocks.length?`<button type="button" class="chip" data-vials>Show vials</button>`:""}</div></div><div class="dosetable" data-dose="${d.id}"></div><div class="vials" hidden>${d.stocks.map(s=>`<figure>${stockToVial(d,s)}<figcaption>${s.l}</figcaption></figure>`).join("")}</div></div>`:""}
           <div class="dg-grid">
+            ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
+            <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>
             <section><h4>Standard supply</h4>${li(d.supply)}</section>
             <section><h4>Mechanism of action</h4>${li(d.moa)}</section>
             <section><h4>Indications</h4>${li(d.ind)}</section>
@@ -1588,46 +1614,55 @@ details.method[open]>summary::after{content:"\2212"}
           </div>
         </div></details>`;
     }
-    const bagCard=b=>`<div class="bag"><div class="bagh"><span class="sect">Standard bag</span>${tag(b.tag)}</div><div class="bagmix"><b>${b.mix}</b><span class="num">${b.conc}</span></div>${b.alt?`<div class="bagalt">${b.alt}</div>`:""}<p class="baguse">${b.use}</p><p class="bagwhy">${b.why}</p></div>`;
+    const bagRow=b=>`<div class="drow bag"><div class="du"><b>Standard bag${b.tag?` <i class="tag">${b.tag}</i>`:""}</b><span>${b.use}${b.alt?" "+b.alt:""}</span><span class="why">${b.why}</span></div><div class="dv"><b>${b.mix}</b><span>${b.conc}</span></div></div>`;
     function row(d,ds,kg){
-      if(ds.kind==="text") return `<div class="drow text"><div class="du"><b>${ds.l}</b>${tag(ds.tag)}</div><div class="dt">${ds.t||""}</div></div>`;
+      if(ds.kind==="text") return `<div class="drow text"><div class="du"><b>${ds.l}${tag(ds.tag)}</b><span>${ds.t||""}</span></div></div>`;
       const r=doseLine(d,ds,kg);
-      const per=ds.kind==="perkg"?`${rng(ds.lo,ds.hi)} ${ds.unit}/kg${ds.max?`, max ${fmt(ds.max,3)} ${ds.unit}`:""}`:(ds.kind==="fixed"&&ds.max?`max ${fmt(ds.max,3)} ${ds.unit}`:"");
-      return `<div class="drow"><div class="du"><b>${ds.l}</b>${ds.t?`<span>${ds.t}</span>`:""}${tag(ds.tag)}</div>
-        <div class="dd"><span class="lbl">Dose</span><b>${r.dose}</b>${per?`<span class="per">${per}</span>`:""}</div>
-        <div class="dg"><span class="lbl">Give</span>${r.vol?`<b>${r.vol}</b>`:`<b class="dim">see dose</b>`}${r.stock?`<span class="stk">${r.stock}</span>`:""}${r.how?`<span class="math">${r.how}</span>`:""}</div>
-        ${ds.note?`<div class="dnote">${ds.note}</div>`:""}</div>`;
+      const detail=[ds.t,ds.max&&ds.kind==="perkg"?`max ${fmt(ds.max,3)} ${ds.unit}`:"",ds.max&&ds.kind==="fixed"?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
+      return `<div class="drow"><div class="du"><b>${ds.l}${tag(ds.tag)}</b>${detail?`<span>${detail}</span>`:""}</div><div class="dv"><b>${r.dose}</b>${r.calc?`<span>${r.calc}</span>`:""}</div>${r.how?`<div class="dm">${r.how}</div>`:""}${ds.note?`<div class="dnote">${ds.note}</div>`:""}</div>`;
     }
     function doseBlock(d,kg){
       return [["adult","Adult"],["peds","Pediatric"]].map(([p,pl])=>{
         const rows=d.doses.filter(x=>x.pop===p); if(!rows.length) return "";
         const groups=RT_ORDER.filter(rt=>rows.some(x=>(x.route||"IV/IO")===rt));
-        const bags=(p==="adult"&&d.bags)?d.bags.map(bagCard).join(""):"";
+        const bags=(p==="adult"&&d.bags)?d.bags.map(bagRow).join(""):"";
         const hasInf=groups.includes("Infusion");
         return `<div class="popgrp ${p}"><div class="pophead">${pl}</div>${groups.map(rt=>`<div class="rtgrp"><div class="rthead">${RT_LABEL[rt]||rt}</div>${rows.filter(x=>(x.route||"IV/IO")===rt).map(ds=>row(d,ds,kg)).join("")}${rt==="Infusion"?bags:""}</div>`).join("")}${!hasInf&&bags?`<div class="rtgrp"><div class="rthead">Mixing</div>${bags}</div>`:""}</div>`;
       }).join("");
     }
-    function renderDoses(){
-      document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); });
-    }
+    function renderDoses(){ document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); }); }
+    function headerH(){ const h=document.querySelector("header.top"); return h?h.getBoundingClientRect().height:0; }
+    function scrollToCard(el){ const top=el.getBoundingClientRect().top+window.scrollY-headerH()-8; window.scrollTo({top:Math.max(0,top),behavior:"smooth"}); }
+    window.revealDrug=(id,scroll)=>{ const el=$("drug-"+id); if(!el) return false; if(!el.open) el.open=true; else if(scroll!==false) scrollToCard(el); return true; };
+    function setStudyBtn(){ studyBtn.textContent=`Study set · ${study.size}`; studyBtn.setAttribute("aria-pressed",studyOnly?"true":"false"); if(!study.size&&studyOnly){ studyOnly=false; studyBtn.setAttribute("aria-pressed","false"); } }
+    function visible(){ const term=q.value.trim().toLowerCase(), c=fil.value; return DRUGS.filter(d=>(!studyOnly||study.has(d.id))&&(!c||d.cls.includes(c))&&(!term||[d.name,...d.brands,...d.cls,...d.ind].join(" ").toLowerCase().includes(term))); }
+    window.visibleDrugIds=()=>visible().map(d=>d.id);
     function render(){
-      const term=q.value.trim().toLowerCase(), c=fil.value;
-      const list=DRUGS.filter(d=>(!c||d.cls.includes(c))&&(!term||[d.name,...d.brands,...d.cls,...d.ind].join(" ").toLowerCase().includes(term)));
-      root.innerHTML=list.length?list.map(card).join(""):`<p class="note">No drug matches.</p>`;
+      const list=visible();
+      root.innerHTML=list.length?list.map(card).join(""):`<p class="note">${studyOnly?"Your study set is empty. Open a drug and tap Add to study set.":"No drug matches."}</p>`;
       $("drug-count").textContent=list.length+" of "+DRUGS.length;
+      setStudyBtn();
       renderDoses();
       const showMath=!!store.get("mm-showmath",false);
-      root.querySelectorAll(".dosebox").forEach(b=>{ b.classList.toggle("showmath",showMath); const m=b.querySelector("[data-math]"); if(m) m.setAttribute("aria-pressed",showMath?"true":"false"); });
-      root.querySelectorAll("[data-math]").forEach(b=>b.addEventListener("click",()=>{ const now=!(store.get("mm-showmath",false)); store.set("mm-showmath",now); root.querySelectorAll(".dosebox").forEach(x=>x.classList.toggle("showmath",now)); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",now?"true":"false")); }));
-      root.querySelectorAll("[data-vials]").forEach(b=>b.addEventListener("click",()=>{ const v=b.closest(".dosebox").querySelector(".vials"); v.hidden=!v.hidden; b.textContent=v.hidden?"Show vials":"Hide vials"; }));
+      root.querySelectorAll(".dg-body").forEach(b=>{ b.classList.toggle("showmath",showMath); const m=b.querySelector("[data-math]"); if(m) m.setAttribute("aria-pressed",showMath?"true":"false"); });
+      root.querySelectorAll("[data-math]").forEach(b=>b.addEventListener("click",()=>{ const now=!(store.get("mm-showmath",false)); store.set("mm-showmath",now); root.querySelectorAll(".dg-body").forEach(x=>x.classList.toggle("showmath",now)); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",now?"true":"false")); }));
+      root.querySelectorAll("[data-vials]").forEach(b=>b.addEventListener("click",()=>{ const v=b.closest(".dg-body").querySelector(".vials"); v.hidden=!v.hidden; b.textContent=v.hidden?"Show vials":"Hide vials"; }));
       root.querySelectorAll("[data-ptopen]").forEach(b=>b.addEventListener("click",()=>{ window.scrollTo({top:0,behavior:"smooth"}); $("pt-pop").hidden=false; setTimeout(()=>$("pt-kg").focus(),300); }));
+      root.querySelectorAll("[data-study]").forEach(b=>b.addEventListener("click",()=>{ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); b.textContent=on?"In study set":"Add to study set"; $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); }));
+      root.querySelectorAll("[data-listen]").forEach(b=>b.addEventListener("click",()=>{ if(window.ttsStart) ttsStart([b.dataset.listen],0); }));
       let seenD=store.get("mm-seenDrugs",{});
-      root.querySelectorAll("details.drug").forEach(d=>d.addEventListener("toggle",()=>{ if(!d.open) return; root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o!==d) o.open=false; }); const id=d.id.replace("drug-",""); if(!seenD[id]){ seenD[id]=Date.now(); store.set("mm-seenDrugs",seenD); document.dispatchEvent(new CustomEvent("drugseen")); } }));
+      root.querySelectorAll("details.drug").forEach(d=>d.addEventListener("toggle",()=>{
+        if(d.open){ root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o!==d) o.open=false; }); const id=d.id.replace("drug-",""); if(!seenD[id]){ seenD[id]=Date.now(); store.set("mm-seenDrugs",seenD); document.dispatchEvent(new CustomEvent("drugseen")); } }
+        requestAnimationFrame(()=>scrollToCard(d));
+      }));
     }
     q.addEventListener("input",render); fil.addEventListener("change",render);
+    studyBtn.addEventListener("click",()=>{ if(!study.size){ studyBtn.textContent="Study set is empty"; setTimeout(setStudyBtn,1500); return; } studyOnly=!studyOnly; render(); });
+    $("drug-listen").addEventListener("click",()=>{ const ids=visible().map(d=>d.id); if(ids.length&&window.ttsStart) ttsStart(ids,0); });
     document.addEventListener("patient",renderDoses);
+    document.addEventListener("study",setStudyBtn);
     render();
-    window.openDrug=id=>{ showPanel("drugs"); q.value=""; fil.value=""; render(); const el=$("drug-"+id); if(el){ el.open=true; el.scrollIntoView({behavior:"smooth",block:"start"}); } };
+    window.openDrug=id=>{ showPanel("drugs"); if(!$("drug-"+id)){ q.value=""; fil.value=""; studyOnly=false; render(); } const el=$("drug-"+id); if(el){ if(el.open) scrollToCard(el); else el.open=true; } };
   })();
   // ---------- methods: formula first, fixed steps, many drugs per method; every number is computed from the drug's parameters ----------
   const f=(n,d)=>fmt(n,d==null?2:d);
@@ -2327,7 +2362,7 @@ details.method[open]>summary::after{content:"\2212"}
   function sampleNot(pool,exclude,n){ const ex=new Set(exclude.map(s=>s.toLowerCase())); return shuffle(pool.filter(p=>!ex.has(p.toLowerCase()))).slice(0,n); }
   function mkOpts(correct,distractors){ const opts=shuffle([{t:correct,ok:true},...distractors.slice(0,3).map(t=>({t,ok:false}))]); return opts; }
   function mcqDrug(){
-    const d=pick(DRUGS); const types=["ind","cls","key","drugfor"]; if(d.contra.length) types.push("contra"); if(d.brands.length) types.push("brand"); if(d.onset.length) types.push("onset"); if(d.doses.some(x=>x.pop==="adult"&&(x.kind==="fixed"||x.kind==="perkg"))) types.push("dose","calc");
+    const d=pick(studyPool()); const types=["ind","cls","key","drugfor"]; if(d.contra.length) types.push("contra"); if(d.brands.length) types.push("brand"); if(d.onset.length) types.push("onset"); if(d.doses.some(x=>x.pop==="adult"&&(x.kind==="fixed"||x.kind==="perkg"))) types.push("dose","calc");
     const t=pick(types);
     if(t==="ind"){ const c=pick(d.ind); return {dom:"pharm",q:`Which of these is an indication for ${d.name}?`,opts:mkOpts(c,sampleNot(POOL.ind,d.ind.concat(d.contra),3)),expl:`${d.name} indications: ${d.ind.join("; ")}.`,ref:d.id}; }
     if(t==="contra"){ const specific=d.contra.filter(x=>!/hypersensitivity|none in the emergency/i.test(x)); const c=pick(specific.length?specific:d.contra); const dpool=POOL.contra.concat(POOL.ind).filter(x=>!/hypersensitivity|none in the emergency/i.test(x)); return {dom:"pharm",q:`Which of these is a contraindication for ${d.name}?`,opts:mkOpts(c,sampleNot(dpool,d.contra.concat(d.ind),3)),expl:`${d.name} contraindications: ${d.contra.join("; ")}.`,ref:d.id}; }
@@ -2417,7 +2452,7 @@ details.method[open]>summary::after{content:"\2212"}
     return c; })();
   let srs=store.get("mm-srs",{});
   const DAY=86400000;
-  function dueCards(){ const now=Date.now(); const due=CARDS.filter(c=>srs[c.id]&&srs[c.id].due<=now).sort((a,b)=>srs[a.id].due-srs[b.id].due); const fresh=CARDS.filter(c=>!srs[c.id]); return {due,fresh}; }
+  function dueCards(){ const now=Date.now(); const pool=new Set(studyPool().map(d=>d.id)); const cards=CARDS.filter(c=>!c.ref||pool.has(c.ref)); const due=cards.filter(c=>srs[c.id]&&srs[c.id].due<=now).sort((a,b)=>srs[a.id].due-srs[b.id].due); const fresh=cards.filter(c=>!srs[c.id]); return {due,fresh}; }
   function rate(c,g){ const s=srs[c.id]||{iv:0,n:0,lapses:0}; s.n++; if(g==="again"){ s.iv=0; s.lapses++; s.due=Date.now()+10*60000; } else if(g==="good"){ s.iv=s.iv?Math.round(s.iv*2.3*10)/10:1; s.due=Date.now()+s.iv*DAY; } else { s.iv=Math.max(3,Math.round(s.iv*3.5*10)/10); s.due=Date.now()+s.iv*DAY; } srs[c.id]=s; store.set("mm-srs",srs); }
   window.runFlash=(count,onDone)=>{
     const {due,fresh}=dueCards(); const set=due.slice(0,count); while(set.length<count&&fresh.length) set.push(fresh.splice(Math.floor(Math.random()*fresh.length),1)[0]);
@@ -2449,11 +2484,16 @@ details.method[open]>summary::after{content:"\2212"}
   const doScen=cb=>{ window.onScenTask=()=>{ sess.scen=true; markActive(); saveSess(); window.onScenTask=null; cb&&cb(); }; showPanel("scen"); const all=[...document.querySelectorAll("details.scen:not(.mine)")]; if(all.length){ all.forEach(d=>d.open=false); const d=all[Math.floor(Math.random()*all.length)]; d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } };
   $("t-flash").addEventListener("click",()=>doFlash()); $("t-quiz").addEventListener("click",()=>doQuiz()); $("t-mcq").addEventListener("click",()=>doMCQ()); $("t-scen").addEventListener("click",()=>doScen());
   $("t-run").addEventListener("click",()=>{ const chain=[]; if(!sess.flash) chain.push(doFlash); if(!sess.quiz) chain.push(doQuiz); if(!sess.mcq) chain.push(doMCQ); if(!sess.scen) chain.push(doScen); const run=()=>{ const f=chain.shift(); if(f) f(run); else showPanel("today"); }; run(); });
+  document.addEventListener("study",renderToday); document.addEventListener("settings",renderToday);
   renderToday();
   // ---------- settings panel ----------
   (function settings(){
     const bind=(id,key)=>{ const el=$(id); el.setAttribute("aria-pressed",SET[key]?"true":"false"); el.addEventListener("click",()=>{ SET[key]=!SET[key]; saveSet(); el.setAttribute("aria-pressed",SET[key]?"true":"false"); if(key==="haptics"&&SET[key]) feedback(true); if(key==="sound"&&SET[key]) feedback(true); document.dispatchEvent(new CustomEvent("settings")); }); };
-    bind("s-haptics","haptics"); bind("s-sound","sound"); bind("s-strict","strict");
+    bind("s-haptics","haptics"); bind("s-sound","sound"); bind("s-strict","strict"); bind("s-studyonly","studyOnly");
+    const studyCount=()=>{ const n=studyIds().length; $("s-studycount").textContent=n?`${n} drug${n===1?"":"s"} in the set: ${studyIds().map(id=>DRUGS.find(d=>d.id===id).name.replace(/\s*\(.*\)/,"")).join(", ")}.`:"Nothing in the set yet, so everything is in play."; };
+    studyCount(); document.addEventListener("study",studyCount);
+    $("s-studygo").addEventListener("click",()=>{ showPanel("drugs"); const b=$("drug-study"); if(b.getAttribute("aria-pressed")!=="true") b.click(); });
+    let armedS=false; $("s-studyclear").addEventListener("click",()=>{ if(!armedS){ armedS=true; $("s-studyclear").textContent="Tap again to clear"; setTimeout(()=>{armedS=false;$("s-studyclear").textContent="Clear the set";},4000); return; } clearStudy(); armedS=false; $("s-studyclear").textContent="Clear the set"; });
     const KEYS=()=>{ const out={}; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith("mm-")) out[k]=localStorage.getItem(k); } }catch(e){} return out; };
     $("s-export").addEventListener("click",()=>{ const data=JSON.stringify({app:"medic-math",v:2,when:new Date().toISOString(),data:KEYS()}); $("s-json").value=data; const a=$("s-dl"); try{ a.href="data:application/json;charset=utf-8,"+encodeURIComponent(data); a.download="medic-math-backup.json"; a.hidden=false; }catch(e){} $("s-msg").textContent="Copy the text, or use the download link in the installed app."; });
     $("s-import").addEventListener("click",()=>{ try{ const o=JSON.parse($("s-json").value); if(o&&o.data){ Object.entries(o.data).forEach(([k,v])=>{ if(k.startsWith("mm-")) localStorage.setItem(k,v); }); $("s-msg").textContent="Imported. Reloading."; setTimeout(()=>location.reload(),600); } else $("s-msg").textContent="That is not a Medic Math backup."; }catch(e){ $("s-msg").textContent="That is not valid JSON."; } });
@@ -2486,13 +2526,82 @@ details.method[open]>summary::after{content:"\2212"}
     $("cv-parse").addEventListener("click",()=>{ const rows=$("cv-in").value.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{ const p=l.split("|"); if(p.length<8||p[0]!=="PILLAR-MM") return {bad:l}; const ok=hash(p.slice(0,7).join("|"))===p[7]; return {code:p[1],name:p[2],date:p[3],score:p[4],time:p[5],missed:p[6],ok}; }); $("cv-out").innerHTML=`<div class="tblwrap"><table class="zebra"><tr><th>Student</th><th>Code</th><th>Date</th><th class="num">Score</th><th class="num">Time</th><th>Missed</th><th></th></tr>${rows.map(r=>r.bad?`<tr><td colspan="7" class="note">Unreadable: ${r.bad}</td></tr>`:`<tr><td>${r.name}</td><td>${r.code}</td><td>${r.date}</td><td class="num">${r.score}</td><td class="num">${r.time}</td><td>${r.missed}</td><td>${r.ok?'<span class="pass">verified</span>':'<span class="fail">edited</span>'}</td></tr>`).join("")}</table></div>`; });
     banner();
   })();
+  // ---------- spoken drug cards: read a card, or quiz by ear with pauses for recall ----------
+  (function tts(){
+    const ok=("speechSynthesis" in window)&&("SpeechSynthesisUtterance" in window);
+    window.ttsOK=ok;
+    const bar=$("ttsbar"); if(!ok){ document.body.classList.add("notts"); return; }
+    let list=[], di=0, parts=[], pi=0, playing=false, timer=null, cur=null;
+    let quiz=!!store.get("mm-ttsquiz",false), rate=+store.get("mm-ttsrate",1)||1;
+    const RT_SAY={"IV/IO":"I V or I O",IM:"I M",IN:"intranasal",ET:"down the E T tube",Infusion:"as an infusion",Neb:"nebulized",PO:"by mouth",SL:"under the tongue",Buccal:"between cheek and gum",Rectal:"rectally",Topical:"topically",Inhaled:"inhaled"};
+    const SUB=[
+      [/\bmcg\/kg\/min\b/g,"micrograms per kilogram per minute"],[/\bmg\/kg\/hr\b/g,"milligrams per kilogram per hour"],[/\bmg\/kg\/min\b/g,"milligrams per kilogram per minute"],[/\bmcg\/kg\/hr\b/g,"micrograms per kilogram per hour"],
+      [/\bmg\/kg\b/g,"milligrams per kilogram"],[/\bmcg\/kg\b/g,"micrograms per kilogram"],[/\bmEq\/kg\b/g,"milliequivalents per kilogram"],[/\bg\/kg\b/g,"grams per kilogram"],[/\bmL\/kg\b/g,"milliliters per kilogram"],
+      [/\bmU\/min\b/g,"milliunits per minute"],[/\bmcg\/min\b/g,"micrograms per minute"],[/\bmg\/min\b/g,"milligrams per minute"],[/\bmg\/hr\b/g,"milligrams per hour"],[/\bmL\/hr\b/g,"milliliters per hour"],[/\bL\/min\b/g,"liters per minute"],
+      [/\bmg\/mL\b/g,"milligrams per milliliter"],[/\bmcg\/mL\b/g,"micrograms per milliliter"],[/\bmEq\/mL\b/g,"milliequivalents per milliliter"],[/\bmU\/mL\b/g,"milliunits per milliliter"],
+      [/\bmcg\b/g,"micrograms"],[/\bmg\b/g,"milligrams"],[/\bmEq\b/g,"milliequivalents"],[/\bmL\b/g,"milliliters"],[/\bmU\b/g,"milliunits"],[/\bkg\b/g,"kilograms"],[/(\d)\s*g\b/g,"$1 grams"],
+      [/\bIV\/IO\b/g,"I V or I O"],[/\bIV\b/g,"I V"],[/\bIO\b/g,"I O"],[/\bIM\b/g,"I M"],[/\bET\b/g,"E T"],[/\bSL\b/g,"sublingual"],[/\bPO\b/g,"by mouth"],[/\bODT\b/g,"dissolving tablet"],[/\bSVN\b/g,"nebulizer"],[/\bBVM\b/g,"bag valve mask"],[/\bMAD\b/g,"atomizer"],
+      [/\bSVT\b/g,"S V T"],[/\bVF\b/g,"V fib"],[/\bVT\b/g,"V tach"],[/\bRSI\b/g,"R S I"],[/\bCCB\b/g,"calcium channel blocker"],[/\bTCA\b/g,"tricyclic"],[/\bCHF\b/g,"heart failure"],[/\bRVR\b/g,"rapid ventricular response"],[/\bA-fib\b/g,"A fib"],[/\bSBP\b/g,"systolic pressure"],[/\bSpO2\b/g,"sat"],[/\bECG\b/g,"E C G"],[/\bCNS\b/g,"C N S"],[/\bACS\b/g,"A C S"],[/\bCOPD\b/g,"C O P D"],[/\bQT\b/g,"Q T"],[/\bQRS\b/g,"Q R S"],[/\bPR\b/g,"P R"],[/\bNMDA\b/g,"N M D A"],[/\bCOX-1\b/g,"cox one"],[/\bHF\b/g,"hydrofluoric"],[/\bLOC\b/g,"level of consciousness"],[/\bMI\b/g,"M I"],[/\bAV\b/g,"A V"],[/\bGI\b/g,"G I"],[/\bPPH\b/g,"postpartum hemorrhage"],[/\bWVFD\b/g,"the profile"],
+      [/\bD50\b/g,"D fifty"],[/\bD10\b/g,"D ten"],[/\bD5\b/g,"D five"],[/\bD8\.3\b/g,"D eight point three"],[/\bD2\.5\b/g,"D two point five"],
+      [/1:10,?000/g,"one to ten thousand"],[/1:1,?000\b/g,"one to one thousand"],[/1:100,?000/g,"one to one hundred thousand"],[/(\d)%/g,"$1 percent"],
+      [/(\d)\s*s\b/g,"$1 seconds"],[/\bmin\b/g,"minutes"],[/\bhr\b/g,"hours"],[/\byr\b/g,"years"],[/\bq(\d)/g,"every $1"],
+      [/×/g," times "],[/÷/g," divided by "],[/=/g," equals "],[/;/g,"."],[/\s+/g," "]
+    ];
+    const say=s=>{ let t=String(s); for(const [re,rep] of SUB) t=t.replace(re,rep); return t.trim(); };
+    const plainName=d=>d.name.replace(/\s*\(.*\)/,"");
+    const r=(a,b)=>a===b?fmt(a,3):fmt(a,3)+" to "+fmt(b,3);
+    function doseSay(ds){ if(ds.kind==="text") return `${ds.l}: ${ds.t}`; const u=ds.unit; const k=ds.kind==="perkg"?"/kg":ds.kind==="infkg"?"/kg/min":ds.kind==="infkghr"?"/kg/hr":ds.kind==="infmin"?"/min":ds.kind==="infhr"?"/hr":""; return `${ds.l}: ${r(ds.lo,ds.hi)} ${u}${k}${ds.max?`, max ${fmt(ds.max,3)} ${u}`:""}, ${RT_SAY[ds.route||"IV/IO"]}${ds.t?", "+ds.t:""}`; }
+    const sentences=t=>t.replace(/([.!?])\s+(?=[A-Z0-9])/g,"$1\n").split("\n").filter(Boolean);
+    function script(d){
+      const P=[]; const push=(sub,text,ask,wait)=>{ if(quiz&&ask){ P.push({sub,t:ask,ask:true}); P.push({sub,wait:wait||4000}); } sentences(text).forEach(s=>P.push({sub,t:s})); };
+      P.push({sub:"Drug",t:plainName(d)+".",head:true});
+      if(d.brands.length&&!quiz) P.push({sub:"Drug",t:`Also called ${d.brands.join(", or ")}.`});
+      push("Class",`Class: ${d.cls.join(", ")}.`,"What class is it?",3000);
+      push("Indications",`Indications: ${d.ind.join(". ")}.`,"What is it for?",5000);
+      const ad=d.doses.filter(x=>x.pop==="adult"), pd=d.doses.filter(x=>x.pop==="peds");
+      if(ad.length) push("Adult dosing",`Adult dosing. ${ad.map(doseSay).join(". ")}.`,"Adult dose?",6000);
+      if(pd.length) push("Pediatric dosing",`Pediatric dosing. ${pd.map(doseSay).join(". ")}.`,"Pediatric dose?",5000);
+      if(d.contra.length) push("Contraindications",`Contraindications: ${d.contra.join(". ")}.`,"Contraindications?",5000);
+      if(d.adverse.length) push("Adverse reactions",`Adverse reactions: ${d.adverse.join(", ")}.`,"Adverse reactions?",4000);
+      push("Key consideration",`Key consideration: ${d.quick.key}`,"Key consideration?",4000);
+      if(!quiz&&d.how) push("How it works",d.how);
+      return P;
+    }
+    let voices=[]; const loadVoices=()=>{ voices=speechSynthesis.getVoices()||[]; }; loadVoices(); if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=loadVoices;
+    function voice(){ if(!voices.length) loadVoices(); return voices.find(v=>/en[-_]US/i.test(v.lang)&&/Google|Samantha|Natural|Premium|Enhanced/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null; }
+    function render(){ const d=cur; const p=parts[pi]; $("tts-title").textContent=d?plainName(d):""; $("tts-sub").textContent=p?(p.ask?p.t:p.wait?"your turn":p.sub):""; $("tts-mode").textContent=(quiz?"Quiz by ear":"Reading")+(list.length>1?` · ${di+1} of ${list.length}`:""); $("tts-play").textContent=playing?"Pause":"Play"; $("tts-quiz").setAttribute("aria-pressed",quiz?"true":"false"); bar.classList.toggle("waiting",!!(p&&p.wait)); }
+    function playPart(){
+      if(!playing) return; if(pi>=parts.length){ if(di<list.length-1){ di++; load(); timer=setTimeout(playPart,600); } else { stop(); $("tts-sub").textContent="done"; } return; }
+      const p=parts[pi]; render();
+      if(p.wait){ timer=setTimeout(()=>{ pi++; playPart(); },p.wait/Math.max(.6,rate)); return; }
+      const u=new SpeechSynthesisUtterance(say(p.t)); u.rate=rate; u.pitch=1; u.lang="en-US"; const v=voice(); if(v) u.voice=v;
+      let done=false; const fin=()=>{ if(done) return; done=true; if(!playing) return; pi++; timer=setTimeout(playPart,p.head?500:180); };
+      u.onend=fin; u.onerror=fin; speechSynthesis.speak(u);
+      // some engines never fire onend for very short strings; guard with a timer scaled to length
+      setTimeout(()=>{ if(!done&&!speechSynthesis.speaking) fin(); },Math.max(1500,p.t.length*90/rate));
+    }
+    function load(){ cur=DRUGS.find(x=>x.id===list[di]); parts=script(cur); pi=0; if(window.revealDrug) revealDrug(cur.id); render(); }
+    function halt(){ clearTimeout(timer); timer=null; try{ speechSynthesis.cancel(); }catch(e){} }
+    function stop(){ playing=false; halt(); render(); }
+    window.ttsStart=(ids,i)=>{ halt(); list=ids.slice(); di=i||0; bar.hidden=false; playing=true; load(); playPart(); };
+    window.ttsStop=()=>{ stop(); bar.hidden=true; };
+    $("tts-play").addEventListener("click",()=>{ if(playing){ stop(); } else { if(!parts.length) return; playing=true; playPart(); } });
+    $("tts-stop").addEventListener("click",()=>ttsStop());
+    $("tts-next").addEventListener("click",()=>{ halt(); if(di<list.length-1){ di++; load(); if(playing) playPart(); } else ttsStop(); });
+    $("tts-prev").addEventListener("click",()=>{ halt(); if(pi>2&&!quiz){ pi=0; } else if(di>0){ di--; } load(); if(playing) playPart(); });
+    $("tts-skip").addEventListener("click",()=>{ const p=parts[pi]; if(p&&p.wait){ clearTimeout(timer); pi++; if(playing) playPart(); } });
+    $("tts-rate").value=String(rate); $("tts-rate").addEventListener("change",()=>{ rate=+$("tts-rate").value; store.set("mm-ttsrate",rate); if(playing){ halt(); playPart(); } });
+    $("tts-quiz").addEventListener("click",()=>{ quiz=!quiz; store.set("mm-ttsquiz",quiz); if(cur){ const was=playing; halt(); parts=script(cur); pi=0; render(); if(was) playPart(); } else render(); });
+    document.addEventListener("panel",e=>{ if(e.detail!=="drugs"&&playing){ /* keep reading; the bar follows you */ } });
+    window.addEventListener("pagehide",()=>halt());
+  })();
   // ---------- calculator drawer ----------
   (function calc(){
     const drawer=$("drawer"), expr=$("dexpr"), res=$("dres"), hist=$("dhist"), fab=$("calc-open"), back=$("calc-backdrop");
     let open=false, history=store.get("mm-calc",[]);
-    function setOpen(v){ open=v; drawer.classList.toggle("open",v); drawer.setAttribute("aria-hidden",v?"false":"true"); fab.setAttribute("aria-expanded",v?"true":"false"); back.hidden=!v; if(v) setTimeout(()=>expr.focus(),50); }
+    function setOpen(v){ open=v; drawer.classList.toggle("open",v); drawer.setAttribute("aria-hidden",v?"false":"true"); fab.setAttribute("aria-expanded",v?"true":"false"); back.hidden=!v;  }
     fab.addEventListener("click",()=>setOpen(!open)); $("calc-close").addEventListener("click",()=>setOpen(false)); back.addEventListener("click",()=>setOpen(false));
-    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&open) setOpen(false); });
+    document.addEventListener("keydown",e=>{ if(!open) return; if(e.key==="Escape"){ setOpen(false); return; } if(e.target&&/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)&&e.target!==expr) return; if(/^[0-9.+\-*/()]$/.test(e.key)){ e.preventDefault(); expr.value+=e.key==="*"?"×":e.key==="/"?"÷":e.key; live(); } else if(e.key==="Backspace"){ e.preventDefault(); expr.value=expr.value.slice(0,-1); live(); } else if(e.key==="Enter"||e.key==="="){ e.preventDefault(); commit(); } else if(e.key==="Delete"){ expr.value=""; live(); } });
     // safe evaluator: tokens, shunting-yard, no eval
     function evaluate(s){
       s=s.replace(/×|x|X/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/,/g,"").replace(/\s+/g,"");
@@ -2514,11 +2623,11 @@ details.method[open]>summary::after{content:"\2212"}
     function live(){ const v=evaluate(expr.value); res.textContent=show(v); res.classList.toggle("bad",v!=null&&!isFinite(v)); }
     expr.addEventListener("input",live);
     function commit(){ const v=evaluate(expr.value); if(v==null||!isFinite(v)) return; history.unshift({e:expr.value,v}); history=history.slice(0,8); store.set("mm-calc",history); renderHist(); expr.value=show(v).replace(/,/g,""); live(); }
-    expr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key==="="){ e.preventDefault(); commit(); } });
-    drawer.querySelectorAll(".dkeys button").forEach(b=>b.addEventListener("click",()=>{ const k=b.dataset.k; if(k==="C"){expr.value="";} else if(k==="⌫"){expr.value=expr.value.slice(0,-1);} else if(k==="="){commit();return;} else expr.value+=k; live(); expr.focus(); }));
-    drawer.querySelectorAll(".dquick button").forEach(b=>b.addEventListener("click",()=>{ const q=b.dataset.q; const cur=expr.value.trim(); expr.value=(cur?`(${cur})`:"")+q; live(); if(cur) commit(); expr.focus(); }));
+    
+    drawer.querySelectorAll(".dkeys button").forEach(b=>b.addEventListener("click",()=>{ const k=b.dataset.k; if(k==="C"){expr.value="";} else if(k==="⌫"){expr.value=expr.value.slice(0,-1);} else if(k==="="){commit();return;} else expr.value+=k; live(); }));
+    drawer.querySelectorAll(".dquick button").forEach(b=>b.addEventListener("click",()=>{ const q=b.dataset.q; const cur=expr.value.trim(); expr.value=(cur?`(${cur})`:"")+q; live(); if(cur) commit(); }));
     function renderHist(){ hist.innerHTML=history.map((h,i)=>`<button type="button" data-i="${i}"><span class="he">${h.e}</span><span class="hv num">${show(h.v)}</span></button>`).join(""); }
-    hist.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; expr.value=show(history[+b.dataset.i].v).replace(/,/g,""); live(); expr.focus(); });
+    hist.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; expr.value=show(history[+b.dataset.i].v).replace(/,/g,""); live(); });
     renderHist();
   })();
 
