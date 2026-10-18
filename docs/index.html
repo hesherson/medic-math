@@ -507,11 +507,13 @@ details.drug:not(.showmath) .dm{display:none!important}
 ul.dlist{padding-left:18px;display:grid;gap:6px;font-size:13px}
 .rtname{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
 .popgrp.peds .rtname{color:var(--amber)}
-ul.tree{list-style:none;padding:0;margin:1px 0 0 -11px;display:block;position:relative;--branch:color-mix(in srgb,var(--muted) 55%,transparent)}
-li.tnode{position:relative;padding:3px 0 3px 24px;font-size:13px;line-height:1.45}
-li.tnode::before{content:"";position:absolute;left:0;top:-5px;width:15px;height:calc(.72em + 8px);border-left:1.5px solid var(--branch);border-bottom:1.5px solid var(--branch);border-bottom-left-radius:9px}
-li.tnode:first-child::before{top:-10px;height:calc(.72em + 13px)}
-li.tnode:not(:last-child)::after{content:"";position:absolute;left:0;top:calc(.72em + 3px);bottom:-5px;border-left:1.5px solid var(--branch)}
+ul.tree{list-style:none;padding:0;margin:1px 0 0 -14px;display:block;position:relative;--branch:color-mix(in srgb,var(--muted) 55%,transparent)}
+li.tnode{position:relative;padding:3px 0 3px 27px;font-size:13px;line-height:1.45}
+li.tnode::before{content:"";position:absolute;left:0;top:-5px;bottom:-5px;border-left:1.5px solid var(--branch)}
+li.tnode.first::before{top:-10px}
+li.tnode.last::before{bottom:auto;height:calc(.72em + 0px)}
+li.tnode.first.last::before{height:calc(.72em + 5px)}
+li.tnode::after{content:"";position:absolute;left:0;top:calc(.72em - 5px);width:18px;height:8px;border-left:1.5px solid var(--branch);border-bottom:1.5px solid var(--branch);border-bottom-left-radius:8px}
 li.tnode .l1{display:flex;align-items:baseline;gap:6px}
 li.tnode .use{font-weight:600;color:var(--ink);min-width:0;overflow-wrap:anywhere}
 li.tnode .lead{flex:1 1 12px;min-width:12px;height:.72em;border-bottom:1px dotted var(--branch)}
@@ -600,7 +602,8 @@ body.focus .quizwrap{max-width:720px;margin:0 auto}
   main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .calcfab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .drawer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
-  .top .inner{padding-block:8px 0}
+  .top .inner{padding-block:0}
+  .top .row{padding-block:10px}
   .todaytop{grid-template-columns:1fr}
   .streakcard .big{font-size:40px}
   .dg-head{grid-template-columns:1fr}
@@ -633,7 +636,9 @@ body.focus .quizwrap{max-width:720px;margin:0 auto}
 details.method[open]>.mbody,details.scen[open]>.sc-body,.dg-body{animation:none}
 .how{background:var(--teal);color:var(--teal-ink);border-radius:8px;padding:14px 16px;display:grid;gap:6px}
 .how .eyebrow{color:inherit;opacity:.8}
-.how p{font-size:15px;line-height:1.55}
+.how .hlead{font-size:15px;line-height:1.5;font-weight:500}
+.how ul{padding-left:18px;display:grid;gap:5px;font-size:14px;line-height:1.5;color:var(--teal-ink)}
+.how ul li{opacity:.92}
 @media (prefers-reduced-motion:reduce){.cascade>*{animation:none}}
 
 /* learn list: job first, formula inside */
@@ -660,7 +665,8 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
 
 /* reveal on scroll */
 .reveal{opacity:0}
-.reveal.in{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes revealUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.reveal.in{animation:revealUp .6s cubic-bezier(.2,.7,.2,1) both}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1}.reveal.in{animation:none}}
 </style>
 </head>
@@ -1185,7 +1191,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
     const SEL="details.drug,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*";
-    const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } else if(e.intersectionRatio===0&&e.boundingClientRect.height>0){ e.target.classList.remove("in"); } }); },{rootMargin:"0px 0px -5% 0px",threshold:[0,0.02]});
+    const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } else if(e.intersectionRatio===0&&e.boundingClientRect.height>0){ e.target.classList.remove("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
     const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); } }); };
     mark(document);
     new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) mark(n); }))).observe(document.body,{childList:true,subtree:true});
@@ -1638,10 +1644,23 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     const shortL=l=>{ for(const [re,rep] of SHORT) l=l.replace(re,rep); return l; };
     const shortT=t=>{ for(const [re,rep] of TSHORT) t=t.replace(re,rep); return t; };
     const RT_SHORT={"IV":"IV","IO":"IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"Oral","Oral, chewed":"Oral","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
-    function onsetRows(d){
-      if(!d.onset.length) return `<p class="note">None listed</p>`;
+    const isTiming=t=>/^(Peak|Duration)\b/i.test(t);
+    const shortTime=v=>v.replace(/\bminutes?\b/g,"min").replace(/\bseconds?\b/g,"s").replace(/\bhours?\b/g,"hr");
+    function timingBlock(d){
+      const RTRE=/^(IV\/IO\/ET\/infusion|IV\/IO|IM\/IN|IV|IO|IM|IN|ET|Rectal|Infusion)\s+(.*)$/;
+      const items=[];
+      const addLine=(kind,text)=>{ let k=kind; text.split(/,\s+/).forEach(seg=>{ seg=seg.trim(); const km=/^(peak|duration)\s+(?:effect\s+)?(?:is\s+)?(.*)$/i.exec(seg); if(km){ k=km[1][0].toUpperCase()+km[1].slice(1).toLowerCase(); seg=km[2]; } const m=RTRE.exec(seg); let rt=m?m[1]:null; if(rt==="IV"||rt==="IO") rt="IV/IO"; items.push({k,rt,v:m?m[2]:seg}); }); };
+      d.onset.forEach(o=>addLine("Onset",o));
+      d.special.forEach(x=>{ if(/^Peak and duration variable/i.test(x)){ items.push({k:"Peak",rt:null,v:"variable"}); items.push({k:"Duration",rt:null,v:"variable"}); } else if(isTiming(x)) addLine(/^Peak/i.test(x)?"Peak":"Duration",x.replace(/^(Peak|Duration)\s+(effect\s+)?(is\s+)?/i,"")); });
+      if(!items.length) return `<p class="note">None listed</p>`;
       const fallback=(()=>{ const r=d.routes.map(x=>RT_SHORT[x]||x); const iv=r.filter(x=>x==="IV"||x==="IO"); const rest=r.filter(x=>x!=="IV"&&x!=="IO"); return (iv.length?["IV / IO"]:[]).concat(rest).slice(0,3).join(", "); })();
-      return `<ul>${d.onset.map(o=>{ const m=/^((?:IV\/IO\/ET\/infusion|IV\/IO|IM\/IN|IV|IM|IN|ET|Rectal))\s+(.*)$/.exec(o); const rt=m?m[1].replace("IV/IO/ET/infusion","IV / IO / ET / drip").replace("IV/IO","IV / IO").replace("IM/IN","IM / IN"):fallback; const txt=m?m[2]:o; return `<li><span class="rtname">${rt}</span> ${txt.charAt(0).toUpperCase()+txt.slice(1)}</li>`; }).join("")}</ul>`;
+      const label=rt=>rt==null?fallback:rt.replace("IV/IO/ET/infusion","IV / IO / ET / drip").replace("IV/IO","IV / IO").replace("IM/IN","IM / IN");
+      const order=[]; items.forEach(it=>{ const key=it.rt==null?"":it.rt; if(!order.includes(key)) order.push(key); });
+      return `<ul class="dlist">${order.map(key=>`<li class="rtitem"><span class="rtname">${label(key===""?null:key)}</span><ul class="tree">${items.filter(it=>(it.rt==null?"":it.rt)===key).map(it=>`<li class="tnode"><div class="l1"><span class="use">${it.k}</span><span class="lead"></span><span class="dose">${shortTime(it.v)}</span></div></li>`).join("")}</ul></li>`).join("")}</ul>`;
+    }
+    function howBlock(d){
+      const t=d.how||d.quick.moa; const parts=t.replace(/([.!?])\s+(?=[A-Z])/g,"$1\n").split("\n").filter(Boolean);
+      return `<p class="hlead">${parts[0]}</p>${parts.length>1?`<ul>${parts.slice(1).map(x=>`<li>${x}</li>`).join("")}</ul>`:""}`;
     }
     function card(d){
       const hasDose=d.doses.length>0, inS=study.has(d.id);
@@ -1651,17 +1670,17 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
         </div>
         <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
         <div class="dg-body">
-          <div class="how"><span class="eyebrow">How it works</span><p>${d.how||d.quick.moa}</p></div>
+          <div class="how"><span class="eyebrow">How it works</span>${howBlock(d)}</div>
           <div class="dg-grid">
             ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
+            <section><h4>Onset</h4>${timingBlock(d)}</section>
             <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>
             <section><h4>Standard supply</h4>${li(d.supply)}</section>
             <section><h4>Mechanism of action</h4>${li(d.moa)}</section>
             <section><h4>Indications</h4>${li(d.ind)}</section>
             <section><h4>Contraindications</h4>${li(d.contra)}</section>
             <section><h4>Adverse reactions</h4>${li(d.adverse)}</section>
-            <section><h4>Onset</h4>${onsetRows(d)}</section>
-            <section><h4>Special considerations</h4>${li(d.special)}</section>
+            <section><h4>Special considerations</h4>${li(d.special.filter(x=>!isTiming(x)))}</section>
           </div>
         </div></details>`;
     }
@@ -1691,7 +1710,8 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     function setStudyBtn(){ studyBtn.textContent=`Study set · ${study.size}`; studyBtn.setAttribute("aria-pressed",studyOnly?"true":"false"); if(!study.size&&studyOnly){ studyOnly=false; studyBtn.setAttribute("aria-pressed","false"); } }
     function visible(){ const term=q.value.trim().toLowerCase(), c=fil.value; return DRUGS.filter(d=>(!studyOnly||study.has(d.id))&&(!c||d.cls.includes(c))&&(!term||[d.name,...d.brands,...d.cls,...d.ind].join(" ").toLowerCase().includes(term))); }
     window.visibleDrugIds=()=>visible().map(d=>d.id);
-    const applyLayers=()=>{ const m=!!store.get("mm-showmath",false), i=!!store.get("mm-showinfo",false); root.querySelectorAll("details.drug").forEach(x=>{ x.classList.toggle("showmath",m); x.classList.toggle("showinfo",i); }); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",m?"true":"false")); root.querySelectorAll("[data-info]").forEach(x=>x.setAttribute("aria-pressed",i?"true":"false")); };
+    const markTrees=()=>{ const info=!!store.get("mm-showinfo",false); root.querySelectorAll("ul.tree").forEach(t=>{ const vis=[...t.children].filter(n=>info||!n.classList.contains("info")); [...t.children].forEach(n=>n.classList.remove("first","last")); if(vis.length){ vis[0].classList.add("first"); vis[vis.length-1].classList.add("last"); } }); };
+    const applyLayers=()=>{ markTrees(); const m=!!store.get("mm-showmath",false), i=!!store.get("mm-showinfo",false); root.querySelectorAll("details.drug").forEach(x=>{ x.classList.toggle("showmath",m); x.classList.toggle("showinfo",i); }); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",m?"true":"false")); root.querySelectorAll("[data-info]").forEach(x=>x.setAttribute("aria-pressed",i?"true":"false")); };
     function render(){
       const list=visible();
       root.innerHTML=list.length?list.map(card).join(""):`<p class="note">${studyOnly?"Your study set is empty. Open a drug and tap Study.":"No drug matches."}</p>`;
