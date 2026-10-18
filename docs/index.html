@@ -526,7 +526,7 @@ li.tnode.first.last::before{height:calc(.72em + 3px)}
 li.tnode::after{content:"";position:absolute;left:0;top:calc(.72em - 5px);width:18px;height:8px;border-left:1.5px solid var(--branch);border-bottom:1.5px solid var(--branch);border-bottom-left-radius:8px}
 li.tnode .l1{display:flex;align-items:baseline;gap:6px}
 li.tnode .use{font-weight:600;color:var(--ink);min-width:0;overflow-wrap:anywhere}
-li.tnode .lead{flex:1 1 12px;min-width:12px;height:.72em;border-bottom:1px dotted var(--branch)}
+li.tnode .lead{flex:1 1 12px;min-width:12px;align-self:flex-start;box-sizing:content-box;height:calc(.72em - 1.5px);border-bottom:1.5px solid var(--branch)}
 li.tnode .dose{flex:0 0 auto;font-family:var(--mono);font-weight:600;color:var(--ink);white-space:nowrap;text-align:right;font-size:13px}
 li.tnode.bag .dose{white-space:normal;font-family:var(--display);font-size:14px;text-align:right;max-width:55%}
 li.tnode .aft,li.tnode .wkg,li.tnode .sub{display:block;font-size:12px;color:var(--muted);line-height:1.4}
@@ -1235,6 +1235,10 @@ body.wbopen{overflow:hidden}
   // ---------- helpers ----------
   const $=id=>document.getElementById(id);
   const fmt=(n,d)=>{ if(!isFinite(n)) return "?"; const p=Math.pow(10,d==null?2:d); const r=Math.round(n*p)/p; return r.toLocaleString(undefined,{maximumFractionDigits:d==null?2:d}); };
+  // doses print tight: 1mg/kg, 10mg/mL, 160\u2013325mg. Ranges take an en dash; time words keep their space (over 2 min).
+  const UNIT_RE=new RegExp("(\\d)\\s+(?=(?:mcg|mg|g|mEq|mL|L|units?|kg|mmol|%)(?:\\/[A-Za-z]+)*(?![A-Za-z]))","g");
+  const tight=t=>String(t==null?"":t).replace(/(\d)(?:-|\s+to\s+)(?=\d)/g,"$1\u2013").replace(UNIT_RE,"$1");
+  window.tight=tight;
   const store={ get(k,f){ try{ const v=localStorage.getItem(k); return v==null?f:JSON.parse(v);}catch(e){return f;} }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
 
   // ---------- settings, feedback, navigation ----------
@@ -1760,7 +1764,7 @@ body.wbopen{overflow:hidden}
     const tag=t=>t?`<i class="tag">${t}</i>`:"";
     const SHORT=[[/VF, pulseless VT/,"VF / pulseless VT"],[/VF or pulseless VT/,"VF / pulseless VT"],[/VT with a pulse/,"VT w/ pulse"],[/A-fib with RVR/,"AFib w/ rapid rate"],[/Stable wide-complex tachycardia/,"Stable wide-complex tachy"],[/Cardiac arrest, no vascular access/,"Arrest, no IV/IO"],[/No vascular access/,"No IV/IO"],[/Anaphylaxis, severe bronchospasm/,"Anaphylaxis / bronchospasm"],[/Reactive airway, anaphylaxis/,"Reactive airway / anaphylaxis"],[/Hyperkalemia, CCB overdose/,"Hyperkalemia / calcium blocker OD"],[/Opioid overdose/,"Opioid OD"],[/Pulmonary edema, CHF/,"Pulmonary edema / CHF"],[/Pulmonary edema, not on furosemide/,"Pulmonary edema, no home furosemide"],[/Pulmonary edema, already on it/,"Pulmonary edema, on home furosemide"],[/Organophosphate, nerve agent/,"Organophosphate / nerve agent"],[/Acidosis, hyperkalemia, TCA overdose/,"Acidosis / hyperkalemia / tricyclic OD"],[/Acidosis, as 4.2%/,"Acidosis, 4.2% strength"],[/Eclampsia, pre-term labor/,"Eclampsia / pre-term labor"],[/Allergic reaction, anaphylaxis/,"Allergic reaction / anaphylaxis"],[/Sedation, chemical restraint/,"Sedation / chemical restraint"],[/Sedation, RSI/,"RSI induction / sedation"],[/Hypoglycemia, able to swallow/,"Hypoglycemia, can swallow"],[/Hypoglycemia, no IV access/,"Hypoglycemia, no IV"],[/Nausea, vomiting/,"Nausea / vomiting"],[/Nausea, 4 to 14 yr/,"Nausea / vomiting, 4 to 14 yr"],[/Chest pain, pulmonary edema/,"Chest pain / pulmonary edema"],[/Shock, symptomatic bradycardia/,"Shock / symptomatic bradycardia"],[/Bradycardia or hypotension/,"Bradycardia / hypotension"],[/Poisoning, within 1 hr/,"Poisoning, under 1 hr"],[/Under 20 kg, or 5 yr and younger/,"Under 20 kg or 5 yr and under"],[/Over 20 kg, or over 5 yr/,"Over 20 kg or over 5 yr"],[/Hypoxia, distress, arrest/,"Hypoxia / distress / arrest"],[/Maintenance after conversion/,"Maintenance drip"],[/Acute coronary syndrome/,"ACS"]];
     const TSHORT=[[/every (\d+) to (\d+) min/g,"q$1-$2 min"],[/every (\d+) min/g,"q$1 min"],[/every (\d+) to (\d+) s\b/g,"q$1-$2 s"],[/rapid push over 1 to 3 s, then a 20 mL flush/,"rapid push 1 to 3 s, 20 mL flush"],[/if no response in (\d+) to (\d+) min; rapid push, 20 mL flush/,"no response in $1-$2 min; rapid push, 20 mL flush"],[/if no response in (\d+) to (\d+) min/,"no response in $1-$2 min"],[/if no response; /,"no response; "],[/titrate to effect/,"titrate"],[/while the drip is set up/,"while the drip is mixed"]];
-    const dash=t=>String(t).replace(/(\d)\s+to\s+(\d)/g,"$1-$2");
+    const dash=t=>tight(t);
     const shortL=l=>{ for(const [re,rep] of SHORT) l=l.replace(re,rep); return l; };
     const shortT=t=>{ for(const [re,rep] of TSHORT) t=t.replace(re,rep); return t; };
     const RT_SHORT={"IV":"IV","IO":"IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"Oral","Oral, chewed":"Oral","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
@@ -1789,16 +1793,16 @@ body.wbopen{overflow:hidden}
       const hasDose=d.doses.length>0, inS=study.has(d.id);
       return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
           <div class="dg-main"><div class="dg-name"><h3>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}<span class="studytag">Study set</span></div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
-          <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${d.quick.dose.replace(/\.$/,"")}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
+          <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${tight(d.quick.dose.replace(/\.$/,""))}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
         <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-study="${d.id}" aria-pressed="${inS?"true":"false"}">Study</button></div></summary>
         <div class="dg-body">
           <div class="how"><span class="eyebrow">How it works</span>${howBlock(d)}</div>
           <div class="dg-grid">
-            ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b> kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
+            ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b>kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
             <section><h4>Onset</h4>${timingBlock(d)}</section>
             <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>
-            <section><h4>Standard supply</h4>${li(d.supply)}</section>
+            <section><h4>Standard supply</h4>${li(d.supply.map(tight))}</section>
             <section><h4>Mechanism of action</h4>${li(d.moa)}</section>
             <section><h4>Indications</h4>${li(d.ind)}</section>
             <section><h4>Contraindications</h4>${li(d.contra)}</section>
@@ -1807,14 +1811,14 @@ body.wbopen{overflow:hidden}
           </div>
         </div></details>`;
     }
-    const mathBlock=steps=>steps.length?`<dl class="dm">${steps.map(x=>`<div><dt>${x.k}</dt><dd>${x.v}</dd></div>`).join("")}</dl>`:"";
-    const bagNode=b=>`<li class="tnode bag info"><div class="l1"><span class="use">Standard bag${b.tag?tag(b.tag):""}</span><span class="lead"></span><span class="dose">${b.mix}</span></div><span class="sub"><b>${b.conc}</b>. ${b.use}${b.alt?" "+b.alt:""}</span><span class="sub why">${b.why}</span></li>`;
+    const mathBlock=steps=>steps.length?`<dl class="dm">${steps.map(x=>`<div><dt>${x.k}</dt><dd>${tight(x.v)}</dd></div>`).join("")}</dl>`:"";
+    const bagNode=b=>`<li class="tnode bag info"><div class="l1"><span class="use">Standard bag${b.tag?tag(b.tag):""}</span><span class="lead"></span><span class="dose">${tight(b.mix)}</span></div><span class="sub"><b>${tight(b.conc)}</b>. ${b.use}${b.alt?" "+b.alt:""}</span><span class="sub why">${b.why}</span></li>`;
     function node(d,ds,kg){
       const extra=ds.tag?" info":"";
-      if(ds.kind==="text") return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span></div><span class="sub">${ds.t||""}</span></li>`;
+      if(ds.kind==="text") return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span></div><span class="sub">${tight(ds.t||"")}</span></li>`;
       const r=doseLine(d,ds,kg);
       const after=[ds.t?shortT(ds.t):"",ds.max&&!/\bmax\b/i.test(ds.t||"")?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
-      return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span><span class="lead"></span><span class="dose">${dash(r.dose)}</span></div>${after?`<span class="aft">${dash(after)}</span>`:""}${r.calc?`<span class="wkg info">${dash(r.calc)}</span>`:""}${ds.note?`<span class="sub">${ds.note}</span>`:""}${mathBlock(r.steps)}</li>`;
+      return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span><span class="lead"></span><span class="dose">${dash(r.dose)}</span></div>${after?`<span class="aft">${dash(after)}</span>`:""}${r.calc?`<span class="wkg info">${dash(r.calc)}</span>`:""}${ds.note?`<span class="sub">${tight(ds.note)}</span>`:""}${mathBlock(r.steps)}</li>`;
     }
     function doseBlock(d,kg){
       return [["adult","Adult"],["peds","Pediatric"]].map(([p,pl])=>{
@@ -2583,7 +2587,7 @@ body.wbopen{overflow:hidden}
     const r=(a,b,u)=>(a===b?fmt(a,3):fmt(a,3)+" to "+fmt(b,3))+" "+u;
     if(t==="dose"){ const u=ds.unit+(ds.kind==="perkg"?"/kg":""); const c=r(ds.lo,ds.hi,u); const dis=uniq([r(ds.lo*10,ds.hi*10,u),r(ds.lo/10,ds.hi/10,u),r(ds.lo*2,ds.hi*2,u),r(ds.lo/2,ds.hi/2,u)].filter(x=>x!==c)); return {dom:"dose",q:`Adult dose of ${d.name} for ${ds.l.replace(/^[A-Z](?=[a-z])/,c=>c.toLowerCase())}?`,opts:mkOpts(c,shuffle(dis)),expl:`${d.name}, ${ds.l}: ${c}${ds.route?" "+ds.route:""}${ds.t?", "+ds.t:""}.`,ref:d.id}; }
     const st=d.stocks[ds.stock||0]; const kg=pick([50,60,70,80,90,100]); let dose=ds.kind==="perkg"?ds.lo*kg:ds.lo; if(ds.max&&dose>ds.max) dose=ds.max; const ml=dose/st.c; const c=fmt(ml,2)+" mL"; const dis=uniq([fmt(ml*10,2),fmt(ml/10,2),fmt(ml*2,2),fmt(ml/2,2)].map(x=>x+" mL").filter(x=>x!==c));
-    return {dom:"dose",q:`${d.name}, ${ds.l.toLowerCase()}${ds.kind==="perkg"?` at ${ds.lo} ${ds.unit}/kg`:` at ${ds.lo} ${ds.unit}`}, patient ${kg} kg. Stock ${st.l}. How many mL?`,opts:mkOpts(c,shuffle(dis)),expl:`${ds.kind==="perkg"?`${ds.lo} × ${kg} = ${fmt(dose,3)} ${ds.unit}${ds.max&&ds.lo*kg>ds.max?" (capped at "+ds.max+")":""}; `:""}${fmt(dose,3)} ÷ ${fmt(st.c,3)} ${st.u}/mL = ${fmt(ml,2)} mL.`,ref:d.id};
+    return {dom:"dose",q:tight(`${d.name}, ${ds.l.toLowerCase()}${ds.kind==="perkg"?` at ${ds.lo} ${ds.unit}/kg`:` at ${ds.lo} ${ds.unit}`}, patient ${kg} kg. Stock ${st.l}. How many mL?`),opts:mkOpts(c,shuffle(dis)),expl:tight(`${ds.kind==="perkg"?`${ds.lo} × ${kg} = ${fmt(dose,3)} ${ds.unit}${ds.max&&ds.lo*kg>ds.max?" (capped at "+ds.max+")":""}; `:""}${fmt(dose,3)} ÷ ${fmt(st.c,3)} ${st.u}/mL = ${fmt(ml,2)} mL.`),ref:d.id};
   }
   function mcqMath(){
     const k=pick(Object.keys(GEN)); const g=GEN[k].make(); const a=g.ans; const u=g.unit?" "+g.unit:"";
@@ -2655,7 +2659,7 @@ body.wbopen{overflow:hidden}
   })();
   // ---------- flashcards with per-item spaced repetition ----------
   const CARDS=(()=>{ const c=[]; const cold=RULES.find(g=>g.cold); cold.items.forEach((it,i)=>c.push({id:"cold"+i,f:it[1],b:it[0],src:"Cold number"}));
-    DRUGS.forEach(d=>{ c.push({id:"dd-"+d.id,f:`Dose: ${d.name}`,b:d.quick.dose,src:"Drug card",ref:d.id}); c.push({id:"dk-"+d.id,f:`Key consideration: ${d.name}`,b:d.quick.key,src:"Drug card",ref:d.id}); c.push({id:"dc-"+d.id,f:`Class: ${d.name}`,b:d.cls.join(", "),src:"Drug card",ref:d.id}); if(d.contra.length) c.push({id:"dx-"+d.id,f:`Contraindications: ${d.name}`,b:d.contra.join("; "),src:"Drug card",ref:d.id}); });
+    DRUGS.forEach(d=>{ c.push({id:"dd-"+d.id,f:`Dose: ${d.name}`,b:tight(d.quick.dose),src:"Drug card",ref:d.id}); c.push({id:"dk-"+d.id,f:`Key consideration: ${d.name}`,b:d.quick.key,src:"Drug card",ref:d.id}); c.push({id:"dc-"+d.id,f:`Class: ${d.name}`,b:d.cls.join(", "),src:"Drug card",ref:d.id}); if(d.contra.length) c.push({id:"dx-"+d.id,f:`Contraindications: ${d.name}`,b:d.contra.join("; "),src:"Drug card",ref:d.id}); });
     RULES.filter(g=>!g.cold).forEach((g,gi)=>g.items.forEach((it,i)=>c.push({id:"rule"+gi+"-"+i,f:it[1],b:it[0],src:"Rule: "+g.g})));
     TRICKS.forEach((t,i)=>c.push({id:"tk"+i,f:t.t,b:Array.isArray(t.x)?t.x.join("<br>"):t.x,src:"Trick: "+t.c}));
     return c; })();
@@ -3087,13 +3091,16 @@ body.wbopen{overflow:hidden}
       cancelAnimationFrame(frame);frame=0;
       window.clearTimeout(completionTimer);completionTimer=0;
       draw(ctx,total(),width,height,atlas,options);
+      if(typeof options.onFrame==='function')options.onFrame(total(),total());
       if(typeof options.onComplete==='function')options.onComplete();
     }
     function tick(now){
       frame=0;if(!running||destroyed||document.hidden||media.matches)return;
       if(then!==null)elapsed+=(now-then)/1000;then=now;
       if(!loop&&elapsed>=total()){finish();return;}
-      draw(ctx,elapsed,width,height,atlas,options);frame=requestAnimationFrame(tick);
+      draw(ctx,elapsed,width,height,atlas,options);
+      if(typeof options.onFrame==='function')options.onFrame(elapsed,total());
+      frame=requestAnimationFrame(tick);
     }
     function refresh(){
       if(destroyed||completed)return;
@@ -3131,7 +3138,10 @@ body.wbopen{overflow:hidden}
     return out;
   }
   function addTextTarget(text, font){ if(typeof document==='undefined') return false; const createCanvas=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;}; const t=textTarget(text,font||'"Barlow Condensed","Arial Narrow",Arial,sans-serif',createCanvas); if(!t) return false; TARGETS.push(t); DURATION=STEP*TARGETS.length; api.duration=DURATION; api.shapes=TARGETS.length; return true; }
-  const api={mount,duration:DURATION,particleCount:COUNT,addTextTarget,shapes:TARGETS.length,timeline:loop=>totalFor(loop===true)};
+  // settled(time, shapeIndex): 0 while the shape before is still holding, 1 once the median particle has landed on that shape.
+  // Uses the same smoothstep and per-particle delay as draw(), so anything driven by it moves in step with the glyphs.
+  function settled(time, shape){ const start=STEP*(shape-1)+HOLD; const raw=(time-start)/MORPH; return smooth((raw-.065)/.87); }
+  const api={mount,duration:DURATION,particleCount:COUNT,addTextTarget,settled,hold:HOLD,morph:MORPH,step:STEP,holdEnd:HOLD_END,shapes:TARGETS.length,timeline:loop=>totalFor(loop===true)};
   if(typeof module!=='undefined'&&module.exports)module.exports={...api,draw,makeAtlas,TARGETS};
   else global.MedicMathParticles=api;
 })(typeof window!=='undefined'?window:globalThis);
@@ -3140,12 +3150,15 @@ body.wbopen{overflow:hidden}
   const h0=location.hash.replace("#","");
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
   (function splash(){ const sp=document.getElementById("splash"); if(!sp) return; const cv=document.getElementById("splash-cv"), title=sp.querySelector(".splash-t"); const quick=(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)||!window.MedicMathParticles||!cv; let h=null, done=false;
-    const out=()=>{ if(done) return; done=true; sp.classList.add("ending"); setTimeout(()=>{ sp.classList.add("out"); setTimeout(()=>{ sp.remove(); try{ h&&h.destroy(); }catch(e){} },520); },1400); };
+    let textShape=-1;
+    const out=()=>{ if(done) return; done=true; const wait=sp.classList.contains("ending")?500:1400; if(textShape>=0){ title.style.transition="opacity .6s ease"; title.style.opacity="1"; } sp.classList.add("ending"); setTimeout(()=>{ sp.classList.add("out"); setTimeout(()=>{ sp.remove(); try{ h&&h.destroy(); }catch(e){} },520); },wait); };
     if(quick){ sp.classList.add("plain"); setTimeout(out,250); return; }
-    const P=MedicMathParticles, STEP=1, HOLD=.35;
-    const addText=font=>{ if(P.shapes>3) return; if(P.addTextTarget("MEDIC MATH",font)){ const r=cv.getBoundingClientRect(); title.style.fontFamily=font; title.style.fontSize=(P.textSize/600*Math.min(r.width,r.height))+"px"; const textAt=STEP*(P.shapes-1)+HOLD+.25; setTimeout(()=>sp.classList.add("ending"),textAt*1000); } };
+    const P=MedicMathParticles;
+    const addText=font=>{ if(P.shapes>3) return; if(P.addTextTarget("MEDIC MATH",font)){ textShape=P.shapes-1; const r=cv.getBoundingClientRect(); title.style.fontFamily=font; title.style.fontSize=(P.textSize/600*Math.min(r.width,r.height))+"px"; title.style.transition="none"; title.style.transform="translateY(-50%)"; title.style.opacity="0"; } };
+    // the crisp title follows the glyphs: each frame its opacity is the engine's own settle curve for the text shape, so it is fully in the instant the last particles land; the particles then hold a beat and fizzle
+    const onFrame=t=>{ if(done||textShape<0) return; const p=P.settled(t,textShape); title.style.opacity=p.toFixed(3); if(p>=1&&t>=P.step*textShape+.3&&!sp.classList.contains("ending")) sp.classList.add("ending"); };
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
-    try{ h=P.mount(cv,{background:false,loop:false,onComplete:()=>setTimeout(out,400)}); }catch(e){ out(); return; }
+    try{ h=P.mount(cv,{background:false,loop:false,onFrame,onComplete:()=>setTimeout(out,250)}); }catch(e){ out(); return; }
     let added=false; const go=f=>{ if(added) return; added=true; addText(f); };
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 100px "Barlow Condensed"').then(fs=>go(fs&&fs.length?barlow:fallback),()=>go(fallback)); setTimeout(()=>go(document.fonts.check('700 100px "Barlow Condensed"')?barlow:fallback),1100); } else go(fallback);
     sp.addEventListener("click",out); })();
