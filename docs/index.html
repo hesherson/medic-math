@@ -25,15 +25,16 @@
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+  --branch:#A7B4BB;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#111A1F; --surface:#1A252C; --surface-2:#233038; --ink:#E6ECEF; --muted:#9AAAB3; --line:#324048;
   --teal:#2C7A92; --teal-ink:#F4FAFC; --amber:#F0A040; --amber-soft:#3A2B18;
-  --good:#5BC58A; --good-soft:#1C3328; --bad:#F07A6A; --bad-soft:#3C2320; color-scheme:dark}}
+  --good:#5BC58A; --good-soft:#1C3328; --bad:#F07A6A; --bad-soft:#3C2320; --branch:#52636C; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111A1F; --surface:#1A252C; --surface-2:#233038; --ink:#E6ECEF; --muted:#9AAAB3; --line:#324048;
   --teal:#2C7A92; --teal-ink:#F4FAFC; --amber:#F0A040; --amber-soft:#3A2B18;
-  --good:#5BC58A; --good-soft:#1C3328; --bad:#F07A6A; --bad-soft:#3C2320; color-scheme:dark}
+  --good:#5BC58A; --good-soft:#1C3328; --bad:#F07A6A; --bad-soft:#3C2320; --branch:#52636C; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
@@ -258,12 +259,17 @@ body.teach .extable{display:none}
 .verdict.good{background:var(--good-soft);border-left:4px solid var(--good)}
 .verdict.bad{background:var(--bad-soft);border-left:4px solid var(--bad)}
 .verdict .head{font-family:var(--display);font-size:18px;font-weight:700;text-transform:uppercase}
-.steps{list-style:none;padding:0;display:grid;gap:10px;counter-reset:st}
-.steps li{display:grid;gap:3px;padding-left:34px;position:relative;counter-increment:st}
-.steps li::before{content:counter(st);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--teal);color:var(--teal-ink);font-family:var(--display);font-weight:700;font-size:14px;display:grid;place-items:center}
+.steps{list-style:none;padding:0;display:grid;gap:12px;counter-reset:st}
+.steps li{display:grid;grid-template-columns:24px minmax(0,1fr);column-gap:10px;row-gap:4px;counter-increment:st;position:relative}
+.steps li::before{content:counter(st);grid-column:1;grid-row:1;width:24px;height:24px;border-radius:50%;background:var(--teal);color:var(--teal-ink);font-family:var(--display);font-weight:700;font-size:14px;display:grid;place-items:center}
+.steps li::after{content:"";grid-column:1;grid-row:1/2;justify-self:center;align-self:stretch;width:0;margin-top:26px;border-left:1.5px solid var(--branch)}
+.steps li:has(.ask)::after{grid-row:1/3}
+.steps li:not(:has(.math))::after,body.teach .steps li::after{display:none}
+.steps .ask,.steps .say,.steps .math{grid-column:2}
 .steps .ask{font-family:var(--display);font-size:17px;font-weight:600;line-height:1.2}
 .steps .say{font-size:14px;line-height:1.45}
-.steps .math{font-family:var(--mono);font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:6px 8px;overflow-x:auto;white-space:nowrap}
+.steps .math{position:relative;font-family:var(--mono);font-size:12.5px;line-height:1.45;color:color-mix(in srgb,var(--teal) 70%,var(--ink));padding:1px 0 2px;overflow-wrap:anywhere;white-space:normal}
+.steps .math::before{content:"";position:absolute;left:-23px;top:-3px;width:15px;height:calc(.72em + 6px);border-left:1.5px solid var(--branch);border-bottom:1.5px solid var(--branch);border-bottom-left-radius:8px}
 .pattern{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:500;border-top:1px solid var(--line);padding-top:8px}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .summary{background:var(--teal);color:var(--teal-ink);border-radius:8px;padding:18px;display:grid;gap:8px}
@@ -316,7 +322,7 @@ html{-webkit-text-size-adjust:100%}
   .rule .big{font-size:24px}
   .rule .formulas{flex-direction:column;gap:6px}
   .rule code{display:block;white-space:normal}
-  .mf,.formula,.steps .math,.out .work{white-space:normal;word-break:break-word}
+  .mf,.formula,.out .work{white-space:normal;word-break:break-word}
   details.sec>summary{padding:12px 14px;flex-wrap:wrap;gap:4px 10px}
   details.sec>summary h2{font-size:20px}
   .tagline{flex-basis:100%}
@@ -328,7 +334,6 @@ html{-webkit-text-size-adjust:100%}
   .qcard .q{font-size:17px}
   .answerrow .btn{flex:1 1 100%}
   .btnrow .btn{flex:1 1 auto}
-  .steps li{padding-left:30px}
   .steps .ask{font-size:16px}
   table{font-size:13px}
   th,td{padding:6px 8px}
@@ -504,11 +509,14 @@ details.drug:not(.showmath) .dm{display:none!important}
 .popgrp{display:grid;gap:2px}
 .poplabel{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);margin-top:4px}
 .popgrp:first-child .poplabel{margin-top:0}
-ul.dlist{padding-left:18px;display:grid;gap:6px;font-size:13px}
+ul.dlist{list-style:none;padding-left:0;display:grid;gap:6px;font-size:13px}
+li.rtitem{position:relative;padding-left:18px}
+li.rtitem::before{content:"";position:absolute;left:4px;top:.58em;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.popgrp.peds li.rtitem::before{background:var(--amber)}
 .rtname{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
 .popgrp.peds .rtname{color:var(--amber)}
-ul.tree{list-style:none;padding:0;margin:1px 0 0 -14px;display:block;position:relative;--branch:color-mix(in srgb,var(--muted) 55%,transparent)}
-li.tnode{position:relative;padding:3px 0 3px 27px;font-size:13px;line-height:1.45}
+ul.tree{list-style:none;padding:0;margin:1px 0 0 -11.75px;display:block;position:relative}
+li.tnode{position:relative;padding:3px 0 3px 26px;font-size:13px;line-height:1.45}
 li.tnode::before{content:"";position:absolute;left:0;top:-5px;bottom:-5px;border-left:1.5px solid var(--branch)}
 li.tnode.first::before{top:-10px}
 li.tnode.last::before{bottom:auto;height:calc(.72em + 0px)}
@@ -541,13 +549,23 @@ details.drug.instudy .studytag{display:inline-block}
 .ttsbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:10px 12px;display:grid;gap:8px;z-index:29;animation:rise .25s ease-out}
 .ttsbar[hidden]{display:none}
 .ttsrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ttsopts{display:flex;gap:6px;flex:0 0 auto}
+.ttsopts select{font:inherit;font-size:12px;padding:3px 4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);max-width:130px}
+.ttstext{max-height:34vh;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);display:grid;gap:8px;font-size:14px;line-height:1.5;scroll-behavior:smooth}
+.ttsbar.notext .ttstext{display:none}
+.tsec{display:grid;gap:2px}
+.tsl{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700}
+.tsec p{margin:0}
+.tw{color:var(--muted);transition:color .2s,background .2s;border-radius:3px}
+.tw.cur{color:var(--ink);background:var(--amber-soft);box-shadow:0 0 0 2px var(--amber-soft)}
+.tw.ask{font-weight:600;color:var(--amber)}
+.tw.veil{color:transparent;background:var(--surface-2);box-shadow:none;border-radius:4px;user-select:none}
 .ttsinfo{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0}
 .ttsinfo b{font-family:var(--display);font-size:19px;font-weight:700;line-height:1}
 .ttsbar.waiting .ttsinfo .note{color:var(--amber);font-weight:600}
 .ttsctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .ttsctl .chip{min-height:40px;white-space:nowrap}
-.ttsbar .timesel{flex:0 0 auto}
-.ttsbar .timesel select{font-size:12px;padding:3px 4px}
+
 .ttsctl .btn{min-height:40px;padding:6px 10px;flex:0 0 auto;font-size:14px}
 .ttsctl #tts-play{flex:1 1 auto}
 .ttsctl #tts-skip{display:none}
@@ -1159,8 +1177,9 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
 </aside>
 
 <div class="ttsbar" id="ttsbar" hidden aria-live="polite">
-  <div class="ttsrow"><div class="ttsinfo"><span class="eyebrow" id="tts-mode">Reading</span><b id="tts-title"></b><span class="note" id="tts-sub"></span></div><label class="timesel">Speed <select id="tts-rate"><option value="0.8">0.8×</option><option value="1">1×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option></select></label></div>
-  <div class="ttsctl"><button type="button" class="btn alt" id="tts-prev" aria-label="Previous">&lsaquo;</button><button type="button" class="btn amber" id="tts-play">Pause</button><button type="button" class="btn alt" id="tts-skip">Reveal</button><button type="button" class="btn alt" id="tts-next" aria-label="Next">&rsaquo;</button><button type="button" class="chip" id="tts-quiz" aria-pressed="false">Quiz me</button><button type="button" class="btn alt" id="tts-stop">Stop</button></div>
+  <div class="ttsrow"><div class="ttsinfo"><span class="eyebrow" id="tts-mode">Reading</span><b id="tts-title"></b><span class="note" id="tts-sub"></span></div><div class="ttsopts"><select id="tts-voice" aria-label="Voice"></select><select id="tts-rate" aria-label="Speed"><option value="0.8">0.8×</option><option value="0.9">0.9×</option><option value="1">1×</option><option value="1.1">1.1×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option></select></div></div>
+  <div class="ttstext" id="tts-text"></div>
+  <div class="ttsctl"><button type="button" class="btn alt" id="tts-prev" aria-label="Previous">&lsaquo;</button><button type="button" class="btn amber" id="tts-play">Pause</button><button type="button" class="btn alt" id="tts-skip">Reveal</button><button type="button" class="btn alt" id="tts-next" aria-label="Next">&rsaquo;</button><button type="button" class="chip" id="tts-quiz" aria-pressed="false">Quiz me</button><button type="button" class="chip" id="tts-texttog" aria-pressed="true">Text</button><button type="button" class="btn alt" id="tts-stop">Stop</button></div>
 </div>
 
 <script>
@@ -1191,8 +1210,10 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
     const SEL="details.drug,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*";
-    const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } else if(e.intersectionRatio===0&&e.boundingClientRect.height>0){ e.target.classList.remove("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
-    const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); } }); };
+    // enter when the block crosses a line 12% above the bottom edge; leave only once it is fully off screen, so nothing flickers at the line
+    const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
+    const out=new IntersectionObserver(es=>{ es.forEach(e=>{ if(!e.isIntersecting&&e.boundingClientRect.height>0) e.target.classList.remove("in"); }); },{rootMargin:"60px 0px 60px 0px",threshold:0});
+    const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); out.observe(el); } }); };
     mark(document);
     new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) mark(n); }))).observe(document.body,{childList:true,subtree:true});
   })();
@@ -1639,7 +1660,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     fil.innerHTML=`<option value="">All classes</option>`+classes.map(c=>`<option>${c}</option>`).join("");
     const li=(arr)=>arr.length?`<ul>${arr.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p class="note">None listed</p>`;
     const tag=t=>t?`<i class="tag">${t}</i>`:"";
-    const SHORT=[[/VF, pulseless VT/,"VF / pVT"],[/VF or pulseless VT/,"VF / pVT"],[/VT with a pulse/,"VT w/ pulse"],[/A-fib with RVR/,"AFib w/ RVR"],[/Stable wide-complex tachycardia/,"Stable WCT"],[/Symptomatic bradycardia/,"Sx bradycardia"],[/Cardiac arrest, no vascular access/,"Arrest, no IV/IO"],[/No vascular access/,"No IV/IO"],[/Anaphylaxis, severe bronchospasm/,"Anaphylaxis / severe bronchospasm"],[/Reactive airway, anaphylaxis/,"Reactive airway / anaphylaxis"],[/Hyperkalemia, CCB overdose/,"Hyper-K / CCB OD"],[/Opioid overdose/,"Opioid OD"],[/Postpartum hemorrhage/,"PPH"],[/Pulmonary edema, CHF/,"Pulm edema / CHF"],[/Pulmonary edema, not on furosemide/,"Pulm edema, no home furosemide"],[/Pulmonary edema, already on it/,"Pulm edema, on home furosemide"],[/Pulmonary edema/,"Pulm edema"],[/Organophosphate, nerve agent/,"Organophosphate / nerve agent"],[/Acidosis, hyperkalemia, TCA overdose/,"Acidosis / hyper-K / TCA OD"],[/Acidosis, as 4.2%/,"Acidosis, 4.2%"],[/Eclampsia, pre-term labor/,"Eclampsia / pre-term labor"],[/Allergic reaction, anaphylaxis/,"Allergic rxn / anaphylaxis"],[/Extrapyramidal reaction/,"EPS reaction"],[/Sedation, chemical restraint/,"Sedation / chem restraint"],[/Sedation, RSI/,"RSI / sedation"],[/RSI induction, over 10 yr/,"RSI, over 10 yr"],[/RSI induction/,"RSI"],[/Hypoglycemia, able to swallow/,"Hypoglycemia, can swallow"],[/Hypoglycemia, no IV access/,"Hypoglycemia, no IV"],[/Hypoglycemia, as D10/,"Hypoglycemia, D10"],[/Hydrofluoric acid burn/,"HF burn"],[/Cyanide poisoning/,"Cyanide"],[/Nausea, vomiting/,"N/V"],[/Nausea, 4 to 14 yr/,"N/V, 4 to 14 yr"],[/Chest pain, pulmonary edema/,"Chest pain / pulm edema"],[/Shock, symptomatic bradycardia/,"Shock / sx brady"],[/Bradycardia or hypotension/,"Brady / hypotension"],[/Poisoning, within 1 hr/,"Poisoning, under 1 hr"],[/Under 20 kg, or 5 yr and younger/,"Under 20 kg or 5 yr and under"],[/Over 20 kg, or over 5 yr/,"Over 20 kg or over 5 yr"],[/Hypoxia, distress, arrest/,"Hypoxia / distress / arrest"],[/Maintenance after conversion/,"Maintenance drip"],[/Acute coronary syndrome/,"ACS"]];
+    const SHORT=[[/VF, pulseless VT/,"VF / pulseless VT"],[/VF or pulseless VT/,"VF / pulseless VT"],[/VT with a pulse/,"VT w/ pulse"],[/A-fib with RVR/,"AFib w/ rapid rate"],[/Stable wide-complex tachycardia/,"Stable wide-complex tachy"],[/Cardiac arrest, no vascular access/,"Arrest, no IV/IO"],[/No vascular access/,"No IV/IO"],[/Anaphylaxis, severe bronchospasm/,"Anaphylaxis / bronchospasm"],[/Reactive airway, anaphylaxis/,"Reactive airway / anaphylaxis"],[/Hyperkalemia, CCB overdose/,"Hyperkalemia / calcium blocker OD"],[/Opioid overdose/,"Opioid OD"],[/Pulmonary edema, CHF/,"Pulmonary edema / CHF"],[/Pulmonary edema, not on furosemide/,"Pulmonary edema, no home furosemide"],[/Pulmonary edema, already on it/,"Pulmonary edema, on home furosemide"],[/Organophosphate, nerve agent/,"Organophosphate / nerve agent"],[/Acidosis, hyperkalemia, TCA overdose/,"Acidosis / hyperkalemia / tricyclic OD"],[/Acidosis, as 4.2%/,"Acidosis, 4.2% strength"],[/Eclampsia, pre-term labor/,"Eclampsia / pre-term labor"],[/Allergic reaction, anaphylaxis/,"Allergic reaction / anaphylaxis"],[/Sedation, chemical restraint/,"Sedation / chemical restraint"],[/Sedation, RSI/,"RSI induction / sedation"],[/Hypoglycemia, able to swallow/,"Hypoglycemia, can swallow"],[/Hypoglycemia, no IV access/,"Hypoglycemia, no IV"],[/Nausea, vomiting/,"Nausea / vomiting"],[/Nausea, 4 to 14 yr/,"Nausea / vomiting, 4 to 14 yr"],[/Chest pain, pulmonary edema/,"Chest pain / pulmonary edema"],[/Shock, symptomatic bradycardia/,"Shock / symptomatic bradycardia"],[/Bradycardia or hypotension/,"Bradycardia / hypotension"],[/Poisoning, within 1 hr/,"Poisoning, under 1 hr"],[/Under 20 kg, or 5 yr and younger/,"Under 20 kg or 5 yr and under"],[/Over 20 kg, or over 5 yr/,"Over 20 kg or over 5 yr"],[/Hypoxia, distress, arrest/,"Hypoxia / distress / arrest"],[/Maintenance after conversion/,"Maintenance drip"],[/Acute coronary syndrome/,"ACS"]];
     const TSHORT=[[/every (\d+) to (\d+) min/g,"q$1-$2 min"],[/every (\d+) min/g,"q$1 min"],[/every (\d+) to (\d+) s\b/g,"q$1-$2 s"],[/rapid push over 1 to 3 s, then a 20 mL flush/,"rapid push 1 to 3 s, 20 mL flush"],[/if no response in (\d+) to (\d+) min; rapid push, 20 mL flush/,"no response in $1-$2 min; rapid push, 20 mL flush"],[/if no response in (\d+) to (\d+) min/,"no response in $1-$2 min"],[/if no response; /,"no response; "],[/titrate to effect/,"titrate"],[/while the drip is set up/,"while the drip is mixed"]];
     const shortL=l=>{ for(const [re,rep] of SHORT) l=l.replace(re,rep); return l; };
     const shortT=t=>{ for(const [re,rep] of TSHORT) t=t.replace(re,rep); return t; };
@@ -1649,14 +1670,17 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     function timingBlock(d){
       const RTRE=/^(IV\/IO\/ET\/infusion|IV\/IO|IM\/IN|IV|IO|IM|IN|ET|Rectal|Infusion)\s+(.*)$/;
       const items=[];
-      const addLine=(kind,text)=>{ let k=kind; text.split(/,\s+/).forEach(seg=>{ seg=seg.trim(); const km=/^(peak|duration)\s+(?:effect\s+)?(?:is\s+)?(.*)$/i.exec(seg); if(km){ k=km[1][0].toUpperCase()+km[1].slice(1).toLowerCase(); seg=km[2]; } const m=RTRE.exec(seg); let rt=m?m[1]:null; if(rt==="IV"||rt==="IO") rt="IV/IO"; items.push({k,rt,v:m?m[2]:seg}); }); };
+      const splitRt=rt=>rt==null?[null]:rt==="IV/IO/ET/infusion"?["IV/IO","ET","Infusion"]:rt==="IM/IN"?["IM","IN"]:(rt==="IV"||rt==="IO")?["IV/IO"]:[rt];
+      const addLine=(kind,text)=>{ let k=kind; text.split(/,\s+/).forEach(seg=>{ seg=seg.trim(); const km=/^(peak|duration)\s+(?:effect\s+)?(?:is\s+)?(.*)$/i.exec(seg); if(km){ k=km[1][0].toUpperCase()+km[1].slice(1).toLowerCase(); seg=km[2]; } const m=RTRE.exec(seg); splitRt(m?m[1]:null).forEach(rt=>items.push({k,rt,v:m?m[2]:seg})); }); };
       d.onset.forEach(o=>addLine("Onset",o));
       d.special.forEach(x=>{ if(/^Peak and duration variable/i.test(x)){ items.push({k:"Peak",rt:null,v:"variable"}); items.push({k:"Duration",rt:null,v:"variable"}); } else if(isTiming(x)) addLine(/^Peak/i.test(x)?"Peak":"Duration",x.replace(/^(Peak|Duration)\s+(effect\s+)?(is\s+)?/i,"")); });
       if(!items.length) return `<p class="note">None listed</p>`;
-      const fallback=(()=>{ const r=d.routes.map(x=>RT_SHORT[x]||x); const iv=r.filter(x=>x==="IV"||x==="IO"); const rest=r.filter(x=>x!=="IV"&&x!=="IO"); return (iv.length?["IV / IO"]:[]).concat(rest).slice(0,3).join(", "); })();
-      const label=rt=>rt==null?fallback:rt.replace("IV/IO/ET/infusion","IV / IO / ET / drip").replace("IV/IO","IV / IO").replace("IM/IN","IM / IN");
-      const order=[]; items.forEach(it=>{ const key=it.rt==null?"":it.rt; if(!order.includes(key)) order.push(key); });
-      return `<ul class="dlist">${order.map(key=>`<li class="rtitem"><span class="rtname">${label(key===""?null:key)}</span><ul class="tree">${items.filter(it=>(it.rt==null?"":it.rt)===key).map(it=>`<li class="tnode"><div class="l1"><span class="use">${it.k}</span><span class="lead"></span><span class="dose">${shortTime(it.v)}</span></div></li>`).join("")}</ul></li>`).join("")}</ul>`;
+      const RMAP={"IV":"IV/IO","IO":"IV/IO","IM":"IM","IN":"IN","ET":"ET","Infusion":"Infusion","Nebulized":"Neb","Oral":"PO","Oral, chewed":"PO","Sublingual":"SL","Buccal":"Buccal","Rectal":"Rectal","Topical":"Topical","Inhalation":"Inhaled"};
+      const drugGroups=[]; d.routes.forEach(x=>{ const k=RMAP[x]||x; if(!drugGroups.includes(k)) drugGroups.push(k); });
+      const groups=[]; items.forEach(it=>(it.rt==null?drugGroups:[it.rt]).forEach(g=>{ if(!groups.includes(g)) groups.push(g); }));
+      groups.sort((a,b)=>(RT_ORDER.indexOf(a)+1||99)-(RT_ORDER.indexOf(b)+1||99));
+      const forGroup=g=>items.filter(it=>it.rt===g||(it.rt==null&&drugGroups.includes(g)&&!items.some(x=>x.rt===g&&x.k===it.k)));
+      return `<ul class="dlist">${groups.map(g=>`<li class="rtitem"><span class="rtname">${RT_LABEL[g]||g}</span><ul class="tree">${forGroup(g).map(it=>`<li class="tnode"><div class="l1"><span class="use">${it.k}</span><span class="lead"></span><span class="dose">${shortTime(it.v)}</span></div></li>`).join("")}</ul></li>`).join("")}</ul>`;
     }
     function howBlock(d){
       const t=d.how||d.quick.moa; const parts=t.replace(/([.!?])\s+(?=[A-Z])/g,"$1\n").split("\n").filter(Boolean);
@@ -2644,9 +2668,17 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       if(!quiz&&d.how) push("How it works",d.how);
       return P;
     }
-    let voices=[]; const loadVoices=()=>{ voices=speechSynthesis.getVoices()||[]; }; loadVoices(); if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=loadVoices;
-    function voice(){ if(!voices.length) loadVoices(); return voices.find(v=>/en[-_]US/i.test(v.lang)&&/Google|Samantha|Natural|Premium|Enhanced/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null; }
-    function render(){ const d=cur; const p=parts[pi]; $("tts-title").textContent=d?plainName(d):""; $("tts-sub").textContent=p?(p.ask?p.t:p.wait?"your turn":p.sub):""; $("tts-mode").textContent=(quiz?"Quiz by ear":"Reading")+(list.length>1?` · ${di+1} of ${list.length}`:""); $("tts-play").textContent=playing?"Pause":"Play"; $("tts-quiz").setAttribute("aria-pressed",quiz?"true":"false"); bar.classList.toggle("waiting",!!(p&&p.wait)); }
+    let voices=[], pickURI=store.get("mm-ttsvoice",null);
+    const vsel=$("tts-voice");
+    const defVoice=()=>voices.find(v=>/en[-_]US/i.test(v.lang)&&/Google|Samantha|Natural|Premium|Enhanced/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||voices[0]||null;
+    const loadVoices=()=>{ voices=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); if(!voices.length) voices=speechSynthesis.getVoices()||[]; const cur=voice(); vsel.innerHTML=voices.map(v=>`<option value="${v.voiceURI}"${cur&&v.voiceURI===cur.voiceURI?" selected":""}>${v.name.replace(/^Microsoft |^Google /,"").replace(/ - English.*$/,"").replace(/\(.*\)/,"").trim()}${/en[-_]GB/i.test(v.lang)?" (UK)":/en[-_]AU/i.test(v.lang)?" (AU)":""}</option>`).join("")||`<option>Default voice</option>`; };
+    function voice(){ if(!voices.length) voices=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); return voices.find(v=>v.voiceURI===pickURI)||defVoice(); }
+    loadVoices(); if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=loadVoices;
+    vsel.addEventListener("change",()=>{ pickURI=vsel.value; store.set("mm-ttsvoice",pickURI); if(playing){ halt(); playPart(); } });
+    const tbox=$("tts-text");
+    function buildText(){ let html="", sub=null, veil=false; parts.forEach((p,i)=>{ if(p.sub!==sub){ if(sub!==null) html+="</p></div>"; sub=p.sub; veil=false; html+=`<div class="tsec"><span class="tsl">${sub}</span><p>`; } if(p.wait){ veil=quiz; return; } html+=`<span class="tw${p.ask?" ask":""}${veil&&!p.ask?" veil":""}" data-p="${i}">${p.t}</span> `; }); if(sub!==null) html+="</p></div>"; tbox.innerHTML=html; }
+    function markText(){ tbox.querySelectorAll(".tw.cur").forEach(e=>e.classList.remove("cur")); for(let i=0;i<=pi&&i<parts.length;i++){ const e=tbox.querySelector(`.tw[data-p="${i}"]`); if(e) e.classList.remove("veil"); } const e=tbox.querySelector(`.tw[data-p="${pi}"]`); if(e){ e.classList.add("cur"); const r=e.getBoundingClientRect(), b=tbox.getBoundingClientRect(); if(r.top<b.top||r.bottom>b.bottom) tbox.scrollTo({top:tbox.scrollTop+(r.top-b.top)-b.height*0.35,behavior:"smooth"}); } }
+    function render(){ markText(); const d=cur; const p=parts[pi]; $("tts-title").textContent=d?plainName(d):""; $("tts-sub").textContent=p?(p.ask?p.t:p.wait?"your turn":p.sub):""; $("tts-mode").textContent=(quiz?"Quiz by ear":"Reading")+(list.length>1?` · ${di+1} of ${list.length}`:""); $("tts-play").textContent=playing?"Pause":"Play"; $("tts-quiz").setAttribute("aria-pressed",quiz?"true":"false"); bar.classList.toggle("waiting",!!(p&&p.wait)); }
     function playPart(){
       if(!playing) return; if(pi>=parts.length){ if(di<list.length-1){ di++; load(); timer=setTimeout(playPart,600); } else { stop(); $("tts-sub").textContent="done"; } return; }
       const p=parts[pi]; render();
@@ -2657,7 +2689,7 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
       // some engines never fire onend for very short strings; guard with a timer scaled to length
       setTimeout(()=>{ if(!done&&!speechSynthesis.speaking) fin(); },Math.max(1500,p.t.length*90/rate));
     }
-    function load(){ cur=DRUGS.find(x=>x.id===list[di]); parts=script(cur); pi=0; if(window.revealDrug) revealDrug(cur.id); render(); }
+    function load(){ cur=DRUGS.find(x=>x.id===list[di]); parts=script(cur); pi=0; buildText(); tbox.scrollTop=0; if(window.revealDrug) revealDrug(cur.id); render(); }
     function halt(){ clearTimeout(timer); timer=null; try{ speechSynthesis.cancel(); }catch(e){} }
     function stop(){ playing=false; halt(); render(); }
     window.ttsStart=(ids,i)=>{ halt(); list=ids.slice(); di=i||0; bar.hidden=false; playing=true; load(); playPart(); };
@@ -2668,7 +2700,9 @@ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset
     $("tts-prev").addEventListener("click",()=>{ halt(); if(pi>2&&!quiz){ pi=0; } else if(di>0){ di--; } load(); if(playing) playPart(); });
     $("tts-skip").addEventListener("click",()=>{ const p=parts[pi]; if(p&&p.wait){ clearTimeout(timer); pi++; if(playing) playPart(); } });
     $("tts-rate").value=String(rate); $("tts-rate").addEventListener("change",()=>{ rate=+$("tts-rate").value; store.set("mm-ttsrate",rate); if(playing){ halt(); playPart(); } });
-    $("tts-quiz").addEventListener("click",()=>{ quiz=!quiz; store.set("mm-ttsquiz",quiz); if(cur){ const was=playing; halt(); parts=script(cur); pi=0; render(); if(was) playPart(); } else render(); });
+    $("tts-quiz").addEventListener("click",()=>{ quiz=!quiz; store.set("mm-ttsquiz",quiz); if(cur){ const was=playing; halt(); parts=script(cur); pi=0; buildText(); render(); if(was) playPart(); } else render(); });
+    const showText=v=>{ bar.classList.toggle("notext",!v); $("tts-texttog").setAttribute("aria-pressed",v?"true":"false"); store.set("mm-ttstext",v); }; showText(store.get("mm-ttstext",true)!==false);
+    $("tts-texttog").addEventListener("click",()=>showText(bar.classList.contains("notext")));
     document.addEventListener("panel",e=>{ if(e.detail!=="drugs"&&playing){ /* keep reading; the bar follows you */ } });
     window.addEventListener("pagehide",()=>halt());
   })();
