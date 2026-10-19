@@ -956,6 +956,32 @@ li.tnode .l1.stack{flex-wrap:wrap;row-gap:2px}
 li.tnode .l1.stack .use{flex:0 0 100%}
 li.tnode .l1.stack .lead{margin-left:0}
 #drug-study .chipstar{width:15px;height:15px;fill:#E0B341;vertical-align:-2px;margin-right:6px}
+
+/* lesson rows: one standard row for every lesson of every game and every drug */
+.phead{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:center;margin:0 0 6px}
+.phead h2{margin:2px 0 4px;font-family:var(--display);font-size:28px;font-weight:700;line-height:1.05}
+.phead h2 .star{margin:-6px 2px -4px -6px;vertical-align:-4px}
+.lrows{display:grid;gap:8px;margin-top:4px}
+.lrow{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.lrow.next{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber) inset}
+.lrow.done{border-color:var(--teal)}
+.lrow.locked{opacity:.55;cursor:default}
+.lrow .lrt{font-family:var(--display);font-size:19px;font-weight:600;display:block;line-height:1.1}
+.lrow .lns{display:block;font-size:13px;color:var(--muted);line-height:1.35;margin-top:2px}
+.lrow .btn{padding:8px 14px;min-height:40px;font-size:14px}
+.lmeta{display:flex;gap:4px 10px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.lmeta .lbest{color:var(--teal);font-weight:600}
+.pips{display:inline-flex;gap:3px;margin-right:2px} .pips i{display:block;width:7px;height:7px;border-radius:50%;background:var(--line)} .pips i.on{background:var(--amber)}
+.lbadge{position:relative;width:48px;height:48px;display:grid;place-items:center}
+.lbadge svg{position:absolute;inset:0;width:48px;height:48px}
+.lbadge .trk{stroke:var(--line)} .lbadge .arc{stroke:var(--teal)}
+.lbadge.done .trk{stroke:var(--teal)} .lbadge.next .trk{stroke:var(--amber)} .lbadge.next .arc{stroke:var(--amber)}
+.lbadge b{position:relative;font-family:var(--display);font-size:19px;font-weight:700;color:var(--ink)}
+.lbadge.done b{color:var(--teal)} .lbadge.next b{color:var(--amber)}
+.lbadge b svg{position:static;width:18px;height:18px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linejoin:round}
+.lrow.review .lbadge b{color:#E0B341}
+.lnode{cursor:pointer}
+.lrow .btn:disabled{opacity:1;background:transparent;border:1px solid var(--line);color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1226,7 +1252,7 @@ li.tnode .l1.stack .lead{margin-left:0}
   <div class="lhead">
     <span class="eyebrow">Games</span>
     <h2>Build the foundations</h2>
-    <p class="intro">Every game is a path of short sections that get harder as you go, ending in a checkpoint. Finish the path and the ring turns bronze; mastery reviews lift it to silver, gold and master. Open a game to see its sections.</p>
+    <p class="intro">Every game is a path of lessons that get harder as you go, ending in a checkpoint. Finish the path and the ring turns bronze; mastery reviews lift it to silver, gold and master. Tap a game to see its lessons.</p>
   </div>
   <div id="games"></div>
 </section>
@@ -1236,7 +1262,7 @@ li.tnode .l1.stack .lead{margin-left:0}
   <div class="lhead">
     <span class="eyebrow">Drug Exercises</span>
     <h2>Learn a drug</h2>
-    <p class="intro">Five lessons per drug, each harder than the last, then mastery reviews that cover every fact on the card until you own all of them. Anything you miss comes back first next time. Starred drugs and the one you are working on sit at the top.</p>
+    <p class="intro">Five lessons per drug, each harder than the last, then mastery reviews that cover every fact on the card until you own all of them. Anything you miss comes back first next time. Starred drugs and the one you are working on sit at the top. Tap a drug to see its lessons.</p>
   </div>
   <div class="lstats">
     <div class="k"><span class="eyebrow">XP today</span><b class="num" id="ls-xp">0</b></div>
@@ -1246,6 +1272,11 @@ li.tnode .l1.stack .lead{margin-left:0}
   <div class="lcontinue" id="l-continue" hidden></div>
   <div class="lfilter"><input type="search" id="lf-q" placeholder="Find a drug" aria-label="Find a drug" autocomplete="off"></div>
   <div class="lpath" id="lpath"></div>
+</section>
+<!-- ================= PATH: the lessons of one game or one drug ================= -->
+<section class="panel" id="panel-path" hidden>
+  <button type="button" class="backchip" id="p-back" data-to="games"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Games</button>
+  <div id="path"></div>
 </section>
 <!-- round runner: full screen while a round is open -->
 <div class="lesson" id="lesson" hidden aria-modal="true" role="dialog" aria-label="Round">
@@ -1465,7 +1496,7 @@ li.tnode .l1.stack .lead{margin-left:0}
   const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["quiz","scen","exam","tests"],more:["progress","proctor","settings"]};
   const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",tests:"Tests",progress:"Progress",proctor:"Proctor",settings:"Settings"};
   // pages reached from inside a group without their own pill
-  const HIDDEN={lesson:"games"};
+  const HIDDEN={lesson:"games",path:"games"};
   const ALLP=Object.values(NAV).flat().concat(Object.keys(HIDDEN));
   function groupOf(id){ return HIDDEN[id]||Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
   let curPanel=null;
@@ -1475,7 +1506,7 @@ li.tnode .l1.stack .lead{margin-left:0}
   // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
-    const SEL="details.drug,details.trick,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*,.lnode,.lstats .k,.lcontinue";
+    const SEL="details.drug,details.trick,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*,.lnode,.lrow,.lstats .k,.lcontinue";
     // enter when the block crosses a line 12% above the bottom edge; leave only once it is fully off screen, so nothing flickers at the line
     const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
     const out=new IntersectionObserver(es=>{ es.forEach(e=>{ if(!e.isIntersecting&&e.boundingClientRect.height>0) e.target.classList.remove("in"); }); },{rootMargin:"60px 0px 60px 0px",threshold:0});
@@ -3163,7 +3194,7 @@ li.tnode .l1.stack .lead{margin-left:0}
       {k:"uses",n:"When to use it",d:"Indications, cautions, routes"},
       {k:"adult",n:"Adult doses",d:"Every adult dose line, typed from memory"},
       {k:"peds",n:"Peds and timing",d:"Pediatric doses, onset, how fast it goes in"},
-      {k:"check",n:"Checkpoint",d:"Everything mixed. 80% first try to pass"}];
+      {k:"check",n:"Checkpoint",d:"Every lesson mixed, on the clock"}];
     const G={};
     G.identify=d=>{ const n=short(d), ex=[];
       ex.push(mc(`What class of drug is ${n}?`,d.cls[0],foreign(d,"cls",3),`${n} is a ${lc(d.cls.join(", "))}.`,"Class"));
@@ -3251,7 +3282,7 @@ li.tnode .l1.stack .lead{margin-left:0}
     const COV={identify:["cls","brand","moa","adv"],uses:["ind","contra","key","false","route"],adult:["adose","max","timing","stock","bag"],peds:["pdose","onset","special","max"]};
     const LESSON_SIZE={identify:14,uses:14,adult:14,peds:14,check:22}, REVIEW_SIZE=30;
     const dedupe=a=>{ const seen=new Set(); return a.filter(e=>{ if(!e||seen.has(e.prompt)) return false; seen.add(e.prompt); return true; }); };
-    function buildLesson(d,lvl){ const P=prog(d.id); const review=P.lvl>=5; DIFF.lvl=review?MASTERY_DIFF:LEVEL_DIFF[Math.min(lvl,4)]; const key=LEVELS[Math.min(lvl,4)].k;
+    function buildLesson(d,lvl){ const P=prog(d.id); const review=lvl>=5; DIFF.lvl=review?MASTERY_DIFF:LEVEL_DIFF[Math.min(lvl,4)]; const key=LEVELS[Math.min(lvl,4)].k;
       const miss=P.miss||{}, known=P.known||{}; const pri=e=>e&&e.k?(miss[e.k]||0)*3+(known[e.k]?0:1):0;
       let cov, base;
       if(review||key==="check"){ cov=G.cover(d); base=G.check(d); } else { cov=G.cover(d,COV[key]); base=G[key](d); if(key==="adult"||key==="peds") base=base.concat(G.extra(d)); }
@@ -3287,7 +3318,7 @@ li.tnode .l1.stack .lead{margin-left:0}
     function startClock(sec,onEnd){ stopClock(); let left=sec; clockEl.hidden=false; const show=()=>{ clockEl.textContent=left>=60?Math.floor(left/60)+":"+String(left%60).padStart(2,"0"):left+" s"; clockEl.classList.toggle("warn",left<=5); }; show(); clockT=setInterval(()=>{ left--; show(); if(left<=0){ stopClock(); onEnd(); } },1000); }
     // cfg: {title, sub, ex[] or next(), count, timed:{total}|{perQ}, xpOk, xpRetry, retry:boolean, onDone(res)->{eyebrow, big, sum, extra, btn, onBtn}}
     function open(cfg){ const ex=cfg.ex?cfg.ex.slice():[]; if(!ex.length&&!cfg.next) return; L={cfg,queue:ex.map(e=>({e,retry:0})),done:0,total:cfg.count||ex.length,xp:0,first:0,misses:0,answered:0,cur:null,t0:Date.now(),ended:false,best:0,streak:0}; titleEl.textContent=cfg.title||""; ov.hidden=false; document.body.classList.add("lessonopen"); setBar(); if(cfg.timed&&cfg.timed.total) startClock(cfg.timed.total,()=>{ if(L&&!L.ended) finish(true); }); next(); }
-    function close(){ stopClock(); ov.hidden=true; document.body.classList.remove("lessonopen"); const was=L; L=null; ui=null; leaving=false; if(was&&was.cfg.onClose) was.cfg.onClose(); renderLessons(); renderGames(); }
+    function close(){ stopClock(); ov.hidden=true; document.body.classList.remove("lessonopen"); const was=L; L=null; ui=null; leaving=false; if(was&&was.cfg.onClose) was.cfg.onClose(); renderLessons(); renderGames(); renderPath(); }
     function next(){ if(L.cfg.next&&!L.queue.length&&L.answered<L.total) L.queue.push({e:L.cfg.next(),retry:0}); if(!L.queue.length||L.answered>=L.total){ finish(false); return; } L.cur=L.queue.shift(); foot.className="lfoot"; foot.dataset.graded="0"; leaving=false; msg.innerHTML=""; msgExpand(false); btn.textContent="Check"; btn.disabled=true; btn.hidden=false; skip.hidden=false; skip.textContent="Skip"; show(L.cur.e); body.scrollTop=0; if(L.cfg.timed&&L.cfg.timed.perQ) startClock(L.cfg.timed.perQ,()=>{ if(L&&foot.dataset.graded!=="1") reveal(); }); }
     function stage(html){ const e=L.cur.e; body.innerHTML=`<div class="lq cascade"><span class="eyebrow">${e.tag}</span>${e.art?`<div class="lart">${e.art}</div>`:""}<h3 class="lprompt">${esc(e.prompt)}</h3>${e.hint?`<p class="note">${esc(e.hint)}</p>`:""}${html}</div>`; }
     const LASTPOS=new Map();
@@ -3364,16 +3395,17 @@ li.tnode .l1.stack .lead{margin-left:0}
     window.roundOpen=open; window.roundActive=()=>!!L; window.roundClose=close;
 
     // ----- Drug Exercises: open a lesson for a drug -----
-    function openLesson(d,lvl){ const ex=buildLesson(d,lvl); if(!ex.length) return; const lv=LEVELS[Math.min(lvl,4)]; const review=prog(d.id).lvl>=5; const clock=clockFor(DIFF.lvl);
+    function openLesson(d,lvl){ const ex=buildLesson(d,lvl); if(!ex.length) return; const lv=LEVELS[Math.min(lvl,4)]; const review=lvl>=5; const clock=clockFor(DIFF.lvl);
       open({id:"lesson",src:"lesson",title:`${short(d)}: ${review?"Mastery review":lv.n} \u00b7 ${ex.length} questions${clock?" \u00b7 "+clock+" s each":""}`,ex,retry:!review,timed:clock?{perQ:clock}:null,xpOk:review?14:10,
         onAnswer(e,ok,retry){ if(!e.k) return; const P=prog(d.id); P.miss=P.miss||{}; P.known=P.known||{}; if(ok){ if(!retry) P.known[e.k]=1; if(P.miss[e.k]) { P.miss[e.k]--; if(!P.miss[e.k]) delete P.miss[e.k]; } } else { P.miss[e.k]=(P.miss[e.k]||0)+1; delete P.known[e.k]; } },
         onDone(res){ const P=prog(d.id); const isCheck=lvl===4, learning=lvl===P.lvl&&P.lvl<5; const passed=!isCheck||res.acc>=PASS;
+        P.lv=P.lv||{}; const lk=review?"r":lvl; const pl=P.lv[lk]||(P.lv[lk]={best:0,plays:0}); pl.best=Math.max(pl.best,res.acc); pl.plays++; pl.last=res.acc;
         if(learning&&passed) P.lvl++; P.xp+=res.xp; P.last=Date.now(); P.acc=res.acc; P.facts=factTotal(d)?factKnown(d)/factTotal(d):1; S.xp[dayKey()]=(S.xp[dayKey()]||0)+res.xp; save();
         try{ document.dispatchEvent(new CustomEvent("lesson",{detail:{id:d.id,lvl,xp:res.xp,passed,mastered:P.lvl>=5}})); }catch(e){} if(typeof window.onLessonDone==="function"){ const cb=window.onLessonDone; window.onLessonDone=null; setTimeout(cb,0); }
         const t=tier(P);
         return {ring:ring(P,96),eyebrow:learning&&passed?(P.lvl>=5?"All five done":"Lesson complete"):(isCheck&&!passed?"Checkpoint not passed":"Review complete"),big:short(d),
           extra:`<p class="lsum">${factKnown(d)} of ${factTotal(d)} facts on this card owned${Object.keys(P.miss||{}).length?`, ${Object.keys(P.miss).length} still coming back`:""}.</p>`,sum:`${lv.n}${isCheck&&!passed?`. You need ${Math.round(PASS*100)}% first try and got ${Math.round(res.acc*100)}%. Run it again.`:learning&&passed&&P.lvl<5?`. Next up: ${LEVELS[P.lvl].n}.`:t?`. ${TIER_NAME[t]} ring${t==="master"?", a true master of this drug":t==="gold"?". Keep every run near perfect for Master":". More XP and cleaner runs lift the ring"}.`:""}`,
-          btn:P.lvl<5?(isCheck&&!passed?"Run it again":"Next lesson"):"Review again",onBtn:()=>openLesson(d,Math.min(prog(d.id).lvl,4))}; } }); }
+          btn:P.lvl<5?(isCheck&&!passed?"Run it again":"Next lesson"):"Review again",onBtn:()=>openLesson(d,prog(d.id).lvl)}; } }); }
     const state=d=>{ const P=S.drugs[d.id]; if(!P||!P.lvl) return "new"; return P.lvl>=5?"done":"going"; };
     const studyStar=d=>`<button type="button" class="star${window.inStudy&&inStudy(d.id)?" on":""}" data-star="${d.id}" aria-pressed="${window.inStudy&&inStudy(d.id)?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>`;
     window.studyStarHTML=studyStar;
@@ -3389,20 +3421,19 @@ li.tnode .l1.stack .lead{margin-left:0}
       const recent=DRUGS.filter(d=>state(d)==="going").sort((a,b)=>S.drugs[b.id].last-S.drugs[a.id].last)[0]; const cont=$("l-continue");
       if(recent){ const P=S.drugs[recent.id]; cont.hidden=false; cont.innerHTML=`<div><span class="eyebrow">Continue</span><b>${esc(short(recent))}</b><span class="lns">Lesson ${P.lvl+1} of 5: ${LEVELS[P.lvl].n}</span></div><button type="button" class="btn amber" data-start="${recent.id}">Go</button>`; } else cont.hidden=true;
       lroot.innerHTML=list.length?list.map(d=>{ const P=S.drugs[d.id]||{lvl:0,xp:0}; const st=state(d); const lv=Math.min(P.lvl,4); const t=tier(P);
-        return `<div class="lnode ${st} ${t}" data-id="${d.id}">${ring(P,48)}<div class="lnt"><div class="lname">${studyStar(d)}<button type="button" class="lnb" data-open="${d.id}" aria-expanded="false">${esc(d.name)}</button></div><span class="lns">${st==="done"?`${TIER_NAME[t]||"Done"}. ${factKnown(d)}/${factTotal(d)} facts, ${P.xp} XP`:st==="going"?`Lesson ${P.lvl+1} of 5: ${LEVELS[lv].n} \u00b7 ${factKnown(d)}/${factTotal(d)} facts`:LEVELS[0].n+" first"}</span></div><button type="button" class="btn ${st==="going"?"amber":st==="done"?"alt":""}" data-start="${d.id}">${st==="going"?"Continue":st==="done"?"Review":"Start"}</button>
-          <div class="llv" hidden>${LEVELS.map((l,i)=>`<button type="button" class="llvb ${i<P.lvl?"done":i===P.lvl?"next":"locked"}" data-lvl="${i}" data-id="${d.id}" ${i>P.lvl&&P.lvl<5?"disabled":""}><span class="lnum">${i<P.lvl?"✓":i+1}</span><span><b>${l.n}</b><small>${l.d}</small></span><span class="lgo">${i<P.lvl?"Practice":i===P.lvl?"Start":""}</span></button>`).join("")}</div></div>`; }).join("")
+        return `<div class="lnode ${st} ${t}" data-id="${d.id}">${ring(P,48)}<div class="lnt"><div class="lname">${studyStar(d)}<button type="button" class="lnb" data-path="${d.id}">${esc(d.name)}</button></div><span class="lns">${st==="done"?`${TIER_NAME[t]||"Done"}. ${factKnown(d)}/${factTotal(d)} facts, ${P.xp} XP`:st==="going"?`Lesson ${P.lvl+1} of 5: ${LEVELS[lv].n} \u00b7 ${factKnown(d)}/${factTotal(d)} facts`:LEVELS[0].n+" first"}</span></div><button type="button" class="btn ${st==="going"?"amber":st==="done"?"alt":""}" data-start="${d.id}">${st==="going"?"Continue":st==="done"?"Review":"Start"}</button>
+</div>`; }).join("")
         :`<p class="note">No drug matches.</p>`;
     }
-    const startFor=id=>{ const d=DRUGS.find(x=>x.id===id); if(d) openLesson(d,Math.min(prog(d.id).lvl,4)); };
+    const startFor=id=>{ const d=DRUGS.find(x=>x.id===id); if(d) openLesson(d,prog(d.id).lvl); };
     if(lroot){ lroot.addEventListener("click",e=>{ const st=e.target.closest("[data-star]"); if(st){ if(window.toggleStudy) toggleStudy(st.dataset.star); return; }
       const s=e.target.closest("[data-start]"); if(s){ startFor(s.dataset.start); return; }
-      const l=e.target.closest(".llvb"); if(l&&!l.disabled){ const d=DRUGS.find(x=>x.id===l.dataset.id); if(d) openLesson(d,+l.dataset.lvl); return; }
-      const o=e.target.closest("[data-open]"); if(o){ const node=o.closest(".lnode"); const lv=node.querySelector(".llv"); lv.hidden=!lv.hidden; o.setAttribute("aria-expanded",lv.hidden?"false":"true"); node.classList.toggle("open",!lv.hidden); } });
+      const o=e.target.closest("[data-path],.lnode .lnt,.lnode>.ringwrap"); if(o){ const node=o.closest(".lnode"); if(node&&node.dataset.id) openPath("drug",node.dataset.id); } });
       $("l-continue").addEventListener("click",e=>{ const s=e.target.closest("[data-start]"); if(s) startFor(s.dataset.start); });
       $("lf-q").addEventListener("input",()=>{ q=$("lf-q").value.trim().toLowerCase(); renderLessons(); });
       document.addEventListener("study",renderLessons); document.addEventListener("panel",e=>{ if(e.detail==="lesson") renderLessons(); }); }
-    window.nextLesson=()=>{ const going=DRUGS.filter(d=>state(d)==="going").sort((a,b)=>S.drugs[b.id].last-S.drugs[a.id].last)[0]; const pool=(window.studyPool?studyPool():DRUGS); const d=going||pool.find(x=>state(x)!=="done")||pool[0]||DRUGS[0]; showPanel("lesson"); openLesson(d,Math.min(prog(d.id).lvl,4)); };
-    window.openLesson=id=>{ const d=DRUGS.find(x=>x.id===id); if(!d) return; showPanel("lesson"); openLesson(d,Math.min(prog(d.id).lvl,4)); };
+    window.nextLesson=()=>{ const going=DRUGS.filter(d=>state(d)==="going").sort((a,b)=>S.drugs[b.id].last-S.drugs[a.id].last)[0]; const pool=(window.studyPool?studyPool():DRUGS); const d=going||pool.find(x=>state(x)!=="done")||pool[0]||DRUGS[0]; openPath("drug",d.id); openLesson(d,prog(d.id).lvl); };
+    window.openLesson=id=>{ const d=DRUGS.find(x=>x.id===id); if(!d) return; openPath("drug",d.id); openLesson(d,prog(d.id).lvl); };
     window.lessonProgress=()=>S;
     window.masteredCount=()=>DRUGS.filter(d=>state(d)==="done").length;
 
@@ -3550,7 +3581,7 @@ li.tnode .l1.stack .lead{margin-left:0}
         L5("Peds math","Bolus, joules, epinephrine, tubes",()=>({ex:pedsMath(12)}))]}
     ];
     // every game ends its path with a checkpoint that mixes all of its sections, unless its last section is already a timed test
-    GAMES.forEach(g=>{ if(!g.levels) return; if(!g.noCheck) g.levels.push({n:"Checkpoint",d:"Every section, on the clock. 80% first try to pass",check:true,make:()=>mixCfg(g,4)}); else g.levels[g.levels.length-1].check=true; });
+    GAMES.forEach(g=>{ if(!g.levels) return; if(!g.noCheck) g.levels.push({n:"Checkpoint",d:"Every lesson mixed, on the clock",check:true,make:()=>mixCfg(g,4)}); else g.levels[g.levels.length-1].check=true; });
     window.GAMES=GAMES; window.GAME_CATS=CATS;
     function mixCfg(g,per){ const ex=[]; g.levels.forEach(l=>{ if(l.check&&!l.make) return; if(l.n==="Checkpoint") return; const c=l.make(); if(c.next){ for(let i=0;i<per;i++){ const e=c.next(); if(e) ex.push(e); } } else ex.push(...shuffle(c.ex||[]).slice(0,per)); }); return {ex:shuffle(dedupe(ex))}; }
     const diffFor=(i,n)=>i>=n-1?2:Math.min(2,Math.floor(i*2/Math.max(1,n-2)));
@@ -3561,12 +3592,13 @@ li.tnode .l1.stack .lead{margin-left:0}
       if(!cfg.timed){ const c=review?20:lv.check?30:DIFF.lvl>=1?45:0; if(c) cfg.timed={perQ:c}; } if(review) cfg.retry=false; else if(cfg.retry==null) cfg.retry=true;
       if(cfg.ex) cfg.title+=` · ${cfg.ex.length} questions`; if(cfg.timed&&cfg.timed.perQ) cfg.title+=` · ${cfg.timed.perQ} s each`;
       cfg.onDone=res=>{ const learning=!review&&i===rec.lvl&&rec.lvl<n; const passed=!(lv&&lv.check)||res.acc>=PASS||(cfg.timed&&cfg.timed.total&&res.first>=10);
+        rec.lv=rec.lv||{}; const lk=review?"r":i; const pl=rec.lv[lk]||(rec.lv[lk]={best:0,plays:0}); pl.best=Math.max(pl.best,res.acc); pl.plays++; pl.last=res.acc;
         if(learning&&passed) rec.lvl++; rec.xp=(rec.xp||0)+res.xp; rec.acc=res.acc; rec.plays=(rec.plays||0)+1; rec.best=Math.max(rec.best||0,res.first); rec.last=Date.now(); gsave();
         const t=tier(rec,n);
-        return {ring:ring(rec,96,n),eyebrow:learning&&passed?(rec.lvl>=n?"Path complete":"Section complete"):(lv&&lv.check&&!passed?"Checkpoint not passed":"Review complete"),big:g.n,
+        return {ring:ring(rec,96,n),eyebrow:learning&&passed?(rec.lvl>=n?"Path complete":"Lesson complete"):(lv&&lv.check&&!passed?"Checkpoint not passed":"Review complete"),big:g.n,
           sum:`${review?"Mastery review":lv.n}${lv&&lv.check&&!passed?`. You need ${Math.round(PASS*100)}% first try and got ${Math.round(res.acc*100)}%.`:learning&&passed&&rec.lvl<n?`. Next up: ${g.levels[rec.lvl].n}.`:t?`. ${TIER_NAME[t]} ring${t==="master"?", mastered":". More XP and cleaner reviews lift it"}.`:""}`,
           statLabel:cfg.timed&&cfg.timed.total?"Best streak":"Time",stat:cfg.timed&&cfg.timed.total?String(res.best):undefined,
-          btn:rec.lvl<n?(lv&&lv.check&&!passed?"Run it again":"Next section"):"Review again",onBtn:()=>playLevel(g,Math.min(rec.lvl,n))}; };
+          btn:rec.lvl<n?(lv&&lv.check&&!passed?"Run it again":"Next lesson"):"Review again",onBtn:()=>playLevel(g,Math.min(rec.lvl,n))}; };
       open(cfg); }
     window.playGame=(id,lvl)=>{ const g=GAMES.find(x=>x.id===id); if(!g||!g.levels) return; const rec=grec(g.id); playLevel(g,lvl!=null?lvl:Math.min(rec.lvl,g.levels.length)); };
     const groot=$("games");
@@ -3574,20 +3606,57 @@ li.tnode .l1.stack .lead{margin-left:0}
     const catTier=xp=>xp>=3000?"master":xp>=1500?"gold":xp>=600?"silver":xp>=150?"bronze":"";
     function gameNode(g){
       if(g.page){ const done=DRUGS.filter(d=>state(d)==="done").length, lessons=DRUGS.reduce((a,d)=>a+Math.min(5,(S.drugs[d.id]||{}).lvl||0),0); const segs=Math.floor(5*lessons/(5*DRUGS.length));
-        return `<div class="lnode ${done?"going":"new"}" data-game="${g.id}">${ring({lvl:segs},48,5,String(done))}<div class="lnt"><div class="lname"><button type="button" class="lnb" data-page="${g.page}">${g.n}</button></div><span class="lns">${done} of ${DRUGS.length} drugs mastered · ${g.d}</span></div><button type="button" class="btn amber" data-page="${g.page}">Open</button></div>`; }
+        return `<div class="lnode ${done?"going":"new"}" data-page="${g.page}">${ring({lvl:segs},48,5,String(done))}<div class="lnt"><div class="lname"><button type="button" class="lnb">${g.n}</button></div><span class="lns">${done} of ${DRUGS.length} drugs mastered</span></div><button type="button" class="btn amber">Open</button></div>`; }
       const n=g.levels.length, rec=GS[g.id]||{lvl:0,xp:0}; const st=gstate(g), t=tier(rec,n), cur=Math.min(rec.lvl||0,n-1);
-      return `<div class="lnode ${st} ${t}" data-game="${g.id}">${ring(rec,48,n)}<div class="lnt"><div class="lname"><button type="button" class="lnb" data-open aria-expanded="false">${g.n}</button></div><span class="lns">${st==="done"?`${TIER_NAME[t]}. ${rec.xp} XP, last run ${Math.round((rec.acc||0)*100)}%`:st==="going"?`Section ${cur+1} of ${n}: ${g.levels[cur].n}`:g.d}</span></div><button type="button" class="btn ${st==="going"?"amber":st==="done"?"alt":""}" data-play="${g.id}">${st==="going"?"Continue":st==="done"?"Review":"Start"}</button>
-        <div class="llv" hidden>${g.levels.map((l,i)=>`<button type="button" class="llvb ${i<(rec.lvl||0)?"done":i===(rec.lvl||0)?"next":"locked"}" data-lvl="${i}" data-g="${g.id}" ${i>(rec.lvl||0)&&(rec.lvl||0)<n?"disabled":""}><span class="lnum">${i<(rec.lvl||0)?"✓":i+1}</span><span><b>${l.n}</b><small>${l.d}</small></span><span class="lgo">${i<(rec.lvl||0)?"Practice":i===(rec.lvl||0)?"Start":""}</span></button>`).join("")}</div></div>`; }
+      return `<div class="lnode ${st} ${t}" data-game="${g.id}">${ring(rec,48,n)}<div class="lnt"><div class="lname"><button type="button" class="lnb">${g.n}</button></div><span class="lns">${st==="done"?`${TIER_NAME[t]}. ${rec.xp} XP, last run ${Math.round((rec.acc||0)*100)}%`:st==="going"?`Lesson ${cur+1} of ${n}: ${g.levels[cur].n}`:`${n} lessons \u00b7 ${g.levels[0].n} first`}</span></div><button type="button" class="btn ${st==="going"?"amber":st==="done"?"alt":""}" data-play="${g.id}">${st==="going"?"Continue":st==="done"?"Review":"Start"}</button></div>`; }
     function renderGames(){ if(!groot) return;
       groot.innerHTML=CATS.map(([ck,cn])=>{ const gs=GAMES.filter(g=>g.cat===ck); if(!gs.length) return ""; const xp=catXP(ck), t=catTier(xp);
         return `<section class="gcat"><div class="gcath"><span class="ringwrap sm ${t}">${t==="master"?'<i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i>':""}<svg class="ring ${t}" viewBox="0 0 36 36" width="36" height="36"><circle cx="18" cy="18" r="14" fill="none" stroke-width="4" class="${t?"on":"off"}"/><text x="50%" y="50%" dy=".36em" text-anchor="middle" class="rn" font-size="13">${t?"★":""}</text></svg></span><div><h3>${cn}</h3><span class="lns">${xp} XP${t?" · "+TIER_NAME[t]:""}</span></div></div><div class="lpath">${gs.map(gameNode).join("")}</div></section>`; }).join("");
     }
     if(groot){ groot.addEventListener("click",e=>{ const pg=e.target.closest("[data-page]"); if(pg){ showPanel(pg.dataset.page); return; }
         const pl=e.target.closest("[data-play]"); if(pl){ playGame(pl.dataset.play); return; }
-        const lv=e.target.closest(".llvb"); if(lv&&!lv.disabled){ playGame(lv.dataset.g,+lv.dataset.lvl); return; }
-        const o=e.target.closest("[data-open]"); if(o){ const node=o.closest(".lnode"); const l=node.querySelector(".llv"); if(!l) return; l.hidden=!l.hidden; o.setAttribute("aria-expanded",l.hidden?"false":"true"); node.classList.toggle("open",!l.hidden); } });
+        const node=e.target.closest(".lnode[data-game]"); if(node) openPath("game",node.dataset.game); });
       document.addEventListener("panel",e=>{ if(e.detail==="games") renderGames(); }); document.addEventListener("lesson",renderGames); }
     const back=$("l-back"); if(back) back.addEventListener("click",()=>showPanel("games"));
+    // ----- one path page for any game or drug: every lesson as a row you can read before you start it -----
+    const proot=$("path"); let PATH=null;
+    const LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+    const pips=k=>`<span class="pips" title="Difficulty">${[0,1,2,3].map(j=>`<i class="${j<=k?"on":""}"></i>`).join("")}</span>`;
+    function badge(state,label,best){ const r=20, C=2*Math.PI*r; const arc=best>0?`<circle cx="24" cy="24" r="${r}" fill="none" stroke-width="4" stroke-linecap="round" class="arc" stroke-dasharray="${(C*best).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 24 24)"/>`:"";
+      return `<span class="lbadge ${state}"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="${r}" fill="none" stroke-width="4" class="trk"/>${arc}</svg><b>${state==="locked"?LOCK:state==="done"?"\u2713":label}</b></span>`; }
+    function lessonRow(i,o){ const st=o.state; return `<div class="lrow ${st}${o.check?" check":""}${o.review?" review":""}" data-run="${i}">${badge(st,o.label,o.best)}<div class="lnt"><b class="lrt">${esc(o.n)}</b><span class="lns">${esc(o.d)}</span><span class="lmeta">${pips(o.diff)}<span>${o.q}</span>${o.clock?`<span>${o.clock} s each</span>`:""}${o.pass?`<span>${o.pass}</span>`:""}${o.best>0?`<span class="lbest">best ${Math.round(o.best*100)}%</span>`:""}</span></div><button type="button" class="btn ${st==="next"?"amber":"alt"}" data-run="${i}" ${st==="locked"?"disabled":""}>${st==="locked"?"Locked":st==="done"?"Practice":o.review?"Review":"Start"}</button></div>`; }
+    function gameRows(g){ const n=g.levels.length, rec=GS[g.id]||{lvl:0}, cur=rec.lvl||0, lv=rec.lv||{}; const save=DIFF.lvl;
+      const rows=g.levels.map((l,i)=>{ const d=diffFor(i,n); DIFF.lvl=d; let c={}; try{ c=l.make()||{}; }catch(e){} const total=c.timed&&c.timed.total; const clock=total?0:(c.timed&&c.timed.perQ)||(l.check?30:d>=1?45:0);
+        return lessonRow(i,{n:l.n,d:l.d,label:i+1,state:i<cur?"done":i===cur?"next":"locked",diff:d,check:!!l.check,q:total?`${total} s, as many as you can`:`${(c.ex||[]).length||c.count||10} questions`,clock,pass:l.check&&!total?"80% first try to pass":"",best:(lv[i]||{}).best||0}); });
+      DIFF.lvl=save; const mix=g.levels.filter(l=>l.n!=="Checkpoint").length*5;
+      rows.push(lessonRow(n,{n:"Mastery review",d:"Every lesson mixed, hardest settings, no second tries. Lifts the ring to silver, gold and master.",label:"\u2605",state:cur>=n?"next":"locked",diff:3,review:true,q:`${mix} questions`,clock:20,best:(lv.r||{}).best||0}));
+      return rows.join(""); }
+    function drugRows(d){ const P=S.drugs[d.id]||{lvl:0}, cur=P.lvl||0, lv=P.lv||{};
+      const rows=LEVELS.map((l,i)=>{ const diff=LEVEL_DIFF[i]; return lessonRow(i,{n:l.n,d:l.d,label:i+1,state:i<cur?"done":i===cur?"next":"locked",diff,check:l.k==="check",q:`${LESSON_SIZE[l.k]} questions`,clock:clockFor(diff),pass:l.k==="check"?"80% first try to pass":"",best:(lv[i]||{}).best||0}); });
+      rows.push(lessonRow(5,{n:"Mastery review",d:"Every fact on the card, missed facts first, no second tries. Master needs every fact owned.",label:"\u2605",state:cur>=5?"next":"locked",diff:3,review:true,q:`${Math.max(REVIEW_SIZE,Math.min(40,factTotal(d)))} questions`,clock:clockFor(MASTERY_DIFF),best:(lv.r||{}).best||0}));
+      return rows.join(""); }
+    function renderPath(){ if(!proot||!PATH) return; const back=$("p-back");
+      if(PATH.kind==="game"){ const g=GAMES.find(x=>x.id===PATH.id); if(!g) return; const n=g.levels.length, rec=GS[g.id]||{lvl:0,xp:0}, t=tier(rec,n), done=Math.min(rec.lvl||0,n); const cat=(CATS.find(c=>c[0]===g.cat)||[])[1]||"Games";
+        back.innerHTML=back.innerHTML.replace(/[^>]*$/,"Games"); back.dataset.to="games";
+        proot.innerHTML=`<div class="phead">${ring(rec,88,n)}<div><span class="eyebrow">${esc(cat)}</span><h2>${esc(g.n)}</h2><span class="lns">${t?`${TIER_NAME[t]} ring`:done?`Lesson ${Math.min(done+1,n)} of ${n} next`:`${n} lessons, each harder than the last`}</span></div></div>
+          <p class="intro">${esc(g.d)}</p>
+          <div class="lstats"><div class="k"><span class="eyebrow">XP</span><b class="num">${rec.xp||0}</b></div><div class="k"><span class="eyebrow">Lessons done</span><b class="num">${done} / ${n}</b></div><div class="k"><span class="eyebrow">Last run</span><b class="num">${rec.plays?Math.round((rec.acc||0)*100)+"%":"none"}</b></div></div>
+          <div class="lrows">${gameRows(g)}</div>`; }
+      else { const d=DRUGS.find(x=>x.id===PATH.id); if(!d) return; const P=S.drugs[d.id]||{lvl:0,xp:0}, t=tier(P), done=Math.min(P.lvl||0,5);
+        back.innerHTML=back.innerHTML.replace(/[^>]*$/,"Drug Exercises"); back.dataset.to="lesson";
+        proot.innerHTML=`<div class="phead">${ring(P,88)}<div><span class="eyebrow">Drug Exercises</span><h2>${studyStar(d)}${esc(d.name)}</h2><span class="lns">${esc(d.cls.join(", "))}</span></div></div>
+          <p class="intro">${t?`${TIER_NAME[t]} ring. `:""}${factKnown(d)} of ${factTotal(d)} facts on this card owned${Object.keys(P.miss||{}).length?`, ${Object.keys(P.miss).length} coming back first`:""}.</p>
+          <div class="lstats"><div class="k"><span class="eyebrow">XP</span><b class="num">${P.xp||0}</b></div><div class="k"><span class="eyebrow">Lessons done</span><b class="num">${done} / 5</b></div><div class="k"><span class="eyebrow">Facts owned</span><b class="num">${factKnown(d)} / ${factTotal(d)}</b></div></div>
+          <div class="lrows">${drugRows(d)}</div>`; }
+    }
+    function openPath(kind,id){ PATH={kind,id}; showPanel("path"); renderPath(); }
+    window.openPath=openPath;
+    if(proot){ proot.addEventListener("click",e=>{ const st=e.target.closest("[data-star]"); if(st){ if(window.toggleStudy) toggleStudy(st.dataset.star); return; }
+        const r=e.target.closest("[data-run]"); if(!r||!PATH) return; const row=r.closest(".lrow"); if(row&&row.classList.contains("locked")) return; const i=+r.dataset.run;
+        if(PATH.kind==="game") playGame(PATH.id,i); else { const d=DRUGS.find(x=>x.id===PATH.id); if(d) openLesson(d,i); } });
+      $("p-back").addEventListener("click",()=>showPanel($("p-back").dataset.to||"games"));
+      document.addEventListener("panel",e=>{ if(e.detail==="path") renderPath(); }); document.addEventListener("study",renderPath); }
+
     window.__LESSON={build:buildLesson,G,LEVELS,state:()=>L,tier,GAMES,mixCfg,factTotal};
     renderLessons(); renderGames();
   })();
