@@ -1,13 +1,13 @@
 {
-  "name": "Medic Math",
-  "short_name": "Medic Math",
-  "description": "Med math drills, drug profiles with a dose calculator, scenarios and a registry simulator for medics.",
+  "name": "Perfuse",
+  "short_name": "Perfuse",
+  "description": "Perfuse by Sanguine Solutions: paramedic drug exercises, med math, games, scenarios and a registry simulator.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#EEF1F3",
-  "theme_color": "#1E5A6E",
+  "background_color": "#141416",
+  "theme_color": "#8B1E2D",
   "icons": [
     {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
     {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
