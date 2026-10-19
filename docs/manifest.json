@@ -1,7 +1,7 @@
 {
-  "name": "Plasma",
-  "short_name": "Plasma",
-  "description": "Plasma by Sanguine Solutions: paramedic drug exercises, med math, games, scenarios and a registry simulator.",
+  "name": "Bloodwork",
+  "short_name": "Bloodwork",
+  "description": "Bloodwork by Sanguine Solutions: paramedic drug exercises, med math, games, scenarios and a registry simulator.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
