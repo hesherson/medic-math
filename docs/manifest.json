@@ -1,7 +1,7 @@
 {
-  "name": "Bloodwork",
-  "short_name": "Bloodwork",
-  "description": "Bloodwork by Sanguine Solutions: paramedic drug exercises, med math, games, scenarios and a registry simulator.",
+  "name": "Lazarus",
+  "short_name": "Lazarus",
+  "description": "Lazarus by Sanguine Solutions: paramedic drug exercises, med math, games, scenarios and a registry simulator.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

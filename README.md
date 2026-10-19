@@ -1,4 +1,4 @@
-# Bloodwork
+# Lazarus
 
 Med math drills, drug profiles with a dose calculator, scenarios and a registry simulator for medics. Built for PILLAR training.
 
