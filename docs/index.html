@@ -952,7 +952,7 @@ header.top h1 .mark{width:28px;height:28px;border-radius:50%;vertical-align:-6px
 
 .splash-m{position:absolute;left:0;right:0;top:calc(50% + 64px);display:grid;justify-items:center;text-align:center;font-family:var(--display);font-size:clamp(12px,3.9vw,15px);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#EFE8DC;opacity:0;transition:opacity 1s ease}
 .splash-m>span{grid-area:1/1;white-space:nowrap;padding:0 12px} .splash-m .sm-en{opacity:0;letter-spacing:.12em}
-.splash-m .ch{display:inline-block;white-space:pre}
+.splash-m .ch,.splash-t .ch{display:inline-block;white-space:pre}
 .splash-fx{position:absolute;width:0;height:0;overflow:hidden}
 /* the Latin melts away a letter at a time and the English condenses out of it */
 .splash-m.wobble{filter:url(#lz-melt)}
@@ -6582,7 +6582,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
   // ---------- intro: two versions, picked at random (the line version about one open in three, never twice running).
   // Glyphs: scrambled glyphs creep in from the edges of the screen and settle into LAZARUS.
-  // Lines: one straight line sweeps across the name and peels off into the straight strokes of each letter, the letters fade in over them, then the motto gets the same.
+  // Lines: a vertical line sweeps across the name with a sharp ease, leaving a plain vertical line where each letter goes; then each letter opens out from its line. The motto gets the same.
   // Both end the same way: the name steps back, the motto slides up into its place, larger, and melts from the Latin into English. ----------
   (function splash(){ const sp=document.getElementById("splash"); if(!sp) return;
     const cv=document.getElementById("splash-cv"), ln=document.getElementById("splash-ln"), glow=sp.querySelector(".splash-glow"), title=sp.querySelector(".splash-t"), motto=sp.querySelector(".splash-m");
@@ -6659,54 +6659,44 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
         try{ h=P.mount(cv,{background:false,loop:false,onFrame,colors:glyphs,scramble:true,curl:.3,easeOut:2.4,maxSide:640*dpr,onComplete:()=>later(()=>{ if(!landed){ landed=true; title.style.opacity="1"; later(rise,400); } },60)}); }catch(e){ title.style.transition="opacity .8s ease"; title.style.opacity="1"; later(rise,1200); } };
       return start; }
 
-    // ================= lines: one line sweeps across and peels off into the straight strokes of each letter =================
-    // strokes for each letter as polylines in its ink box, x from left to right and y from cap top to baseline, run down the middle of each stem
-    const s=.13, v=.08;
-    const SK={
-      L:[[[s,0],[s,1]],[[s,1-v],[1,1-v]]], A:[[[.06,1],[.5,0],[.94,1]],[[.27,.66],[.73,.66]]], Z:[[[0,v],[1,v]],[[1-s,v],[s,1-v]],[[0,1-v],[1,1-v]]],
-      R:[[[s,1],[s,0]],[[s,v],[.72,v],[1-s,.18],[1-s,.4],[.72,.5],[s,.5]],[[.52,.52],[.94,1]]], U:[[[s,0],[s,.78],[.3,1-v],[.7,1-v],[1-s,.78],[1-s,0]]],
-      S:[[[1-s,.22],[.78,v],[.22,v],[s,.24],[s,.38],[.26,.48],[.74,.53],[1-s,.63],[1-s,.79],[.78,1-v],[.22,1-v],[s,.78]]],
-      C:[[[1-s,.24],[.76,v],[.26,v],[s,.26],[s,.74],[.26,1-v],[.76,1-v],[1-s,.76]]], O:[[[.26,v],[.74,v],[1-s,.26],[1-s,.74],[.74,1-v],[.26,1-v],[s,.74],[s,.26],[.26,v]]],
-      E:[[[s,0],[s,1]],[[s,v],[1,v]],[[s,.5],[.84,.5]],[[s,1-v],[1,1-v]]], P:[[[s,1],[s,0]],[[s,v],[.72,v],[1-s,.2],[1-s,.44],[.72,.55],[s,.55]]],
-      N:[[[s,1],[s,0],[1-s,1],[1-s,0]]], T:[[[0,v],[1,v]],[[.5,0],[.5,1]]], I:[[[.5,0],[.5,1]]], M:[[[s,1],[s,0],[.5,.72],[1-s,0],[1-s,1]]], V:[[[.06,0],[.5,1],[.94,0]]],
-      ",":[[[.65,0],[.35,1]]], ".":[[[.15,.5],[.85,.5]]] };
-    const lg=ln.getContext("2d"); let LW=0, LH=0, LDPR=1;
-    const sizeLn=()=>{ const r=sp.getBoundingClientRect(); LDPR=Math.min(window.devicePixelRatio||1,2); LW=r.width; LH=r.height; ln.width=Math.round(LW*LDPR); ln.height=Math.round(LH*LDPR); };
+    // ================= lines: a vertical line sweeps across, leaving a plain vertical line where each letter will be, then each letter opens out from its line =================
+    const eQ=x=>{ x=Math.max(0,Math.min(1,x)); return x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2; };
+    const eO=x=>{ x=Math.max(0,Math.min(1,x)); return 1-Math.pow(1-x,3); };
+    const lg=ln.getContext("2d"); let LDPR=1;
+    const sizeLn=()=>{ const r=sp.getBoundingClientRect(); LDPR=Math.min(window.devicePixelRatio||1,2); ln.width=Math.round(r.width*LDPR); ln.height=Math.round(r.height*LDPR); };
     // the ink box of every letter in an element, from its laid-out position and the font's own measurements
     function boxes(el){ const r0=sp.getBoundingClientRect(), cs=getComputedStyle(el), fs=parseFloat(cs.fontSize)||16, spans=split(el);
       const mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; el.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
       const g=document.createElement("canvas").getContext("2d"); g.font=`${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
-      return spans.map(c=>{ const ch=c.textContent.toUpperCase(), r=c.getBoundingClientRect(), x=r.left-r0.left; if(!SK[ch]) return null; const m=g.measureText(ch);
+      return spans.map(c=>{ const ch=c.textContent.toUpperCase(); if(!ch.trim()) return null; const r=c.getBoundingClientRect(), x=r.left-r0.left, m=g.measureText(ch);
         const okm=m.actualBoundingBoxAscent!=null&&isFinite(m.actualBoundingBoxRight);
         const x0=okm?x-m.actualBoundingBoxLeft:x+.04*fs, x1=okm?x+m.actualBoundingBoxRight:x+m.width-.04*fs, y0=okm?base-m.actualBoundingBoxAscent:base-.7*fs, y1=okm?base+m.actualBoundingBoxDescent:base;
-        return {ch,x0,x1,y0,y1}; }).filter(Boolean); }
-    // every stroke starts as a piece of the sweeping line and turns, slides and stretches into place once the line has passed it
-    function build(el,lw){ const B=boxes(el); if(!B.length) return null; const left=Math.min(...B.map(b=>b.x0)), right=Math.max(...B.map(b=>b.x1)), y0=Math.min(...B.map(b=>b.y0)), y1=Math.max(...B.filter(b=>b.ch!==","&&b.ch!==".").map(b=>b.y1));
-      const ly=(y0+y1)/2, segs=[];
-      B.forEach(b=>{ const w=b.x1-b.x0, hh=b.y1-b.y0; SK[b.ch].forEach(pl=>{ for(let i=0;i<pl.length-1;i++){ const ax=b.x0+pl[i][0]*w, ay=b.y0+pl[i][1]*hh, bx=b.x0+pl[i+1][0]*w, by=b.y0+pl[i+1][1]*hh;
-        let th=Math.atan2(by-ay,bx-ax); if(th>Math.PI/2) th-=Math.PI; if(th<=-Math.PI/2) th+=Math.PI; const L=Math.hypot(bx-ax,by-ay), cx=(ax+bx)/2, cy=(ay+by)/2;
-        segs.push({cx,cy,th,L,L0:Math.max(3,L*.6),start:0}); } }); });
-      return {left:left-18,right:right+18,ly,segs,lw}; }
-    const strokesAt=(S,t,a)=>{ lg.lineCap="round"; for(const g of S.segs){ const q=(t-g.start)/S.dur; if(q<=0) continue; const e=eIO(q), x=g.cx, y=S.ly+(g.cy-S.ly)*e, th=g.th*e, L=g.L0+(g.L-g.L0)*e, dx=Math.cos(th)*L/2, dy=Math.sin(th)*L/2;
-        const al=a*(q<1?.75+.25*Math.sin(Math.PI*Math.min(1,q)):.85);
-        lg.strokeStyle=`rgba(239,232,220,${(al*.16).toFixed(3)})`; lg.lineWidth=S.lw*3.2; lg.beginPath(); lg.moveTo(x-dx,y-dy); lg.lineTo(x+dx,y+dy); lg.stroke();
-        lg.strokeStyle=`rgba(239,232,220,${al.toFixed(3)})`; lg.lineWidth=S.lw; lg.beginPath(); lg.moveTo(x-dx,y-dy); lg.lineTo(x+dx,y+dy); lg.stroke(); } };
-    // the sweeping line itself: drawn out from the left with a bright head, then gone once it reaches the far side
-    const sweepAt=(S,t)=>{ const q=t/S.sweep; if(q<=0) return; const hx=S.left+(S.right-S.left)*(.5-.5*Math.cos(Math.PI*Math.min(1,q))), a=q<1?1:Math.max(0,1-(t-S.sweep)/.35); if(a<=0) return;
-      lg.strokeStyle=`rgba(239,232,220,${(.8*a).toFixed(3)})`; lg.lineWidth=S.lw; lg.beginPath(); lg.moveTo(S.left,S.ly); lg.lineTo(hx,S.ly); lg.stroke();
-      const R=6*S.lw, gr=lg.createRadialGradient(hx,S.ly,0,hx,S.ly,R); gr.addColorStop(0,`rgba(255,250,240,${a.toFixed(3)})`); gr.addColorStop(.35,`rgba(255,244,228,${(.55*a).toFixed(3)})`); gr.addColorStop(1,"rgba(255,244,228,0)"); lg.fillStyle=gr; lg.beginPath(); lg.arc(hx,S.ly,R,0,Math.PI*2); lg.fill(); };
-    // a stroke starts peeling off as the head reaches its middle
-    const time=(S,sweep,dur)=>{ S.sweep=sweep; S.dur=dur; S.segs.forEach(g=>{ const f=(g.cx-S.left)/(S.right-S.left), q=Math.acos(1-2*Math.max(0,Math.min(1,f)))/Math.PI; g.start=q*sweep-.04; }); S.end=Math.max(...S.segs.map(g=>g.start))+dur; return S; };
+        return {span:c,sx:x,sw:r.width,x0,x1,y0,y1,c:(x0+x1)/2}; }).filter(Boolean); }
+    // one pass: the sweep, the line it leaves at each letter, and each letter opening out from its line as the line splits to the letter's edges
+    function pass(el,lw,sweep,stag,open){ const B=boxes(el); if(!B.length) return null;
+      const caps=B.filter(b=>b.y1-b.y0>(B[0].y1-B[0].y0)*.5), top=Math.min(...caps.map(b=>b.y0)), bot=Math.max(...caps.map(b=>b.y1)), pad=(bot-top)*.35;
+      const left=Math.min(...B.map(b=>b.x0))-14, right=Math.max(...B.map(b=>b.x1))+14;
+      // when the sweep reaches each letter's middle, found by searching the ease
+      B.forEach(b=>{ const f=(b.c-left)/(right-left); let lo=0, hi=1; for(let k=0;k<24;k++){ const mid=(lo+hi)/2; if(eQ(mid)<f) lo=mid; else hi=mid; } b.hit=lo*sweep; b.span.style.clipPath=`inset(-40% ${(b.sx+b.sw-b.c).toFixed(1)}px -40% ${(b.c-b.sx).toFixed(1)}px)`; });
+      const fill0=sweep+.18; B.forEach((b,i)=>{ b.fill=fill0+i*stag; }); el.style.opacity="1";
+      return {B,lw,sweep,open,left,right,top:top-pad,bot:bot+pad,end:fill0+(B.length-1)*stag+open}; }
+    function drawPass(S,t){ if(!S||t<0) return; lg.lineCap="butt";
+      const line=(x,y0,y1,a,w)=>{ if(a<=.003) return; lg.strokeStyle=`rgba(239,232,220,${(a*.18).toFixed(3)})`; lg.lineWidth=w*3.5; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); lg.strokeStyle=`rgba(239,232,220,${a.toFixed(3)})`; lg.lineWidth=w; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); };
+      // the sweep: fast through the middle, slow at both ends, gone once it reaches the far side
+      if(t<=S.sweep+.12){ const x=S.left+(S.right-S.left)*eQ(t/S.sweep), a=1-sm((t-S.sweep*.8)/(S.sweep*.2+.12)); line(x,S.top,S.bot,a,S.lw*1.1); }
+      S.B.forEach(b=>{ if(t<b.hit) return; const d=eO((t-b.hit)/.22), h=(S.bot-S.top)/2, mid=(b.y0+b.y1)/2, hh=h+((b.y1-b.y0)/2-h)*d;
+        const q=(t-b.fill)/S.open;
+        if(q<=0){ line(b.c,mid-hh,mid+hh,.92,S.lw); return; }
+        const e=eQ(q), L=b.c-(b.c-b.x0)*e, R=b.c+(b.x1-b.c)*e, a=.92*Math.pow(Math.max(0,1-e),.7);
+        b.span.style.clipPath=q>=1?"none":`inset(-40% ${((b.sx+b.sw-b.c)*(1-e)-4*e).toFixed(1)}px -40% ${((b.c-b.sx)*(1-e)-4*e).toFixed(1)}px)`;
+        line(L,mid-hh,mid+hh,a,S.lw); line(R,mid-hh,mid+hh,a,S.lw); }); }
     function lineIntro(){ const start=()=>{ if(done) return; place(); sizeLn();
-        const T=time(build(title,1.6)||{left:0,right:0,ly:0,segs:[],lw:1.6},.9,.55); motto.style.opacity="0"; const Mo=time(build(la||motto,1)||{left:0,right:0,ly:0,segs:[],lw:1},.75,.45);
-        const tFade=T.end-.25, mStart=tFade+.55, mFade=mStart+Mo.end-.2, riseAt=mFade+1.15; let tt=0, lastT=null;
+        motto.style.opacity="0"; const T=pass(title,1.6,.85,.06,.55); const M=pass(la||motto,1,.75,.02,.45); if(motto&&M) motto.style.opacity="1";
+        const mAt=T?T.sweep+.18+(T.B.length-1)*.06+.15:0, riseAt=mAt+(M?M.end:0)+.35; let tt=0, lastT=null;
         const frame=now=>{ raf=0; if(done||risen) return; if(lastT!=null) tt+=Math.min(.05,Math.max(0,(now-lastT)/1000)); lastT=now;
           lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); lg.setTransform(LDPR,0,0,LDPR,0,0);
-          const tl=sm((tt-tFade)/.9), ml=sm((tt-mFade)/.8);
-          title.style.opacity=tl.toFixed(3); motto.style.opacity=ml.toFixed(3);
-          sweepAt(T,tt); strokesAt(T,tt,1-sm((tt-tFade-.35)/.7));
-          if(tt>=mStart){ sweepAt(Mo,tt-mStart); strokesAt(Mo,tt-mStart,1-sm((tt-mFade-.3)/.6)); }
-          if(tt>=riseAt){ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); rise(); return; }
+          drawPass(T,tt); drawPass(M,tt-mAt);
+          if(tt>=riseAt){ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); [T,M].forEach(S=>S&&S.B.forEach(b=>b.span.style.clipPath="none")); rise(); return; }
           raf=requestAnimationFrame(frame); };
         raf=requestAnimationFrame(frame); };
       return start; }
