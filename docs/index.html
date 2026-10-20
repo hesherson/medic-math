@@ -957,8 +957,8 @@ header.top h1 .mark{width:28px;height:28px;border-radius:50%;vertical-align:-6px
 /* the Latin melts away a letter at a time and the English condenses out of it */
 .splash-m.wobble{filter:url(#lz-melt)}
 .splash-m.melting .sm-en{opacity:1}
-.splash-m.melting .sm-la .ch{transform-origin:50% 0;animation:lzDrip 1s cubic-bezier(.45,0,.8,.35) both}
-.splash-m.melting .sm-en .ch{opacity:0;transform-origin:50% 100%;animation:lzRise 1s cubic-bezier(.2,.65,.25,1) both}
+.splash-m.melting .sm-la .ch{transform-origin:50% 0;animation:lzDrip .72s cubic-bezier(.45,0,.8,.35) both}
+.splash-m.melting .sm-en .ch{opacity:0;transform-origin:50% 100%;animation:lzRise .72s cubic-bezier(.2,.65,.25,1) both}
 @keyframes lzDrip{0%{transform:none;opacity:1;filter:blur(0)}30%{transform:translateY(1px) scaleY(1.12);opacity:.92}100%{transform:translateY(11px) scale(.86,1.75);opacity:0;filter:blur(2.5px)}}
 @keyframes lzRise{0%{transform:translateY(8px) scale(1.08,1.45);opacity:0;filter:blur(4px)}50%{opacity:.78;filter:blur(1.2px)}100%{transform:none;opacity:1;filter:blur(0)}}
 .splash.ending .splash-m{opacity:1}
@@ -1492,7 +1492,7 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
   <canvas id="splash-ln" aria-hidden="true"></canvas>
   <div class="splash-t">Lazarus</div>
   <div class="splash-m"><span class="sm-la" lang="la">Per Constantiam, Vincimus.</span><span class="sm-en" aria-hidden="true">Through steadfastness, we prevail</span></div>
-  <svg class="splash-fx" width="0" height="0" aria-hidden="true" focusable="false"><filter id="lz-melt" x="-10%" y="-60%" width="120%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.11" numOctaves="2" seed="7" result="n"><animate id="lz-melt-f" attributeName="baseFrequency" begin="indefinite" dur="2.2s" values="0.015 0.11;0.028 0.18;0.015 0.11" fill="freeze"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"><animate id="lz-melt-s" attributeName="scale" begin="indefinite" dur="2.2s" values="0;5;2.5;0" keyTimes="0;.4;.75;1" fill="freeze"/></feDisplacementMap></filter></svg>
+  <svg class="splash-fx" width="0" height="0" aria-hidden="true" focusable="false"><filter id="lz-melt" x="-10%" y="-60%" width="120%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.11" numOctaves="2" seed="7" result="n"><animate id="lz-melt-f" attributeName="baseFrequency" begin="indefinite" dur="1.6s" values="0.015 0.11;0.028 0.18;0.015 0.11" fill="freeze"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"><animate id="lz-melt-s" attributeName="scale" begin="indefinite" dur="1.6s" values="0;5;2.5;0" keyTimes="0;.4;.75;1" fill="freeze"/></feDisplacementMap></filter></svg>
 </div>
 </div>
 </div>
@@ -6734,10 +6734,10 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
     const la=motto.querySelector(".sm-la"), en=motto.querySelector(".sm-en");
     const split=node=>{ if(!node) return []; const t=node.textContent; node.textContent=""; return [...t].map(ch=>{ const c=document.createElement("span"); c.className="ch"; c.textContent=ch; node.appendChild(c); return c; }); };
     const melt=()=>{ if(!la||!en) return;
-      const A=split(la), B=split(en), wave=.5, rnd=.12; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.4+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
+      const A=split(la), B=split(en), wave=.36, rnd=.09; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.28+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
       en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("wobble","melting"); if(glow) glow.classList.add("swell");
       try{ document.getElementById("lz-melt-s").beginElement(); document.getElementById("lz-melt-f").beginElement(); }catch(e){}
-      later(()=>motto.classList.remove("wobble"),2300); };
+      later(()=>motto.classList.remove("wobble"),1650); };
 
     // ----- geometry: the name sits at the middle of a 600 square that grows with the screen up to 640 px -----
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
@@ -6764,7 +6764,7 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
       Object.assign(motto.style,{transition:"transform 1s cubic-bezier(.2,.8,.2,1), opacity .8s ease",transform:`translateY(${dy}px) scale(${S.toFixed(3)})`,opacity:"1"});
       motto.classList.add("hero");
       if(glow){ glow.style.top=cy+"px"; later(()=>glow.classList.add("on"),500); }
-      later(melt,1500); later(()=>{ fade(motto,600,0); if(glow) glow.classList.remove("on","swell"); },4100); later(gone,4700); };
+      later(melt,1500); later(()=>{ fade(motto,600,0); if(glow) glow.classList.remove("on","swell"); },3600); later(gone,4200); };
 
     // ================= glyphs: scrambled glyphs stream in from off screen on every side and settle into the name =================
     function glyphIntro(){
