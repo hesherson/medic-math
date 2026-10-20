@@ -1294,7 +1294,7 @@ details.subfold>:not(summary){margin:0 14px 14px}
 .pcard:last-child{border-bottom:0}
 .pcard:hover{transform:none;box-shadow:none;background:var(--surface-2)}
 .pcard .pnum{grid-row:1;font-size:13px;min-width:12px}
-.pcard .ptitle{font-family:var(--body);font-size:15px;font-weight:600}
+.pcard .ptitle{font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:.01em;line-height:1.15}
 .pcard .tsub{font-family:var(--body);font-size:12.5px;justify-self:end}
 .pcard .pdesc{display:none}
 .pcard.done{background:color-mix(in srgb,var(--good) 10%,transparent);border-color:var(--line)}
@@ -1672,6 +1672,23 @@ details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
 .rule-card{content-visibility:auto;contain-intrinsic-size:auto 87px}
 .simcase{content-visibility:auto;contain-intrinsic-size:auto 65px}
 .gt{content-visibility:auto;contain-intrinsic-size:auto 138px}
+
+/* ================= the press: everything you can tap gives under the finger straight away, the same way everywhere ================= */
+html{touch-action:manipulation}
+.ptab,.nav button,.chip,.btn,.backchip,.ptchip,.tapbox,.simcase,.simscen,.simrand,.gt,.gcard,.pcard,.lopt,.ltile,.opt,.stile,details.fold>summary,details.drug>summary,details.method>summary,details.trick>summary,details.scen>summary,details.subfold>summary{transition:transform .14s cubic-bezier(.3,.7,.3,1),filter .14s ease,background-color .2s ease,color .2s ease,border-color .2s ease}
+.ptab:active,.nav button:active,.chip:active,.btn:active,.backchip:active,.ptchip:active{transform:scale(.95);filter:brightness(1.12)}
+.tapbox:active,.simcase:active,.simscen:active,.simrand:active,.gt:active,.gcard:active,.pcard:active,.opt:active,.stile:active{transform:scale(.98);filter:brightness(1.1)}
+details.fold>summary:active,details.drug>summary:active,details.method>summary:active,details.trick>summary:active,details.scen>summary:active,details.subfold>summary:active{filter:brightness(1.15)}
+/* a new page opens the bar back up at once */
+html.hdrnow .top .row h1,html.hdrnow .top .row .ptchip,html.hdrnow .top .subnav,html.hdrnow header.top::before{transition:none!important}
+
+/* ================= names in Barlow Condensed everywhere: fold rows, setting rows, the dashboard's five, progress areas, option rows ================= */
+details.fold>summary .ft{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:.01em;line-height:1.1}
+.setrow b{font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:.01em;line-height:1.15}
+.ptitle{font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:.01em}
+.arow b{font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:.01em}
+details.subfold>summary,details.subfold.quizopts>summary>span:first-child,.aspick>summary{font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:.01em}
+details.subfold.quizopts>summary .qsum{font-family:var(--body)}
 </style>
 </head>
 <body>
@@ -2512,7 +2529,17 @@ details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
           fr.push({transform:`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) scale(${sc.toFixed(4)})`}); }
         el.style.transform=`translate3d(${to.toFixed(1)}px,0,0)`;
         try{ live.push(el.animate(fr,{duration:D,easing:"linear"})); }catch(e){} }); };
-    place(); window.addEventListener("resize",place); })();
+    // scrolling carries the lights up with the page at a fraction of its speed, the near ones fastest. Each light wraps round once it is off
+    // screen, so they keep moving however long the page is; and they follow how far you have scrolled, never where the page sits, so a page
+    // change (which jumps to the top) never makes them jump. -----
+    const FAC={far:.035,mid:.07,near:.12}; let H=window.innerHeight||800, lastY=window.scrollY||0, acc=0, tick=0;
+    const P=L.map(l=>({f:FAC[[...l.classList].find(c=>FAC[c])]||.06,d:[...l.querySelectorAll("i")].map(el=>({el,b:0,m:0,last:""}))}));
+    const measure=()=>{ H=window.innerHeight||800; P.forEach(l=>l.d.forEach(d=>{ const cs=getComputedStyle(d.el); d.b=parseFloat(cs.getPropertyValue("--y"))/100*H||0; d.m=(parseFloat(cs.getPropertyValue("--s"))||120)/2+H*.08; })); };
+    const lift=()=>{ P.forEach(l=>{ const off=acc*l.f; l.d.forEach(d=>{ const span=H+2*d.m, y=d.b-off, w=((y+d.m)%span+span)%span-d.m, v=`0 ${(w-d.b).toFixed(1)}px`; if(v!==d.last){ d.last=v; d.el.style.translate=v; } }); }); };
+    const still=()=>window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.addEventListener("scroll",()=>{ if(tick||still()) return; tick=requestAnimationFrame(()=>{ tick=0; const y=window.scrollY||0, d=y-lastY; lastY=y; if(Math.abs(d)<H*1.5){ acc+=d; lift(); } }); },{passive:true});
+    window.bokehScrollReset=()=>{ lastY=window.scrollY||0; };
+    measure(); place(); window.addEventListener("resize",()=>{ place(); measure(); lift(); }); })();
   // pages visited, so the back gesture walks back through them
   const navStack=[];
   window.showPanel=(id,o)=>showPanel(id,o);
@@ -2525,7 +2552,7 @@ details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
   let swapDone=null; window.afterPanel=fn=>{ if(swapDone) swapDone.then(()=>fn()); else fn(); };
   // ----- the page strip: built once per tab, then only its selection and thumb change -----
   function strip(g,id,anim){ const sub=$("subnav"), items=NAV[g]; sub.hidden=items.length<2; if(sub.hidden){ sub.dataset.g=""; return; }
-    const fresh=sub.dataset.g!==g;
+    const fresh=sub.dataset.g!==g; { const t0=sub.querySelector(".ptrack"); if(t0&&t0.getAnimations) t0.getAnimations().forEach(a=>a.cancel()); }
     if(fresh){ sub.dataset.g=g; sub.innerHTML=`<div class="ptrack" role="tablist" aria-label="${GNAME[g]||""} pages"><span class="pthumb" aria-hidden="true"></span>${items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join("")}</div>`; }
     id=PARENT[id]||id; sub.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
     const tr=sub.querySelector(".ptrack");
@@ -2541,42 +2568,57 @@ details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
   function fit(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["","s1","s2","s3"]; tr.classList.remove("s1","s2","s3");
     for(const c of S){ if(c){ tr.classList.remove(...S.filter(Boolean)); tr.classList.add(c); } if(tr.scrollWidth<=tr.clientWidth+1) return; } }
   function edges(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const over=tr.scrollWidth>tr.clientWidth+2; tr.classList.toggle("scrolls",over); tr.classList.toggle("atstart",!over||tr.scrollLeft<=2); tr.classList.toggle("atend",!over||tr.scrollLeft+tr.clientWidth>=tr.scrollWidth-2); }
-  // ----- moving between pages happens on the live page, never on snapshots: the old page is lifted out exactly where it sits and slides away
-  // while the new one slides in, so nothing waits on a capture, the glass and the lights stay live, and nothing jumps when it ends -----
-  const EASE="cubic-bezier(.22,.8,.24,1)";
-  let leaving=null, entering=null;
-  function settle(){ if(entering){ try{ entering.finish(); }catch(e){} entering=null; } if(!leaving) return; const L=leaving; leaving=null; try{ L.anim.cancel(); }catch(e){} L.el.hidden=L.el.id!=="panel-"+curPanel; L.el.classList.remove("leaving"); L.el.style.cssText=L.css; }
-  function lift(el){ const r=el.getBoundingClientRect(), css=el.style.cssText; Object.assign(el.style,{position:"fixed",top:r.top+"px",left:r.left+"px",width:r.width+"px",margin:"0",zIndex:"1"}); el.classList.add("leaving"); return css; }
+  // iOS only shows a pressed state on touch when something listens for touches; this empty listener is what lets every button press down under the finger
+  document.addEventListener("touchstart",()=>{},{passive:true});
+  // ----- moving between pages, as a quick fade-through on the live page. The tap answers at once: the tab lights, the strip's thumb slides,
+  // the lights start to pan and the old page eases out. A tenth of a second later the new page takes its place and settles in.
+  // Pages never overlap, so nothing ghosts through, and nothing is ever drawn from a snapshot. -----
+  const EASE="cubic-bezier(.22,.8,.24,1)", OUT=110;
+  let pend=null, entering=null;
+  function settleIn(){ if(entering){ try{ entering.finish(); }catch(e){} entering=null; } }
+  // what changes on the tap itself, before the page does
+  function markTap(id,from){ const g=groupOf(id), gf=from?groupOf(from):null;
+    document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
+    if(gf===g) strip(g,id,true); else { const tr=$("subnav").querySelector(".ptrack"); if(tr&&!$("subnav").hidden&&tr.animate) tr.animate([{opacity:1},{opacity:0}],{duration:OUT,easing:"ease-in",fill:"forwards"}); }
+    if(window.bokehGo&&gf&&gf!==g) bokehGo(Object.keys(NAV).indexOf(g)); }
   function showPanel(id,opts){
-    if(!ALLP.includes(id)) id="today"; const g=groupOf(id), from=curPanel;
+    if(!ALLP.includes(id)) id="today";
+    // still easing the old page out: only where we are going changes
+    if(pend){ pend.id=id; pend.opts=opts; markTap(id,pend.from); return swapDone; }
+    settleIn();
+    const from=curPanel, oldEl=from&&from!==id?$("panel-"+from):null;
+    const move=!!(oldEl&&!oldEl.hidden&&!reduceMotion()&&!document.hidden);
+    if(!move){ commit(id,opts,from,null); return; }
+    const zoom=(ZOOM[id]&&from==="today")||(ZOOM[from]&&id==="today"), dir=dirOf(from,id,opts)==="fwd"?1:-1, near=groupOf(from)===groupOf(id);
+    const zsrc=zoom?(ZOOM[id]&&from==="today"?$(ZOOM[id]):ztop(from)):null, zr=zsrc?zsrc.getBoundingClientRect():null;
+    markTap(id,from);
+    const out=oldEl.animate(zoom?[{opacity:1},{opacity:0}]:[{opacity:1,transform:"none"},{opacity:0,transform:`translateX(${-dir*(near?14:22)}px)`}],{duration:OUT,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"});
+    let done; swapDone=new Promise(r=>done=r);
+    pend={id,opts,from,oldEl,out,zr,dir,near};
+    out.finished.then(()=>{ const P=pend; pend=null; commit(P.id,P.opts,P.from,P); swapDone=null; done(); },()=>{});
+    return swapDone;
+  }
+  function commit(id,opts,from,P){ const g=groupOf(id);
     if(!(opts&&opts.back)&&from&&from!==id){ navStack.push(from); if(navStack.length>60) navStack.shift(); }
-    settle();
     curPanel=id; store.set("mm-panel",id); try{ history.replaceState(null,"","#"+id); }catch(e){}
     if(NAV[g].length>1&&NAV[g].includes(PARENT[id]||id)) store.set("mm-last-"+g,PARENT[id]||id);
-    const oldEl=from&&from!==id?$("panel-"+from):null, move=!!(oldEl&&!oldEl.hidden&&!reduceMotion()&&!document.hidden);
-    const zoom=(ZOOM[id]&&from==="today")||(ZOOM[from]&&id==="today"), dir=dirOf(from,id,opts)==="fwd"?1:-1, near=groupOf(from)===g;
-    // the dashboard box and the card at the top of the page it opens grow into each other
-    const zsrc=move&&zoom?(ZOOM[id]&&from==="today"?$(ZOOM[id]):ztop(from)):null, zr=zsrc?zsrc.getBoundingClientRect():null;
-    const css=move?lift(oldEl):null;
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
-    strip(g,id,move);
+    if(!P&&window.bokehGo&&from&&groupOf(from)!==g) bokehGo(Object.keys(NAV).indexOf(g));
+    strip(g,id,!!P);
     ALLP.forEach(p=>{ const el=$("panel-"+p); if(el) el.hidden=p!==id; });
+    if(P){ try{ P.out.cancel(); }catch(e){} }
     if(document.body&&document.body.setAttribute) document.body.setAttribute("data-panel",id);
-    replayCascade(document.getElementById("panel-"+id));
-    document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
+    // the bar opens back up at once on a new page, rather than easing open while the page arrives
+    const de=document.documentElement; if(de&&de.classList&&de.classList.contains("hdrmin")){ de.classList.add("hdrnow"); de.classList.remove("hdrmin"); requestAnimationFrame(()=>requestAnimationFrame(()=>de.classList.remove("hdrnow"))); }
+    window.scrollTo({top:0,behavior:"instant"}); if(window.bokehScrollReset) bokehScrollReset();
+    document.dispatchEvent(new CustomEvent("panel",{detail:id}));
     document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false");
-    // a change of bottom tab pans the lights behind the glass over to that tab's part of the field
-    if(window.bokehGo&&from&&groupOf(from)!==g) bokehGo(Object.keys(NAV).indexOf(g));
-    if(!move) return;
-    oldEl.hidden=false; const nw=$("panel-"+id), dx=near?26:46;
-    const out=zoom?[{opacity:1},{opacity:0}]:[{transform:"none",opacity:1},{transform:`translateX(${-dir*dx}px)`,opacity:0}];
-    const anim=oldEl.animate(out,{duration:zoom?170:230,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"});
-    leaving={el:oldEl,css,anim}; anim.finished.then(()=>{ if(leaving&&leaving.el===oldEl) settle(); },()=>{});
-    const zdst=zoom?(ZOOM[id]&&from==="today"?ztop(id):$(ZOOM[from])):null;
-    if(zdst&&zr){ const r=zdst.getBoundingClientRect(); if(r.width&&r.height){ const sx=zr.width/r.width, sy=zr.height/r.height, tx=zr.left-r.left, ty=zr.top-r.top;
-        zdst.animate([{transformOrigin:"0 0",transform:`translate(${tx}px,${ty}px) scale(${sx},${sy})`},{transformOrigin:"0 0",transform:"none"}],{duration:420,easing:EASE}); }
-      entering=nw.animate([{opacity:0},{opacity:1}],{duration:300,easing:"ease-out",delay:40,fill:"backwards"}); }
-    else entering=nw.animate([{transform:`translateX(${dir*dx}px)`,opacity:0},{transform:"none",opacity:1}],{duration:near?300:360,easing:EASE});
+    if(!P) return;
+    const nw=$("panel-"+id), zoom=(ZOOM[id]&&from==="today")||(ZOOM[from]&&id==="today");
+    const zdst=zoom&&P.zr?(ZOOM[id]&&from==="today"?ztop(id):$(ZOOM[from])):null;
+    if(zdst){ const r=zdst.getBoundingClientRect(), zr=P.zr; if(r.width&&r.height) zdst.animate([{transformOrigin:"0 0",transform:`translate(${zr.left-r.left}px,${zr.top-r.top}px) scale(${zr.width/r.width},${zr.height/r.height})`},{transformOrigin:"0 0",transform:"none"}],{duration:380,easing:EASE});
+      entering=nw.animate([{opacity:0},{opacity:1}],{duration:220,easing:"ease-out"}); }
+    else entering=nw.animate([{opacity:0,transform:`translateX(${P.dir*(P.near?18:30)}px)`},{opacity:1,transform:"none"}],{duration:P.near?240:280,easing:EASE});
     entering.finished.then(()=>{ entering=null; },()=>{});
   }
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-backto]"); if(b) showPanel(b.dataset.backto,{back:true}); });
@@ -5234,7 +5276,9 @@ details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
         const pl=e.target.closest("[data-play]"); if(pl){ playGame(pl.dataset.play); return; }
         const node=e.target.closest("[data-game]"); if(node) openPath("game",node.dataset.game); });
       groot.addEventListener("change",e=>{ if(e.target.id==="g-cat"){ GV.cat=e.target.value; gsave2(); renderGames(); } });
-      document.addEventListener("panel",e=>{ if(e.detail==="games") renderGames(); }); document.addEventListener("lesson",renderGames); }
+      // the games page is rebuilt only when something on it has changed, not on every visit
+      let gDirty=true; ["round","study","rq","drugseen"].forEach(ev=>document.addEventListener(ev,()=>{ gDirty=true; }));
+      document.addEventListener("panel",e=>{ if(e.detail==="games"&&gDirty){ gDirty=false; renderGames(); } }); document.addEventListener("lesson",()=>{ gDirty=false; renderGames(); }); }
     const back=$("l-back"); if(back) back.addEventListener("click",()=>showPanel("games"));
     // ----- one path page for any game or drug: every lesson as a row you can read before you start it -----
     const proot=$("path"); let PATH=null;
