@@ -1297,6 +1297,11 @@ details.drug:not([open]) .dg-facts{display:grid;gap:4px;margin-top:8px;padding-t
 details.drug:not([open]) .fact{grid-template-columns:36px minmax(0,1fr);gap:8px;font-size:13.5px;line-height:1.32}
 details.drug:not([open]) .fact .fl{font-size:10px;letter-spacing:.12em;padding-top:2px}
 details.drug:not([open]) .fact b{font-size:13.5px}
+/* dose lines: one per route, each with its route tag and, when the reasons differ, the reason */
+.dlines{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 8px;align-items:baseline;min-width:0}
+.dl{display:contents} .dl .dv{min-width:0}
+.dl .rt{justify-self:start;font:600 10.5px/1.6 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:0 6px;border-radius:5px;color:var(--ink);background:color-mix(in srgb,var(--fam,var(--teal)) 22%,var(--surface-2))}
+.dl .dx{font-size:11.5px;color:var(--muted)}
 details.drug:not([open]) .fact>span:last-child{color:color-mix(in srgb,var(--ink) 82%,var(--muted));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 details.drug:not([open]) .fact:nth-child(3)>span:last-child{-webkit-line-clamp:1}
 .druglist{gap:8px}
@@ -2579,7 +2584,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
     {id:"dexamethasone",name:"Dexamethasone",brands:["Decadron"],cls:["Corticosteroid","Glucocorticoid","Anti-inflammatory"],supply:["Vial"],
       moa:["Suppresses acute and chronic inflammation","Immunosuppressive effect","Stabilizes cell membranes"],ind:["Asthma","Chronic bronchitis","Emphysema","Other reactive airway conditions","Anaphylaxis"],contra:["Known hypersensitivity"],adverse:[],routes:["IV","IO"],onset:["4 to 8 hours"],
       adult:["8 to 24 mg"],peds:["0.25 to 0.6 mg/kg, max 16 mg"],special:[],
-      quick:{moa:"Corticosteroid, reduces inflammation.",ind:"Anaphylaxis, asthma, cerebral edema.",dose:"10 to 20 mg IV/IM.",key:"May raise blood sugar."},
+      quick:{moa:"Corticosteroid, reduces inflammation.",ind:"Asthma, COPD, anaphylaxis.",dose:"8 to 24 mg IV/IO.",key:"May raise blood sugar."},
       how:"Dexamethasone is a long-acting synthetic glucocorticoid. It enters cells and changes gene transcription, switching off production of inflammatory mediators and reducing the migration of white cells into inflamed tissue, so over hours airway swelling and mucus in asthma and COPD settle and the late phase of an allergic reaction is blunted. Because it works through protein synthesis the onset is hours, and it does nothing for the next few minutes, so it is given early so that it is working by the time the bronchodilators wear off.",
       doses:[{l:"Reactive airway, anaphylaxis",pop:"adult",kind:"fixed",lo:8,hi:24,unit:"mg",route:"IV/IO"},{l:"Reactive airway, anaphylaxis",pop:"peds",kind:"perkg",lo:0.25,hi:0.6,unit:"mg",max:16,route:"IV/IO"}],stocks:[{l:"10 mg / 1 mL",c:10,u:"mg"},{l:"4 mg / 1 mL",c:4,u:"mg"}]},
     {id:"d50",name:"Dextrose 50%",brands:["D50"],cls:["Carbohydrate","Antihypoglycemic"],supply:["Prefilled syringe"],
@@ -2681,7 +2686,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
     {id:"methylpred",name:"Methylprednisolone",brands:["Solu-Medrol"],cls:["Corticosteroid","Glucocorticoid","Anti-inflammatory"],supply:["Vial"],
       moa:["Suppresses inflammation","Immunosuppressive effect","Stabilizes cellular membranes"],ind:["Asthma","Chronic bronchitis","Emphysema","Other reactive airway conditions","Anaphylaxis","Burns involving the airway"],contra:[],adverse:[],routes:["IV","IO"],onset:["1 to 6 hours"],
       adult:["125 mg"],peds:["2 to 4 mg/kg"],special:["Peak 8 hours","Duration 18 to 36 hours"],
-      quick:{moa:"Corticosteroid, reduces inflammation.",ind:"Anaphylaxis, asthma, spinal cord injury.",dose:"125 mg IV.",key:"May raise blood sugar."},
+      quick:{moa:"Corticosteroid, reduces inflammation.",ind:"Asthma, COPD, anaphylaxis, airway burns.",dose:"125 mg IV.",key:"May raise blood sugar."},
       how:"Methylprednisolone is a synthetic glucocorticoid. It acts inside the cell nucleus to turn down the genes that make inflammatory mediators, stabilizes mast cell and lysosomal membranes, and reduces the capillary leak and white cell infiltration that drive swelling, so over several hours airway inflammation in asthma, COPD and anaphylaxis settles and recurrence is less likely. Nothing happens in the first hour, which is why it is given early and paired with drugs that act now.",
       doses:[{l:"Reactive airway, anaphylaxis",pop:"adult",kind:"fixed",lo:125,hi:125,unit:"mg",route:"IV/IO"},{l:"Reactive airway, anaphylaxis",pop:"peds",kind:"perkg",lo:2,hi:4,unit:"mg",max:125,route:"IV/IO"}],stocks:[{l:"125 mg / 2 mL",c:62.5,u:"mg"}]},
     {id:"midazolam",name:"Midazolam",brands:["Versed"],cls:["Benzodiazepine","Anticonvulsant","Sedative","Hypnotic"],supply:["Vial"],
@@ -2760,6 +2765,35 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
       if(changed){ d.local=true; d.quick=Object.assign({},d.quick,{dose:d.doses.filter(x=>x.pop==="adult"&&x.kind!=="text").slice(0,3).map(x=>`${x.l}: ${x.lo===x.hi?fmt(x.lo):fmt(x.lo)+"\u2013"+fmt(x.hi)}${x.unit}${({perkg:"/kg",infmin:"/min",infhr:"/hr",infkg:"/kg/min",infkghr:"/kg/hr"})[x.kind]||""} ${x.route||""}`.trim()).join("; ")||d.quick.dose}); } });
     for(let i=DRUGS.length-1;i>=0;i--) if(off.includes(DRUGS[i].id)) DRUGS.splice(i,1);
     PACK.applied={changed:DRUGS.filter(d=>d.local).length,off:off.length}; })();
+  // ---------- the card's dose lines are built from the profile doses (after any local pack), one line per route, so the summary can never disagree with the profile ----------
+  (function quickDoseLines(){
+    const PRI=["IV/IO","IV","IO","IM","IN","Neb","PO","SL","Buccal","Topical","Inhaled","Infusion","ET","Rectal"], TAG={Infusion:"Inf",Rectal:"PR"};
+    const pri=r=>{ const i=PRI.indexOf(r); return i<0?PRI.length:i; };
+    const num=x=>fmt(x,3), base=l=>String(l||"").replace(/,\s*(initial|second|repeat) dose$/i,"").trim();
+    const PER={perkg:"/kg",infkg:"/kg/min",infkghr:"/kg/hr",infmin:"/min",infhr:"/hr"};
+    // one dose as words: the amount, its max, and the few notes that change what you give (rapid, slow, increments, per nostril, timing)
+    function amt(o,first,solo){ let lo=o.lo, hi=o.hi==null?o.lo:o.hi, u=o.unit, mx=o.max; if(u==="mg"&&lo>=1000&&hi>=1000){ lo/=1000; hi/=1000; u="g"; if(mx) mx/=1000; }
+      const t=String(o.t||""); let s=(lo===hi?num(lo):`${num(lo)} to ${num(hi)}`)+" "+u+(PER[o.kind]||"");
+      if(/per increment/i.test(t)) s+=" increments"; if(/per nostril/i.test(t)) s+=" per nostril"; if(/\bchewed\b/i.test(t)) s+=" chewed";
+      if(first&&/rapid/i.test(t)) s+=" rapid push"; if(/slow push/i.test(t)) s+=" slow push";
+      if(/^over\b/i.test(t)||(o.route==="Infusion"&&o.kind==="fixed")){ const m=/over ([\d][^;,()]*)/i.exec(t); if(m) s+=" over "+m[1].trim(); }
+      if(o.route!=="Infusion"){ const m=/every ([\d][^;,()]*)/i.exec(t); if(m) s+=" every "+m[1].trim(); }
+      if(mx) s+=`, max ${num(mx)} ${u}`; else if(first){ const m=/max(?: total)? ([\d.]+ ?[a-z][a-z/]*)/i.exec(t); if(m) s+=", max "+m[1]; }
+      const us=solo&&/usually ([\d][^;,()]*)/i.exec(t); if(us) s+=` (usually ${us[1].trim()})`;
+      return s; }
+    function lines(d){ const all=(d.doses||[]).filter(x=>!x.tag), pop=all.some(x=>x.pop==="adult")?"adult":"peds", ds=all.filter(x=>x.pop===pop&&x.kind!=="text");
+      if(!ds.length) return [];
+      // per route: the first indication listed for it, with its follow-up doses chained on
+      const by=new Map(); ds.forEach(o=>{ const r=o.route||""; if(!by.has(r)) by.set(r,[]); by.get(r).push(o); });
+      let rows=[...by.entries()].map(([r,os])=>{ const b=base(os[0].l), chain=os.filter(o=>base(o.l)===b); return {route:r,base:b,text:chain.map((o,i)=>amt(o,i===0,chain.length===1)).join(", then ")}; });
+      // routes with the same dose for the same reason share one line
+      const out=[]; rows.sort((a,b)=>pri(a.route)-pri(b.route)).forEach(x=>{ const m=out.find(y=>y.text===x.text&&y.base===x.base); if(m) m.routes.push(x.route); else out.push({routes:[x.route],base:x.base,text:x.text}); });
+      const keep=out.slice(0,3), mixed=new Set(keep.map(x=>x.base)).size>1;
+      // when the lines are for different reasons each one says why, without repeating the reason of the line above
+      return keep.map((x,i)=>({tag:x.routes.map(r=>TAG[r]||r).join("/"),text:x.text,ctx:mixed&&(i===0||keep[i-1].base!==x.base)?x.base:""})); }
+    window.quickDoses=lines;
+    DRUGS.forEach(d=>{ const L=lines(d); d.quick=Object.assign({},d.quick,{lines:L}); if(L.length) d.quick.dose=L.map(x=>`${x.tag} ${x.text}${x.ctx?` (${x.ctx})`:""}`).join("; ")+"."; });
+  })();
   // ---------- patient (shared weight and age) ----------
   const PT={kg:+store.get("mm-ptkg",80), age:store.get("mm-ptage",null)};
   function setPatient(kg,age){ if(kg!=null&&isFinite(kg)&&kg>0) PT.kg=Math.round(kg*10)/10; PT.age=age; store.set("mm-ptkg",PT.kg); store.set("mm-ptage",age); document.querySelectorAll(".ptkg").forEach(e=>e.textContent=fmt(PT.kg,1)); document.dispatchEvent(new CustomEvent("patient")); }
@@ -2853,7 +2887,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
       const hasDose=d.doses.length>0, inS=study.has(d.id);
       return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
           <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
-          <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${tight(d.quick.dose.replace(/\.$/,""))}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
+          <div class="dg-facts"><div class="fact"><span class="fl">Dose</span>${(d.quick.lines||[]).length?`<div class="dlines">${d.quick.lines.map(l=>`<div class="dl"><span class="rt">${l.tag}</span><span class="dv"><b>${tight(l.text)}</b>${l.ctx?` <span class="dx">${l.ctx}</span>`:""}</span></div>`).join("")}</div>`:`<b>${tight(d.quick.dose.replace(/\.$/,""))}</b>`}</div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
         <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
         <div class="dg-body">
