@@ -1293,7 +1293,10 @@ details.drug>summary::after{content:"";width:7px;height:7px;border-right:2px sol
 details.drug[open]>summary::after{content:"";transform:rotate(45deg)}
 details.drug:not([open]) .dg-head{grid-template-columns:1fr;gap:2px}
 details.drug:not([open]) .dg-name h3{font-size:18px}
-details.drug:not([open]) .dg-brand,details.drug:not([open]) .dg-cls{display:none}
+details.drug:not([open]) .dg-cls{display:none}
+/* the brand names stay under the generic name on a closed card, small and grey as on the open card */
+details.drug:not([open]) .dg-name{flex-direction:column;align-items:flex-start;gap:3px}
+details.drug:not([open]) .dg-brand{display:block;font-size:12.5px;line-height:1.25;padding-left:26px}
 /* the quick view stays: dose, what it's for and how it works, each held to a line or two */
 details.drug:not([open]) .dg-facts{display:grid;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
 details.drug:not([open]) .fact{grid-template-columns:36px minmax(0,1fr);gap:8px;font-size:13.5px;line-height:1.32}
