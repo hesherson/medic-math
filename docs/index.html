@@ -6143,9 +6143,9 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
   // ---------- boot ----------
   const h0=location.hash.replace("#","");
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
-  (function splash(){ const sp=document.getElementById("splash"); if(!sp) return; const cv=document.getElementById("splash-cv"), title=sp.querySelector(".splash-t"), mark=sp.querySelector(".splash-mark"), motto=sp.querySelector(".splash-m"), ink=document.getElementById("splash-ink"); const quick=(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)||!window.MedicMathParticles||!cv; let h=null, done=false, logoShape=-1, textShape=-1, fin=false; const timers=[]; document.documentElement.classList.add("splashing");
+  (function splash(){ const sp=document.getElementById("splash"); if(!sp) return; const cv=document.getElementById("splash-cv"), title=sp.querySelector(".splash-t"), mark=sp.querySelector(".splash-mark"), motto=sp.querySelector(".splash-m"), ink=document.getElementById("splash-ink"); const quick=(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)||!window.MedicMathParticles||!cv; let h=null, done=false, logoShape=-1, textShape=-1, fin=false; const timers=[]; const htm=document.documentElement; if(htm&&htm.classList) htm.classList.add("splashing");
     const later=(f,ms)=>{ timers.push(setTimeout(f,ms)); };
-    const gone=()=>{ if(done) return; done=true; timers.forEach(clearTimeout); sp.classList.add("out"); setTimeout(()=>{ sp.remove(); document.documentElement.classList.remove("splashing"); try{ h&&h.destroy(); }catch(e){} },480); };
+    const gone=()=>{ if(done) return; done=true; timers.forEach(clearTimeout); sp.classList.add("out"); setTimeout(()=>{ sp.remove(); if(htm&&htm.classList) htm.classList.remove("splashing"); try{ h&&h.destroy(); }catch(e){} },480); };
     const fade=(el,ms,to)=>{ if(!el) return; el.style.transition=`opacity ${ms}ms ease`; el.style.opacity=String(to); };
     if(quick){ sp.classList.add("plain","ending"); later(gone,1400); sp.addEventListener("click",gone); return; }
     // the motto melts from the Latin into the English as a wave across the line: each Latin letter drips away while the English letter in the same spot rises out of it
