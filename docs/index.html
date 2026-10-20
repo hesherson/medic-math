@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Lazarus</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/barlow-condensed-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/barlow-condensed-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/barlow-condensed-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2')}</style>
 <style>
 /* Layout: kneeboard card. Sticky tab bar, one column of reference sections, calculators as live panels, quiz as a single focused card. */
 :root{
@@ -1057,6 +1057,53 @@ li.tnode .l1.stack .lead{margin-left:0}
 .stabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px} .stabs::-webkit-scrollbar{display:none} .stabs .chip{flex:0 0 auto}
 .simtime{margin-top:4px} .simtime .btn{flex:1}
 .panel.simon>.lhead{display:none}
+/* ---------- full-screen tool sheets: calculators and code timer ---------- */
+.wheel.open .wtool[data-tool="meds"]{transform:translate(-139px,-57px) scale(1);transition-delay:.06s}
+.wheel.open .wtool[data-tool="code"]{transform:translate(-57px,-139px) scale(1);transition-delay:.1s}
+.tsheet{position:fixed;inset:0;z-index:60;background:var(--bg);color:var(--ink);display:flex;flex-direction:column}
+.tsheet[hidden]{display:none}
+.tsheet-top{position:relative;min-height:58px;padding:calc(14px + env(safe-area-inset-top,0px)) 96px 10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center}
+.tsheet-top .donebtn{top:calc(10px + env(safe-area-inset-top,0px))}
+.tsheet-body{flex:1;overflow:auto;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;align-content:start;max-width:720px;width:100%;margin:0 auto;box-sizing:border-box}
+.mcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.mcf{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}
+.mci{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.mci input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:500 17px var(--mono);padding:9px 10px}
+.mci em{font-style:normal;padding:0 10px;color:var(--muted);font-size:13px}
+.mcf select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 8px;min-height:42px}
+.mcout{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px;display:grid;gap:4px}
+.mcbig{font-size:32px;font-weight:600;color:var(--teal)} .mcwork{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:4px}
+.ctstart{display:grid;gap:12px} .ctgo{min-height:64px;font-size:20px}
+.ctclock{font-size:64px;font-weight:600;text-align:center;line-height:1}
+.ctcyc{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden} .ctcyc i{display:block;height:100%;background:var(--teal);border-radius:99px;width:0}
+.ctepi{border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface)}
+.ctepi b{font-family:var(--display);font-size:20px} .ctepi span{font-size:13px;color:var(--muted);text-align:right}
+.ctepi.wait{border-color:var(--good)} .ctepi.due{border-color:var(--amber);background:var(--amber-soft)} .ctepi.over{border-color:var(--bad);background:var(--bad-soft)} .ctepi.over b{color:var(--bad)}
+.ctcount{display:grid;grid-template-columns:repeat(3,1fr);gap:8px} .ctcount>div{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;display:grid;background:var(--surface)} .ctcount b{font-size:26px} .ctcount span{font-size:12px;color:var(--muted)}
+.ctev{display:flex;flex-wrap:wrap;gap:8px} .ctev .chip{min-height:46px;font-size:14px} .ctev .chip.big{background:var(--teal);color:var(--teal-ink);border-color:var(--teal);font-weight:600;min-width:120px}
+.ctlog{margin:0;white-space:pre-wrap;font:13px/1.5 var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;max-height:240px;overflow:auto}
+/* ---------- protocol packs, assignments, QR ---------- */
+.pksearch{width:100%;box-sizing:border-box;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.pklist{display:grid;gap:6px}
+.pkrow{appearance:none;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:10px 12px;font:inherit;cursor:pointer}
+.pkrow.on{border-color:var(--amber)} .pkrow.on .note{color:var(--amber)} .pkrow.off{opacity:.65} .pkrow.off .note{color:var(--bad)}
+.pksave{position:sticky;bottom:0;background:var(--bg);padding:8px 0}
+.pkh{margin:4px 0 0;font-family:var(--display);font-size:24px}
+.pkdose{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px;background:var(--surface)}
+.pkdl{display:grid;gap:2px} .pkdl .note{font-size:12px}
+.pkin{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap} .pkin label{display:grid;gap:3px;font-size:11.5px;color:var(--muted)}
+.pkin input{width:84px;font:500 16px var(--mono);padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)} .pkin em{font-style:normal;color:var(--muted);padding-bottom:10px}
+#pack-card textarea,.codebox,.tsheet textarea{width:100%;box-sizing:border-box;font:12px/1.4 var(--mono);padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.qrwrap{display:flex;justify-content:center} .qr{width:min(260px,70vw);height:auto;border-radius:8px;border:6px solid #fff}
+.filebtn{cursor:pointer;display:inline-flex;align-items:center}
+.aslist{list-style:none;margin:6px 0;padding:0;display:grid;gap:4px}
+.aslist li{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:14px}
+.aslink{appearance:none;border:0;background:none;color:var(--ink);font:inherit;padding:4px 0;text-align:left;cursor:pointer} .aslist li.ok .aslink b{color:var(--good)} .aslist li .note{font-size:12px;text-align:right}
+.aspick summary{cursor:pointer;font-weight:600;padding:6px 0} .aspick .chklist{max-height:260px;overflow:auto}
+.asout{margin-top:8px;display:grid;gap:6px}
+.drug .localtag{display:inline-block;margin-left:6px;font:600 10.5px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber);border-radius:99px;padding:3px 7px;vertical-align:middle}
+.pdfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px} .pdfgrid .btn{display:grid;gap:2px;text-align:left;padding:10px 12px;min-height:58px} .pdfgrid .btn small{font-family:var(--body);font-size:11.5px;font-weight:400;letter-spacing:0;text-transform:none;opacity:.85}
+#remind-card input[type=time]{font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1117,6 +1164,7 @@ li.tnode .l1.stack .lead{margin-left:0}
     <div class="lvlring" id="lv-ring"></div>
     <div class="lvlinfo"><span class="eyebrow">Level <b id="lv-n">1</b></span><h2 id="lv-title">Candidate</h2><div class="xpbar"><i id="lv-bar"></i></div><span class="note" id="lv-next"></span></div>
   </div>
+  <div class="actcard" id="assign-card" hidden></div>
   <div class="statcards six">
     <div class="k"><b class="num" id="t-streak">0</b><span>day streak</span></div>
     <div class="k"><b class="num" id="t-xpday">0</b><span>XP today</span></div>
@@ -1179,6 +1227,11 @@ li.tnode .l1.stack .lead{margin-left:0}
 
 <!-- ================= REFERENCE ================= -->
 <section class="panel" id="panel-ref" hidden>
+  <div class="rcard pdfcard">
+    <header><span class="eyebrow">Print</span><h2>PDFs to print or keep</h2><p class="lead">Strips and 12-leads print on true ECG paper at 100% scale.</p></header>
+    <div class="pdfgrid"><button type="button" class="btn amber" data-pdf="cards">Drug cards<small>your study set, 4 a page</small></button><button type="button" class="btn" data-pdf="rhythms">Rhythm strips<small>every rhythm, 6 s each</small></button><button type="button" class="btn" data-pdf="twelve">12-lead atlas<small>13 patterns, landscape</small></button><button type="button" class="btn" data-pdf="ref">Quick reference<small>vitals, GCS, APGAR, triage, formulas</small></button></div>
+    <p class="note" id="pdf-msg"></p>
+  </div>
   <div class="rule">
     <span class="eyebrow" style="color:inherit;opacity:.8">The one rule</span>
     <div class="big">% = grams in every 100 mL</div>
@@ -1478,6 +1531,16 @@ li.tnode .l1.stack .lead{margin-left:0}
 <!-- ================= PROCTOR ================= -->
 <section class="panel" id="panel-proctor" hidden>
   <div class="rcard">
+    <header><span class="eyebrow">Class assignment</span><h2>Assign drugs and games</h2><p class="lead">Pick what is due and share one code. Each student sends back one line.</p></header>
+    <div id="as-build"></div>
+  </div>
+  <div class="rcard">
+    <header><span class="eyebrow">Join</span><h2>Got a code from your instructor?</h2></header>
+    <label class="mcf"><span>Your name</span><span class="mci"><input id="as-student" placeholder="First and last"></span></label>
+    <label class="mcf"><span>Assignment code</span><textarea id="as-code" rows="3" placeholder="LZA1..."></textarea></label>
+    <div class="btnrow"><button type="button" class="btn amber" id="as-join">Join</button><label class="btn alt filebtn">From a file<input type="file" id="as-file" accept=".json,.txt,text/plain" hidden></label></div><p class="note" id="as-msg"></p>
+  </div>
+  <div class="rcard">
     <header><span class="eyebrow">Proctor</span><h2>Run a student through scenarios</h2><p class="lead">Pick scenarios and hand over the phone. First attempts count. Finish gives one line for the AAR.</p></header>
     <div class="fields"><div class="field"><label for="pr-name">Student</label><input type="text" id="pr-name"></div><div class="field"><label for="pr-code">Code (optional)</label><input type="text" id="pr-code" placeholder="auto"></div></div>
     <div class="chklist" id="pr-list"></div>
@@ -1486,7 +1549,7 @@ li.tnode .l1.stack .lead{margin-left:0}
   </div>
   <div class="rcard">
     <header><span class="eyebrow">Class view</span><h2>Paste result lines</h2></header>
-    <textarea id="cv-in" rows="4" placeholder="One PILLAR-MM line per row"></textarea>
+    <textarea id="cv-in" rows="4" placeholder="One result line per row: proctor runs or assignments"></textarea>
     <div class="btnrow"><button type="button" class="btn" id="cv-parse">Build table</button></div>
     <div id="cv-out"></div>
   </div>
@@ -1494,6 +1557,8 @@ li.tnode .l1.stack .lead{margin-left:0}
 
 <!-- ================= SETTINGS ================= -->
 <section class="panel" id="panel-settings" hidden>
+  <div class="rcard" id="pack-card"></div>
+  <div class="rcard" id="remind-card"></div>
   <div class="rcard">
     <header><span class="eyebrow">Theme</span><h2>Colours</h2><p class="lead">Auto follows the phone.</p></header>
     <div class="chips"><button type="button" class="chip" data-appearance="auto">Auto</button><button type="button" class="chip" data-appearance="dark">Dark</button><button type="button" class="chip" data-appearance="light">Light</button></div>
@@ -1528,12 +1593,26 @@ li.tnode .l1.stack .lead{margin-left:0}
     <p class="note">Built for PILLAR training. Doses are standard published ranges and the WVFD profile set; verify every number against your protocol before use on a patient. Progress is stored only on this device.</p>
   </div>
 </section>
+<div class="tsheet" id="medcalc" hidden role="dialog" aria-label="Dose calculators">
+  <div class="tsheet-top"><span class="eyebrow">Calculators</span><button type="button" class="donebtn" id="mc-close">Done</button></div>
+  <div class="tsheet-body"><div class="chips" id="mc-tabs"></div><div class="mcgrid" id="mc-form"></div><div class="mcout" id="mc-out" aria-live="polite"></div><p class="note">Check every number against your protocol.</p></div>
+</div>
+<div class="tsheet" id="codet" hidden role="dialog" aria-label="Code timer">
+  <div class="tsheet-top"><span class="eyebrow">Code timer</span><button type="button" class="donebtn" id="ct-close">Done</button></div>
+  <div class="tsheet-body" id="ct-body"></div>
+</div>
+<div class="tsheet" id="packed" hidden role="dialog" aria-label="Protocol pack">
+  <div class="tsheet-top"><span class="eyebrow">Protocol pack</span><button type="button" class="donebtn" id="pk-x">Done</button></div>
+  <div class="tsheet-body" id="pk-body"></div>
+</div>
 
 <footer>Reference doses are standard published ranges and the WVFD profile set. Verify every number against local protocol before use.</footer>
 </main>
 <div class="wheel" id="wheel">
   <button type="button" class="wtool" data-tool="calc" aria-label="Calculator"><svg viewBox="0 0 24 24"><path d="M5 3h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v4h12V5zm0 6v2h3v-2zm5 0v2h3v-2zm5 0v2h2v-2zM6 15v2h3v-2zm5 0v2h3v-2zm5 0v4h2v-4zM6 19v2h8v-2z"/></svg><span>Calc</span></button>
   <button type="button" class="wtool" data-tool="board" aria-label="Whiteboard"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zm17.7-10.2a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></svg><span>Board</span></button>
+  <button type="button" class="wtool" data-tool="meds" aria-label="Dose calculators"><svg viewBox="0 0 24 24"><path d="M7 2h10v2h-1v3.2l4.6 8A3.5 3.5 0 0 1 17.6 21H6.4a3.5 3.5 0 0 1-3-5.8L8 7.2V4H7zm3 2v3.7L7.6 12h8.8L14 7.7V4z"/></svg><span>Doses</span></button>
+  <button type="button" class="wtool" data-tool="code" aria-label="Code timer"><svg viewBox="0 0 24 24"><path d="M9 1h6v2H9zm3 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zm0 2a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm-1 2h2v5.4l3.3 2-1 1.7L11 14.5z"/></svg><span>Code</span></button>
   <button type="button" class="wtool" data-tool="listen" aria-label="Listen"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><span>Listen</span></button>
 </div>
 <button class="calcfab" id="calc-open" type="button" aria-label="Tools" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></button>
@@ -1690,14 +1769,15 @@ li.tnode .l1.stack .lead{margin-left:0}
     function grid(w,h){ let mi="",ma=""; for(let x=0;x<=w+.001;x+=1){ (Math.round(x)%5===0?(ma+=`M${x} 0V${h}`):(mi+=`M${x} 0V${h}`)); } for(let y=0;y<=h+.001;y+=1){ (Math.round(y)%5===0?(ma+=`M0 ${y}H${w}`):(mi+=`M0 ${y}H${w}`)); }
       return `<rect width="${w}" height="${h}" fill="${PAPER}"/><path d="${mi}" stroke="${MINOR}" stroke-width=".1" fill="none"/><path d="${ma}" stroke="${MAJOR}" stroke-width=".22" fill="none"/>`; }
     // trace from t0 to t1 seconds starting at x0 mm, baseline at y0 mm; points that sit on a straight line are dropped
-    function trace(fn,t0,t1,x0,y0,dt){ dt=dt||.0025; const pts=[]; for(let t=t0;t<=t1+1e-9;t+=dt){ pts.push([x0+(t-t0)*MMS,y0-fn(t)*MMV]); }
+    function trace(fn,t0,t1,x0,y0,dt){ const keep=tracePts(fn,t0,t1,x0,y0,dt); return "M"+keep.map(p=>p[0].toFixed(2)+" "+p[1].toFixed(2)).join("L"); }
+    function tracePts(fn,t0,t1,x0,y0,dt){ dt=dt||.0025; const pts=[]; for(let t=t0;t<=t1+1e-9;t+=dt){ pts.push([x0+(t-t0)*MMS,y0-fn(t)*MMV]); }
       // Ramer-Douglas-Peucker: drop only points that sit within 0.02 mm of the line the kept points draw
       const keepF=new Uint8Array(pts.length); keepF[0]=keepF[pts.length-1]=1; const st=[[0,pts.length-1]];
       while(st.length){ const [i0,i1]=st.pop(); const A=pts[i0], B=pts[i1]; let mx=0, mi=-1; const dx=B[0]-A[0], dy=B[1]-A[1], L=Math.hypot(dx,dy)||1;
         for(let i=i0+1;i<i1;i++){ const d=Math.abs(dy*(pts[i][0]-A[0])-dx*(pts[i][1]-A[1]))/L; if(d>mx){ mx=d; mi=i; } }
         if(mx>.02){ keepF[mi]=1; st.push([i0,mi],[mi,i1]); } }
       const keep=pts.filter((p,i)=>keepF[i]);
-      return "M"+keep.map(p=>p[0].toFixed(2)+" "+p[1].toFixed(2)).join("L"); }
+      return keep; }
     const cal=(x,y)=>`M${x} ${y}H${x+1.5}V${y-10}H${x+6.5}V${y}H${x+8}`;
     const svgOpen=(w,h,cls,label)=>`<svg class="ecgpaper ${cls||""}" viewBox="0 0 ${w} ${h}" width="${w*3.78}" height="${h*3.78}" preserveAspectRatio="xMinYMin meet" role="img" aria-label="${label||"ECG"}" data-mmw="${w}">`;
     const txt=(x,y,s,size,anchor)=>`<text x="${x}" y="${y}" font-size="${size||3.2}" font-family="Arial,Helvetica,sans-serif" font-weight="700" fill="#222" ${anchor?`text-anchor="${anchor}"`:""}>${s}</text>`;
@@ -1778,7 +1858,7 @@ li.tnode .l1.stack .lead{margin-left:0}
       const size=()=>{ const sv=ov.querySelector("svg"); if(!sv) return; const mm=+sv.dataset.mmw||200; const px=Math.round(mm*z); sv.setAttribute("width",String(px)); sv.removeAttribute("height"); sv.style.width=px+"px"; sv.style.maxWidth="none"; sv.style.height="auto"; const n=document.getElementById("ecgv-n"); if(n) n.textContent=Math.round(z/3.78*100)+"%"; };
       document.addEventListener("click",e=>{ const host=e.target.closest(".ecgzoom"); if(!host) return; const sv=host.querySelector("svg.ecgpaper"); if(!sv) return; if(!ov) build(); document.getElementById("ecgv-body").innerHTML=sv.outerHTML; z=Math.max(3.78,Math.min(6,(window.innerWidth-24)/(+sv.dataset.mmw||200)*1.6)); size(); ov.hidden=false; });
     })();
-    window.ECGX={twelve,rhythm,capno,TWELVE,RHY,CAP,LEADS,leadValue,vent,MMS,MMV,stripSVG,twelveSVG,capnoSVG};
+    window.ECGX={tracePts,LAYOUT,twelve,rhythm,capno,TWELVE,RHY,CAP,LEADS,leadValue,vent,MMS,MMV,stripSVG,twelveSVG,capnoSVG};
   })();
   // ---------- settings, feedback, navigation ----------
   const SET=Object.assign({haptics:true,sound:false,strict:false,studyOnly:true},store.get("mm-set",{}));
@@ -1844,6 +1924,9 @@ li.tnode .l1.stack .lead{margin-left:0}
     const closeTop=()=>{
       const ex=$("exitask"); if(ex&&!ex.hidden){ ex.hidden=true; return true; }
       if(vis("ecgview")){ $("ecgview").hidden=true; return true; }
+      if(vis("medcalc")){ $("medcalc").hidden=true; return true; }
+      if(vis("codet")){ $("codet").hidden=true; return true; }
+      if(vis("packed")){ $("packed").hidden=true; return true; }
       if(vis("lesson")&&window.roundBack&&roundBack()) return true;
       if(vis("panel-sim")&&window.simBack&&simBack()) return true;
       if(vis("wb")){ $("wb-close").click(); return true; }
@@ -2306,6 +2389,17 @@ li.tnode .l1.stack .lead{margin-left:0}
       how:"Sodium bicarbonate buffers hydrogen ions, combining with them to form water and carbon dioxide and so raising the blood pH. In hyperkalemia the rise in pH shifts potassium into cells; in tricyclic overdose the sodium load and the alkaline pH together pull the drug off cardiac sodium channels and narrow the QRS. The carbon dioxide it generates has to be breathed off, so a patient who is not being ventilated well becomes more acidotic inside the cells, which is why it is not routine in cardiac arrest. It precipitates with calcium in the line and inactivates catecholamines, so flush between drugs.",
       doses:[{l:"Acidosis, hyperkalemia, TCA overdose",pop:"adult",kind:"perkg",lo:1,hi:1,unit:"mEq",route:"IV/IO",t:"slow push; flush before and after"},{l:"Acidosis, as 4.2%",pop:"peds",kind:"perkg",lo:1,hi:1,unit:"mEq",route:"IV/IO",t:"slow push",stock:1}],stocks:[{l:"50 mEq / 50 mL (8.4%)",c:1,u:"mEq"},{l:"4.2% peds (0.5 mEq/mL)",c:0.5,u:"mEq"}]}
   ];
+  // ---------- local protocol pack: agency doses replace the standard ones before anything else reads the drug list ----------
+  // pack: {v, name, agency, date, ov:{drugId:{d:{index:{lo,hi,max,t}}, note, off}}}
+  const PACK=(function(){ let p=null; try{ p=JSON.parse(localStorage.getItem("mm-pack")||"null"); }catch(e){ p=null; } return p&&p.ov?p:null; })();
+  (function applyPack(){ window.__ALLDRUGS=JSON.parse(JSON.stringify(DRUGS)); if(!PACK) return; const off=[];
+    const fmt=x=>String(Math.round(x*1000)/1000);
+    Object.keys(PACK.ov).forEach(id=>{ const d=DRUGS.find(x=>x.id===id), o=PACK.ov[id]; if(!d||!o) return; if(o.off){ off.push(id); return; }
+      let changed=false; Object.keys(o.d||{}).forEach(i=>{ const ds=d.doses[+i], c=o.d[i]; if(!ds||!c) return; ["lo","hi","max"].forEach(k=>{ if(c[k]!=null&&c[k]!==""&&isFinite(+c[k])){ if(ds[k]!==+c[k]){ ds[k]=+c[k]; changed=true; } } }); if(ds.lo>ds.hi) ds.hi=ds.lo; if(c.t!=null&&c.t!==ds.t){ ds.t=c.t; changed=true; } if(changed) ds.local=true; });
+      if(o.note){ d.localNote=o.note; changed=true; }
+      if(changed){ d.local=true; d.quick=Object.assign({},d.quick,{dose:d.doses.filter(x=>x.pop==="adult"&&x.kind!=="text").slice(0,3).map(x=>`${x.l}: ${x.lo===x.hi?fmt(x.lo):fmt(x.lo)+"\u2013"+fmt(x.hi)}${x.unit}${({perkg:"/kg",infmin:"/min",infhr:"/hr",infkg:"/kg/min",infkghr:"/kg/hr"})[x.kind]||""} ${x.route||""}`.trim()).join("; ")||d.quick.dose}); } });
+    for(let i=DRUGS.length-1;i>=0;i--) if(off.includes(DRUGS[i].id)) DRUGS.splice(i,1);
+    PACK.applied={changed:DRUGS.filter(d=>d.local).length,off:off.length}; })();
   // ---------- patient (shared weight and age) ----------
   const PT={kg:+store.get("mm-ptkg",80), age:store.get("mm-ptage",null)};
   function setPatient(kg,age){ if(kg!=null&&isFinite(kg)&&kg>0) PT.kg=Math.round(kg*10)/10; PT.age=age; store.set("mm-ptkg",PT.kg); store.set("mm-ptage",age); document.querySelectorAll(".ptkg").forEach(e=>e.textContent=fmt(PT.kg,1)); document.dispatchEvent(new CustomEvent("patient")); }
@@ -2398,7 +2492,7 @@ li.tnode .l1.stack .lead{margin-left:0}
     function card(d){
       const hasDose=d.doses.length>0, inS=study.has(d.id);
       return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
-          <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
+          <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span><b>${tight(d.quick.dose.replace(/\.$/,""))}</b></div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
         <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
@@ -2407,7 +2501,7 @@ li.tnode .l1.stack .lead{margin-left:0}
           <div class="dg-grid">
             ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b>kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
             <section><h4>Onset</h4>${timingBlock(d)}</section>
-            <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>
+            <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>${d.localNote?`<section><h4>Local protocol</h4><p class="kc">${String(d.localNote).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}</p></section>`:""}
             <section><h4>Standard supply</h4>${li(d.supply.map(tight))}</section>
             <section><h4>Mechanism of action</h4>${li(d.moa)}</section>
             <section><h4>Indications</h4>${li(d.ind)}</section>
@@ -4523,6 +4617,221 @@ li.tnode .l1.stack .lead{margin-left:0}
     renderHist();
     window.__CAT={eap,P,DOM,MODES,Phi,nextItem:()=>nextItem(),setX:x=>{ X=x; },fromSource,drugItem};
   })();
+window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,(function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1}))},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(t,r){var e=n("友");if(2!=e.length||38726!=(e[0]<<8|e[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();return t.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},t}();  // ---------- sharing: compact codes, QR codes, saving files, the share sheet ----------
+  const SHARE=(function(){
+    const WEB="https://hesherson.github.io/medic-math/";
+    const b64u=bytes=>{ let s=""; const ch=8192; for(let i=0;i<bytes.length;i+=ch) s+=String.fromCharCode.apply(null,bytes.subarray(i,i+ch)); return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); };
+    const unb64u=str=>{ str=str.replace(/-/g,"+").replace(/_/g,"/"); while(str.length%4) str+="="; const bin=atob(str); const out=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; };
+    const te=new TextEncoder(), td=new TextDecoder();
+    async function pipe(bytes,stream){ const s=new Blob([bytes]).stream().pipeThrough(stream); return new Uint8Array(await new Response(s).arrayBuffer()); }
+    // TAG1. is deflated JSON, TAG0. is plain JSON for old browsers
+    async function enc(obj,tag){ const raw=te.encode(JSON.stringify(obj)); if(typeof CompressionStream!=="undefined"){ try{ return tag+"1."+b64u(await pipe(raw,new CompressionStream("deflate-raw"))); }catch(e){} } return tag+"0."+b64u(raw); }
+    async function dec(code){ code=String(code||"").trim(); const m=/([A-Z]{3})([01])\.([A-Za-z0-9_-]+)/.exec(code); if(!m) throw new Error("Not a Lazarus code."); let bytes=unb64u(m[3]); if(m[2]==="1"){ if(typeof DecompressionStream==="undefined") throw new Error("This browser can't unpack that code."); bytes=await pipe(bytes,new DecompressionStream("deflate-raw")); } return {tag:m[1],data:JSON.parse(td.decode(bytes))}; }
+    function qr(text){ if(!window.__QR) return ""; let q=null; for(const lvl of ["M","L"]){ try{ q=window.__QR(0,lvl); q.addData(text,"Byte"); q.make(); break; }catch(e){ q=null; } } if(!q) return `<p class="note">Too long for one QR code. Share the file or the code instead.</p>`;
+      const n=q.getModuleCount(), pad=4, sz=n+pad*2; let d=""; for(let r=0;r<n;r++) for(let c=0;c<n;c++) if(q.isDark(r,c)) d+=`M${c+pad} ${r+pad}h1v1h-1z`;
+      return `<svg class="qr" viewBox="0 0 ${sz} ${sz}" shape-rendering="crispEdges" role="img" aria-label="QR code"><rect width="${sz}" height="${sz}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`; }
+    const cap=()=>window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.Plugins||null;
+    // native: write to the cache folder and open the share sheet; browser: download
+    async function save(name,mime,data){ const P=cap();
+      if(P&&P.Filesystem&&P.Share){ try{ const b64=typeof data==="string"?btoa(unescape(encodeURIComponent(data))):(()=>{ let s=""; for(let i=0;i<data.length;i+=8192) s+=String.fromCharCode.apply(null,data.subarray(i,i+8192)); return btoa(s); })();
+          const w=await P.Filesystem.writeFile({path:name,data:b64,directory:"CACHE"}); await P.Share.share({title:name,files:[w.uri],dialogTitle:"Save or send"}); return "shared"; }catch(e){ if(String(e&&e.message||e).match(/cancel/i)) return "cancelled"; } }
+      const blob=new Blob([data],{type:mime}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },4000); return "downloaded"; }
+    async function shareText(text,title){ const P=cap(); try{ if(P&&P.Share){ await P.Share.share({title:title||"Lazarus",text}); return "shared"; } if(navigator.share){ await navigator.share({title:title||"Lazarus",text}); return "shared"; } }catch(e){ return "cancelled"; }
+      try{ await navigator.clipboard.writeText(text); return "copied"; }catch(e){ return "failed"; } }
+    async function copy(text){ try{ await navigator.clipboard.writeText(text); return true; }catch(e){ return false; } }
+    const readFile=file=>new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result)); r.onerror=rej; r.readAsText(file); });
+    return {enc,dec,qr,save,shareText,copy,readFile,WEB,native:()=>!!cap()};
+  })();
+  window.SHARE=SHARE;
+  // ---------- protocol pack editor, sharing, and class assignments ----------
+  (function packs(){
+    const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const D="\u2013";
+    const ALL=window.__ALLDRUGS||DRUGS;
+    const fmt=x=>String(Math.round(x*1000)/1000);
+    const SUF={perkg:"/kg",infmin:"/min",infhr:"/hr",infkg:"/kg/min",infkghr:"/kg/hr"};
+    const doseTxt=ds=>ds.kind==="text"?(ds.t||""):`${ds.lo===ds.hi?fmt(ds.lo):fmt(ds.lo)+D+fmt(ds.hi)}${ds.unit}${SUF[ds.kind]||""}${ds.max?`, max ${fmt(ds.max)}${ds.unit}`:""}`;
+    // ----- settings card -----
+    function card(){ const el=$("pack-card"); if(!el) return; const p=PACK;
+      el.innerHTML=`<header><span class="eyebrow">Local protocol</span><h2>${p?esc(p.name||"Agency pack"):"Standard doses"}</h2><p class="lead">${p?`${esc(p.agency||"")}${p.agency?". ":""}${p.applied?`${p.applied.changed} drug${p.applied.changed===1?"":"s"} changed${p.applied.off?`, ${p.applied.off} not carried`:""}`:""}. Lessons, exams and cards use these doses.`:"Set your agency's doses once and every lesson, card and exam uses them."}</p></header>
+        <div class="btnrow"><button type="button" class="btn amber" id="pk-edit">${p?"Edit pack":"Make a pack"}</button><button type="button" class="btn alt" id="pk-import">Import</button>${p?`<button type="button" class="btn alt" id="pk-share">Share</button><button type="button" class="btn alt" id="pk-clear">Back to standard</button>`:""}</div>
+        <div id="pk-io" hidden></div>`; }
+    // ----- editor sheet -----
+    const ed=$("packed"); let draft=null, cur=null, q="";
+    function openEditor(){ draft=JSON.parse(JSON.stringify(PACK||{v:1,name:"",agency:"",ov:{}})); cur=null; q=""; ed.hidden=false; drawEd(); }
+    function drawEd(){ const b=$("pk-body"); if(!b) return;
+      if(!cur){ const list=ALL.filter(d=>!q||d.name.toLowerCase().includes(q)||(d.brands||[]).join(" ").toLowerCase().includes(q));
+        b.innerHTML=`<div class="mcgrid"><label class="mcf"><span>Pack name</span><span class="mci"><input id="pk-name" value="${esc(draft.name)}" placeholder="County protocols 2026"></span></label><label class="mcf"><span>Agency</span><span class="mci"><input id="pk-agency" value="${esc(draft.agency)}" placeholder="Agency name"></span></label></div>
+          <input type="search" class="pksearch" id="pk-q" placeholder="Find a drug" value="${esc(q)}" aria-label="Find a drug">
+          <div class="pklist">${list.map(d=>{ const o=draft.ov[d.id]; const n=o?Object.keys(o.d||{}).length:0; return `<button type="button" class="pkrow ${o&&o.off?"off":n||o&&o.note?"on":""}" data-pkd="${d.id}"><b>${esc(d.name)}</b><span class="note">${o&&o.off?"Not carried":n?`${n} dose${n>1?"s":""} changed`:o&&o.note?"Note added":"Standard"}</span></button>`; }).join("")}</div>
+          <div class="btnrow pksave"><button type="button" class="btn amber" id="pk-save">Save and apply</button><button type="button" class="btn alt" id="pk-cancel">Cancel</button></div>`; return; }
+      const d=ALL.find(x=>x.id===cur), o=draft.ov[cur]||{d:{}};
+      b.innerHTML=`<button type="button" class="backchip" id="pk-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>All drugs</button><h2 class="pkh">${esc(d.name)}</h2>
+        <label class="setrow"><div><b>Not carried</b><div class="note">Drops it from lessons, cards and exams.</div></div><input type="checkbox" id="pk-off" ${o.off?"checked":""}></label>
+        ${d.doses.map((ds,i)=>{ const c=(o.d||{})[i]||{}; if(ds.kind==="text") return `<div class="pkdose"><div class="pkdl"><b>${esc(ds.l)}</b><span class="note">${esc(ds.t||"")}</span></div></div>`; return `<div class="pkdose"><div class="pkdl"><b>${esc(ds.l)}</b><span class="note">${ds.pop==="peds"?"Pediatric":"Adult"} · ${esc(ds.route||"")} · standard ${esc(doseTxt(ds))}</span></div>
+          <div class="pkin"><label>Low<input inputmode="decimal" data-i="${i}" data-k="lo" value="${c.lo!=null?c.lo:""}" placeholder="${fmt(ds.lo)}"></label><label>High<input inputmode="decimal" data-i="${i}" data-k="hi" value="${c.hi!=null?c.hi:""}" placeholder="${fmt(ds.hi)}"></label><label>Max<input inputmode="decimal" data-i="${i}" data-k="max" value="${c.max!=null?c.max:""}" placeholder="${ds.max?fmt(ds.max):"none"}"></label><em>${esc(ds.unit)}${SUF[ds.kind]||""}</em></div></div>`; }).join("")}
+        <label class="mcf"><span>Local note, shown on the card</span><textarea id="pk-note" rows="2" placeholder="Med control before second dose">${esc(o.note||"")}</textarea></label>`; }
+    function readDrug(){ if(!cur) return; const o={d:{}}; const off=$("pk-off"); if(off&&off.checked) o.off=true;
+      ed.querySelectorAll(".pkin input").forEach(inp=>{ const v=inp.value.trim(); if(v==="") return; const x=parseFloat(v); if(!isFinite(x)) return; const i=inp.dataset.i; (o.d[i]=o.d[i]||{})[inp.dataset.k]=x; });
+      const note=$("pk-note"); if(note&&note.value.trim()) o.note=note.value.trim();
+      if(!o.off&&!Object.keys(o.d).length&&!o.note) delete draft.ov[cur]; else draft.ov[cur]=o; }
+    if(ed){ ed.addEventListener("click",e=>{ const r=e.target.closest("[data-pkd]"); if(r){ draft.name=($("pk-name")||{}).value||draft.name; draft.agency=($("pk-agency")||{}).value||draft.agency; cur=r.dataset.pkd; drawEd(); ed.querySelector(".tsheet-body").scrollTop=0; return; }
+        if(e.target.closest("#pk-back")){ readDrug(); cur=null; drawEd(); return; }
+        if(e.target.closest("#pk-save")){ draft.name=$("pk-name").value.trim()||"Agency pack"; draft.agency=$("pk-agency").value.trim(); draft.date=new Date().toISOString().slice(0,10); apply(draft); return; }
+        if(e.target.closest("#pk-cancel")||e.target.closest("#pk-x")){ if(cur) readDrug(); ed.hidden=true; } });
+      ed.addEventListener("input",e=>{ if(e.target.id==="pk-q"){ q=e.target.value.trim().toLowerCase(); const pos=e.target.selectionStart; drawEd(); const n=$("pk-q"); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(x){} } }); }
+    function apply(p){ if(!p||!p.ov||!Object.keys(p.ov).length){ store.set("mm-pack",null); } else store.set("mm-pack",{v:1,name:p.name,agency:p.agency,date:p.date,ov:p.ov}); location.reload(); }
+    // ----- import and share -----
+    const io=()=>$("pk-io");
+    function showImport(){ const el=io(); el.hidden=false; el.innerHTML=`<label class="mcf"><span>Paste a pack code</span><textarea id="pk-code" rows="3" placeholder="LZP1..."></textarea></label><div class="btnrow"><button type="button" class="btn" id="pk-doimport">Import code</button><label class="btn alt filebtn">Choose a file<input type="file" id="pk-file" accept=".json,.lazarus,application/json,text/plain" hidden></label></div><p class="note" id="pk-msg"></p>`; }
+    async function importText(text){ const msg=$("pk-msg"); try{ let data=null; text=String(text||"").trim(); if(/^\{/.test(text)) data=JSON.parse(text); else { const r=await SHARE.dec(text); if(r.tag!=="LZP") throw new Error("That code is not a protocol pack."); data=r.data; } if(!data.ov) throw new Error("No doses in that pack.");
+        const n=Object.keys(data.ov).length; if(confirmBox(`Use "${data.name||"Agency pack"}"? It changes ${n} drug${n===1?"":"s"}.`)) apply(data); }catch(e){ if(msg) msg.textContent=e.message||"Could not read that."; } }
+    const confirmBox=t=>{ try{ return window.confirm(t); }catch(e){ return true; } };
+    async function showShare(){ const el=io(); el.hidden=false; el.innerHTML=`<p class="note">Packing…</p>`; const code=await SHARE.enc({v:1,name:PACK.name,agency:PACK.agency,date:PACK.date,ov:PACK.ov},"LZP"); const link=SHARE.WEB+"#pack="+code;
+      el.innerHTML=`<div class="qrwrap">${SHARE.qr(link)}</div><p class="note">Scan to open it in the web app, or send the file. Code:</p><textarea readonly rows="3" class="codebox">${esc(code)}</textarea>
+        <div class="btnrow"><button type="button" class="btn" id="pk-copy">Copy code</button><button type="button" class="btn alt" id="pk-file-out">Save file</button><button type="button" class="btn alt" id="pk-send">Send link</button></div>`;
+      el.dataset.code=code; el.dataset.link=link; }
+    document.addEventListener("click",async e=>{ if(!e.target.closest("#pack-card")) return;
+      if(e.target.closest("#pk-edit")) openEditor(); else if(e.target.closest("#pk-import")) showImport(); else if(e.target.closest("#pk-share")) showShare();
+      else if(e.target.closest("#pk-clear")){ if(confirmBox("Go back to the standard doses?")){ store.set("mm-pack",null); location.reload(); } }
+      else if(e.target.closest("#pk-doimport")) importText($("pk-code").value);
+      else if(e.target.closest("#pk-copy")){ if(await SHARE.copy(io().dataset.code)) e.target.textContent="Copied"; }
+      else if(e.target.closest("#pk-file-out")){ const name=(PACK.name||"pack").replace(/[^\w-]+/g,"-").toLowerCase()+".lazarus.json"; SHARE.save(name,"application/json",JSON.stringify({v:1,name:PACK.name,agency:PACK.agency,date:PACK.date,ov:PACK.ov},null,1)); }
+      else if(e.target.closest("#pk-send")) SHARE.shareText(`${PACK.name} protocol pack for Lazarus: ${io().dataset.link}`,PACK.name); });
+    document.addEventListener("change",async e=>{ if(e.target.id==="pk-file"&&e.target.files[0]) importText(await SHARE.readFile(e.target.files[0])); if(e.target.id==="as-file"&&e.target.files[0]) joinText(await SHARE.readFile(e.target.files[0])); });
+
+    // ----- class assignments: instructor builds, student joins, results come back as one line -----
+    const GAMESL=()=>(window.GAMES||[]).filter(g=>g.levels);
+    const fnv=s=>{ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); };
+    let A=store.get("mm-assign",[]); if(!Array.isArray(A)) A=[];
+    const tierRank={"":0,bronze:1,silver:2,gold:3,master:4};
+    function progressOf(a){ const L=window.__LESSON; if(!L) return {done:0,total:0,items:[]}; const items=[];
+      (a.drugs||[]).forEach(id=>{ const d=DRUGS.find(x=>x.id===id); if(!d){ items.push({k:"drug:"+id,n:id,ok:false,s:"not carried"}); return; } const P=L.drugState(d); const t=L.tier(P)||""; const ok=a.tier?tierRank[t]>=tierRank[a.tier]:(P.lvl||0)>=5; items.push({k:"drug:"+id,n:d.name,ok,s:t?t:`${Math.min(P.lvl||0,5)}/5 lessons`}); });
+      (a.games||[]).forEach(id=>{ const g=GAMESL().find(x=>x.id===id); if(!g) return; const r=L.grec(id), n=g.levels.length; const t=L.tier(r,n)||""; const ok=a.tier?tierRank[t]>=tierRank[a.tier]:(r.lvl||0)>=n; items.push({k:"game:"+id,n:g.n,ok,s:t?t:`${Math.min(r.lvl||0,n)}/${n} lessons`}); });
+      if(a.cat) { const h=store.get("mm-cat",[]).filter(x=>x.d>=(a.joined||0)); const best=h.reduce((m,x)=>Math.max(m,x.p||0),0); items.push({k:"cat",n:"Adaptive exam",ok:best>=.5,s:h.length?`best pass chance ${Math.round(best*100)}%`:"not taken"}); }
+      return {done:items.filter(i=>i.ok).length,total:items.length,items}; }
+    function resultLine(a){ const p=progressOf(a); const name=store.get("mm-student","")||"Student"; const body=`LZR|${a.cls||""}|${a.id}|${name}|${new Date().toISOString().slice(0,10)}|${p.done}/${p.total}|${p.items.map(i=>`${i.k}=${i.ok?"done":i.s}`).join(";")}`; return body+"|"+fnv(body); }
+    window.parseAssignLine=l=>{ const p=l.split("|"); if(p[0]!=="LZR"||p.length<8) return null; const ok=fnv(p.slice(0,7).join("|"))===p[7]; return {cls:p[1],id:p[2],name:p[3],date:p[4],score:p[5],items:p[6],ok}; };
+    function renderAssign(){ const el=$("assign-card"); if(!el) return; if(!A.length){ el.hidden=true; el.innerHTML=""; return; } el.hidden=false;
+      el.innerHTML=A.map((a,ix)=>{ const p=progressOf(a); const due=a.due?new Date(a.due+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"}):"";
+        return `<div class="acthead"><div><span class="eyebrow">Assignment${a.cls?" · "+esc(a.cls):""}${due?" · due "+esc(due):""}</span><h2>${esc(a.title||"Class assignment")}</h2></div><b class="num">${p.done}/${p.total}</b></div>
+          <ul class="aslist">${p.items.map(i=>`<li class="${i.ok?"ok":""}"><button type="button" class="aslink" data-go="${esc(i.k)}"><b>${i.ok?"✓":"○"}</b> ${esc(i.n)}</button><span class="note">${esc(i.s)}</span></li>`).join("")}</ul>
+          <div class="btnrow"><button type="button" class="btn amber" data-asres="${ix}">Send results</button><button type="button" class="btn alt" data-asdrop="${ix}">Remove</button></div><div class="asout" id="as-out-${ix}" hidden></div>`; }).join(""); }
+    async function joinText(text){ const msg=$("as-msg"); try{ const r=await SHARE.dec(String(text).trim()); if(r.tag!=="LZA") throw new Error("That code is not an assignment."); const a=r.data; if(A.some(x=>x.id===a.id)) throw new Error("Already joined."); a.joined=Date.now(); A.push(a); store.set("mm-assign",A); renderAssign(); if(msg) msg.textContent=`Joined "${a.title}". It is on your Dashboard.`; }catch(e){ if(msg) msg.textContent=e.message||"Could not read that code."; } }
+    function builder(){ const el=$("as-build"); if(!el) return; const gs=GAMESL();
+      el.innerHTML=`<div class="mcgrid"><label class="mcf"><span>Title</span><span class="mci"><input id="as-title" placeholder="Week 3: cardiac drugs"></span></label><label class="mcf"><span>Class</span><span class="mci"><input id="as-cls" placeholder="Medic 24-2"></span></label><label class="mcf"><span>Due</span><span class="mci"><input type="date" id="as-due"></span></label>
+        <label class="mcf"><span>Done means</span><select id="as-tier"><option value="">every lesson finished</option><option value="bronze">bronze ring</option><option value="silver">silver ring</option><option value="gold">gold ring</option><option value="master">master</option></select></label></div>
+        <details class="aspick"><summary>Drugs <span class="note" id="as-dn">0 picked</span></summary><div class="chklist">${(window.__ALLDRUGS||DRUGS).map(d=>`<label class="chk"><input type="checkbox" data-asd="${d.id}"> ${esc(d.name)}</label>`).join("")}</div></details>
+        <details class="aspick"><summary>Games <span class="note" id="as-gn">0 picked</span></summary><div class="chklist">${gs.map(g=>`<label class="chk"><input type="checkbox" data-asg="${g.id}"> ${esc(g.n)}</label>`).join("")}</div></details>
+        <label class="chk"><input type="checkbox" id="as-cat"> Include an adaptive exam</label>
+        <div class="btnrow"><button type="button" class="btn amber" id="as-make">Make the code</button></div><div id="as-share"></div>`; }
+    document.addEventListener("change",e=>{ if(e.target.matches("[data-asd]")) $("as-dn").textContent=document.querySelectorAll("[data-asd]:checked").length+" picked"; if(e.target.matches("[data-asg]")) $("as-gn").textContent=document.querySelectorAll("[data-asg]:checked").length+" picked"; if(e.target.id==="as-student") store.set("mm-student",e.target.value.trim()); });
+    document.addEventListener("click",async e=>{
+      if(e.target.closest("#as-make")){ const a={v:1,id:fnv(Date.now()+"-"+Math.random()).slice(0,6),title:$("as-title").value.trim()||"Class assignment",cls:$("as-cls").value.trim(),due:$("as-due").value,tier:$("as-tier").value,drugs:[...document.querySelectorAll("[data-asd]:checked")].map(x=>x.dataset.asd),games:[...document.querySelectorAll("[data-asg]:checked")].map(x=>x.dataset.asg),cat:$("as-cat").checked};
+        const sh=$("as-share"); if(!a.drugs.length&&!a.games.length&&!a.cat){ sh.innerHTML=`<p class="note">Pick at least one drug, game or the exam.</p>`; return; } const code=await SHARE.enc(a,"LZA"); const link=SHARE.WEB+"#assign="+code;
+        sh.innerHTML=`<div class="qrwrap">${SHARE.qr(link)}</div><p class="note">Students scan this or paste the code under Join. Results come back as one line each; paste them into Class view.</p><textarea readonly rows="3" class="codebox">${esc(code)}</textarea><div class="btnrow"><button type="button" class="btn" data-ascopy="${esc(code)}">Copy code</button><button type="button" class="btn alt" data-assend="${esc(link)}">Send link</button></div>`; return; }
+      const cp=e.target.closest("[data-ascopy]"); if(cp){ if(await SHARE.copy(cp.dataset.ascopy)) cp.textContent="Copied"; return; }
+      const sd=e.target.closest("[data-assend]"); if(sd){ SHARE.shareText("Lazarus assignment: "+sd.dataset.assend,"Assignment"); return; }
+      if(e.target.closest("#as-join")){ joinText($("as-code").value); return; }
+      const rs=e.target.closest("[data-asres]"); if(rs){ const ix=+rs.dataset.asres, a=A[ix]; if(!store.get("mm-student","")){ const n=(window.prompt?window.prompt("Your name for the result line"):"")||""; if(n.trim()) store.set("mm-student",n.trim()); } const line=resultLine(a); const out=$("as-out-"+ix); out.hidden=false; out.innerHTML=`<textarea readonly rows="2" class="codebox">${esc(line)}</textarea><div class="btnrow"><button type="button" class="btn" data-ascopy="${esc(line)}">Copy</button><button type="button" class="btn alt" data-asline="${esc(line)}">Send</button></div>`; return; }
+      const sl=e.target.closest("[data-asline]"); if(sl){ SHARE.shareText(sl.dataset.asline,"Assignment results"); return; }
+      const dr=e.target.closest("[data-asdrop]"); if(dr){ A.splice(+dr.dataset.asdrop,1); store.set("mm-assign",A); renderAssign(); return; }
+      const go=e.target.closest("[data-go]"); if(go&&go.closest("#assign-card")){ const k=go.dataset.go; if(k.startsWith("drug:")) openPath("drug",k.slice(5)); else if(k.startsWith("game:")) openPath("game",k.slice(5)); else showPanel("exam"); } });
+    // ----- links: #pack= and #assign= open straight into import -----
+    (async function fromLink(){ const h=location.hash; const m=/#(pack|assign)=([A-Za-z0-9._-]+)/.exec(h); if(!m) return; try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+      if(m[1]==="pack") setTimeout(()=>importText(m[2]),300); else setTimeout(async()=>{ await joinText(m[2]); showPanel("today"); },300); })();
+    ["lesson","round","panel","cat"].forEach(ev=>document.addEventListener(ev,renderAssign));
+    card(); builder(); renderAssign();
+  })();
+  // ---------- printable PDFs: drug cards, rhythm strips and 12-leads at true paper scale, quick reference ----------
+  // A small PDF writer: Helvetica and Helvetica-Bold (no font embedding), WinAnsi text, lines, rectangles and paths.
+  (function pdf(){
+    const MM=72/25.4;
+    const W_REG=[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584];
+    const W_BOLD=[278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584];
+    // unicode to WinAnsi byte, and widths for the extras
+    const WIN={0x2013:[0x96,556],0x2014:[0x97,1000],0x00b7:[0xb7,278],0x00b0:[0xb0,400],0x00d7:[0xd7,584],0x00f7:[0xf7,584],0x00b5:[0xb5,556],0x2022:[0x95,350],0x2019:[0x92,222],0x2018:[0x91,222],0x201c:[0x93,333],0x201d:[0x94,333],0x00bd:[0xbd,834],0x00b1:[0xb1,584],0x00b2:[0xb2,333],0x2026:[0x85,1000],0x00e9:[0xe9,556]};
+    const SUBS={"≥":">=","≤":"<=","\u2192":"->","−":"-","₂":"2","✓":"x","✗":"x","○":"o","★":"*"};
+    const clean=s=>String(s==null?"":s).replace(/[≥≤\u2192−₂✓✗○★]/g,c=>SUBS[c]).replace(/<[^>]+>/g,"");
+    function width(s,size,bold){ s=clean(s); let w=0; for(const ch of s){ const c=ch.codePointAt(0); if(c>=32&&c<=126) w+=(bold?W_BOLD:W_REG)[c-32]; else if(WIN[c]) w+=WIN[c][1]; else w+=556; } return w*size/1000; }
+    function pdfStr(s){ s=clean(s); let o="("; for(const ch of s){ const c=ch.codePointAt(0); if(c===40||c===41||c===92) o+="\\"+ch; else if(c>=32&&c<=126) o+=ch; else if(WIN[c]) o+="\\"+WIN[c][0].toString(8).padStart(3,"0"); else o+="?"; } return o+")"; }
+    function wrap(text,maxW,size,bold){ const out=[]; clean(text).split(/\n/).forEach(par=>{ let line=""; par.split(/\s+/).filter(Boolean).forEach(w=>{ const t=line?line+" "+w:w; if(width(t,size,bold)<=maxW) line=t; else { if(line) out.push(line); line=w; while(width(line,size,bold)>maxW&&line.length>4){ let k=line.length-1; while(k>1&&width(line.slice(0,k),size,bold)>maxW) k--; out.push(line.slice(0,k)); line=line.slice(k); } } }); out.push(line); }); return out; }
+    const col=c=>{ const h=c.replace("#",""); return [0,2,4].map(i=>(parseInt(h.slice(i,i+2),16)/255).toFixed(3)).join(" "); };
+    function Doc(){ const pages=[]; let cur=null, W=612, H=792;
+      const d={ page(w,h){ W=w||612; H=h||792; cur={w:W,h:H,ops:[]}; pages.push(cur); return d; },
+        get W(){ return W; }, get H(){ return H; },
+        text(x,y,s,size,bold,color){ cur.ops.push(`BT /${bold?"F2":"F1"} ${size} Tf ${col(color||"#111111")} rg ${x.toFixed(2)} ${(H-y).toFixed(2)} Td ${pdfStr(s)} Tj ET`); return d; },
+        line(x1,y1,x2,y2,w,color){ cur.ops.push(`${col(color||"#000000")} RG ${w} w ${x1.toFixed(2)} ${(H-y1).toFixed(2)} m ${x2.toFixed(2)} ${(H-y2).toFixed(2)} l S`); return d; },
+        rect(x,y,w,h,fill,stroke,lw){ cur.ops.push(`${fill?col(fill)+" rg ":""}${stroke?col(stroke)+" RG "+(lw||.5)+" w ":""}${x.toFixed(2)} ${(H-y-h).toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re ${fill&&stroke?"B":fill?"f":"S"}`); return d; },
+        path(pts,w,color){ if(!pts.length) return d; let o=`${col(color||"#000000")} RG ${w} w 1 J 1 j ${pts[0][0].toFixed(2)} ${(H-pts[0][1]).toFixed(2)} m`; for(let i=1;i<pts.length;i++) o+=` ${pts[i][0].toFixed(2)} ${(H-pts[i][1]).toFixed(2)} l`; cur.ops.push(o+" S"); return d; },
+        raw(s){ cur.ops.push(s); return d; },
+        para(x,y,text,maxW,size,bold,color,lead){ const ls=wrap(text,maxW,size,bold); ls.forEach((l,i)=>d.text(x,y+i*(lead||size*1.22),l,size,bold,color)); return y+ls.length*(lead||size*1.22); },
+        bytes(title){ const objs=[]; const add=s=>{ objs.push(s); return objs.length; };
+          const cat=add(""), pgs=add(""), f1=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), f2=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+          const kids=pages.map(p=>{ const content=p.ops.join("\n"); const c=add(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`); return add(`<< /Type /Page /Parent ${pgs} 0 R /MediaBox [0 0 ${p.w} ${p.h}] /Resources << /Font << /F1 ${f1} 0 R /F2 ${f2} 0 R >> >> /Contents ${c} 0 R >>`); });
+          objs[cat-1]=`<< /Type /Catalog /Pages ${pgs} 0 R >>`; objs[pgs-1]=`<< /Type /Pages /Kids [${kids.map(k=>k+" 0 R").join(" ")}] /Count ${kids.length} >>`;
+          const info=add(`<< /Title ${pdfStr(title||"Lazarus")} /Producer (Lazarus, Sanguine Solutions) >>`);
+          let out="%PDF-1.4\n%âãÏÓ\n"; const off=[]; objs.forEach((o,i)=>{ off.push(out.length); out+=`${i+1} 0 obj\n${o}\nendobj\n`; });
+          const x=out.length; out+=`xref\n0 ${objs.length+1}\n0000000000 65535 f \n`+off.map(o=>String(o).padStart(10,"0")+" 00000 n \n").join("")+`trailer\n<< /Size ${objs.length+1} /Root ${cat} 0 R /Info ${info} 0 R >>\nstartxref\n${x}\n%%EOF\n`;
+          const b=new Uint8Array(out.length); for(let i=0;i<out.length;i++) b[i]=out.charCodeAt(i)&255; return b; } };
+      return d; }
+    const fmt=x=>String(Math.round(x*1000)/1000), DASH="\u2013";
+    const SUF={perkg:"/kg",infmin:"/min",infhr:"/hr",infkg:"/kg/min",infkghr:"/kg/hr"};
+    const doseLineP=ds=>ds.kind==="text"?`${ds.l}: ${ds.t||""}`:`${ds.l}: ${ds.lo===ds.hi?fmt(ds.lo):fmt(ds.lo)+DASH+fmt(ds.hi)}${ds.unit}${SUF[ds.kind]||""} ${ds.route||""}${ds.max?`, max ${fmt(ds.max)}${ds.unit}`:""}${ds.t?` (${ds.t})`:""}`;
+    function footer(d,label){ d.text(36,d.H-22,`${label} · Lazarus, a Sanguine Solutions product · verify against local protocol`,7,false,"#777777"); }
+    // ----- drug cards: four to a letter page, cut lines between -----
+    function drugCards(list){ const d=Doc(); const cw=270, ch=360, gx=24, gy=20, x0=(612-2*cw-gx)/2, y0=26;
+      list.forEach((g,i)=>{ if(i%4===0) d.page(612,792); const k=i%4, x=x0+(k%2)*(cw+gx), y=y0+Math.floor(k/2)*(ch+gy);
+        d.rect(x,y,cw,ch,null,"#999999",.6); d.rect(x,y,cw,24,"#7A1F2B"); d.text(x+10,y+16,g.name+(g.local?"  (local)":""),12.5,true,"#FFFFFF");
+        let yy=y+36; const sec=(h,t,lines)=>{ if(yy>y+ch-20) return; d.text(x+10,yy,h,7.2,true,"#7A1F2B"); yy+=9; (Array.isArray(t)?t:[t]).filter(Boolean).forEach(line=>{ wrap(line,cw-24,7.2,false).forEach(l=>{ if(yy>y+ch-10) return; d.text(x+12,yy,l,7.2,false); yy+=8.6; }); }); yy+=3; };
+        sec("CLASS",g.cls.join(", ")); sec("INDICATIONS",g.ind.join("; ")); if(g.contra.length) sec("CONTRAINDICATIONS",g.contra.join("; "));
+        const ad=g.doses.filter(x=>x.pop==="adult"), pd=g.doses.filter(x=>x.pop==="peds"); if(ad.length) sec("ADULT",ad.map(doseLineP)); if(pd.length) sec("PEDIATRIC",pd.map(doseLineP));
+        if(g.onset&&g.onset.length) sec("ONSET",g.onset.join("; ")); sec("KEY",g.quick.key); if(g.localNote) sec("LOCAL PROTOCOL",g.localNote);
+        if(k===3||i===list.length-1) footer(d,"Drug cards"); });
+      return d.bytes("Lazarus drug cards"); }
+    // ----- ECG paper at true scale: 1 mm minor, 5 mm major, 25 mm/s, 10 mm/mV -----
+    function paper(d,x,y,wmm,hmm){ const X=x, Y=y; d.rect(X,Y,wmm*MM,hmm*MM,"#FFF4F0");
+      let mi="", ma=""; for(let i=0;i<=wmm;i++){ const px=(X+i*MM).toFixed(2); const s=` ${px} ${(d.H-Y).toFixed(2)} m ${px} ${(d.H-Y-hmm*MM).toFixed(2)} l`; if(i%5===0) ma+=s; else mi+=s; }
+      for(let j=0;j<=hmm;j++){ const py=(d.H-Y-j*MM).toFixed(2); const s=` ${X.toFixed(2)} ${py} m ${(X+wmm*MM).toFixed(2)} ${py} l`; if(j%5===0) ma+=s; else mi+=s; }
+      d.raw(`${col("#F2C2BA")} RG .25 w${mi} S`); d.raw(`${col("#E07A6E")} RG .55 w${ma} S`); }
+    const P=(x,y,pts)=>pts.map(p=>[x+p[0]*MM,y+p[1]*MM]);
+    function calib(d,x,y,base){ d.path(P(x,y,[[1,base],[2.5,base],[2.5,base-10],[7.5,base-10],[7.5,base],[9,base]]),.8); }
+    function rhythmSheets(){ const X=window.ECGX; const d=Doc(); const R=(window.GD&&GD.rhythms)||[]; const extra=[{k:"flutter",n:"Atrial flutter",hint:"Sawtooth flutter waves, here 4:1"},{k:"junctional",n:"Junctional rhythm",hint:"40"+DASH+"60, P absent or inverted with a short PR"}];
+      const list=R.concat(extra.filter(e=>!R.some(r=>r.k===e.k))); const per=6; let y=0;
+      list.forEach((r,i)=>{ if(i%per===0){ d.page(612,792); d.text(36,36,"Rhythm strips at true scale",14,true,"#7A1F2B"); d.text(36,50,"Print at 100% (actual size). 25 mm/s, 10 mm/mV: one small box is 0.04 s and 0.1 mV.",8,false,"#555555"); y=64; footer(d,"Rhythm strips"); }
+        const R0=X.rhythm(r.k,11+i,{ratio:r.k==="wenck"?4:undefined}); const wmm=160, hmm=30, x=(612-wmm*MM)/2;
+        d.text(x,y+9,r.n,10,true); d.text(x+width(r.n,10,true)+8,y+9,r.hint||"",7.5,false,"#555555"); paper(d,x,y+13,wmm,hmm);
+        calib(d,x,y+13,18); d.path(P(x,y+13,X.tracePts(t=>R0.value("II",t),0,6,10,18)),.75); y+=13+hmm*MM+12; });
+      return d.bytes("Lazarus rhythm strips"); }
+    function twelveAtlas(){ const X=window.ECGX; const d=Doc(); const keys=Object.keys(X.TWELVE);
+      keys.forEach((k,i)=>{ const E=X.twelve(k,21+i); d.page(792,612); const x=(792-260*MM)/2, y=60; d.text(x,36,E.name,15,true,"#7A1F2B"); d.text(x,50,`Heart rate ${E.hr}. Print at 100% for true 25 mm/s, 10 mm/mV paper.`,8,false,"#555555");
+        paper(d,x,y,260,120); for(let r=0;r<4;r++){ const base=r*30+18; calib(d,x,y,base);
+          if(r<3){ for(let c=0;c<4;c++){ const lead=X.LAYOUT[r][c], t0=c*2.5, x0=10+c*62.5; d.path(P(x,y,X.tracePts(t=>E.value(lead,t),t0,t0+2.5,x0,base)),.7); d.text(x+(x0+1.2)*MM,y+(r*30+5)*MM,lead,7,true); if(c) d.path(P(x,y,[[x0,base-3],[x0,base+3]]),.7); } }
+          else { d.path(P(x,y,X.tracePts(t=>E.value("II",t),0,10,10,base)),.7); d.text(x+11.2*MM,y+(r*30+5)*MM,"II",7,true); } }
+        footer(d,"12-lead atlas"); });
+      return d.bytes("Lazarus 12-lead atlas"); }
+    // ----- quick reference: the tables you look up on shift -----
+    function quickRef(){ const d=Doc(); d.page(612,792); const L=36, Wd=612-72; let y=40;
+      const h=(t)=>{ if(y>740){ footer(d,"Quick reference"); d.page(612,792); y=40; } d.text(L,y,t,11,true,"#7A1F2B"); y+=6; d.line(L,y,L+Wd,y,.6,"#7A1F2B"); y+=12; };
+      const rows=(cells,widths,bold)=>{ let x=L, hmax=0; cells.forEach((c,i)=>{ const ls=wrap(c,widths[i]-6,8,bold); ls.forEach((l,j)=>d.text(x,y+j*9.6,l,8,bold)); hmax=Math.max(hmax,ls.length*9.6); x+=widths[i]; }); y+=hmax+3; if(y>735){ footer(d,"Quick reference"); d.page(612,792); y=40; } };
+      d.text(L,y,"Lazarus quick reference",16,true); y+=20;
+      const G=window.GD||{};
+      if(G.vitals){ h("Normal vitals by age"); rows(["Age","Heart rate","Resp rate","Systolic BP"],[150,130,130,130],true); G.vitals.forEach(v=>rows([v.g,v.hr.join(DASH),v.rr.join(DASH),v.sbp.join(DASH)],[150,130,130,130])); y+=4; }
+      if(G.gcs){ h("Glasgow Coma Scale"); const cols=[["Eyes",G.gcs.eye],["Verbal",G.gcs.verbal],["Motor",G.gcs.motor]]; const n=Math.max(...cols.map(c=>c[1].length)); rows(cols.map(c=>c[0]),[180,180,180],true); for(let i=0;i<n;i++) rows(cols.map(c=>c[1][i]?`${c[1][i][1]}  ${c[1][i][0]}`:""),[180,180,180]); y+=4; }
+      if(G.apgar){ h("APGAR"); rows(["Sign","0","1","2"],[120,140,140,140],true); G.apgar.forEach(([n,r])=>rows([n,...[0,1,2].map(s=>{ const x=r.find(q=>q[1]===s); return x?x[0]:""; })],[120,140,140,140])); y+=4; }
+      if(G.nines){ h("Rule of nines"); rows(["Area","Adult %","Child %"],[220,100,100],true); G.nines.adult.forEach(([a,p])=>{ const c=(G.nines.child.find(x=>x[0]===a)||[])[1]; rows([a,String(p),c!=null?String(c):""],[220,100,100]); }); y+=4; }
+      h("START and JumpSTART"); [["Walking","Green, minor"],["Not breathing after airway opened","Black. JumpSTART child with a pulse: 5 rescue breaths first"],["Adult RR over 30; child RR under 15 or over 45","Red, immediate"],["No radial pulse or cap refill over 2 s; child: no palpable pulse","Red, immediate"],["Can't follow commands; child: P inappropriate or U","Red, immediate"],["Otherwise","Yellow, delayed"]].forEach(r=>rows(r,[300,240]));
+      h("Capnography"); [["Normal","35"+DASH+"45 mmHg, square waveform"],["CPR","Under 10: improve compressions. Sudden rise: check for ROSC"],["Shark fin","Bronchospasm"],["Sudden loss","Tube dislodged or disconnected"],["Head injury","Target 35"+DASH+"45"]].forEach(r=>rows(r,[150,390]));
+      h("Formulas"); [["Drip rate","Volume (mL) "+"×"+" drop factor "+"÷"+" minutes = gtt/min"],["Dose to volume","Dose "+"÷"+" concentration = mL"],["Infusion","mcg/kg/min "+"×"+" kg "+"×"+" 60 "+"÷"+" mcg/mL = mL/hr"],["Parkland","4 mL "+"×"+" kg "+"×"+" %TBSA, half in the first 8 hours"],["MAP","(SBP + 2 "+"×"+" DBP) "+"÷"+" 3"],["Shock index","HR "+"÷"+" SBP, over 0.9 is a warning"],["Peds weight","Age "+"×"+" 2 + 8 kg"],["ET tube (uncuffed)","Age "+"÷"+" 4 + 4; depth 3 "+"×"+" tube size"]].forEach(r=>rows(r,[150,390]));
+      footer(d,"Quick reference"); return d.bytes("Lazarus quick reference"); }
+    // ----- the card in Reference -----
+    async function make(kind){ const msg=$("pdf-msg"); if(msg) msg.textContent="Building…"; await new Promise(r=>setTimeout(r,30)); let bytes, name;
+      try{ if(kind==="cards"){ const pool=(window.studyPool?studyPool():DRUGS); bytes=drugCards(pool.length?pool:DRUGS); name="lazarus-drug-cards.pdf"; }
+        else if(kind==="rhythms"){ bytes=rhythmSheets(); name="lazarus-rhythm-strips.pdf"; } else if(kind==="twelve"){ bytes=twelveAtlas(); name="lazarus-12-lead-atlas.pdf"; } else { bytes=quickRef(); name="lazarus-quick-reference.pdf"; }
+        const how=await SHARE.save(name,"application/pdf",bytes); if(msg) msg.textContent=how==="downloaded"?`Saved ${name}.`:how==="shared"?"Sent to the share sheet.":""; }catch(e){ if(msg) msg.textContent="Could not build that PDF: "+(e.message||e); } }
+    document.addEventListener("click",e=>{ const b=e.target.closest("[data-pdf]"); if(b) make(b.dataset.pdf); });
+    window.__PDF={drugCards,rhythmSheets,twelveAtlas,quickRef,width,wrap};
+  })();
   // ---------- settings panel ----------
   (function settings(){
     const bind=(id,key)=>{ const el=$(id); el.setAttribute("aria-pressed",SET[key]?"true":"false"); el.addEventListener("click",()=>{ SET[key]=!SET[key]; saveSet(); el.setAttribute("aria-pressed",SET[key]?"true":"false"); if(key==="haptics"&&SET[key]) feedback(true); if(key==="sound"&&SET[key]) feedback(true); document.dispatchEvent(new CustomEvent("settings")); }); };
@@ -4560,7 +4869,7 @@ li.tnode .l1.stack .lead{margin-left:0}
     function finish(){ const total=run.ids.reduce((a,i)=>a+SCEN[i].tasks.length,0); const ok=Object.values(run.res).filter(x=>x).length; const s=Math.round((Date.now()-run.start)/1000); const missed=run.ids.flatMap(i=>SCEN[i].tasks.map((t,k)=>run.res[i+"."+k]?null:`${SCEN[i].tag} ${k+1}`).filter(Boolean)); const body=`PILLAR-MM|${run.code}|${run.name}|${new Date().toISOString().slice(0,10)}|${ok}/${total}|${s}s|${missed.join(",")||"none"}`; const line=body+"|"+hash(body); $("pr-out").value=line; $("pr-result").hidden=false; run=null; store.set("mm-proctor",null); banner(); document.querySelectorAll("details.scen").forEach(d=>d.hidden=false); showPanel("proctor"); }
     $("pr-copy").addEventListener("click",()=>{ navigator.clipboard&&navigator.clipboard.writeText($("pr-out").value).then(()=>{$("pr-msg").textContent="Copied.";},()=>{$("pr-out").select();}); });
     $("pr-abort").addEventListener("click",()=>{ run=null; store.set("mm-proctor",null); banner(); document.querySelectorAll("details.scen").forEach(d=>d.hidden=false); });
-    $("cv-parse").addEventListener("click",()=>{ const rows=$("cv-in").value.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{ const p=l.split("|"); if(p.length<8||p[0]!=="PILLAR-MM") return {bad:l}; const ok=hash(p.slice(0,7).join("|"))===p[7]; return {code:p[1],name:p[2],date:p[3],score:p[4],time:p[5],missed:p[6],ok}; }); $("cv-out").innerHTML=`<div class="tblwrap"><table class="zebra"><tr><th>Student</th><th>Code</th><th>Date</th><th class="num">Score</th><th class="num">Time</th><th>Missed</th><th></th></tr>${rows.map(r=>r.bad?`<tr><td colspan="7" class="note">Unreadable: ${r.bad}</td></tr>`:`<tr><td>${r.name}</td><td>${r.code}</td><td>${r.date}</td><td class="num">${r.score}</td><td class="num">${r.time}</td><td>${r.missed}</td><td>${r.ok?'<span class="pass">verified</span>':'<span class="fail">edited</span>'}</td></tr>`).join("")}</table></div>`; });
+    $("cv-parse").addEventListener("click",()=>{ const rows=$("cv-in").value.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{ const p=l.split("|"); if(p[0]==="LZR"){ const a=window.parseAssignLine&&parseAssignLine(l); return a?{code:(a.cls?a.cls+" ":"")+a.id,name:a.name,date:a.date,score:a.score,time:"",missed:a.items.replace(/;/g,"; "),ok:a.ok}:{bad:l}; } if(p.length<8||p[0]!=="PILLAR-MM") return {bad:l}; const ok=hash(p.slice(0,7).join("|"))===p[7]; return {code:p[1],name:p[2],date:p[3],score:p[4],time:p[5],missed:p[6],ok}; }); $("cv-out").innerHTML=`<div class="tblwrap"><table class="zebra"><tr><th>Student</th><th>Code</th><th>Date</th><th class="num">Score</th><th class="num">Time</th><th>Missed</th><th></th></tr>${rows.map(r=>r.bad?`<tr><td colspan="7" class="note">Unreadable: ${r.bad}</td></tr>`:`<tr><td>${r.name}</td><td>${r.code}</td><td>${r.date}</td><td class="num">${r.score}</td><td class="num">${r.time}</td><td>${r.missed}</td><td>${r.ok?'<span class="pass">verified</span>':'<span class="fail">edited</span>'}</td></tr>`).join("")}</table></div>`; });
     banner();
   })();
   // ---------- tricks page: search, category filter, sort, expand, small graphics ----------
@@ -5015,6 +5324,8 @@ li.tnode .l1.stack .lead{margin-left:0}
       setOpen(false);
       if(tool==="calc"&&window.openCalc) openCalc();
       else if(tool==="board"&&window.openBoard) openBoard();
+      else if(tool==="meds"&&window.openMedCalc) openMedCalc();
+      else if(tool==="code"&&window.openCode) openCode();
       else if(tool==="listen"){ if(!window.ttsStart) return; const openCard=document.querySelector("details.drug[open]"); if(openCard) ttsStart([openCard.id.replace("drug-","")],0); else { if(!document.getElementById("panel-drugs")||document.getElementById("panel-drugs").hidden) showPanel("drugs"); const ids=window.visibleDrugIds?visibleDrugIds():[]; if(ids.length) ttsStart(ids,0); } }
     }
     const toolAt=(x,y)=>{ const el=document.elementFromPoint(x,y); return el&&el.closest?el.closest(".wtool"):null; };
@@ -5076,6 +5387,102 @@ li.tnode .l1.stack .lead{margin-left:0}
     document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!wrap.hidden) close(); });
     window.addEventListener("resize",()=>{ if(!wrap.hidden){ size(); render(); } });
     window.addEventListener("pagehide",save);
+  })();
+  // ---------- tool wheel extras: dose calculators and the code timer ----------
+  (function codetools(){
+    const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const num=v=>{ const x=parseFloat(String(v).replace(",",".")); return isFinite(x)?x:NaN; };
+    const r=(x,d)=>{ if(!isFinite(x)) return "--"; const p=Math.pow(10,d==null?2:d); return String(Math.round(x*p)/p); };
+    const D="\u2013", X="×", DIV="÷";
+    // ----- calculators -----
+    const mc=$("medcalc"); let tab=store.get("mm-mctab","drip");
+    const UNIT={g:1e6,mg:1e3,mcg:1}; // to mcg
+    const field=(id,label,val,unit,attrs)=>`<label class="mcf"><span>${label}</span><span class="mci"><input id="${id}" inputmode="decimal" value="${val==null?"":val}" ${attrs||""}>${unit?`<em>${unit}</em>`:""}</span></label>`;
+    const sel=(id,label,opts,v)=>`<label class="mcf"><span>${label}</span><select id="${id}">${opts.map(o=>`<option value="${o[0]}" ${String(o[0])===String(v)?"selected":""}>${o[1]}</option>`).join("")}</select></label>`;
+    const kg=()=>typeof PT!=="undefined"&&PT.kg?PT.kg:70;
+    const FORMS={
+      drip:{n:"Drip rate",ui:()=>field("c-vol","Volume","1000","mL")+field("c-time","Time","60","")+sel("c-tu","Time in",[["min","minutes"],["hr","hours"]],"min")+sel("c-df","Drip set",[[10,"10 gtt/mL"],[15,"15 gtt/mL"],[20,"20 gtt/mL"],[60,"60 gtt/mL (micro)"]],10),
+        calc:g=>{ const v=num(g("c-vol")), t=num(g("c-time"))*(g("c-tu")==="hr"?60:1), df=num(g("c-df")); const gtt=v*df/t; return {big:`${r(gtt,0)} gtt/min`,sub:`${r(v/t*60,0)}mL/hr · about ${r(gtt/60*15,0)} drops every 15 s`,work:`${r(v,0)}mL ${X} ${df} gtt/mL ${DIV} ${r(t,0)} min = ${r(gtt,1)} gtt/min`}; }},
+      dose:{n:"Dose to mL",ui:()=>field("c-dose","Dose ordered","1","")+sel("c-du","Dose unit",[["mg","mg"],["mcg","mcg"],["g","g"],["mEq","mEq"],["units","units"]],"mg")+sel("c-pk","Per kilo?",[["no","No, a fixed dose"],["yes","Yes, per kg"]],"no")+field("c-kg","Weight",String(kg()),"kg")+field("c-amt","On hand: amount","10","")+sel("c-au","On-hand unit",[["mg","mg"],["mcg","mcg"],["g","g"],["mEq","mEq"],["units","units"]],"mg")+field("c-ml","On hand: volume","1","mL")+field("c-max","Max dose (optional)","",""),
+        calc:g=>{ let d=num(g("c-dose")); const du=g("c-du"), au=g("c-au"); const per=g("c-pk")==="yes", w=num(g("c-kg")); let total=per?d*w:d; const mx=num(g("c-max")); let capped=false; if(isFinite(mx)&&total>mx){ total=mx; capped=true; }
+          const conv=(x,from,to)=>UNIT[from]&&UNIT[to]?x*UNIT[from]/UNIT[to]:(from===to?x:NaN); const totalInAu=conv(total,du,au); const c=num(g("c-amt"))/num(g("c-ml")); const ml=totalInAu/c;
+          return {big:isFinite(ml)?`${r(ml,2)}mL`:"Units don't convert",sub:`${r(total,3)}${du}${per?` for ${r(w,1)}kg`:""}${capped?" (capped at max)":""} · stock ${r(c,3)}${au}/mL`,work:`${per?`${r(d,3)}${du}/kg ${X} ${r(w,1)}kg = ${r(d*w,3)}${du}${capped?`, capped to ${r(mx,3)}${du}`:""}; `:""}${du!==au&&isFinite(totalInAu)?`${r(total,3)}${du} = ${r(totalInAu,4)}${au}; `:""}${r(totalInAu,4)}${au} ${DIV} ${r(c,3)}${au}/mL = ${r(ml,2)}mL`}; }},
+      pump:{n:"Pump rate",ui:()=>field("c-rate","Dose","5","")+sel("c-ru","Dose unit",[["mcgkgmin","mcg/kg/min"],["mcgmin","mcg/min"],["mgmin","mg/min"],["mghr","mg/hr"],["unhr","units/hr"],["mgkghr","mg/kg/hr"]],"mcgkgmin")+field("c-kg2","Weight",String(kg()),"kg")+field("c-bagamt","Bag: drug amount","400","")+sel("c-bagu","Bag unit",[["mg","mg"],["mcg","mcg"],["g","g"],["units","units"]],"mg")+field("c-bagml","Bag: volume","250","mL"),
+        calc:g=>{ const dose=num(g("c-rate")), u=g("c-ru"), w=num(g("c-kg2")); const bu=g("c-bagu"); const amt=num(g("c-bagamt")), vol=num(g("c-bagml"));
+          const inMcg=bu==="units"?NaN:amt*UNIT[bu]; const concMcg=inMcg/vol, concU=bu==="units"?amt/vol:NaN; let perHr, conc, cu;
+          if(u==="mcgkgmin"){ perHr=dose*w*60; conc=concMcg; cu="mcg"; } else if(u==="mcgmin"){ perHr=dose*60; conc=concMcg; cu="mcg"; } else if(u==="mgmin"){ perHr=dose*1000*60; conc=concMcg; cu="mcg"; } else if(u==="mghr"){ perHr=dose*1000; conc=concMcg; cu="mcg"; } else if(u==="mgkghr"){ perHr=dose*w*1000; conc=concMcg; cu="mcg"; } else { perHr=dose; conc=concU; cu="units"; }
+          const mlhr=perHr/conc; return {big:isFinite(mlhr)?`${r(mlhr,1)}mL/hr`:"Check the units",sub:`Concentration ${r(conc,3)}${cu}/mL · ${r(perHr,1)}${cu}/hr`,work:`${u.indexOf("kg")>=0?`${r(dose,3)} ${X} ${r(w,1)}kg ${X} ${u==="mgkghr"?"1,000":"60"}`:`${r(dose,3)} ${X} ${u==="mgmin"?"1,000 "+X+" 60":u==="mghr"?"1,000":u==="unhr"?"1":"60"}`} = ${r(perHr,1)}${cu}/hr; ${DIV} ${r(conc,3)}${cu}/mL = ${r(mlhr,1)}mL/hr`}; }},
+      burn:{n:"Burn fluids",ui:()=>field("c-bkg","Weight",String(kg()),"kg")+field("c-tbsa","Burned (partial and full thickness)","36","%")+sel("c-form","Formula",[["4","Parkland, 4mL/kg/%"],["2","ABA adult start, 2mL/kg/%"],["3","ABA child, 3mL/kg/%"],["10","TCCC rule of ten"]],"4")+field("c-since","Hours since the burn","0","hr"),
+        calc:g=>{ const w=num(g("c-bkg")), t=num(g("c-tbsa")), f=g("c-form"), since=Math.max(0,num(g("c-since"))||0);
+          if(f==="10"){ const base=t*10, add=w>80?Math.ceil((w-80)/10)*100:0; return {big:`${r(base+add,0)}mL/hr`,sub:w>=40&&w<=80?"Starting rate, then titrate to urine output":"Adds 100mL/hr per 10kg over 80kg",work:`${r(t,0)}% ${X} 10 = ${r(base,0)}mL/hr${add?` + ${add}mL/hr for weight over 80kg`:""}`}; }
+          const k=+f, tot=k*w*t, first=tot/2, left=Math.max(0,8-since); const rate=left>0?first/left:NaN;
+          return {big:`${r(tot,0)}mL in 24 hr`,sub:left>0?`First half, ${r(first,0)}mL, by hour 8: ${r(rate,0)}mL/hr for the next ${r(left,1)} hr`:"Past hour 8: give the second half over the remaining 16 hours",work:`${k} ${X} ${r(w,1)}kg ${X} ${r(t,0)}% = ${r(tot,0)}mL; half in the first 8 hours from the time of the burn`}; }}
+    };
+    function drawCalc(){ if(!mc) return; const F=FORMS[tab]||FORMS.drip; $("mc-tabs").innerHTML=Object.keys(FORMS).map(k=>`<button type="button" class="chip" data-mct="${k}" aria-pressed="${k===tab?"true":"false"}">${FORMS[k].n}</button>`).join("");
+      $("mc-form").innerHTML=F.ui(); update(); }
+    function update(){ const F=FORMS[tab]; const g=id=>{ const el=$(id); return el?el.value:""; }; let out; try{ out=F.calc(g); }catch(e){ out={big:"--",sub:"",work:""}; }
+      $("mc-out").innerHTML=`<div class="mcbig num">${esc(out.big)}</div><div class="note">${esc(out.sub||"")}</div>${out.work?`<div class="mcwork">${esc(out.work)}</div>`:""}`; }
+    if(mc){ mc.addEventListener("input",e=>{ if(e.target.closest("#mc-form")) update(); }); mc.addEventListener("change",e=>{ if(e.target.closest("#mc-form")) update(); });
+      mc.addEventListener("click",e=>{ const t=e.target.closest("[data-mct]"); if(t){ tab=t.dataset.mct; store.set("mm-mctab",tab); drawCalc(); } if(e.target.closest("#mc-close")) mc.hidden=true; }); }
+    window.openMedCalc=()=>{ if(!mc) return; mc.hidden=false; drawCalc(); };
+
+    // ----- code timer: elapsed time, 2 minute cycles, epinephrine every 3 to 5 minutes, and a log for handoff -----
+    const ct=$("codet"); let C=store.get("mm-code",null), tickT=null, wake=null;
+    const now=()=>Date.now();
+    const mmss=ms=>{ const s=Math.max(0,Math.floor(ms/1000)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); };
+    const save=()=>store.set("mm-code",C);
+    let actx=null; const beep=(f,ms)=>{ try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); const o=actx.createOscillator(), g=actx.createGain(); o.frequency.value=f||880; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(.18,actx.currentTime); o.start(); o.stop(actx.currentTime+(ms||180)/1000); }catch(e){} };
+    const buzz=p=>{ try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
+    const EV=[["cpr","CPR started"],["shock","Shock"],["epi","Epinephrine 1mg"],["amio","Amiodarone"],["lido","Lidocaine"],["access","IV/IO access"],["airway","Advanced airway"],["vf","Rhythm: VF/pVT"],["pea","Rhythm: PEA"],["asys","Rhythm: asystole"],["pulse","Pulse check"],["rosc","ROSC"]];
+    function add(k,label){ if(!C) return; const t=now()-C.t0; if(k==="shock"){ C.shocks=(C.shocks||0)+1; label=`Shock ${C.shocks}`; } if(k==="epi"){ C.epi=(C.epi||0)+1; C.lastEpi=now(); C.alert3=C.alert5=false; label=`Epinephrine 1mg (#${C.epi})`; } if(k==="amio"){ C.amio=(C.amio||0)+1; label=C.amio===1?"Amiodarone 300mg":"Amiodarone 150mg"; } if(k==="pulse"||k==="vf"||k==="pea"||k==="asys") C.cycle=now();
+      if(k==="rosc") C.rosc=now(); C.log.push({t,k,label}); save(); draw(); buzz(30); }
+    function start(){ C={t0:now(),cycle:now(),log:[{t:0,k:"start",label:"Code started"}],shocks:0,epi:0,amio:0,lastEpi:null,wall:new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}; save(); draw(); run(); lock(); }
+    function stop(){ if(!C) return; C.log.push({t:now()-C.t0,k:"end",label:"Code ended"}); const hist=store.get("mm-codes",[]); hist.push(C); store.set("mm-codes",hist.slice(-10)); C.ended=true; save(); clearInterval(tickT); tickT=null; unlock(); draw(); }
+    const lock=async()=>{ try{ if(navigator.wakeLock) wake=await navigator.wakeLock.request("screen"); }catch(e){} }, unlock=()=>{ try{ wake&&wake.release(); }catch(e){} wake=null; };
+    function run(){ clearInterval(tickT); tickT=setInterval(()=>{ if(!C||C.ended) return; if(C.lastEpi){ const since=now()-C.lastEpi; if(since>=180000&&!C.alert3){ C.alert3=true; beep(880,220); buzz([200,100,200]); save(); } if(since>=300000&&!C.alert5){ C.alert5=true; beep(660,400); setTimeout(()=>beep(660,400),500); buzz([400,150,400]); save(); } }
+        const cyc=now()-C.cycle; if(cyc>=120000&&!C.cycAlert){ C.cycAlert=true; beep(1040,160); buzz(160); } if(cyc<120000) C.cycAlert=false; if(ct&&!ct.hidden) drawClock(); },500); }
+    function text(){ if(!C) return ""; const lines=C.log.map(l=>`${mmss(l.t)} ${l.label}`); return `Code started ${C.wall}. ${C.shocks} shock${C.shocks===1?"":"s"}, ${C.epi} epinephrine, ${C.amio||0} amiodarone${C.rosc?`, ROSC at ${mmss(C.rosc-C.t0)}`:""}.\n`+lines.join("\n"); }
+    function drawClock(){ if(!C||!ct) return; const el=$("ct-clock"); if(!el) return; const T=now()-C.t0; el.textContent=mmss(C.ended?(C.log[C.log.length-1].t):T);
+      const cyc=Math.min(1,(now()-C.cycle)/120000); $("ct-cyc").style.width=(cyc*100)+"%"; $("ct-cyct").textContent=C.ended?"":cyc>=1?"Rhythm check now":`Rhythm check in ${mmss(120000-(now()-C.cycle))}`;
+      const ep=$("ct-epi"); if(!C.lastEpi){ ep.className="ctepi"; ep.innerHTML=`<b>Epinephrine</b><span>not given</span>`; } else { const s=now()-C.lastEpi; ep.className="ctepi "+(s>=300000?"over":s>=180000?"due":"wait"); ep.innerHTML=`<b>${s>=300000?"Epi overdue":s>=180000?"Epi due":"Next epi"}</b><span>${s>=180000?`${mmss(s)} since the last dose`:`in ${mmss(180000-s)} (3${D}5 min)`}</span>`; } }
+    function draw(){ if(!ct) return; const b=$("ct-body");
+      if(!C||C.ended){ b.innerHTML=`<div class="ctstart"><p class="note">Starts the arrest clock: 2 minute rhythm checks, epinephrine every 3${D}5 minutes with alerts, and a time-stamped log for handoff.</p><button type="button" class="btn amber ctgo" id="ct-start">Start code</button>${C&&C.ended?`<h3>Last code</h3><pre class="ctlog">${esc(text())}</pre><div class="btnrow"><button type="button" class="btn alt" id="ct-copy">Copy log</button></div>`:""}</div>`; return; }
+      b.innerHTML=`<div class="ctclock num" id="ct-clock">0:00</div><div class="ctcyc"><i id="ct-cyc"></i></div><div class="note" id="ct-cyct"></div><div class="ctepi" id="ct-epi"></div>
+        <div class="ctcount"><div><b class="num">${C.shocks}</b><span>shocks</span></div><div><b class="num">${C.epi}</b><span>epi</span></div><div><b class="num">${C.amio||0}</b><span>amio</span></div></div>
+        <div class="ctev">${EV.map(([k,l])=>`<button type="button" class="chip ${k==="shock"||k==="epi"?"big":""}" data-ev="${k}">${esc(l)}</button>`).join("")}</div>
+        <pre class="ctlog" id="ct-log">${esc(C.log.slice().reverse().map(l=>`${mmss(l.t)}  ${l.label}`).join("\n"))}</pre>
+        <div class="btnrow"><button type="button" class="btn alt" id="ct-copy">Copy log</button><button type="button" class="btn" id="ct-end">End code</button></div>`; drawClock(); }
+    if(ct){ ct.addEventListener("click",e=>{ const ev=e.target.closest("[data-ev]"); if(ev){ const k=ev.dataset.ev; add(k,(EV.find(x=>x[0]===k)||[])[1]); return; }
+        if(e.target.closest("#ct-start")){ start(); return; } if(e.target.closest("#ct-end")){ stop(); return; }
+        if(e.target.closest("#ct-copy")){ const t=text(); try{ navigator.clipboard.writeText(t).then(()=>{ const c=$("ct-copy"); if(c) c.textContent="Copied"; }); }catch(x){} return; }
+        if(e.target.closest("#ct-close")) ct.hidden=true; }); }
+    window.openCode=()=>{ if(!ct) return; ct.hidden=false; draw(); if(C&&!C.ended){ run(); lock(); } };
+    if(C&&!C.ended) run();
+  })();
+  // ---------- Android extras: a daily reminder, and the home screen widget's numbers ----------
+  (function nativeBits(){
+    const P=()=>window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()?Capacitor.Plugins:null;
+    let R=store.get("mm-remind",{on:false,h:19,m:0});
+    const ID=7001;
+    const pad=n=>String(n).padStart(2,"0");
+    function body(){ const due=window.RQ?RQ.stats().due:0; const nx=window.studyNext?studyNext(1)[0]:null; return due?`${due} review${due===1?"":"s"} due. Five minutes keeps the streak.`:nx?`Next up: ${nx.n}. Five minutes keeps the streak.`:"Five minutes keeps the streak."; }
+    async function schedule(){ const p=P(); if(!p||!p.LocalNotifications) return "web"; const LN=p.LocalNotifications;
+      try{ await LN.cancel({notifications:[{id:ID}]}); }catch(e){}
+      if(!R.on) return "off";
+      try{ let perm=await LN.checkPermissions(); if(perm.display!=="granted") perm=await LN.requestPermissions(); if(perm.display!=="granted") return "denied";
+        await LN.schedule({notifications:[{id:ID,title:"Lazarus",body:body(),schedule:{on:{hour:R.h,minute:R.m},allowWhileIdle:true},smallIcon:"ic_stat_lazarus",iconColor:"#CF3341"}]}); return "on"; }catch(e){ return "error"; } }
+    function card(state){ const el=$("remind-card"); if(!el) return; const native=!!P();
+      el.innerHTML=`<header><span class="eyebrow">Reminder</span><h2>Daily nudge</h2><p class="lead">${native?"One notification a day at the time you pick, with what is due.":"Reminders work in the Android app."}</p></header>
+        <div class="setrow"><div><b>Remind me</b><div class="note">${state==="denied"?"Notifications are off for Lazarus in Android settings.":R.on?`Every day at ${pad(R.h)}:${pad(R.m)}`:"Off"}</div></div><button type="button" class="chip tog" id="rm-tog" aria-pressed="${R.on?"true":"false"}" ${native?"":"disabled"}>${R.on?"On":"Off"}</button></div>
+        <div class="setrow"><div><b>Time</b></div><input type="time" id="rm-time" value="${pad(R.h)}:${pad(R.m)}" ${native?"":"disabled"} aria-label="Reminder time"></div>`; }
+    document.addEventListener("click",async e=>{ if(e.target.closest("#rm-tog")){ R.on=!R.on; store.set("mm-remind",R); card(await schedule()); } });
+    document.addEventListener("change",async e=>{ if(e.target.id==="rm-time"){ const [h,m]=e.target.value.split(":").map(Number); if(isFinite(h)&&isFinite(m)){ R.h=h; R.m=m; store.set("mm-remind",R); card(await schedule()); } } });
+    // the widget reads what we last wrote; refresh it whenever the numbers move
+    let wt=null; function widget(){ clearTimeout(wt); wt=setTimeout(()=>{ const p=P(); if(!p||!p.WidgetBridge) return; try{ const due=window.RQ?RQ.stats().due:0; const nx=window.studyNext?studyNext(1)[0]:null; const pace=window.examPace?examPace():null;
+        p.WidgetBridge.update({streak:window.dayStreak?dayStreak():0,due,next:nx?`Next: ${nx.n}`:"All topics strong",exam:pace&&pace.dl>0?`${pace.dl} days to the registry`:""}); }catch(e){} },400); }
+    ["rq","round","lesson","cat","study"].forEach(ev=>document.addEventListener(ev,widget));
+    document.addEventListener("visibilitychange",()=>{ if(document.hidden){ widget(); if(R.on) schedule(); } });
+    card(); widget(); if(R.on) schedule().then(card);
   })();
 /* Lazarus: granular medical morph. No dependencies. */
 (function (global) {
