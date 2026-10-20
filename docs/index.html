@@ -6340,8 +6340,8 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     const scale=Math.min(width,height,options.maxSide||Infinity)/600;
     ctx.translate((width-600*scale)/2,(height-600*scale)/2);ctx.scale(scale,scale);
     for(let i=0;i<COUNT;i++){
-      // pow above 1 keeps the glyphs near where they start for longer, so a shape closes in slowly rather than flying
-      const m=META[i], p0=ease((raw-m.delay)/(1-DELAY)), p=options.pow?Math.pow(p0,options.pow):p0, dissolve=Math.sin(Math.PI*p);
+      // easeOut: arrive fast and settle long (for glyphs that start off screen); pow above 1 keeps glyphs near where they start for longer
+      const m=META[i], x0=Math.max(0,Math.min(1,(raw-m.delay)/(1-DELAY))), p0=options.easeOut?1-Math.pow(1-x0,options.easeOut):ease(x0), p=options.pow?Math.pow(p0,options.pow):p0, dissolve=Math.sin(Math.PI*p);
       let x=a[i][0]+(b[i][0]-a[i][0])*p;
       let y=a[i][1]+(b[i][1]-a[i][1])*p;
       const curl=m.angle+Math.PI*p*.8;
@@ -6641,19 +6641,19 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       if(glow){ glow.style.top=cy+"px"; later(()=>glow.classList.add("on"),500); }
       later(melt,1500); later(()=>{ fade(motto,600,0); if(glow) glow.classList.remove("on","swell"); },4100); later(gone,4700); };
 
-    // ================= glyphs: scrambled glyphs creep in from the edges and settle into the name =================
+    // ================= glyphs: scrambled glyphs stream in from off screen on every side and settle into the name =================
     function glyphIntro(){
       Object.assign(cv.style,{transition:"none",opacity:"0"});
       const glyphs=(()=>{ try{ const n=themeNow(); return (n.themes[n.name]||{}).glyphs||null; }catch(e){ return null; } })();
       try{ P.clearTargets(); }catch(e){}
-      // the edges of the screen in the 600 space, and a band just inside them for the glyphs to start in
-      const G=geo(), X0=-G.ox/G.k, X1=(G.W-G.ox)/G.k, Y0=-G.oy/G.k, Y1=(G.H-G.oy)/G.k, w=X1-X0, hh=Y1-Y0, band=.11*Math.min(w,hh), per=2*(w+hh), pts=[];
-      for(let i=0;i<4000;i++){ let u=Math.random()*per; const d=-14+(band+14)*Math.pow(Math.random(),1.6), j=Math.random(); let x,y;
+      // the edges of the screen in the 600 space; every glyph starts somewhere beyond them, so none is visible until it flies in
+      const G=geo(), X0=-G.ox/G.k, X1=(G.W-G.ox)/G.k, Y0=-G.oy/G.k, Y1=(G.H-G.oy)/G.k, w=X1-X0, hh=Y1-Y0, per=2*(w+hh), pts=[];
+      for(let i=0;i<4000;i++){ let u=Math.random()*per; const d=-(26+280*Math.random()), j=Math.random(); let x,y;
         if(u<w){ x=X0+u; y=Y0+d; } else if((u-=w)<hh){ x=X1-d; y=Y0+u; } else if((u-=hh)<w){ x=X1-u; y=Y1-d; } else { u-=w; x=X0+d; y=Y1-u; }
         pts.push([x,y,.55+.45*j]); }
-      P.addPointsTarget(pts); P.setTiming(0,{hold:.7,morph:2.1});
+      P.addPointsTarget(pts); P.setTiming(0,{hold:.05,morph:2.5});
       let textShape=-1, landed=false;
-      const onFrame=t=>{ if(done||risen) return; const fi=sm(t/.6);
+      const onFrame=t=>{ if(done||risen) return; const fi=1;
         if(textShape<0){ cv.style.opacity=fi.toFixed(3); return; }
         const land=P.landAt(textShape), co=1-sm((t-(land-.1))/.8);
         cv.style.opacity=(fi*co).toFixed(3); cv.style.filter=co<1?`blur(${(5*(1-co)).toFixed(1)}px)`:"";
@@ -6661,7 +6661,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
         if(!landed&&t>=land+.55){ landed=true; cv.style.opacity="0"; title.style.opacity="1"; later(rise,500); } };
       const start=()=>{ if(done) return; try{ if(P.addTextTarget("LAZARUS",font,300)) textShape=P.shapes-1; }catch(e){} place();
         const dpr=Math.min(window.devicePixelRatio||1,2);
-        try{ h=P.mount(cv,{background:false,loop:false,onFrame,colors:glyphs,scramble:true,curl:.4,pow:1.8,maxSide:640*dpr,onComplete:()=>later(()=>{ if(!landed){ landed=true; title.style.opacity="1"; later(rise,400); } },60)}); }catch(e){ title.style.transition="opacity .8s ease"; title.style.opacity="1"; later(rise,1200); } };
+        try{ h=P.mount(cv,{background:false,loop:false,onFrame,colors:glyphs,scramble:true,curl:.3,easeOut:2.4,maxSide:640*dpr,onComplete:()=>later(()=>{ if(!landed){ landed=true; title.style.opacity="1"; later(rise,400); } },60)}); }catch(e){ title.style.transition="opacity .8s ease"; title.style.opacity="1"; later(rise,1200); } };
       return start; }
 
     // ================= lines: one line sweeps across and peels off into the straight strokes of each letter =================
