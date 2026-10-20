@@ -1212,12 +1212,13 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 main:has(#panel-sim.simon:not([hidden])) #hubseg{display:none}
 /* ---------- moving between pages: the page slides the way you are going ---------- */
 /* the header bar never moves; its old picture is dropped at once so the new tab highlight shows straight away */
-header.top{view-transition-name:apphdr} .calcfab{view-transition-name:calcfab}
+/* names only while a page change runs: a named element cannot see behind itself, which would stop the glass bars from blurring */
+html[data-vt] header.top{view-transition-name:apphdr} html[data-vt] .calcfab{view-transition-name:calcfab}
 ::view-transition-group(apphdr),::view-transition-group(calcfab){animation:none}
 ::view-transition-old(apphdr),::view-transition-old(calcfab){display:none}
 ::view-transition-new(apphdr),::view-transition-new(calcfab){animation:none}
 /* the pill row belongs to its tab: on a new bottom tab it leaves with the old page; inside the same tab it stays put */
-#subnav{view-transition-name:subnav}
+html[data-vt] #subnav{view-transition-name:subnav}
 ::view-transition-group(subnav){animation:none}
 html[data-vt^="in-"]::view-transition-old(subnav),html[data-vt^="seg-"]::view-transition-old(subnav){display:none}
 html[data-vt^="in-"]::view-transition-new(subnav),html[data-vt^="seg-"]::view-transition-new(subnav){animation:none}
@@ -1537,11 +1538,11 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
   animation:bkA var(--d,90s) ease-in-out infinite alternate;animation-delay:var(--dl,0s)}
 .bokeh i:nth-child(1){--c:var(--bk-red);width:260px;height:260px;left:-70px;top:22%;--d:96s;--dl:-20s}
 .bokeh i:nth-child(2){--c:var(--bk-gold);width:170px;height:170px;right:-30px;top:58%;--d:84s;--dl:-55s;animation-name:bkB}
-.bokeh i:nth-child(3){--c:var(--bk-pale);width:120px;height:120px;left:58%;top:12%;--d:72s;--dl:-10s;animation-name:bkC}
-.bokeh i:nth-child(4){--c:var(--bk-red);width:150px;height:150px;left:46%;top:78%;--d:110s;--dl:-70s;animation-name:bkB}
-.bokeh i:nth-child(5){--c:var(--bk-gold);width:90px;height:90px;left:12%;top:68%;--d:78s;--dl:-35s;animation-name:bkC}
+.bokeh i:nth-child(3){--c:var(--bk-pale);width:120px;height:120px;left:58%;top:24%;--d:72s;--dl:-10s;animation-name:bkC}
+.bokeh i:nth-child(4){--c:var(--bk-red);width:150px;height:150px;left:46%;top:66%;--d:110s;--dl:-70s;animation-name:bkB}
+.bokeh i:nth-child(5){--c:var(--bk-gold);width:90px;height:90px;left:12%;top:60%;--d:78s;--dl:-35s;animation-name:bkC}
 .bokeh i:nth-child(6){--c:var(--bk-pale);width:70px;height:70px;left:76%;top:36%;--d:66s;--dl:-48s}
-.bokeh i:nth-child(7){--c:var(--bk-red);width:200px;height:200px;right:-80px;top:-40px;--d:120s;--dl:-90s;animation-name:bkC}
+.bokeh i:nth-child(7){--c:var(--bk-red);width:200px;height:200px;right:-80px;top:30%;--d:120s;--dl:-90s;animation-name:bkC}
 @keyframes bkA{0%{transform:translate(0,0)}35%{transform:translate(9vw,-4vh)}70%{transform:translate(4vw,6vh)}100%{transform:translate(-5vw,2vh)}}
 @keyframes bkB{0%{transform:translate(0,0)}40%{transform:translate(-8vw,-6vh)}75%{transform:translate(-3vw,4vh)}100%{transform:translate(5vw,-2vh)}}
 @keyframes bkC{0%{transform:translate(0,0)}30%{transform:translate(-5vw,5vh)}65%{transform:translate(6vw,3vh)}100%{transform:translate(2vw,-6vh)}}
@@ -1589,6 +1590,75 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
 ::view-transition-group(ptthumb){animation-duration:.42s;animation-timing-function:cubic-bezier(.3,.8,.25,1)}
 ::view-transition-old(ptthumb){display:none} ::view-transition-new(ptthumb){animation:none}
 ::view-transition-group(*.ptab){animation-duration:.42s} ::view-transition-old(*.ptab),::view-transition-new(*.ptab){animation-duration:.36s}
+
+/* ================= one set of corners: boxes round at 14px, the controls inside them at 10px (the 4px gap keeps the curves parallel), small tags at 6px ================= */
+:root{--r-box:14px;--r-ctl:10px;--r-tag:6px}
+.rcard,details.drug,details.trick,details.method,details.scen,details.sec,.rule-card,.plan,.fcard,.lvlcard,.actcard,.badgecard,.regbox,.regstats>div,.pgt,.reghero,.ghero,.gt,.gcard,.simcase,.simscene,.sprint,.dispatch,.simrand,.simscen,.lnode,.lrow,.lcontinue,.streakcard,.ob,.theme,.toast,.ptpop,.monitor,details.fold,details.subfold.quizopts,.qcard,.calc,.cold,.statcards .k,.rqbox>div,.rqi,.review li,.pkrow,.mci,.mcout,.ctepi,.ctlog,.sheet,.expick,.badge,.plancards,.ptrack,.board,.htile,.todo>div,.prbanner,.pkdose,.pksearch,.ctcount>div,.how,.calcfab,.wheel,.drawer .dkeys{border-radius:var(--r-box)}
+.chip,.pill,.btn,.ptchip,.backchip,.donebtn,.ptab,.pthumb,.lopt,.ltile,.opt,.stile,.nav button,.stabs2 button,.dhist button,.dquick button,.dkeys button,.dexpr,.exbar .exsel,.ghgo,.dg-grid section,.dm,.verdict,.lbuilt,.lfilter input,
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),select,textarea{border-radius:var(--r-ctl)}
+.dg-cls span,.tag,.studytag,.localtag,.drug .localtag,.dl .rt,.lopt .ln{border-radius:var(--r-tag)}
+details.drug[open]>summary{border-radius:var(--r-box) var(--r-box) 0 0}
+
+/* ================= glass on every control, not just the boxes ================= */
+.chip,.btn.alt,.backchip,.pill,input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),select,textarea{
+  background-color:color-mix(in srgb,var(--surface) 80%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);
+  border-color:color-mix(in srgb,var(--line) 72%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
+.btn.alt{border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge))}
+.btn:not(.alt){background-image:linear-gradient(170deg,rgba(255,255,255,.22),rgba(255,255,255,0) 62%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 14px -10px rgba(0,0,0,.5)}
+.ptchip{background-image:linear-gradient(170deg,rgba(255,255,255,.18),rgba(255,255,255,0) 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+
+/* ================= the bars are glass too: the colour sits on a frosted layer that blurs whatever passes under it ================= */
+header.top{background:transparent;box-shadow:none}
+header.top::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--barh,58px);z-index:-1;pointer-events:none;
+  background-color:color-mix(in srgb,var(--teal) 86%,transparent);background-image:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0) 64%);
+  box-shadow:inset 0 -1px 0 rgba(255,255,255,.12),0 8px 20px -12px rgba(0,0,0,.55);
+  -webkit-backdrop-filter:blur(14px) saturate(1.35);backdrop-filter:blur(14px) saturate(1.35);transition:transform .34s cubic-bezier(.3,.8,.25,1)}
+/* the page strip floats on the page with no band behind it; its own glass blurs what scrolls beneath */
+.top .subnav{background:transparent}
+.ptrack{background-color:color-mix(in srgb,var(--surface) 74%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.25);backdrop-filter:blur(12px) saturate(1.25);box-shadow:inset 0 1px 0 var(--glass-edge),0 8px 18px -12px rgba(0,0,0,.5)}
+@media (max-width:600px){
+  .nav{background-color:color-mix(in srgb,var(--teal) 86%,transparent);background-image:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 70%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 -8px 20px -12px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(14px) saturate(1.35);backdrop-filter:blur(14px) saturate(1.35)}
+  .nav button[aria-selected="true"]{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+}
+/* a page change is drawn from snapshots that cannot see behind themselves, so for that moment the glass takes the colour it would show over the page */
+html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 86%,var(--bg))}
+html[data-vt] .ptrack{background-color:color-mix(in srgb,var(--surface) 74%,var(--bg))}
+@media (max-width:600px){ html[data-vt] .nav{background-color:color-mix(in srgb,var(--teal) 86%,var(--bg))} }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){ header.top::before{background-color:var(--teal)} .ptrack{background-color:var(--surface)} .nav{background-color:var(--teal)!important} }
+
+/* ================= scrolling down squashes the bar a little: the colour slides up, the name and the patient chip shrink, the strip follows ================= */
+@media (max-width:600px){
+  .top .row h1,.top .row .ptchip,.top .subnav{transition:transform .34s cubic-bezier(.3,.8,.25,1)}
+  .top .row h1{transform-origin:0 50%} .top .row .ptchip{transform-origin:100% 50%}
+  html.hdrmin header.top::before{transform:translateY(-16px)}
+  html.hdrmin .top .row h1,html.hdrmin .top .row .ptchip{transform:translateY(-8px) scale(.84)}
+  html.hdrmin .top .subnav{transform:translateY(-16px)}
+  html.hdrmin details.drug[open]>summary{top:calc(var(--hdr,48px) - 16px + env(safe-area-inset-top,0px))}
+  html.hdrmin .stickybar{top:calc(var(--hdr,48px) - 16px + env(safe-area-inset-top,0px))}
+}
+
+/* ================= Patient Sim: the way into the step-by-step scenarios ================= */
+.simscen{appearance:none;text-align:left;font:inherit;color:var(--ink);cursor:pointer;border:1px solid var(--line);padding:14px 40px 14px 16px;display:grid;gap:3px;margin:10px 0 0}
+.simscen b{font-family:var(--display);font-size:20px;line-height:1.1}
+.simscen .note{font-size:12.5px}
+.simscen{background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;
+  border-color:color-mix(in srgb,var(--line) 72%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge),var(--glass-shadow)}
+
+/* ================= quiz: the drill set lives in Options, and the closed row says what a round draws from ================= */
+details.subfold.quizopts>summary .qsum{margin-left:auto;font-weight:500;font-size:12.5px;color:var(--muted);text-align:right}
+.qopts .qdrill{flex:1 1 100%;display:grid;gap:8px} .qopts .qdrill .eyebrow{margin:0}
+
+/* ================= listen: a microphone chip like any other, lit only while its card is being read ================= */
+.chip.listen,#drug-listen{background-color:color-mix(in srgb,var(--surface) 80%,transparent);color:var(--ink);border-color:color-mix(in srgb,var(--line) 72%,var(--glass-edge));font-weight:inherit}
+.chip.listen[aria-pressed="true"],#drug-listen[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
+.chip .mic{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:5px;vertical-align:-3px}
+.chip.listen[aria-pressed="true"] .mic,#drug-listen[aria-pressed="true"] .mic{animation:micpulse 1.2s ease-in-out infinite}
+@keyframes micpulse{50%{opacity:.45}}
+/* the card being read glows at its edge; the part being read is lit, and in quiz by ear it waits, dimmed, for your answer */
+details.drug.reading{border-color:color-mix(in srgb,var(--teal) 70%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--teal) 45%,transparent),0 10px 30px -14px color-mix(in srgb,var(--teal) 70%,transparent)}
+details.drug .speaking{position:relative;border-radius:var(--r-ctl);background-color:color-mix(in srgb,var(--teal) 14%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--teal) 14%,transparent);transition:background-color .35s ease,box-shadow .35s ease}
+details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1683,6 +1753,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
 
 <!-- ================= SCENARIOS ================= -->
 <section class="panel" id="panel-scen" hidden>
+  <button type="button" class="backchip" data-backto="sim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Patient Sim</button>
   <p class="intro">Each scenario walks one patient through several steps, and a miss shows you the work.</p>
   <div class="gate" id="scen-gate" hidden>Strict gates are on, so scenarios unlock once your last 20 quiz answers run 70% or better. You can turn the gates off in Settings.</div>
   <div class="prbanner" id="pr-banner" hidden></div>
@@ -1917,11 +1988,8 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
 <!-- ================= QUIZ ================= -->
 <section class="panel" id="panel-quiz" hidden>
   <div class="quizwrap">
-    <div class="hidefocus">
-      <span class="eyebrow">Drill set</span>
-      <div class="chips" id="chips" style="margin-top:6px"></div>
-    </div>
-    <details class="subfold quizopts hidefocus"><summary>Options</summary><div class="qopts">
+    <details class="subfold quizopts hidefocus"><summary><span>Options</span><span class="qsum" id="q-optsum"></span></summary><div class="qopts">
+      <div class="qdrill"><span class="eyebrow">Drill set</span><div class="chips" id="chips"></div></div>
       <label class="timesel">Clock <select id="q-time"><option value="0">off</option><option value="15">15 s</option><option value="20">20 s</option><option value="30">30 s</option><option value="45">45 s</option><option value="60">1 min</option><option value="90">1.5 min</option><option value="120">2 min</option><option value="180">3 min</option></select></label>
       <label class="timesel">Round <select id="q-count"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select></label>
       <button type="button" class="chip" id="q-focus" aria-pressed="false">Focus</button>
@@ -1935,7 +2003,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
     </div>
     <div class="qcard" id="qcard">
       <div class="qtop"><span class="cat" id="q-cat">Ready</span><span class="clock num" id="q-clock"></span></div>
-      <div class="q" id="q-text">Pick a drill set, then start.</div>
+      <div class="q" id="q-text">Press start for a round. Drill sets and the clock are under Options.</div>
       <form class="answerrow" id="q-form" hidden>
         <input type="text" inputmode="decimal" id="q-in" placeholder="answer" autocomplete="off" aria-label="Your answer">
         <span class="unit" id="q-unit"></span>
@@ -1993,7 +2061,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   <div class="drugtop">
     <div class="introrow"><p class="intro">Search by name, brand, class or use, and tap the star to add a drug to your study set.</p></div>
     <div class="drugbar"><input type="search" id="drug-q" placeholder="Search drug, brand, class, indication" aria-label="Search drugs"><select id="drug-filter" aria-label="Filter by class"></select></div>
-    <div class="drugchips"><button type="button" class="chip" id="drug-study" aria-pressed="false">Study set · 0</button><button type="button" class="chip" id="drug-listen">Listen to these</button><span class="note" id="drug-count"></span></div>
+    <div class="drugchips"><button type="button" class="chip" id="drug-study" aria-pressed="false">Study set · 0</button><button type="button" class="chip" id="drug-listen" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen to these</button><span class="note" id="drug-count"></span></div>
   </div>
   <div class="druglist" id="druglist"></div>
   <p class="note">Source: WVFD Drug Profiles, based on AHA, ACLS and PALS common practice with AZDHS and JB Learning content. It's a training reference, so check it against your current protocol.</p>
@@ -2071,6 +2139,11 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
     <div class="setrow"><div><b>Sound</b><div class="note">Quiet click on correct.</div></div><button type="button" class="chip tog" id="s-sound">On</button></div>
     <div class="setrow"><div><b>Strict gates</b><div class="note">Scenarios stay locked until your last 20 quiz answers run 70% or better.</div></div><button type="button" class="chip tog" id="s-strict">On</button></div>
   </div></details>
+  <details class="fold" id="s-listen"><summary><span class="ft">Listening</span><span class="fs">Voice, speed, quiz by ear</span></summary><div class="fbody">
+    <div class="setrow"><div><b>Voice</b><div class="note">Used when a drug card is read aloud.</div></div><select id="tts-voice" aria-label="Voice"></select></div>
+    <div class="setrow"><div><b>Speed</b></div><select id="tts-rate" aria-label="Speed"><option value="0.8">0.8×</option><option value="0.9">0.9×</option><option value="1">1×</option><option value="1.1">1.1×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option></select></div>
+    <div class="setrow"><div><b>Quiz by ear</b><div class="note">Asks each part first and waits for you to answer before reading it.</div></div><button type="button" class="chip tog" id="tts-quiz" aria-pressed="false">On</button></div>
+  </div></details>
   <details class="fold"><summary><span class="ft">Install</span></summary><div class="fbody">
     <div id="s-how"></div>
     <button type="button" class="btn amber" id="s-install" hidden>Install</button>
@@ -2131,13 +2204,6 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   </div>
   <div class="dhist" id="dhist"></div>
 </aside>
-
-<div class="ttsbar" id="ttsbar" hidden aria-live="polite">
-  <button type="button" class="donebtn" id="tts-stop">Done</button>
-  <div class="ttsrow"><div class="ttsinfo"><span class="eyebrow" id="tts-mode">Reading</span><b id="tts-title"></b><span class="note" id="tts-sub"></span></div><div class="ttsopts"><select id="tts-voice" aria-label="Voice"></select><select id="tts-rate" aria-label="Speed"><option value="0.8">0.8×</option><option value="0.9">0.9×</option><option value="1">1×</option><option value="1.1">1.1×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option></select></div></div>
-  <div class="ttstext" id="tts-text"></div>
-  <div class="ttsctl"><button type="button" class="btn alt" id="tts-prev" aria-label="Previous">&lsaquo;</button><button type="button" class="btn amber" id="tts-play">Pause</button><button type="button" class="btn alt" id="tts-skip">Reveal</button><button type="button" class="btn alt" id="tts-next" aria-label="Next">&rsaquo;</button><button type="button" class="chip" id="tts-quiz" aria-pressed="false">Quiz me</button><button type="button" class="chip" id="tts-texttog" aria-pressed="true">Text</button></div>
-</div>
 
 <script>
 (function(){
@@ -2363,17 +2429,19 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
     if(SET.sound){ try{ audio=audio||new (window.AudioContext||window.webkitAudioContext)(); const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=ok?880:220; g.gain.value=0.05; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(ok?0.08:0.18)); }catch(e){} }
   }
   // two-level navigation
-  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["sim","scen","review","quiz","exam","tests"],more:["proctor","settings"]};
+  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["sim","review","quiz","exam","tests"],more:["proctor","settings"]};
   const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",sim:"Patient Sim",review:"Review",tests:"Tests",progress:"Progress",registry:"Registry",proctor:"Proctor",settings:"Settings"};
   // every tab with more than one page shows them the same way: one strip under the header, a thumb sliding to the open page
   // Test Prep lists its practice pages first, then its tests, with a divider between the two; quizzes come before exams
-  const TAB={exam:"Exams",quiz:"Quizzes",tests:"Custom",sim:"Patients",scen:"Scenarios",review:"Review"};
-  const GNAME={learn:"Learn",prep:"Test Prep",more:"More"}, SPLIT={prep:3};
+  const TAB={exam:"Exams",quiz:"Quizzes",tests:"Custom",sim:"Patient Sim",review:"Review"};
+  const GNAME={learn:"Learn",prep:"Test Prep",more:"More"}, SPLIT={prep:2};
+  // pages opened from inside another page keep that page lit in the strip
+  const PARENT={scen:"sim"};
   // each tab reopens the page you were last on in it
   const lastOf=g=>{ const v=store.get("mm-last-"+g,NAV[g][0]); return NAV[g].includes(v)?v:NAV[g][0]; };
   // pages reached from inside a group without their own pill
   // Progress and the registry page open from their boxes on the dashboard
-  const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today"};
+  const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today",scen:"prep"};
   // a dashboard box and the card at the top of the page it opens grow into each other
   const ZOOM={progress:"lv-card",registry:"exam-card"}, ZTOP={progress:"#pg-tiles .pgt.wide",registry:"#reg-body .reghero"};
   const ztop=id=>document.querySelector(ZTOP[id]);
@@ -2401,7 +2469,28 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   })();
   // scroll the page under script control; touches and wheel are ignored until it lands
   window.smoothScrollTo=(getTop,ms)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||520; const hold=380; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=x=>1-Math.pow(1-x,3); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop)); window.scrollTo(0,p<1?start+(target-start)*ease(p):target); if(el<ms+hold) requestAnimationFrame(step); else done(); }; requestAnimationFrame(step); };
-  (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const set=()=>{ try{ document.documentElement.style.setProperty("--hdr",Math.round(h.getBoundingClientRect().height)+"px"); }catch(e){} }; set(); if(window.ResizeObserver) new ResizeObserver(set).observe(h); window.addEventListener("resize",set); })();
+  (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const de=document.documentElement, sub=document.getElementById("subnav");
+    // --hdr is the whole header, --barh just the coloured bar above the page strip, which the glass bar behind it is sized to
+    const set=()=>{ try{ de.style.setProperty("--hdr",Math.round(h.getBoundingClientRect().height)+"px"); de.style.setProperty("--barh",Math.round(sub&&!sub.hidden?sub.offsetTop:h.offsetHeight)+"px"); }catch(e){} };
+    set(); if(window.ResizeObserver) new ResizeObserver(set).observe(h); window.addEventListener("resize",set);
+    // scrolling down squashes the bar, and it stays squashed until the page is back at the very top
+    let min=false, tick=0; window.addEventListener("scroll",()=>{ if(tick) return; tick=requestAnimationFrame(()=>{ tick=0; const y=window.scrollY||0; if(!min&&y>48){ min=true; de.classList.add("hdrmin"); } else if(min&&y<6){ min=false; de.classList.remove("hdrmin"); } }); },{passive:true}); })();
+  // ----- the lights behind the glass. A change of bottom tab pushes them like bubbles in a liquid: each is carried along by its depth,
+  // drifts nearer or farther, swings back a little and settles. Every push starts from wherever the last one left them, so rapid taps never jump. -----
+  (function bokeh(){ const B=[...document.querySelectorAll(".bokeh i")]; if(!B.length||!B[0].animate) return;
+    const P=B.map((el,i)=>({depth:[1,.55,.35,.75,.45,.3,.85][i%7], hz:[.34,.42,.48,.38,.45,.5,.36][i%7], vy:[-.5,.8,.35,-.7,.6,-.3,.45][i%7], sz:[.16,-.12,.1,-.15,.13,-.1,.14][i%7]}));
+    let live=[]; const N=40, D=3600;
+    const imp=(T,hz,z)=>{ const w=2*Math.PI*hz, wd=w*Math.sqrt(1-z*z), pk=Math.atan(Math.sqrt(1-z*z)/z)/wd, nm=Math.exp(-z*w*pk)*Math.sin(wd*pk); return Math.exp(-z*w*T)*Math.sin(wd*T)/nm; };
+    const back=T=>Math.exp(-2.2*T)*(1+2.2*T);
+    const num=(v,d)=>{ const n=parseFloat(v); return isFinite(n)?n:d; };
+    window.bokehStir=dir=>{ if(document.hidden||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)) return; const k=Math.min(1.4,Math.max(.8,(window.innerWidth||400)/400));
+      const from=B.map(el=>{ const cs=getComputedStyle(el), t=(cs.translate||"none").split(" "); return {x:t[0]==="none"?0:num(t[0],0), y:num(t[1],0), s:cs.scale&&cs.scale!=="none"?num(cs.scale,1):1}; });
+      live.forEach(a=>a.cancel()); live=[];
+      B.forEach((el,i)=>{ const p=P[i], f=from[i], A=-dir*(34+60*p.depth)*k, Ay=p.vy*30*p.depth*k, S=p.sz*(.6+p.depth*.6), fr=[];
+        for(let j=0;j<=N;j++){ const T=j/N*D/1000, b=back(T), x=f.x*b+A*imp(T,p.hz,.5), y=f.y*b+Ay*imp(T,p.hz*.8,.52), sc=1+(f.s-1)*b+S*imp(T,p.hz*.7,.55);
+          fr.push({translate:`${x.toFixed(1)}px ${y.toFixed(1)}px`,scale:sc.toFixed(4)}); }
+        try{ live.push(el.animate(fr,{duration:D,easing:"linear",fill:"none"})); }catch(e){} }); };
+  })();
   // pages visited, so the back gesture walks back through them
   const navStack=[];
   window.showPanel=(id,o)=>showPanel(id,o);
@@ -2415,7 +2504,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   // ----- the page strip: built once per tab, then only its selection and thumb change -----
   function strip(g,id,vt){ const sub=$("subnav"), items=NAV[g]; sub.hidden=items.length<2; if(sub.hidden){ sub.dataset.g=""; return; }
     if(sub.dataset.g!==g){ sub.dataset.g=g; sub.innerHTML=`<div class="ptrack" role="tablist" aria-label="${GNAME[g]||""} pages"><span class="pthumb" aria-hidden="true"></span>${items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join("")}</div>`; thumb(false,id); }
-    sub.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
+    id=PARENT[id]||id; sub.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
     fit(); thumb(!vt&&!reduceMotion(),id); edges();
     // bring the open page into view along the strip, once the page change has played
     const on=sub.querySelector('.ptab[aria-selected="true"]'), tr=sub.querySelector(".ptrack");
@@ -2434,7 +2523,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
     if(!ALLP.includes(id)) id="today"; const g=groupOf(id), from=curPanel;
     if(!(opts&&opts.back)&&from&&from!==id){ navStack.push(from); if(navStack.length>60) navStack.shift(); }
     curPanel=id; store.set("mm-panel",id); try{ history.replaceState(null,"","#"+id); }catch(e){}
-    if(NAV[g].length>1&&NAV[g].includes(id)) store.set("mm-last-"+g,id);
+    if(NAV[g].length>1&&NAV[g].includes(PARENT[id]||id)) store.set("mm-last-"+g,PARENT[id]||id);
     const vt=!!(from&&from!==id&&document.startViewTransition&&!reduceMotion()&&!document.hidden);
     let zs=null, zd=null; if(vt){ if(ZOOM[id]&&from==="today"){ zs=$(ZOOM[id]); zd=()=>ztop(id); } else if(ZOOM[from]&&id==="today"){ zs=ztop(from); zd=()=>$(ZOOM[from]); } if(!zs){ zs=zd=null; } }
     const swap=()=>{
@@ -2444,6 +2533,8 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
       replayCascade(document.getElementById("panel-"+id));
       document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
       document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false"); };
+    // a change of bottom tab stirs the lights behind the glass, as if they hang in a fluid the page just moved through
+    const gFrom=from?groupOf(from):null; if(gFrom&&gFrom!==g&&!zs&&window.bokehStir){ const G=Object.keys(NAV); bokehStir(Math.sign(G.indexOf(g)-G.indexOf(gFrom))||1); }
     // within one tab the strip stays put and only its thumb and labels move, so they get names of their own for the page change
     const inTab=!zs&&groupOf(from)===g&&NAV[g].length>1&&NAV[g].includes(id)&&NAV[g].includes(from);
     if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=zs?"zoom":groupOf(from)===g?"in-"+dir:dir; if(inTab) nameStrip(true);
@@ -2477,7 +2568,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
       if(vis("panel-sim")&&window.simBack&&simBack()) return true;
       if(vis("wb")){ $("wb-close").click(); return true; }
       const dr=$("drawer"); if(dr&&dr.classList.contains("open")){ $("calc-close").click(); return true; }
-      if(vis("ttsbar")){ $("tts-stop").click(); return true; }
+      if(window.ttsPlaying&&ttsPlaying()){ ttsStop(); return true; }
       if(vis("learnfirst")){ $("learnfirst").hidden=true; return true; }
       if(vis("pt-pop")){ $("pt-pop").hidden=true; return true; }
       const wh=$("wheel"); if(wh&&wh.classList.contains("open")){ wh.classList.remove("open"); return true; }
@@ -3071,7 +3162,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
           <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span>${(d.quick.lines||[]).length?`<div class="dlines">${d.quick.lines.map(l=>`<div class="dl"><span class="rt">${l.tag}</span><span class="dv"><b>${tight(l.text)}</b>${l.ctx?` <span class="dx">${l.ctx}</span>`:""}</span></div>`).join("")}</div>`:`<b>${tight(d.quick.dose.replace(/\.$/,""))}</b>`}</div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
-        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}">Listen</button><button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
+        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen</button><button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
         <div class="dg-body" data-lazy="1"></div></details>`;
     }
     // the open card's full body, built the first time it opens so the closed list stays light
@@ -3137,7 +3228,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
         if(b.hasAttribute("data-math")){ store.set("mm-showmath",!store.get("mm-showmath",false)); applyLayers(); }
         else if(b.hasAttribute("data-lesson")){ if(window.openLesson) openLesson(b.dataset.lesson); }
         else if(b.hasAttribute("data-info")){ store.set("mm-showinfo",!store.get("mm-showinfo",false)); applyLayers(); }
-        else if(b.dataset.listen){ if(window.ttsStart) ttsStart([b.dataset.listen],0); }
+        else if(b.dataset.listen){ if(window.ttsToggle) ttsToggle([b.dataset.listen],false); }
         else if(b.dataset.study){ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); } }));
       let seenD=store.get("mm-seenDrugs",{});
       root.querySelectorAll("details.drug").forEach(d=>d.addEventListener("toggle",()=>{
@@ -3155,7 +3246,7 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
       const sm=e.target.closest("details.drug>summary"); if(sm) fill(sm.parentNode); },true);
     q.addEventListener("input",render); fil.addEventListener("change",render);
     studyBtn.addEventListener("click",()=>{ if(!study.size){ studyBtn.innerHTML=`<svg class="chipstar" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>Tap a star to add a drug`; setTimeout(setStudyBtn,1800); return; } studyOnly=!studyOnly; render(); });
-    $("drug-listen").addEventListener("click",()=>{ const ids=visible().map(d=>d.id); if(ids.length&&window.ttsStart) ttsStart(ids,0); });
+    $("drug-listen").addEventListener("click",()=>{ const ids=visible().map(d=>d.id); if(ids.length&&window.ttsToggle) ttsToggle(ids,true); });
     document.addEventListener("patient",renderDoses);
     document.addEventListener("study",setStudyBtn);
     render();
@@ -3725,9 +3816,12 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   keys.forEach(k=>{
     const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=GEN[k].label;
     b.setAttribute("aria-pressed",active.has(k)?"true":"false"); b.dataset.k=k;
-    b.addEventListener("click",()=>{ if(active.has(k)){ if(active.size>1) active.delete(k);} else active.add(k); b.setAttribute("aria-pressed",active.has(k)?"true":"false"); store.set("mm-cats",[...active]); });
+    b.addEventListener("click",()=>{ if(active.has(k)){ if(active.size>1) active.delete(k);} else active.add(k); b.setAttribute("aria-pressed",active.has(k)?"true":"false"); store.set("mm-cats",[...active]); drillSum(); });
     chips.appendChild(b);
   });
+  // the closed Options row says which drill sets a round will draw from
+  function drillSum(){ const el=$("q-optsum"); if(el) el.textContent=active.size===keys.length?"All drill sets":active.size===1?GEN[[...active][0]].label:`${active.size} of ${keys.length} drill sets`; }
+  drillSum();
   // mastery history: last 50 per category
   let hist=store.get("mm-hist",{});
   function stats(k){ const h=hist[k]||[]; const l=h.slice(-20); const r=l.length?l.filter(x=>x.o).length/l.length:null; const ts=h.filter(x=>x.t!=null).map(x=>x.t); const cw=h.filter(x=>x.cw).length; return {n:h.length,n20:l.length,r20:r,best:ts.length?Math.min(...ts):null,avg:ts.length?ts.reduce((a,b)=>a+b,0)/ts.length:null,cw}; }
@@ -6157,6 +6251,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     function cancelTyping(){ typing=null; }
     function list(){ cancelTyping(); stopLoop(); S=null; pend=null; setOn(false); try{ window.scrollTo({top:0}); }catch(e){} const hist=store.get("mm-sim",{});
       root.innerHTML=`<div class="simhome"><button type="button" class="simrand" id="sim-rand"><span class="eyebrow">Unknown call</span><b>Take a random call</b><span class="note">You only know what dispatch tells you.</span></button>
+        <button type="button" class="simscen tapbox" data-goscen><svg class="tapgo" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span class="eyebrow">Step by step</span><b>Scenarios</b><span class="note">One patient through several methods in a row, with the work shown on a miss.</span></button>
         <div class="simlist">${C.map(c=>{ const h=hist[c.id]; return `<button type="button" class="simcase" data-sim="${c.id}"><span class="eyebrow">${esc(c.tag)}</span><b>${esc(c.n)}</b><span class="note">${esc(c.blurb)}</span>${h?`<span class="simbest">Best ${h.best} · ${esc(h.last)}</span>`:""}</button>`; }).join("")}</div></div>`; }
     // the call comes in on a blank screen, typed out the way an MDT prints it
     function dispatch(id){ const c=C.find(x=>x.id===id); if(!c) return; stopLoop(); S=null; setOn(true); try{ window.scrollTo({top:0}); }catch(e){}
@@ -6229,7 +6324,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     function hint(t){ const h=q("#sim-hint"); if(!h) return; h.textContent=t; h.classList.add("show"); clearTimeout(hintT); hintT=setTimeout(()=>{ h.classList.remove("show"); },2600); }
     function cycleBP(){ const s=S; if(!s||s.ended) return; if(!s.seen.mon){ hint("Put the monitor on first."); return; } if(s.nibpBusy) return; s.nibpBusy=true; s.nibpAt=s.t+15; update(); }
     function transport(){ const s=S; if(!s||s.ended) return; const b=q("#sim-transport"); const now=Date.now(); if(s.tAsk&&now-s.tAsk<3500){ end("transport"); return; } s.tAsk=now; if(b){ b.textContent="Tap again to transport"; setTimeout(()=>{ if(b&&S===s&&!s.ended) b.textContent="Transport"; },3500); } }
-    root.addEventListener("click",e=>{
+    root.addEventListener("click",e=>{ if(e.target.closest("[data-goscen]")){ showPanel("scen"); return; }
       const gb=e.target.closest("#sim-go"); if(gb){ if(!gb.disabled) go(); return; }
       if(e.target.closest("#sim-disp")){ if(typing&&typing.finish) typing.finish(); return; }
       const tb=e.target.closest("[data-tab]"); if(tb&&S){ S.tab=tb.dataset.tab; drawTabs(); return; }
@@ -6253,7 +6348,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     const NAT=(()=>{ try{ const C=window.Capacitor; if(C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.TextToSpeech) return C.Plugins.TextToSpeech; }catch(e){} return null; })();
     const ok=!!NAT||(("speechSynthesis" in window)&&("SpeechSynthesisUtterance" in window));
     window.ttsOK=ok;
-    const bar=$("ttsbar"); if(!ok){ document.body.classList.add("notts"); return; }
+    if(!ok){ document.body.classList.add("notts"); return; }
     let list=[], di=0, parts=[], pi=0, playing=false, timer=null, cur=null;
     // one time, everyone moves to the new defaults: the deepest male voice at 0.9x
     if(!store.get("mm-ttsdef2",false)){ store.set("mm-ttsdef2",true); store.set("mm-ttsrate",0.9); store.set("mm-ttsvoice",null); }
@@ -6312,32 +6407,45 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       // some engines never fire onend for very short strings; guard with a timer scaled to length
       setTimeout(()=>{ if(!done&&!speechSynthesis.speaking) fin(); },Math.max(1500,text.length*90/rate)); }
     vsel.addEventListener("change",()=>{ pickURI=vsel.value; store.set("mm-ttsvoice",pickURI); if(playing){ halt(); playPart(); } });
-    const tbox=$("tts-text");
-    function buildText(){ let html="", sub=null, veil=false; parts.forEach((p,i)=>{ if(p.sub!==sub){ if(sub!==null) html+="</p></div>"; sub=p.sub; veil=false; html+=`<div class="tsec"><span class="tsl">${sub}</span><p>`; } if(p.wait){ veil=quiz; return; } html+=`<span class="tw${p.ask?" ask":""}${veil&&!p.ask?" veil":""}" data-p="${i}">${p.t}</span> `; }); if(sub!==null) html+="</p></div>"; tbox.innerHTML=html; }
-    function markText(){ tbox.querySelectorAll(".tw.cur").forEach(e=>e.classList.remove("cur")); for(let i=0;i<=pi&&i<parts.length;i++){ const e=tbox.querySelector(`.tw[data-p="${i}"]`); if(e) e.classList.remove("veil"); } const e=tbox.querySelector(`.tw[data-p="${pi}"]`); if(e){ e.classList.add("cur"); const r=e.getBoundingClientRect(), b=tbox.getBoundingClientRect(); if(r.top<b.top||r.bottom>b.bottom) tbox.scrollTo({top:tbox.scrollTop+(r.top-b.top)-b.height*0.35,behavior:"smooth"}); } }
-    function render(){ markText(); const d=cur; const p=parts[pi]; $("tts-title").textContent=d?plainName(d):""; $("tts-sub").textContent=p?(p.ask?p.t:p.wait?"your turn":p.sub):""; $("tts-mode").textContent=(quiz?"Quiz by ear":"Reading")+(list.length>1?` · ${di+1} of ${list.length}`:""); $("tts-play").textContent=playing?"Pause":"Play"; $("tts-quiz").setAttribute("aria-pressed",quiz?"true":"false"); bar.classList.toggle("waiting",!!(p&&p.wait)); }
+    // ----- reading happens on the drug card itself: the card opens and stays in view, the part being read is lit, and the card's own Listen chip is the switch -----
+    const SEC={"Class":".dg-cls","Indications":"Indications","Adult dosing":".popgrp.adult","Pediatric dosing":".popgrp.peds","Contraindications":"Contraindications","Adverse reactions":"Adverse reactions","Key consideration":"Key consideration","How it works":".how"};
+    const card=()=>cur?$("drug-"+cur.id):null;
+    function secOf(c,sub){ if(!c) return null; if(sub==="Drug") return c.querySelector(".dg-name"); const k=SEC[sub]; if(!k) return null; if(k[0]===".") return c.querySelector(k);
+      const h=[...c.querySelectorAll(".dg-grid>section>h4")].find(x=>x.textContent.trim()===k); return h?h.parentNode:null; }
+    let lit=null;
+    function headerH(){ const h=document.querySelector("header.top"); return h?h.getBoundingClientRect().height:0; }
+    // keep the lit part on screen: when it starts below the fold or under the header, the page glides so it sits a third of the way down
+    function follow(el){ if(!el||!window.smoothScrollTo) return; const r=el.getBoundingClientRect(), top=headerH()+8, vh=window.innerHeight||800, nav=(document.querySelector(".nav")||{}).offsetHeight||0;
+      if(r.top<top||r.bottom>vh-nav-16) smoothScrollTo(()=>el.getBoundingClientRect().top+window.scrollY-Math.max(top,(vh-nav)*.3),620); }
+    function render(){ const c=card(), p=parts[pi];
+      document.querySelectorAll("details.drug.reading").forEach(x=>{ if(x!==c||!playing) x.classList.remove("reading","yourturn"); });
+      const el=playing&&c&&p?secOf(c,p.sub):null; if(lit&&lit!==el){ lit.classList.remove("speaking"); } if(el&&el!==lit){ el.classList.add("speaking"); follow(el); } lit=el;
+      if(c&&playing){ c.classList.add("reading"); c.classList.toggle("yourturn",!!(p&&p.wait)); }
+      document.querySelectorAll("[data-listen]").forEach(b=>b.setAttribute("aria-pressed",playing&&cur&&b.dataset.listen===cur.id?"true":"false"));
+      const all=$("drug-listen"); if(all) all.setAttribute("aria-pressed",playing&&list.length>1?"true":"false");
+      const qz=$("tts-quiz"); if(qz) qz.setAttribute("aria-pressed",quiz?"true":"false"); }
     function playPart(){
-      if(!playing) return; if(pi>=parts.length){ if(di<list.length-1){ di++; load(); timer=setTimeout(playPart,600); } else { stop(); $("tts-sub").textContent="done"; } return; }
+      if(!playing) return; if(pi>=parts.length){ if(di<list.length-1){ di++; load(); timer=setTimeout(playPart,600); } else stop(); return; }
       const p=parts[pi]; render();
       if(p.wait){ timer=setTimeout(()=>{ pi++; playPart(); },p.wait/Math.max(.6,rate)); return; }
       speak(say(p.t),()=>{ if(!playing) return; pi++; timer=setTimeout(playPart,p.head?500:180); });
     }
-    function load(){ cur=DRUGS.find(x=>x.id===list[di]); parts=script(cur); pi=0; buildText(); tbox.scrollTop=0; if(window.revealDrug) revealDrug(cur.id); render(); }
+    function load(){ cur=DRUGS.find(x=>x.id===list[di]); parts=script(cur); pi=0; if(window.revealDrug) revealDrug(cur.id); render(); }
     function halt(){ clearTimeout(timer); timer=null; token++; try{ if(NAT) NAT.stop(); else speechSynthesis.cancel(); }catch(e){} }
-    function stop(){ playing=false; halt(); render(); }
-    window.ttsStart=(ids,i)=>{ halt(); list=ids.slice(); di=i||0; bar.hidden=false; playing=true; load(); playPart(); };
-    window.ttsStop=()=>{ stop(); bar.hidden=true; };
-    $("tts-play").addEventListener("click",()=>{ if(playing){ stop(); } else { if(!parts.length) return; playing=true; playPart(); } });
-    $("tts-stop").addEventListener("click",()=>ttsStop());
-    $("tts-next").addEventListener("click",()=>{ halt(); if(di<list.length-1){ di++; load(); if(playing) playPart(); } else ttsStop(); });
-    $("tts-prev").addEventListener("click",()=>{ halt(); if(pi>2&&!quiz){ pi=0; } else if(di>0){ di--; } load(); if(playing) playPart(); });
-    $("tts-skip").addEventListener("click",()=>{ const p=parts[pi]; if(p&&p.wait){ clearTimeout(timer); pi++; if(playing) playPart(); } });
+    function stop(){ playing=false; halt(); if(lit) lit.classList.remove("speaking"); lit=null; render(); }
+    window.ttsStart=(ids,i)=>{ halt(); list=ids.slice(); di=i||0; playing=true; load(); playPart(); };
+    window.ttsStop=()=>stop();
+    window.ttsPlaying=()=>playing;
+    // the same chip starts and stops: a card's chip reads that card, "Listen to these" reads the whole list in turn
+    window.ttsToggle=(ids,many)=>{ if(playing&&(many?list.length>1:cur&&list.length===1&&ids[0]===cur.id)){ stop(); return; } window.ttsStart(ids,0); };
+    // tapping the lit part while a quiz-by-ear pause runs reveals it straight away
+    document.addEventListener("click",e=>{ const p=parts[pi]; if(playing&&p&&p.wait&&lit&&e.target.closest(".speaking")){ clearTimeout(timer); pi++; playPart(); } });
     $("tts-rate").value=String(rate); $("tts-rate").addEventListener("change",()=>{ rate=+$("tts-rate").value; store.set("mm-ttsrate",rate); if(playing){ halt(); playPart(); } });
-    $("tts-quiz").addEventListener("click",()=>{ quiz=!quiz; store.set("mm-ttsquiz",quiz); if(cur){ const was=playing; halt(); parts=script(cur); pi=0; buildText(); render(); if(was) playPart(); } else render(); });
-    const showText=v=>{ bar.classList.toggle("notext",!v); $("tts-texttog").setAttribute("aria-pressed",v?"true":"false"); store.set("mm-ttstext",v); }; showText(store.get("mm-ttstext",true)!==false);
-    $("tts-texttog").addEventListener("click",()=>showText(bar.classList.contains("notext")));
-    document.addEventListener("panel",e=>{ if(e.detail!=="drugs"&&playing){ /* keep reading; the bar follows you */ } });
+    $("tts-quiz").addEventListener("click",()=>{ quiz=!quiz; store.set("mm-ttsquiz",quiz); if(cur&&playing){ halt(); parts=script(cur); pi=0; render(); playPart(); } else render(); });
+    // reading belongs to the drug page: leaving the page ends it (it carries on with the screen off, for listening on the move)
+    document.addEventListener("panel",e=>{ if(e.detail!=="drugs"&&playing) stop(); });
     window.addEventListener("pagehide",()=>halt());
+    render();
   })();
   // ---------- calculator drawer ----------
   (function calc(){
