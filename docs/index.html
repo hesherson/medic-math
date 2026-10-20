@@ -30,11 +30,11 @@
   --branch:#A9A39A; --splash-bg:#000; --splash-ink:#EFE8DC;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#171516; --surface:#1F1C1D; --surface-2:#2A2627; --ink:#EFE8DC; --muted:#A89F95; --line:#3A3436;
+  --bg:#171516; --surface:#262224; --surface-2:#312C2E; --ink:#EFE8DC; --muted:#A89F95; --line:#423B3D;
   --teal:#B8333F; --teal-ink:#FBF3E7; --amber:#C9A66B; --amber-soft:#3A3022;
   --good:#7FB394; --good-soft:#1E2E25; --bad:#DA6A5C; --bad-soft:#3B2522; --branch:#544C4E; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#171516; --surface:#1F1C1D; --surface-2:#2A2627; --ink:#EFE8DC; --muted:#A89F95; --line:#3A3436;
+  --bg:#171516; --surface:#262224; --surface-2:#312C2E; --ink:#EFE8DC; --muted:#A89F95; --line:#423B3D;
   --teal:#B8333F; --teal-ink:#FBF3E7; --amber:#C9A66B; --amber-soft:#3A3022;
   --good:#7FB394; --good-soft:#1E2E25; --bad:#DA6A5C; --bad-soft:#3B2522; --branch:#544C4E; color-scheme:dark}
 
@@ -1441,6 +1441,46 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 .obq .chip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 .obq .seg2 .chip{flex:1 1 0;justify-content:center;min-height:42px}
 .onboard.leaving{opacity:0;transition:opacity .25s ease}
+
+/* ----- dashboard: one screen, no scrolling ----- */
+#panel-today:not([hidden]){display:flex;flex-direction:column;gap:10px}
+#panel-today>.hello{margin:0 0 2px} #panel-today>.lvlcard,#panel-today>.actcard{margin:0}
+#panel-today .hello h1{font-size:28px} #panel-today .hello p{margin-top:4px;font-size:14px}
+#panel-today .plan{padding:12px 14px;gap:8px} #panel-today .planhead h2{font-size:19px}
+#panel-today .pcard{padding:10px 40px 10px 14px}
+@media (max-height:760px){ #panel-today:not([hidden]){gap:8px} #panel-today .hello h1{font-size:23px} #panel-today .hello p{display:none} #panel-today .pcard{padding:7px 40px 7px 14px} #panel-today .lvlcard{padding:10px 36px 10px 12px;grid-template-columns:64px 1fr;gap:12px} #panel-today .lvlring svg{width:64px;height:64px} #panel-today .lvlinfo h2{font-size:21px;margin-bottom:6px} #panel-today .statline{margin-top:5px} #panel-today .regbox{padding:9px 40px 9px 14px} #panel-today .regbox .rbd{font-size:17px} #panel-today .plan{padding:10px 12px;gap:6px} #panel-today .planhead h2{font-size:17px} #panel-today .planprog .btn{padding:8px 14px} }
+/* on short phones the dashboard needs the whole screen, so the tools button steps aside there */
+@media (max-height:760px){ body:has(#panel-today:not([hidden])) .calcfab{display:none} }
+/* boxes that open a page: the whole box is the button, with a chevron to say so */
+.tapbox{position:relative;cursor:pointer;transition:transform .15s ease,border-color .2s ease,background-color .2s ease;-webkit-tap-highlight-color:transparent}
+@media (hover:hover){ .tapbox:hover{border-color:color-mix(in srgb,var(--teal) 40%,var(--line))} } .tapbox:active{transform:scale(.985)}
+.tapbox:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.tapgo{position:absolute;right:12px;top:50%;width:18px;height:18px;margin-top:-9px;fill:none;stroke:var(--muted);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.lvlcard.tapbox{padding-right:36px}
+/* the registry date as one line */
+.regbox{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:2px 12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 40px 12px 16px}
+.regbox .eyebrow{margin:0;grid-column:1/-1} .regbox .rbd{font-family:var(--display);font-size:19px;font-weight:700;line-height:1.1;grid-column:1/3}
+.regbox .rbn{justify-self:end;font-size:13px;color:var(--muted)} .regbox .rbn b{font-family:var(--display);font-size:19px;color:var(--ink);margin-right:3px}
+/* the registry page */
+.regpage{display:grid;gap:12px}
+.reghero{display:grid;gap:4px;padding:18px 18px 16px;border-radius:16px;border:1px solid var(--line);background:radial-gradient(120% 100% at 100% 0%,color-mix(in srgb,var(--teal) 14%,transparent),transparent 65%),var(--surface)}
+.reghero .eyebrow{margin:0} .reghero h2{margin:0;font-family:var(--display);font-size:24px;line-height:1.1}
+.regcount{display:flex;align-items:baseline;gap:8px;margin:6px 0 2px} .regcount b{font-family:var(--display);font-size:56px;line-height:.95;font-weight:700} .regcount span{color:var(--muted);font-size:15px}
+.reghero .note{margin:2px 0 0;font-size:13.5px}
+.regedit .btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center} .regedit input[type=date]{font:inherit;font-size:15px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);min-height:42px}
+.regstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.regstats>div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:2px} .regstats .eyebrow{margin:0} .regstats b{font-family:var(--display);font-size:26px;line-height:1.05} .regstats .note{font-size:12px}
+/* a dashboard box grows into its page, and shrinks back */
+html[data-vt="zoom"]::view-transition-old(root){animation:vtFadeOut .26s ease both}
+html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn .42s cubic-bezier(.2,.8,.2,1) .06s both}
+::view-transition-group(vzoom){animation-duration:.46s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+::view-transition-old(vzoom),::view-transition-new(vzoom){animation-duration:.46s;animation-timing-function:cubic-bezier(.2,.8,.2,1);height:100%;object-fit:cover;object-position:left top}
+@keyframes vtZoomIn{from{opacity:0}}
+
+/* the day streak, today's XP and mastered drugs run along the bottom of the XP box in one line */
+.lvlcard>.statline{grid-column:1/-1;margin:2px 0 0;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);flex-wrap:nowrap;justify-content:space-between;white-space:nowrap}
+body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+@media (max-height:700px){ #panel-today:not([hidden]){gap:6px} #panel-today .hello h1{font-size:21px} #panel-today .pcard{padding:6px 40px 6px 14px} #panel-today .lvlcard{padding:8px 36px 8px 12px} #panel-today .lvlcard>.statline{padding-top:6px} #panel-today .regbox{padding:8px 40px 8px 14px} body:has(#panel-today:not([hidden])) main{padding-top:12px} }
 </style>
 </head>
 <body>
@@ -1499,11 +1539,13 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 <!-- ================= TODAY ================= -->
 <section class="panel" id="panel-today">
   <div class="hello" id="hello"><h1 id="hello-h"></h1><p id="hello-p"></p></div>
-  <div class="lvlcard">
+  <div class="lvlcard tapbox" id="lv-card" role="button" tabindex="0" aria-label="Open your progress">
+    <svg class="tapgo" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
     <div class="lvlring" id="lv-ring"></div>
-    <div class="lvlinfo"><span class="eyebrow">Level <b id="lv-n">1</b></span><h2 id="lv-title">Candidate</h2><div class="xpbar"><i id="lv-bar"></i></div><span class="note" id="lv-next"></span>
-      <div class="statline"><span><b class="num" id="t-streak">0</b> day streak</span><span><b class="num" id="t-xpday">0</b> XP today</span><span><b class="num" id="t-mastered">0</b> mastered</span></div></div>
+    <div class="lvlinfo"><span class="eyebrow">Level <b id="lv-n">1</b></span><h2 id="lv-title">Candidate</h2><div class="xpbar"><i id="lv-bar"></i></div><span class="note" id="lv-next"></span></div>
+    <div class="statline"><span><b class="num" id="t-streak">0</b> day streak</span><span><b class="num" id="t-xpday">0</b> XP today</span><span><b class="num" id="t-mastered">0</b> mastered</span></div>
   </div>
+  <div class="regbox tapbox" id="exam-card" role="button" tabindex="0" aria-label="Open your registry date"></div>
   <div class="actcard" id="assign-card" hidden></div>
   <div class="plan" id="today-plan">
     <div class="planhead"><div><span class="eyebrow">Today</span><h2>Your five</h2></div><div class="planprog"><b id="t-prog">0 / 5</b><button type="button" class="btn amber" id="t-run">Start</button></div></div>
@@ -1516,13 +1558,6 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
     </div>
     <button type="button" class="btn alt" id="t-install" hidden>Install on this phone</button>
   </div>
-  <div class="actcard" id="heat-card"></div>
-  <div class="actcard" id="exam-card"></div>
-  <details class="fold" id="t-more"><summary><span class="ft">Activity and badges</span><span class="fs" id="badge-count">0 of 0</span></summary><div class="fbody">
-    <div class="statcards three"><div class="k"><b class="num" id="t-due">0</b><span>cards due</span></div><div class="k"><b class="num" id="t-new">0</b><span>never seen</span></div><div class="k"><b class="num" id="t-overall">0</b><span>quiz, last 20</span></div></div>
-    <div><span class="eyebrow">Last 30 days</span><div id="act-graph"></div><div id="t-cal" hidden></div></div>
-    <div><span class="eyebrow">Badges</span><div class="badges" id="badges"></div></div>
-  </div></details>
   <div class="flash" id="flash" hidden></div>
 </section>
 <!-- ================= METHODS ================= -->
@@ -1857,7 +1892,12 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 </section>
 
 <!-- ================= PROGRESS ================= -->
+<section class="panel" id="panel-registry" hidden>
+  <button type="button" class="backchip" data-backto="today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Dashboard</button>
+  <div class="regpage" id="reg-body"></div>
+</section>
 <section class="panel" id="panel-progress" hidden>
+  <button type="button" class="backchip" data-backto="today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>Dashboard</button>
   <div class="pgtiles" id="pg-tiles"></div>
   <div class="rcard pgcard">
     <header class="pghead"><div><span class="eyebrow">Registry areas</span><h2 id="pg-ready">Getting started</h2><span class="note">Weighted by each area's share of the exam</span></div><div class="pgring" id="pg-ring" aria-hidden="true"></div></header>
@@ -1868,6 +1908,10 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
     <div class="drugbar2" id="pg-drugbar"></div>
     <div class="dkey" id="pg-dkey"></div>
   </div>
+  <div class="rcard pgcard"><header><span class="eyebrow">Activity</span><h2>Last 30 days</h2></header>
+    <div class="statcards three"><div class="k"><b class="num" id="t-due">0</b><span>cards due</span></div><div class="k"><b class="num" id="t-new">0</b><span>never seen</span></div><div class="k"><b class="num" id="t-overall">0</b><span>quiz, last 20</span></div></div>
+    <div id="act-graph"></div><div id="t-cal" hidden></div></div>
+  <details class="fold" id="t-more"><summary><span class="ft">Badges</span><span class="fs" id="badge-count">0 of 0</span></summary><div class="fbody"><div class="badges" id="badges"></div></div></details>
   <details class="fold"><summary><span class="ft">Med math quiz</span><span class="fs" id="m-overall">No rounds yet</span></summary><div class="fbody">
     <div class="mastery" id="mastery"></div>
     <div class="btnrow"><button type="button" class="btn alt danger" id="m-reset">Reset quiz history</button></div>
@@ -2211,8 +2255,8 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
     if(SET.sound){ try{ audio=audio||new (window.AudioContext||window.webkitAudioContext)(); const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=ok?880:220; g.gain.value=0.05; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(ok?0.08:0.18)); }catch(e){} }
   }
   // two-level navigation
-  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["exam","quiz","tests","sim","scen","review"],more:["progress","proctor","settings"]};
-  const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",sim:"Patient Sim",review:"Review",tests:"Tests",progress:"Progress",proctor:"Proctor",settings:"Settings"};
+  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["exam","quiz","tests","sim","scen","review"],more:["proctor","settings"]};
+  const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",sim:"Patient Sim",review:"Review",tests:"Tests",progress:"Progress",registry:"Registry",proctor:"Proctor",settings:"Settings"};
   // Test Prep holds two hubs; each hub's sections are their own pages, switched by a segmented control at the top
   const HUBS={tests:["exam","quiz","tests"],practice:["sim","scen","review"]};
   const HUBNAME={tests:"Tests",practice:"Practice"};
@@ -2220,7 +2264,11 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
   const hubOf=id=>Object.keys(HUBS).find(h=>HUBS[h].includes(id));
   const hubLast=h=>{ const v=store.get("mm-hub-"+h,HUBS[h][0]); return HUBS[h].includes(v)?v:HUBS[h][0]; };
   // pages reached from inside a group without their own pill
-  const HIDDEN={lesson:"games",path:"games"};
+  // Progress and the registry page open from their boxes on the dashboard
+  const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today"};
+  // a dashboard box and the card at the top of the page it opens grow into each other
+  const ZOOM={progress:"lv-card",registry:"exam-card"}, ZTOP={progress:"#pg-tiles .pgt.wide",registry:"#reg-body .reghero"};
+  const ztop=id=>document.querySelector(ZTOP[id]);
   const ALLP=Object.values(NAV).flat().concat(Object.keys(HIDDEN));
   function groupOf(id){ return HIDDEN[id]||Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
   let curPanel=null;
@@ -2260,6 +2308,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
     curPanel=id; store.set("mm-panel",id); try{ history.replaceState(null,"","#"+id); }catch(e){}
     const hb=hubOf(id); if(hb) store.set("mm-hub-"+hb,id);
     const vt=!!(from&&from!==id&&document.startViewTransition&&!reduceMotion()&&!document.hidden);
+    let zs=null, zd=null; if(vt){ if(ZOOM[id]&&from==="today"){ zs=$(ZOOM[id]); zd=()=>ztop(id); } else if(ZOOM[from]&&id==="today"){ zs=ztop(from); zd=()=>$(ZOOM[from]); } if(!zs){ zs=zd=null; } }
     const swap=()=>{
       document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
       const sub=$("subnav"); const items=g==="prep"?Object.keys(HUBS).map(h=>"hub:"+h):NAV[g]; sub.hidden=items.length<2;
@@ -2272,9 +2321,12 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
       replayCascade(document.getElementById("panel-"+id));
       document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
       document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false"); };
-    if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=hb&&hubOf(from)===hb?"seg-"+dir:groupOf(from)===g?"in-"+dir:dir; try{ const t=document.startViewTransition(swap); const clr=()=>{ delete de.dataset.vt; }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; swap(); } }
+    if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=zs?"zoom":hb&&hubOf(from)===hb?"seg-"+dir:groupOf(from)===g?"in-"+dir:dir;
+      if(zs) zs.style.viewTransitionName="vzoom"; let zel=null; const run=zs?()=>{ zs.style.viewTransitionName=""; swap(); zel=zd(); if(zel) zel.style.viewTransitionName="vzoom"; }:swap;
+      try{ const t=document.startViewTransition(run); if(zs){ const off=()=>{ if(zel) zel.style.viewTransitionName=""; }; t.finished.then(off,off); } const clr=()=>{ delete de.dataset.vt; }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; if(zs) zs.style.viewTransitionName=""; swap(); } }
     else swap();
   }
+  document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-backto]"); if(b) showPanel(b.dataset.backto,{back:true}); });
   document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(b.dataset.g==="prep"?hubLast("tests"):NAV[b.dataset.g][0])));
   $("subnav").addEventListener("click",e=>{ const b=e.target.closest(".pill"); if(!b) return; const p=b.dataset.p; showPanel(p.startsWith("hub:")?hubLast(p.slice(4)):p); });
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-hub]"); if(b) showPanel(b.dataset.hub); });
@@ -2315,7 +2367,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
   // ---------- colour themes: six palettes, each with a dark and a light side; Sanguine is home ----------
   const THEMES={
     sanguine:{glyphs:["#EFE6DA","#D9B8AB","#C9A66B","#F6F1EA"],n:"Sanguine",d:"Charcoal, wine red, cream",
-      dark:{bg:"#171516",surface:"#1F1C1D",surface2:"#2A2627",ink:"#EFE8DC",muted:"#A89F95",line:"#3A3436",teal:"#B8333F",tealInk:"#FBF3E7",amber:"#C9A66B",amberSoft:"#3A3022",good:"#7FB394",goodSoft:"#1E2E25",bad:"#DA6A5C",badSoft:"#3B2522",branch:"#544C4E"},
+      dark:{bg:"#171516",surface:"#262224",surface2:"#312C2E",ink:"#EFE8DC",muted:"#A89F95",line:"#423B3D",teal:"#B8333F",tealInk:"#FBF3E7",amber:"#C9A66B",amberSoft:"#3A3022",good:"#7FB394",goodSoft:"#1E2E25",bad:"#DA6A5C",badSoft:"#3B2522",branch:"#544C4E"},
       light:{bg:"#EAE6E1",surface:"#F8F5EF",surface2:"#DFD9D2",ink:"#1E1B1B",muted:"#625B56",line:"#CEC6BC",teal:"#86293A",tealInk:"#FBF4E8",amber:"#A07C3E",amberSoft:"#F1E6D0",good:"#3F7A57",goodSoft:"#DDEDE2",bad:"#B0402F",badSoft:"#F3DFDA",branch:"#ABA39A"}},
     tide:{glyphs:["#E5F3ED","#ABD5D8","#72B1BF","#E1A55D"],n:"Tide",d:"Deep teal and amber",
       dark:{bg:"#111A1F",surface:"#1A252C",surface2:"#233038",ink:"#E6ECEF",muted:"#9AAAB3",line:"#324048",teal:"#2C7A92",tealInk:"#F4FAFC",amber:"#F0A040",amberSoft:"#3A2B18",good:"#5BC58A",goodSoft:"#1C3328",bad:"#F07A6A",badSoft:"#3C2320",branch:"#52636C"},
@@ -3752,7 +3804,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
   function saveSess(){ store.set("mm-sess",sess); renderToday(); }
   function renderToday(){
     const {due,fresh}=dueCards(); $("t-streak").textContent=dayStreak(); $("t-due").textContent=due.length; $("t-new").textContent=fresh.length;
-    const o=typeof overall==="function"?overall():{r:null}; $("t-overall").textContent=o.r==null?"no rounds yet":Math.round(o.r*100)+"%";
+    const o=typeof overall==="function"?overall():{r:null}; $("t-overall").textContent=o.r==null?"--":Math.round(o.r*100)+"%";
     const rq=window.RQ?RQ.stats():{due:0}; if(window.RQ&&!rq.due&&!sess.review){ sess.review=true; store.set("mm-sess",sess); } const nx=window.studyNext?studyNext(1)[0]:null;
     [["review","Review queue",rq.due?`${Math.min(rq.due,15)} due`:"nothing due"],["flash","Flash cards",`${Math.min(due.length||3,8)} due`],["quiz","Weak-spot quiz","5 questions"],["next","Study next",nx?nx.n:"one lesson"],["lesson","Drug exercise","one round"]].forEach(([k,label,sub])=>{ const el=$("t-"+k); if(!el) return; el.classList.toggle("done",!!sess[k]); el.querySelector(".tsub").textContent=sub; });
     const done=PLAN.filter(k=>sess[k]).length; $("t-prog").textContent=`${done} / 5`; $("t-prog").parentElement.classList.toggle("alldone",done===5); try{ window.markPlan&&markPlan(done,5); }catch(e){}
@@ -3823,7 +3875,17 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
       graph();
       const bl=$("badges"); if(bl){ const earned=BADGES.filter(b=>P.badges[b.id]).length; $("badge-count").textContent=`${earned} of ${BADGES.length}`; bl.innerHTML=BADGES.map(b=>`<div class="badge ${P.badges[b.id]?"on":""}" title="${b.d}">${svgIcon(b.i)}<b>${b.n}</b><span>${b.d}</span></div>`).join(""); } }
     window.renderProgress=render;
-    document.addEventListener("panel",e=>{ if(e.detail==="today") render(); }); document.addEventListener("study",render); document.addEventListener("lesson",render);
+    // every time the dashboard opens, the ring and bar fill from empty and the XP counts up: slow to start, a quick rush, then a long soft finish
+    const eQ=x=>x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2;
+    let fillRun=0;
+    function fill(){ const st=xpState(), span=Math.max(1,st.next-st.cur), cur=Math.max(0,Math.min(span,st.total-st.cur)), bar=$("lv-bar"), nx=$("lv-next"), ring=document.querySelector("#lv-ring .on");
+      if(!bar||!nx) return; const run=++fillRun; const C=ring?parseFloat(ring.getAttribute("stroke-dasharray").split(" ")[1]):0;
+      const set=f=>{ const v=cur*f; bar.style.transition="none"; bar.style.width=(100*v/span).toFixed(2)+"%"; nx.textContent=`${Math.round(v)} / ${span} XP to level ${st.level+1}`; if(ring) ring.setAttribute("stroke-dasharray",`${(C*v/span).toFixed(1)} ${C.toFixed(1)}`); };
+      if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){ set(1); return; }
+      set(0); const go=()=>{ const t0=performance.now(), D=1500; const step=now=>{ if(run!==fillRun) return; const q=Math.min(1,(now-t0)/D); set(eQ(q)); if(q<1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
+      // wait out the intro so the fill is seen
+      const wait=n=>{ if(run!==fillRun) return; const h=document.documentElement; if(((h.classList&&h.classList.contains("splashing"))||document.getElementById("splash"))&&n<120) setTimeout(()=>wait(n+1),150); else setTimeout(go,280); }; wait(0); }
+    document.addEventListener("panel",e=>{ if(e.detail==="today"){ render(); fill(); } if(e.detail==="progress") render(); }); document.addEventListener("study",render); document.addEventListener("lesson",render);
     markOpen(); document.addEventListener("visibilitychange",()=>{ if(!document.hidden) markOpen(); });
     render();
   })();
@@ -4944,14 +5006,23 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 
     // ----- dashboard cards -----
     const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-    function renderCountdown(){ const el=$("exam-card"); if(!el) return; const p=pace(), st=stats();
-      if(!p){ el.innerHTML=`<div class="acthead"><div><span class="eyebrow">Registry date</span><h2>Not set</h2></div><button type="button" class="chip" id="exam-edit">Set</button></div><div class="btnrow" id="exam-editrow" hidden><input type="date" id="exam-date" aria-label="Exam date"><button type="button" class="btn amber" id="exam-set">Save</button></div>`; return; }
-      const when=new Date(store.get(EX,"")+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"});
-      const msg=p.dl<0?"Your exam date has passed, so set the next one.":p.dl===0?"It's exam day, so keep the review light and then go get it.":p.dl===1?"It's tomorrow, so do one quick adaptive exam and your reviews, then rest.":`${p.per} lesson${p.per>1?"s":""} and your reviews a day finishes every path by ${when}.`;
-      const examDay=p.dl>0&&(p.dl<=7||new Date().getDay()===0);
-      el.innerHTML=`<div class="acthead"><div><span class="eyebrow">Registry ${esc(when)}</span><h2><b class="num">${Math.max(0,p.dl)}</b> day${p.dl===1?"":"s"} left</h2><span class="note">${msg}</span></div><button type="button" class="chip" id="exam-edit">Change</button></div>
-        ${p.dl>0?`<div class="todo"><div class="${DL.rounds>=p.per?"done":""}"><b class="num">${Math.min(DL.rounds,p.per)} / ${p.per}</b><span>lessons today</span></div><div class="${st.due?"":"done"}"><b class="num">${st.due}</b><span>reviews due</span></div>${examDay?`<div><b class="num">1</b><span>adaptive exam</span></div>`:""}</div>`:""}
-        <div class="btnrow" id="exam-editrow" hidden><input type="date" id="exam-date" aria-label="Exam date" value="${esc(store.get(EX,""))}"><button type="button" class="btn amber" id="exam-set">Save</button><button type="button" class="btn alt" id="exam-clear">Clear</button></div>`; }
+    // the registry date: one line on the dashboard, and a page of its own with everything about it and the place to change it
+    const dfmt=(v,o)=>new Date(v+"T00:00:00").toLocaleDateString(undefined,o);
+    const chev='<svg class="tapgo" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>';
+    function renderCountdown(){ const el=$("exam-card"), pg=$("reg-body"); const p=pace(), st=stats(), v=store.get(EX,"");
+      if(el) el.innerHTML=chev+(p?`<span class="eyebrow">Registry date</span><b class="rbd">${esc(dfmt(v,{month:"long",day:"numeric",year:"numeric"}))}</b><span class="rbn">${p.dl<0?"passed":p.dl===0?"today":`<b class="num">${p.dl}</b> day${p.dl===1?"":"s"}`}</span>`
+        :`<span class="eyebrow">Registry date</span><b class="rbd">Not set</b><span class="rbn">Set it</span>`);
+      if(!pg) return;
+      const when=p?dfmt(v,{month:"short",day:"numeric"}):"";
+      const msg=!p?"Set the day you sit the registry and Lazarus paces your lessons and reviews to it.":p.dl<0?"Your exam date has passed, so set the next one.":p.dl===0?"It's exam day, so keep the review light and then go get it.":p.dl===1?"It's tomorrow, so do one quick adaptive exam and your reviews, then rest.":`${p.per} lesson${p.per>1?"s":""} and your reviews a day finishes every path by ${when}.`;
+      const examDay=p&&p.dl>0&&(p.dl<=7||new Date().getDay()===0);
+      const R=window.readinessNow?readinessNow():{ready:null,pass:null};
+      pg.innerHTML=`<div class="reghero"><span class="eyebrow">Registry date</span><h2>${p?esc(dfmt(v,{weekday:"long",month:"long",day:"numeric",year:"numeric"})):"Not set yet"}</h2>
+          ${p?`<div class="regcount"><b class="num">${Math.max(0,p.dl)}</b><span>${p.dl===1?"day":"days"} left</span></div>`:""}<p class="note">${msg}</p></div>
+        <div class="rcard regedit"><header><span class="eyebrow">${p?"Change the date":"Set the date"}</span></header><div class="btnrow"><input type="date" id="exam-date" aria-label="Registry date" value="${esc(v)}"><button type="button" class="btn amber" id="exam-set">Save</button>${p?'<button type="button" class="btn alt" id="exam-clear">Clear</button>':""}</div><span class="note" id="exam-msg"></span></div>
+        ${p&&p.dl>0?`<div class="rcard"><header><span class="eyebrow">Today</span><h2>${DL.rounds>=p.per&&!st.due?"On pace":"To stay on pace"}</h2></header><div class="todo"><div class="${DL.rounds>=p.per?"done":""}"><b class="num">${Math.min(DL.rounds,p.per)} / ${p.per}</b><span>lessons today</span></div><div class="${st.due?"":"done"}"><b class="num">${st.due}</b><span>reviews due</span></div>${examDay?`<div><b class="num">1</b><span>adaptive exam</span></div>`:""}</div></div>`:""}
+        <div class="regstats">${p?`<div><span class="eyebrow">Lessons left</span><b class="num">${p.left}</b><span class="note">across every path</span></div><div><span class="eyebrow">Study days</span><b class="num">${Math.max(0,p.dl-1)}</b><span class="note">before the exam</span></div>`:""}
+          <div><span class="eyebrow">Readiness</span><b class="num">${R.ready==null?"--":R.ready+"%"}</b><span class="note">weighted by the exam</span></div><div><span class="eyebrow">Pass estimate</span><b class="num">${R.pass==null?"--":R.pass+"%"}</b><span class="note">${R.pass==null?"take an adaptive exam":"last adaptive exam"}</span></div></div>`; }
     function renderHeat(){ const el=$("heat-card"); if(!el||!LS().GAMES) return; const picks=nextUp(3);
       const tiles=DOMAINS.map(D=>`<div class="hdom"><span class="hdn">${esc(D.n)}</span><div class="htiles">${D.games.filter(id=>gameOf(id)).map(id=>{ const s=strength(id); return `<button type="button" class="htile ${heat(s)}" data-topic="${id}" title="${esc(nameOf(id))}${s==null?", not started":", "+Math.round(s*100)+"%"}"><span>${esc(nameOf(id))}</span><b>${s==null?"new":Math.round(s*100)+"%"}</b></button>`; }).join("")}</div></div>`).join("");
       // one line up front; the map of every topic waits behind a fold, and stays open across refreshes if you opened it
@@ -4967,8 +5038,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
         :`<p class="note">Nothing here yet. Every question you miss anywhere in the app lands here and comes back until it sticks, right away and then 1, 3, 7, 16 and 35 days later.</p>`; }
     function renderAll(){ try{ renderCountdown(); }catch(e){} try{ renderHeat(); }catch(e){} try{ renderPanel(); }catch(e){} }
     document.addEventListener("click",e=>{ const t=e.target.closest("[data-topic]"); if(t&&(t.closest("#heat-card"))){ startTopic(t.dataset.topic); return; }
-      if(e.target.closest("#exam-set")){ const v=$("exam-date").value; if(v){ store.set(EX,v); renderAll(); } return; }
-      if(e.target.closest("#exam-edit")){ const r=$("exam-editrow"); if(r) r.hidden=!r.hidden; return; }
+      if(e.target.closest("#exam-set")){ const v=$("exam-date").value; if(v){ store.set(EX,v); renderAll(); const m=$("exam-msg"); if(m) m.textContent="Saved."; } return; }
       if(e.target.closest("#exam-clear")){ store.set(EX,""); renderAll(); return; }
       if(e.target.closest("#rq-start")){ run(20); return; } });
     ["rq","lesson","study","panel","settings"].forEach(ev=>document.addEventListener(ev,renderAll));
@@ -6522,6 +6592,13 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     document.addEventListener("panel",e=>{ if(e.detail==="progress") render(); });
     document.addEventListener("round",()=>{ const p=$("panel-progress"); if(p&&!p.hidden) render(); });
     window.renderProgressPage=render; try{ render(); }catch(e){}
+    // readiness weighted by the exam, and the last adaptive exam's pass estimate, for the registry page
+    window.readinessNow=()=>{ const D=window.REG_DOMAINS||[], S=window.topicStrength; let ws=0, wt=0; D.forEach(d=>{ const ss=d.games.map(id=>{ try{ return S?S(id):null; }catch(e){ return null; } }); ws+=d.w*ss.reduce((a,v)=>a+(v||0),0)/Math.max(1,ss.length); wt+=d.w; });
+      const cat=store.get("mm-cat",[]), last=cat[cat.length-1]; return {ready:wt?Math.round(100*ws/wt):null,pass:last&&last.p!=null?Math.round(last.p*100):null}; };
+    // the two dashboard boxes open their pages
+    const opens={"lv-card":"progress","exam-card":"registry"};
+    document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("#lv-card,#exam-card"); if(b) showPanel(opens[b.id]); });
+    document.addEventListener("keydown",e=>{ if(e.key!=="Enter"&&e.key!==" ") return; const b=e.target.closest&&e.target.closest("#lv-card,#exam-card"); if(b){ e.preventDefault(); showPanel(opens[b.id]); } });
   })();
   // ---------- who you are: three quick questions once, a greeting every time you come back ----------
   (function me(){
