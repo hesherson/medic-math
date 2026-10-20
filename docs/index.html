@@ -1484,6 +1484,9 @@ html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn .42s cubic-be
 .lvlcard>.statline{grid-column:1/-1;margin:2px 0 0;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);flex-wrap:nowrap;justify-content:space-between;white-space:nowrap}
 body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 @media (max-height:700px){ #panel-today:not([hidden]){gap:6px} #panel-today .hello h1{font-size:21px} #panel-today .pcard{padding:6px 40px 6px 14px} #panel-today .lvlcard{padding:8px 36px 8px 12px} #panel-today .lvlcard>.statline{padding-top:6px} #panel-today .regbox{padding:8px 40px 8px 14px} body:has(#panel-today:not([hidden])) main{padding-top:12px} }
+
+/* games: one category dropdown and the count */
+.gtools.gsel{display:flex;align-items:center;gap:10px;margin:0 0 14px} .gtools.gsel label{flex:1;display:flex;align-items:center;gap:8px} .gtools.gsel select{flex:1;max-width:280px;font-size:15px;padding:9px 12px;min-height:40px}
 </style>
 </head>
 <body>
@@ -2258,10 +2261,11 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
     if(SET.sound){ try{ audio=audio||new (window.AudioContext||window.webkitAudioContext)(); const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=ok?880:220; g.gain.value=0.05; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(ok?0.08:0.18)); }catch(e){} }
   }
   // two-level navigation
-  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["exam","quiz","tests","sim","scen","review"],more:["proctor","settings"]};
+  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["sim","scen","review","quiz","exam","tests"],more:["proctor","settings"]};
   const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",sim:"Patient Sim",review:"Review",tests:"Tests",progress:"Progress",registry:"Registry",proctor:"Proctor",settings:"Settings"};
   // Test Prep holds two hubs; each hub's sections are their own pages, switched by a segmented control at the top
-  const HUBS={tests:["exam","quiz","tests"],practice:["sim","scen","review"]};
+  // Practice comes first in Test Prep, and quizzes come before exams
+  const HUBS={practice:["sim","scen","review"],tests:["quiz","exam","tests"]};
   const HUBNAME={tests:"Tests",practice:"Practice"};
   const SEG={exam:"Exams",quiz:"Quizzes",tests:"Make your own",sim:"Patients",scen:"Scenarios",review:"Review"};
   const hubOf=id=>Object.keys(HUBS).find(h=>HUBS[h].includes(id));
@@ -2330,7 +2334,7 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
     else swap();
   }
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-backto]"); if(b) showPanel(b.dataset.backto,{back:true}); });
-  document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(b.dataset.g==="prep"?hubLast("tests"):NAV[b.dataset.g][0])));
+  document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(b.dataset.g==="prep"?hubLast("practice"):NAV[b.dataset.g][0])));
   $("subnav").addEventListener("click",e=>{ const b=e.target.closest(".pill"); if(!b) return; const p=b.dataset.p; showPanel(p.startsWith("hub:")?hubLast(p.slice(4)):p); });
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-hub]"); if(b) showPanel(b.dataset.hub); });
   $("subnav").addEventListener("scroll",()=>{ const sub=$("subnav"); sub.classList.toggle("atend",sub.scrollLeft+sub.clientWidth>=sub.scrollWidth-2); },{passive:true});
@@ -4291,8 +4295,10 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
     const pick=a=>a[Math.floor(Math.random()*a.length)];
     const uniq=a=>{ const seen=new Set(), out=[]; a.forEach(x=>{ if(x==null||x==="") return; const k=String(x).toLowerCase(); if(!seen.has(k)){ seen.add(k); out.push(x); } }); return out; };
     const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-    const lc=s=>String(s).charAt(0).toLowerCase()+String(s).slice(1);
+    // lower-case the first letter, but leave an acronym (RSI, SVT, COPD) as it is
+    const lc=s=>{ s=String(s); return /^[A-Z]{2}/.test(s)?s:s.charAt(0).toLowerCase()+s.slice(1); };
     const cap=s=>String(s).charAt(0).toUpperCase()+String(s).slice(1);
+    const an=w=>(/^[aeiou]/i.test(w)&&!/^(eu|uni|one)/i.test(w)?"an ":"a ")+w;
     const short=d=>d.name.replace(/\s*\(.*\)/,"");
     const dayKey=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
     const near=(a,b)=>Math.abs(a-b)<=Math.max(1e-9,Math.abs(b)*1e-6);
@@ -4331,7 +4337,7 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
     const line=(d,ds)=>`${use(ds)}: ${dstr(ds)} ${rt(ds)}${ds.t?", "+when(ds):""}${ds.max&&!/\bmax\b/i.test(ds.t||"")?", max "+tight(fmt(ds.max,3)+" "+ds.unit):""}`;
     const scaleWrong=(ds,f)=>{ f=f||pick([10,.1,2,.5]); return {t:tight(rng(ds.lo*f,ds.hi*f)+" "+unitOf(ds)),src:f>1?`${f} times the real dose`:`${f===.5?"half":"a tenth of"} the real dose`}; };
     // n entries of field f from other drugs that do not restate anything this drug lists; each remembers where it came from
-    const foreign=(d,f,n,own)=>{ const mine=new Set((own||d[f]||[]).map(x=>String(x).toLowerCase())); const out=[], seen=new Set(); for(const o of shuffle(others(d))){ for(const x of (o[f]||[])){ const k=String(x).toLowerCase(); if(mine.has(k)||seen.has(k)||conflicts(d,x)) continue; seen.add(k); out.push({t:x,src:short(o)}); if(out.length>=n) return out; } } return out; };
+    const foreign=(d,f,n,own)=>{ const mine=new Set((own||d[f]||[]).map(x=>String(x).toLowerCase())); const out=[], seen=new Set(); for(const o of shuffle(others(d))){ for(const x of (o[f]||[])){ const k=String(x).toLowerCase(); if(mine.has(k)||seen.has(k)||conflicts(d,x)) continue; if(f==="contra"&&/hypersensitiv|allerg|^none/i.test(x)) continue; seen.add(k); out.push({t:x,src:short(o)}); if(out.length>=n) return out; } } return out; };
     const foreignQ=(d,k,n)=>{ const out=[], seen=new Set(); for(const o of shuffle(others(d))){ const x=o.quick&&o.quick[k]; if(!x||x===d.quick[k]||seen.has(x)||conflicts(d,x)) continue; seen.add(x); out.push({t:x,src:short(o)}); if(out.length>=n) break; } return out; };
     const foreignDose=(d,ds,n)=>{ const out=[], seen=new Set([dstr(ds)]); for(const o of shuffle(others(d))){ for(const x of numDoses(o)){ if(x.unit!==ds.unit||x.kind!==ds.kind) continue; const t=dstr(x); if(seen.has(t)) continue; seen.add(t); out.push({t,src:`${short(o)}'s ${lc(use(x))} dose`}); if(out.length>=n) return out; } } return out; };
     const sameDrugDose=(d,ds)=>numDoses(d).filter(x=>x!==ds&&x.unit===ds.unit&&x.kind===ds.kind&&dstr(x)!==dstr(ds)).map(x=>({t:dstr(x),src:`the ${popWord(x.pop)} ${rt(x)} ${lc(use(x))} dose`}));
@@ -4355,10 +4361,10 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       {k:"check",n:"Checkpoint",d:"Every lesson mixed, on the clock"}];
     const G={};
     G.identify=d=>{ const n=short(d), ex=[];
-      ex.push(mc(`What class of drug is ${n}?`,d.cls[0],foreign(d,"cls",3),`${n} is a ${lc(d.cls.join(", "))}.`,"Class"));
+      ex.push(mc(`What class of drug is ${n}?`,d.cls[0],foreign(d,"cls",3),`${n} is ${an(lc(d.cls.join(", ")))}.`,"Class"));
       if(d.brands&&d.brands.length) ex.push(mc(`Which of these is a trade name for ${n}?`,pick(d.brands),foreign(d,"brands",3),`${n} is sold as ${d.brands.join(", ")}.`,"Trade names"));
       ex.push(mc(`How does ${n} work?`,d.quick.moa,foreignQ(d,"moa",3),`${n}: ${lc(d.quick.moa)}`,"Mechanism"));
-      const wc=foreign(d,"cls",1)[0]; if(wc) ex.push(Math.random()<.5?tf(`${n} is a ${lc(d.cls[0])}.`,true,`${n}: ${d.cls.join(", ")}.`):tf(`${n} is a ${lc(wc.t)}.`,false,`${lc(cap(wc.t))} is ${wc.src}'s class. ${n} is a ${lc(d.cls[0])}.`));
+      const wc=foreign(d,"cls",1)[0]; if(wc) ex.push(Math.random()<.5?tf(`${n} is ${an(lc(d.cls[0]))}.`,true,`${n}: ${d.cls.join(", ")}.`):tf(`${n} is ${an(lc(wc.t))}.`,false,`${lc(cap(wc.t))} is ${wc.src}'s class. ${n} is ${an(lc(d.cls[0]))}.`));
       ex.push(match("Match each drug to its class",[[n,d.cls[0]]].concat(shuffle(others(d)).map(o=>[short(o),o.cls[0]]))));
       const adv=(d.adverse||[]).filter(a=>!/^none/i.test(a)); if(adv.length) ex.push(mc(`Which is an adverse effect of ${n}?`,pick(adv),foreign(d,"adverse",3,adv),`${n} adverse effects: ${adv.join(", ")}.`,"Adverse effects"));
       if(d.cls.length>1) ex.push(sel(`Tap every class ${n} belongs to`,d.cls.slice(0,3),foreign(d,"cls",3),`${n}: ${d.cls.join(", ")}.`));
@@ -4415,11 +4421,12 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
     const names=(d,keep,why)=>shuffle(others(d).filter(keep)).map(o=>({t:short(o),src:why(o)}));
     const unrelated=d=>o=>!o.cls.some(c=>d.cls.includes(c));
     G.cover=(d,which)=>{ const n=short(d), ex=[], want=w=>!which||which.includes(w);
-      if(want("cls")) d.cls.forEach((c,i)=>ex.push(K(Math.random()<.5?tf(`${n} is a ${lc(c)}.`,true,`${n}: ${d.cls.join(", ")}.`):mc(`Which of these is a ${lc(c)}?`,n,names(d,o=>!o.cls.some(x=>x.toLowerCase()===c.toLowerCase()),o=>`${short(o)} is a ${lc(o.cls[0])}`),`${n}: ${d.cls.join(", ")}.`,"Class"),"cls:"+i)));
-      if(want("brand")) (d.brands||[]).forEach((b,i)=>ex.push(K(mc(`${b} is a trade name for?`,n,names(d,o=>!(o.brands||[]).some(x=>x.toLowerCase()===b.toLowerCase()),o=>`${short(o)} is sold as ${(o.brands||[]).join(", ")||"its generic name"}`),`${b} is ${n}.`,"Trade names"),"brand:"+i)));
-      if(want("moa")) (d.moa||[]).forEach((m,i)=>ex.push(K(Math.random()<.4?tf(`${n}: ${lc(m)}.`,true,`${n}: ${d.moa.join("; ")}.`):mc(`Which drug: "${m}"?`,n,names(d,unrelated(d),o=>`${short(o)}: ${lc(o.quick.moa)}`),`${n}: ${d.moa.join("; ")}.`,"Mechanism"),"moa:"+i)));
+      // every fact is asked about the drug itself; a lesson is about one drug, so "which drug" would give the answer away
+      if(want("cls")) d.cls.forEach((c,i)=>ex.push(K(mc(`Which of these is one of ${n}'s classes?`,c,foreign(d,"cls",4),`${n}: ${d.cls.join(", ")}.`,"Class"),"cls:"+i)));
+      if(want("brand")) (d.brands||[]).forEach((b,i)=>ex.push(K(mc(`Which of these is a trade name for ${n}?`,b,foreign(d,"brands",4),`${n} is sold as ${d.brands.join(", ")}.`,"Trade names"),"brand:"+i)));
+      if(want("moa")) (d.moa||[]).forEach((m,i)=>ex.push(K(mc(`Which of these is part of how ${n} works?`,m,foreign(d,"moa",4),`${n}: ${d.moa.join("; ")}.`,"Mechanism"),"moa:"+i)));
       if(want("adv")) (d.adverse||[]).filter(a=>!/^none/i.test(a)).forEach((a,i)=>ex.push(K(Math.random()<.5?tf(`${a} is an adverse effect of ${n}.`,true,`${n} adverse effects: ${d.adverse.join(", ")}.`):mc(`Which is an adverse effect of ${n}?`,a,foreign(d,"adverse",4),`${n} adverse effects: ${d.adverse.join(", ")}.`,"Adverse effects"),"adv:"+i)));
-      if(want("ind")) (d.ind||[]).forEach((x,i)=>ex.push(K(Math.random()<.4?tf(`${n} is given for ${lc(x)}.`,true,`${n}: ${d.ind.join("; ")}.`):mc(`Which drug is given for ${lc(x)}?`,n,names(d,o=>!conflicts(o,x),o=>`${short(o)} is given for ${lc(o.quick.ind)}`),`${n}: ${d.ind.join("; ")}.`,"Indications"),"ind:"+i)));
+      if(want("ind")) (d.ind||[]).forEach((x,i)=>ex.push(K(mc(`${n} is given for which of these?`,x,foreign(d,"ind",4),`${n}: ${d.ind.join("; ")}.`,"Indications"),"ind:"+i)));
       if(want("contra")) (d.contra||[]).forEach((x,i)=>ex.push(K(Math.random()<.5?tf(`${x}: a contraindication for ${n}.`,true,`${n} contraindications: ${d.contra.join("; ")}.`):mc(`Which is a contraindication for ${n}?`,x,foreign(d,"contra",4),`${n} contraindications: ${d.contra.join("; ")}.`,"Cautions"),"contra:"+i)));
       if(want("false")){ ["ind","contra","adverse"].forEach(f=>{ const w=foreign(d,f,1)[0]; if(w) ex.push(tf(f==="ind"?`${n} is given for ${lc(w.t)}.`:f==="contra"?`${w.t}: a contraindication for ${n}.`:`${w.t} is an adverse effect of ${n}.`,false,`${cap(w.t)} belongs to ${w.src}. ${n}: ${(d[f]||[]).join("; ")}.`)); }); }
       if(want("key")) ex.push(K(mc(`Key consideration for ${n}?`,d.quick.key,foreignQ(d,"key",4),`${n}: ${d.quick.key}`,"Key consideration"),"key"));
@@ -4431,31 +4438,85 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       if(want("onset")){ const on=onsetRows(d); on.forEach((o,i)=>{ const own=on.map(x=>x.time); const wrong=[]; const seen=new Set(); for(const x of shuffle(others(d))){ for(const r of onsetRows(x)){ const t=tight(r.time); if(seen.has(t.toLowerCase())||own.some(y=>overlaps(y,r.time))) continue; seen.add(t.toLowerCase()); wrong.push({t,src:`${short(x)}'s onset`}); if(wrong.length>=4) break; } if(wrong.length>=4) break; } ex.push(K(mc(`Onset of ${n}${o.route?" given "+o.route:""}?`,tight(o.time),wrong,`${n} onset: ${on.map(x=>(x.route?x.route+" ":"")+tight(x.time)).join("; ")}.`,"Onset"),"onset:"+i)); }); }
       if(want("special")||want("stock")||want("bag")){ const xs=G.extra(d); xs.forEach(e=>{ const tag=e.tag; const kind=/Supply/.test(tag)||/ stock /.test(e.prompt)&&/Concentration/.test(e.prompt)?"stock":/Infusion/.test(tag)||/bag|push-dose|infusion/i.test(e.prompt)?"bag":/Peak|Duration|Fine print/.test(tag)?"special":/Mechanism/.test(tag)?"how":"math"; if(want(kind)||(kind==="math"&&want("bag"))||(kind==="how"&&want("special"))) ex.push(K(e,kind+":"+e.prompt.slice(0,40))); }); }
       const seen=new Set(); return ex.filter(e=>{ if(!e) return false; if(seen.has(e.prompt)) return false; seen.add(e.prompt); return true; }); };
+    // ----- harder questions: the odd one out, two clues at once, the contraindication in a patient, and the right dose for the right route -----
+    G.hard=(d,only)=>{ const n=short(d), ex=[], want=w=>!only||only.includes(w);
+      // all of these but one are true of the drug, so every option has to be known
+      const odd=(f,label,tag)=>{ const own=(d[f]||[]).filter(x=>!/^none/i.test(x)); if(own.length<3) return; const w=foreign(d,f,1,own)[0]; if(!w) return; const trues=shuffle(own).slice(0,3);
+        const e=mc(`All of these are ${label} of ${n} except:`,{t:w.t,src:w.src},trues.map(t=>({t,src:`one of ${n}'s ${label}`})),`${cap(w.t)} belongs to ${w.src}. ${n}: ${own.join("; ")}.`,tag); if(e){ e.sub="odd"; e.facts=trues; ex.push(e); } };
+      if(want("ind")) odd("ind","indications","Indications"); if(want("contra")) odd("contra","contraindications","Cautions"); if(want("adv")) odd("adverse","adverse effects","Adverse effects");
+      // a class and a use together: only one pairing is right, the others swap in another drug's class or use
+      const ind=pick(d.ind||[]), cl=d.cls[0]; if(want("clue")&&ind&&cl){ const fc=foreign(d,"cls",2), fi=foreign(d,"ind",2); const pair=(c,u)=>`${cap(c)}, given for ${lc(u)}`;
+        const wr=[]; if(fi[0]) wr.push({t:pair(cl,fi[0].t),src:`${lc(fi[0].t)} is ${fi[0].src}'s use`}); if(fc[0]) wr.push({t:pair(fc[0].t,ind),src:`${lc(fc[0].t)} is ${fc[0].src}'s class`}); if(fc[1]&&fi[1]) wr.push({t:pair(fc[1].t,fi[1].t),src:"neither clue is right"});
+        const e=mc(`Which description fits ${n}?`,pair(cl,ind),wr,`${n}: ${lc(d.cls.join(", "))}, given for ${lc(d.ind.join("; "))}.`,"Two clues"); if(e){ e.sub="clue"; e.facts=[cl,ind]; ex.push(e); } }
+      // the caution in a patient: of several patients, which one should not get the drug
+      const ct=(d.contra||[]).map(x=>x.replace(/\s*\(per profile\)/i,"")).filter(x=>x.length<60&&!/hypersensitiv|allerg|^none|^(not|known|no|use|do not|avoid|caution|patients?|per|in|if|when|with)\b/i.test(x)); if(want("contra")&&ct.length&&(d.ind||[]).length>=2){ const c=pick(ct);
+        const e=mc(`Which of these patients should not get ${n}?`,`A patient with ${lc(c)}`,shuffle(d.ind).slice(0,3).map(x=>({t:`A patient with ${lc(x)}`,src:`${lc(x)} is an indication for ${n}`})),`${n} contraindications: ${d.contra.join("; ")}.`,"Cautions"); if(e){ e.sub="app"; e.facts=[c]; ex.push(e); } }
+      // the same drug by two routes: which dose goes with which route
+      const A=adultD(d), byRt=uniq(A.map(rt)); if(want("dose")&&byRt.length>=2){ const r=pick(A), alt=A.filter(x=>rt(x)!==rt(r)&&dstr(x)!==dstr(r)).map(x=>({t:dstr(x),src:`the ${rt(x)} dose`})); if(alt.length){
+        const e=mc(`${n}, adult, ${lc(use(r))}: which dose is the ${rt(r)} dose?`,dstr(r),alt.concat([scaleWrong(r)],foreignDose(d,r,2)),line(d,r),"Route and dose"); if(e){ e.sub="route"; ex.push(e); } } }
+      return ex.filter(Boolean); };
+    // ----- what each question is about, so a round asks about a fact once and spreads the topics out -----
+    const okTexts=e=>e.type==="mc"||e.type==="select"?e.options.filter(o=>o.ok).map(o=>o.t):e.type==="match"?e.pairs.map(p=>p.join(" ")):e.type==="tiles"?e.seq:[e.answer||""];
+    function factKeys(d,e){ if(e._fk) return e._fk; const n=short(d).toLowerCase(), keys=new Set(), P=String(e.prompt||"").toLowerCase();
+      // questions that list several of the drug's facts at once (tap all, the odd one out) count as one of their kind, so they never crowd out the single-fact questions
+      if(e.type==="select"||e.sub==="odd"){ const f=/route/.test(P)?"route":/class/.test(P)?"cls":/contraindicat/.test(P)?"contra":/adverse/.test(P)?"adv":/given for|indicat/.test(P)?"ind":"x"; e._fk=[f+":"+(e.sub||"sel")]; if(f==="cls") e._fk=e._fk.concat(d.cls.map((_,i)=>"cls:"+i)); return e._fk; }
+      // a match counts for the pair that belongs to this drug
+      const own=e.type==="match"?e.pairs.filter(p=>p.some(x=>String(x).toLowerCase()===n||String(x).toLowerCase().startsWith(n+":"))):null;
+      if(own&&!own.length) return e._fk=["match:"+P.slice(0,30)];
+      const text=(P+" | "+(own?own.map(p=>p.join(" ")):okTexts(e)).concat(e.facts||[]).join(" | ")).toLowerCase(), has=x=>x&&text.includes(String(x).toLowerCase());
+      [["cls","cls"],["brands","brand"],["moa","moa"],["adverse","adv"],["ind","ind"],["contra","contra"]].forEach(([f,k])=>(d[f]||[]).forEach((x,i)=>{ if(has(x)) keys.add(k+":"+i); }));
+      if(has(d.quick.moa)) keys.add("moa:q"); if(has(d.quick.key)||/key consideration/.test(P)) keys.add("key"); if(has(d.quick.ind)) keys.add("ind:q");
+      numDoses(d).forEach((ds,i)=>{ const about=P.includes(rt(ds).toLowerCase())&&P.includes(lc(use(ds)).toLowerCase()); if(/maximum/.test(P)){ if(about) keys.add("max:"+i); return; } if(/how is it given/.test(P)){ if(about) keys.add("time:"+i); return; } if(about||okTexts(e).includes(dstr(ds))) keys.add("dose:"+i); });
+      if(/onset/.test(P)) keys.add("onset"); if(/\broutes?\b/.test(P)&&!keys.size) keys.add("route");
+      if(!keys.size) keys.add("x:"+P.replace(n,"").slice(0,40));
+      return e._fk=[...keys]; }
+    const topic=k=>k.split(":")[0];
+    // pick for the round: no fact twice, true-or-false at most once and only as a claim to catch, then order so the same topic never runs back to back
+    const TOPCAP={ind:2,brand:1,moa:1,route:1,contra:2,adv:1,cls:1,key:1,onset:1,dose:8,time:2,max:2,x:4};
+    function curate(d,cands,want,review){ const used=new Map(), tops=new Map(), out=[]; let tfN=0;
+      for(const e of cands){ if(out.length>=want) break; if(!e) continue; const ks=factKeys(d,e);
+        if(e.type==="tf"&&(e.ok||tfN>=(review?2:1))) continue;
+        const cap=review?2:1; if(ks.some(k=>(used.get(k)||0)>=cap)) continue;
+        // and no one topic takes over the round: three uses at most, one question about routes, and so on
+        const tps=uniq(ks.map(topic)); if(tps.some(t=>(tops.get(t)||0)>=(TOPCAP[t]||3)*(review?2:1))) continue;
+        out.push(e); ks.forEach(k=>used.set(k,(used.get(k)||0)+1)); tps.forEach(t=>tops.set(t,(tops.get(t)||0)+1)); if(e.type==="tf") tfN++; }
+      const pool=out.slice(), seq=[];
+      while(pool.length){ let best=0, score=-1e9; pool.forEach((e,i)=>{ const T=new Set(factKeys(d,e).map(topic)); let gap=6; for(let j=seq.length-1;j>=0&&seq.length-j<6;j--){ if(factKeys(d,seq[j]).some(k=>T.has(topic(k)))){ gap=seq.length-j; break; } } const sc=gap*10-(seq.length&&seq[seq.length-1].type===e.type?4:0)-i*.05; if(sc>score){ score=sc; best=i; } }); seq.push(pool.splice(best,1)[0]); }
+      return seq; }
     const coverCount=new Map();
     const factTotal=d=>{ if(!coverCount.has(d.id)){ const keys=new Set(G.cover(d).map(e=>e.k).filter(k=>k&&!/^(math|how):/.test(k))); coverCount.set(d.id,keys.size); } return coverCount.get(d.id); };
     const factKnown=d=>{ const P=S.drugs[d.id]; return P&&P.known?Object.keys(P.known).filter(k=>!/^(math|how):/.test(k)).length:0; };
     // each lesson is harder than the last: more options, closer distractors, whole ranges, more decoys, and from the checkpoint on a clock
-    const LEVEL_DIFF=[0,0,1,1,2], MASTERY_DIFF=3;
+    // lessons start where the confusion is real: options from the drug's own class from the first lesson, whole ranges and more options from the third
+    const LEVEL_DIFF=[1,1,2,2,3], MASTERY_DIFF=3;
     const clockFor=diff=>diff>=3?20:diff>=2?30:0;
     const COV={identify:["cls","brand","moa","adv"],uses:["ind","contra","key","false","route"],adult:["adose","max","timing","stock","bag"],peds:["pdose","onset","special","max"]};
-    const LESSON_SIZE={identify:14,uses:14,adult:14,peds:14,check:22}, REVIEW_SIZE=30;
+    const LESSON_SIZE={identify:12,uses:12,adult:12,peds:12,check:20}, REVIEW_SIZE=26;
     const ekey=e=>e.prompt+"|"+(e.spec?JSON.stringify(e.spec):"")+"|"+(e.answer||"");
     const dedupe=a=>{ const seen=new Set(); return a.filter(e=>{ if(!e) return false; const k=e.spec?ekey(e):e.prompt; if(seen.has(k)) return false; seen.add(k); return true; }); };
     function buildLesson(d,lvl){ const P=prog(d.id); const review=lvl>=5; DIFF.lvl=review?MASTERY_DIFF:LEVEL_DIFF[Math.min(lvl,4)]; const key=LEVELS[Math.min(lvl,4)].k;
       const miss=P.miss||{}, known=P.known||{}; const pri=e=>e&&e.k?(miss[e.k]||0)*3+(known[e.k]?0:1):0;
       let cov, base;
-      if(review||key==="check"){ cov=G.cover(d); base=G.check(d); } else { cov=G.cover(d,COV[key]); base=G[key](d); if(key==="adult"||key==="peds") base=base.concat(G.extra(d)); }
+      const HARD={identify:["clue","adv"],uses:["ind","contra"],adult:["dose"],peds:["dose"]};
+      if(review||key==="check"){ cov=G.cover(d); base=G.check(d).concat(G.hard(d)); } else { cov=G.cover(d,COV[key]); base=G[key](d).concat(G.hard(d,HARD[key])); if(key==="adult"||key==="peds") base=base.concat(G.extra(d)); }
       const want=review?Math.max(REVIEW_SIZE,Math.min(40,cov.length)):LESSON_SIZE[key];
       // facts you missed or have not yet owned come first, then the rest of the card's facts, then the varied drills
       // weight maths shows up a few times a round, never most of it
       const isMath=e=>/Patient \d+kg|Draw up how many|Pump rate\?/.test(e.prompt);
-      cov=shuffle(cov).sort((a,b)=>pri(b)-pri(a)); base=shuffle(base).filter(e=>!isMath(e));
+      // the harder forms go in ahead of the plain ones, so the round leans on them
+      cov=shuffle(cov).sort((a,b)=>pri(b)-pri(a)); base=shuffle(base).filter(e=>!isMath(e)).sort((a,b)=>(b&&b.sub?1:0)-(a&&a.sub?1:0));
       const nCov=review?want:Math.ceil(want*.6);
       let ex=dedupe(cov.slice(0,nCov).concat(base));
       if(ex.length<want) ex=dedupe(ex.concat(cov,shuffle(G.check(d)).filter(e=>!isMath(e))));
       let m=0; ex=ex.filter(e=>!isMath(e)||++m<=(review?5:3));
       if(ex.length<want) ex=dedupe(ex.concat(shuffle(G.check(d)).filter(e=>!isMath(e))));
-      return shuffle(ex.slice(0,want)); }
+      // the harder forms first among the new material, then no fact twice and the topics spread out; if that leaves the round short, earlier lessons' facts fill it as review
+      const self=e=>e&&e.type==="mc"&&String(e.answer).toLowerCase()===short(d).toLowerCase(); ex=ex.filter(e=>!self(e));
+      const hard=ex.filter(e=>e&&e.sub), rest=ex.filter(e=>e&&!e.sub), li=Math.min(lvl,4);
+      const lv=L=>L.k==="check"?[]:G.cover(d,COV[L.k]).concat(G[L.k](d),G.hard(d,HARD[L.k]));
+      // earlier lessons first as review; a first lesson with few facts borrows from the next one rather than run short
+      const prior=review||key==="check"?[]:shuffle([].concat(...LEVELS.slice(0,li).map(lv))).filter(e=>e&&!isMath(e)).concat(li===0?shuffle(lv(LEVELS[1])).filter(e=>e&&!isMath(e)):[]);
+      return curate(d,cov.slice(0,Math.ceil(want*.35)).filter(e=>pri(e)>=3&&!self(e)).concat(hard,rest,prior.filter(e=>!self(e))),want,review); }
     // ----- lesson progress and ring tiers -----
     const KEY="mm-dl", PASS=.8;
     let S=store.get(KEY,{drugs:{},xp:{}}); if(!S.drugs) S.drugs={}; if(!S.xp) S.xp={};
@@ -4696,7 +4757,7 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       {id:"classsort",cat:"pharm",n:"Class Sort",d:"Drug to class, class to drug, then the look-alikes.",levels:[
         L5("Name the class","One drug, four classes",()=>({ex:shuffle(DRUGS).slice(0,10).map(d=>mc(`What class is ${short(d)}?`,d.cls[0],foreign(d,"cls",4),`${short(d)}: ${d.cls.join(", ")}.`,"Class"))})),
         L5("Match the classes","Five drugs, five classes",()=>({ex:rep(4,()=>match("Match each drug to its class",distinct(DRUGS,5,d=>d.cls[0]).map(o=>[short(o),o.cls[0]]))).concat(shuffle(DRUGS).slice(0,4).map(d=>mc(`What class is ${short(d)}?`,d.cls[0],foreign(d,"cls",4),`${short(d)}: ${d.cls.join(", ")}.`,"Class")))})),
-        L5("Find the members","Tap every drug in a class",()=>{ const cls=uniq(DRUGS.flatMap(d=>d.cls)).filter(c=>DRUGS.filter(d=>d.cls.includes(c)).length>=2); return {ex:shuffle(cls).slice(0,8).map(c=>{ const mem=DRUGS.filter(d=>d.cls.includes(c)); return sel(`Tap every ${lc(c)}`,mem.map(short).slice(0,4),shuffle(DRUGS.filter(d=>!d.cls.includes(c))).map(d=>({t:short(d),src:`${short(d)} is a ${lc(d.cls[0])}`})),`${c}: ${mem.map(short).join(", ")}.`); })}; }),
+        L5("Find the members","Tap every drug in a class",()=>{ const cls=uniq(DRUGS.flatMap(d=>d.cls)).filter(c=>DRUGS.filter(d=>d.cls.includes(c)).length>=2); return {ex:shuffle(cls).slice(0,8).map(c=>{ const mem=DRUGS.filter(d=>d.cls.includes(c)); return sel(`Tap every ${lc(c)}`,mem.map(short).slice(0,4),shuffle(DRUGS.filter(d=>!d.cls.includes(c))).map(d=>({t:short(d),src:`${short(d)} is ${an(lc(d.cls[0]))}`})),`${c}: ${mem.map(short).join(", ")}.`); })}; }),
         L5("Look-alikes","Every class a drug belongs to, with close distractors",()=>({ex:shuffle(DRUGS.filter(d=>d.cls.length>1)).slice(0,10).map(d=>sel(`Tap every class ${short(d)} belongs to`,d.cls,foreign(d,"cls",4),`${short(d)}: ${d.cls.join(", ")}.`))}))]},
       {id:"antidote",cat:"tox",n:"Antidotes and Toxidromes",d:"The core antidotes, the rest of the list, then the toxidromes.",levels:[
         L5("Core antidotes","Naloxone, atropine, glucagon and more",()=>({ex:pairsRound(AD.slice(0,10),{n:10,tag:"Antidote",q:r=>`Antidote for ${lc(r[0])}?`,rq:r=>`${r[1]} reverses or treats?`,tfq:(r,m)=>`${m} treats ${lc(r[0])}.`,mprompt:"Match the poisoning to its antidote",term:r=>r[0],mean:r=>r[1]})})),
@@ -4854,7 +4915,8 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       ops:'<path d="M4.5 19.5h15M7 19.5v-5.5a5 5 0 0 1 10 0v5.5M12 4v2M5 6.8l1.4 1.4M19 6.8l-1.4 1.4"/>'};
     const icon=c=>`<svg viewBox="0 0 24 24" aria-hidden="true">${CAT_IC[c]||CAT_IC.medical}</svg>`;
     const catName=c=>(CATS.find(x=>x[0]===c)||[c,c])[1];
-    let GV=Object.assign({cat:"all",sort:"suggest",show:"all"},store.get("mm-gview",{}));
+    // only the category is chosen now; every game shows, in suggested order within its section
+    let GV=Object.assign({cat:"all"},store.get("mm-gview",{}),{sort:"suggest",show:"all"});
     const gsave2=()=>store.set("mm-gview",GV);
     // progress of one tile: lessons cleared out of the path, the line under the name, and whether it's new, under way or done
     function info(g){ if(g.page){ const done=DRUGS.filter(d=>state(d)==="done").length, lessons=DRUGS.reduce((a,d)=>a+Math.min(5,(S.drugs[d.id]||{}).lvl||0),0);
@@ -4863,7 +4925,7 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       return {st,frac:Math.min(1,(rec.lvl||0)/n),line:st==="done"?`${TIER_NAME[tier(rec,n)]||"Done"} · ${rec.xp||0} XP`:st==="going"?`Lesson ${cur+1} of ${n}`:`${n} lessons`,n,rec,next:st==="going"?g.levels[cur].n:g.levels[0].n}; }
     function tile(g){ const I=info(g);
       return `<button type="button" class="gt ${I.st}" style="--h:${CAT_HUE[g.cat]||200}" ${g.page?`data-page="${g.page}"`:`data-game="${g.id}"`}><span class="gtop"><span class="gic">${icon(g.cat)}</span>${I.st==="done"?'<span class="gdone">✓</span>':""}</span><b class="gname">${esc(g.n)}</b><span class="gline">${esc(I.line)}</span><span class="gbar"><i style="width:${Math.round(I.frac*100)}%"></i></span><span class="gwm" aria-hidden="true">${icon(g.cat)}</span></button>`; }
-    function renderGames(){ if(!groot) return; const row0=groot.querySelector(".gchips"), sl=row0?row0.scrollLeft:0;
+    function renderGames(){ if(!groot) return;
       const all=GAMES.filter(g=>g.levels||g.page);
       // the one you're in the middle of, most recent first
       const going=all.filter(g=>g.levels&&gstate(g)==="going").sort((a,b)=>((GS[b.id]||{}).last||0)-((GS[a.id]||{}).last||0))[0];
@@ -4880,17 +4942,13 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       const shown=secs.filter(x=>x[2].length); secs.length=0; secs.push(...shown);
       const hero=going?(()=>{ const I=info(going); return `<button type="button" class="ghero" style="--h:${CAT_HUE[going.cat]||200}" data-play="${going.id}"><span class="gic">${icon(going.cat)}</span><span class="ghtx"><span class="eyebrow">Last played</span><b>${esc(going.n)}</b><span class="note">Lesson ${Math.min((I.rec.lvl||0)+1,I.n)} of ${I.n}: ${esc(I.next)}</span><span class="gbar"><i style="width:${Math.round(I.frac*100)}%"></i></span></span><span class="ghgo">Continue</span></button>`; })():"";
       groot.innerHTML=`${hero}
-        <div class="gtools"><div class="gchips" role="tablist" aria-label="Categories"><button type="button" class="chip" data-gcat="all" aria-pressed="${GV.cat==="all"}">All</button>${cats.map(([c,n])=>`<button type="button" class="chip" data-gcat="${c}" aria-pressed="${GV.cat===c}" style="--h:${CAT_HUE[c]}"><span class="cdot"></span>${esc(n)}</button>`).join("")}</div>
-          <div class="gsel"><label><span class="eyebrow">Show</span><select id="g-show"><option value="all">Everything</option><option value="new">Not started</option><option value="going">Under way</option><option value="done">Finished</option></select></label><label><span class="eyebrow">Sort</span><select id="g-sort"><option value="suggest">Suggested</option><option value="progress">Most progress</option><option value="recent">Played recently</option><option value="az">A to Z</option></select></label><span class="note gcount">${list.length} game${list.length===1?"":"s"}</span></div></div>
+        <div class="gtools gsel"><label><span class="eyebrow">Category</span><select id="g-cat"><option value="all">All categories</option>${cats.map(([c,n])=>`<option value="${c}"${GV.cat===c?" selected":""}>${esc(n)}</option>`).join("")}</select></label><span class="note gcount">${list.length} game${list.length===1?"":"s"}</span></div>
         <div class="gsecs">${secs.map(([c,n,gs])=>`<section class="gsec" style="--h:${CAT_HUE[c]||200}"><h3 class="gsech"><span class="gic">${icon(c)}</span><span class="gsecn">${esc(n)}</span><span class="gsecc">${gs.length}</span></h3><div class="ggrid">${gs.map(tile).join("")}</div></section>`).join("")||`<p class="note">Nothing here with those filters.</p>`}</div>`;
-      const sh=$("g-show"), so=$("g-sort"); if(sh) sh.value=GV.show; if(so) so.value=GV.sort;
-      // keep the chip row where it was, and bring the picked chip into view if it sits under an edge
-      const row=groot.querySelector(".gchips"); if(row){ row.scrollLeft=sl; const on=row.querySelector('[aria-pressed="true"]'); if(on){ const l=on.offsetLeft, r=l+on.offsetWidth; if(l<row.scrollLeft+16||r>row.scrollLeft+row.clientWidth-24) row.scrollLeft=Math.max(0,l-(row.clientWidth-on.offsetWidth)/2); } } }
+      const gc=$("g-cat"); if(gc) gc.value=GV.cat; }
     if(groot){ groot.addEventListener("click",e=>{ const pg=e.target.closest("[data-page]"); if(pg){ showPanel(pg.dataset.page); return; }
         const pl=e.target.closest("[data-play]"); if(pl){ playGame(pl.dataset.play); return; }
-        const gc=e.target.closest("[data-gcat]"); if(gc){ GV.cat=gc.dataset.gcat; gsave2(); renderGames(); return; }
         const node=e.target.closest("[data-game]"); if(node) openPath("game",node.dataset.game); });
-      groot.addEventListener("change",e=>{ if(e.target.id==="g-sort"){ GV.sort=e.target.value; gsave2(); renderGames(); } else if(e.target.id==="g-show"){ GV.show=e.target.value; gsave2(); renderGames(); } });
+      groot.addEventListener("change",e=>{ if(e.target.id==="g-cat"){ GV.cat=e.target.value; gsave2(); renderGames(); } });
       document.addEventListener("panel",e=>{ if(e.detail==="games") renderGames(); }); document.addEventListener("lesson",renderGames); }
     const back=$("l-back"); if(back) back.addEventListener("click",()=>showPanel("games"));
     // ----- one path page for any game or drug: every lesson as a row you can read before you start it -----
@@ -4907,7 +4965,7 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
       rows.push(lessonRow(n,{n:"Mastery review",d:"Every lesson mixed, hardest settings, no second tries. Lifts the ring to silver, gold and master.",label:"\u2605",state:cur>=n?"next":"locked",diff:3,review:true,q:`${mix} questions`,clock:20,best:(lv.r||{}).best||0}));
       return rows.join(""); }
     function drugRows(d){ const P=S.drugs[d.id]||{lvl:0}, cur=P.lvl||0, lv=P.lv||{};
-      const rows=LEVELS.map((l,i)=>{ const diff=LEVEL_DIFF[i]; return lessonRow(i,{n:l.n,d:l.d,label:i+1,state:i<cur?"done":i===cur?"next":"locked",diff,check:l.k==="check",q:`${LESSON_SIZE[l.k]} questions`,clock:clockFor(diff),pass:l.k==="check"?"80% first try to pass":"",best:(lv[i]||{}).best||0}); });
+      const rows=LEVELS.map((l,i)=>{ const diff=LEVEL_DIFF[i]; return lessonRow(i,{n:l.n,d:l.d,label:i+1,state:i<cur?"done":i===cur?"next":"locked",diff,check:l.k==="check",q:`up to ${LESSON_SIZE[l.k]} questions`,clock:clockFor(diff),pass:l.k==="check"?"80% first try to pass":"",best:(lv[i]||{}).best||0}); });
       rows.push(lessonRow(5,{n:"Mastery review",d:"Every fact on the card, missed ones first with no second tries, and mastery means owning every fact.",label:"\u2605",state:cur>=5?"next":"locked",diff:3,review:true,q:`${Math.max(REVIEW_SIZE,Math.min(40,factTotal(d)))} questions`,clock:clockFor(MASTERY_DIFF),best:(lv.r||{}).best||0}));
       return rows.join(""); }
     function renderPath(){ if(!proot||!PATH) return; const back=$("p-back");
