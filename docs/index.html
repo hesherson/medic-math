@@ -739,13 +739,15 @@ body.teach .board{display:grid}
 
 /* tool wheel */
 .wheel{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;z-index:30;pointer-events:none}
-.wtool{position:absolute;left:0;top:0;width:56px;height:56px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;cursor:pointer;transform:translate(0,0) scale(.2);opacity:0;transition:transform .25s cubic-bezier(.2,.7,.2,1),opacity .2s;pointer-events:none}
+.wtool{position:absolute;left:0;top:0;width:56px;height:56px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;cursor:pointer;transform:rotate(0deg) translateX(0px) rotate(0deg) scale(.2);opacity:0;transition:transform .36s cubic-bezier(.3,1.25,.5,1),opacity .22s;pointer-events:none}
 .wtool svg{width:20px;height:20px;fill:var(--teal)}
 .wtool span{font-family:var(--display);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink);line-height:1;white-space:nowrap}
 .wheel.open .wtool{opacity:1;pointer-events:auto}
-.wheel.open .wtool[data-tool="calc"]{transform:translate(-84px,0) scale(1);transition-delay:0s}
-.wheel.open .wtool[data-tool="board"]{transform:translate(-60px,-60px) scale(1);transition-delay:.04s}
-.wheel.open .wtool[data-tool="listen"]{transform:translate(0,-84px) scale(1);transition-delay:.08s}
+/* the tools fan out along a quarter circle around the button, sweeping from the left up to the top */
+.wheel.open .wtool[data-tool="calc"]{transform:rotate(0deg) translateX(-124px) rotate(0deg) scale(1);transition-delay:0s}
+.wheel.open .wtool[data-tool="meds"]{transform:rotate(30deg) translateX(-124px) rotate(-30deg) scale(1);transition-delay:.035s}
+.wheel.open .wtool[data-tool="board"]{transform:rotate(60deg) translateX(-124px) rotate(-60deg) scale(1);transition-delay:.07s}
+.wheel.open .wtool[data-tool="code"]{transform:rotate(90deg) translateX(-124px) rotate(-90deg) scale(1);transition-delay:.105s}
 .wtool.hot,.wtool:hover{background:var(--amber)}
 .wtool.hot svg,.wtool:hover svg{fill:#1a1208}
 .wtool.hot span,.wtool:hover span{color:#1a1208}
@@ -1124,10 +1126,8 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 .simlog summary{cursor:pointer;font-weight:600} .simlog ol{margin:6px 0 0;padding-left:0;list-style:none;display:grid;gap:4px;font-size:13px} .simlog .num{color:var(--muted);margin-right:6px}
 .simlog li.bad{color:var(--bad)} .simlog li.good{color:var(--good)} .simlog .simprints{margin-top:8px}
 @media (max-width:420px){ .mv b{font-size:16px} .mvit{grid-template-columns:repeat(3,1fr)} .rqbox{grid-template-columns:repeat(3,1fr)} .catd{grid-template-columns:1fr auto} .catd .catbar{grid-column:1/-1;grid-row:2} .stabs2 button{font-size:12px;padding:11px 4px} .cad{font-size:14px} }
-.panel.simon>.lhead,.panel.simon>.hubseg{display:none}
+.panel.simon>.lhead{display:none}
 /* ---------- full-screen tool sheets: calculators and code timer ---------- */
-.wheel.open .wtool[data-tool="meds"]{transform:translate(-139px,-57px) scale(1);transition-delay:.06s}
-.wheel.open .wtool[data-tool="code"]{transform:translate(-57px,-139px) scale(1);transition-delay:.1s}
 .tsheet{position:fixed;inset:0;z-index:60;background:var(--bg);color:var(--ink);display:flex;flex-direction:column}
 .tsheet[hidden]{display:none}
 .tsheet-top{position:relative;min-height:58px;padding:calc(14px + env(safe-area-inset-top,0px)) 96px 10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center}
@@ -1173,18 +1173,34 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 .pdfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px} .pdfgrid .btn{display:grid;gap:2px;text-align:left;padding:10px 12px;min-height:58px} .pdfgrid .btn small{font-family:var(--body);font-size:11.5px;font-weight:400;letter-spacing:0;text-transform:none;opacity:.85}
 #remind-card input[type=time]{font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
 
-/* ---------- hubs: Tests and Practice keep their sections behind one segmented control ---------- */
-.hubseg{display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;margin:0 0 16px;max-width:560px}
-.hubseg button{flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13.5px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 8px;border-radius:9px;cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
-.hubseg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.16)}
+/* ---------- hubs: Tests and Practice share one segmented control above their pages ---------- */
+.hubseg{position:relative;display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;margin:0 0 16px;max-width:560px;--n:3;--i:0}
+.hubseg[hidden]{display:none}
+.hubthumb{position:absolute;top:4px;bottom:4px;left:calc(4px + var(--i) * ((100% - 8px - (var(--n) - 1) * 4px) / var(--n) + 4px));width:calc((100% - 8px - (var(--n) - 1) * 4px) / var(--n));border-radius:9px;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.16);transition:left .4s cubic-bezier(.3,.8,.25,1);pointer-events:none}
+.hubseg button{position:relative;z-index:1;flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13.5px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 8px;border-radius:9px;cursor:pointer;transition:color .3s}
+.hubseg button[aria-selected="true"]{color:var(--ink)}
 .hubseg button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
-/* ---------- moving between sections: the page slides the way you are going, the header stays put ---------- */
+main:has(#panel-sim.simon:not([hidden])) #hubseg{display:none}
+/* ---------- moving between pages: the page slides the way you are going ---------- */
+/* the header bar never moves; its old picture is dropped at once so the new tab highlight shows straight away */
 header.top{view-transition-name:apphdr} .calcfab{view-transition-name:calcfab}
-::view-transition-group(apphdr),::view-transition-group(calcfab){animation-duration:0s}
-::view-transition-old(apphdr),::view-transition-new(apphdr){animation:none}
-::view-transition-old(root),::view-transition-new(root){animation-duration:.38s;animation-timing-function:cubic-bezier(.25,.8,.25,1);animation-fill-mode:both}
-html[data-vt="fwd"]::view-transition-old(root){animation-name:vtOutL} html[data-vt="fwd"]::view-transition-new(root){animation-name:vtInR}
-html[data-vt="back"]::view-transition-old(root){animation-name:vtOutR} html[data-vt="back"]::view-transition-new(root){animation-name:vtInL}
+::view-transition-group(apphdr),::view-transition-group(calcfab){animation:none}
+::view-transition-old(apphdr),::view-transition-old(calcfab){display:none}
+::view-transition-new(apphdr),::view-transition-new(calcfab){animation:none}
+/* the pill row belongs to its tab: on a new bottom tab it leaves with the old page; inside the same tab it stays put */
+#subnav{view-transition-name:subnav}
+::view-transition-group(subnav){animation:none}
+html[data-vt^="in-"]::view-transition-old(subnav),html[data-vt^="seg-"]::view-transition-old(subnav){display:none}
+html[data-vt^="in-"]::view-transition-new(subnav),html[data-vt^="seg-"]::view-transition-new(subnav){animation:none}
+/* inside a hub the segmented control stays where it is and only its thumb slides */
+html[data-vt^="seg-"] #hubseg{view-transition-name:hubseg}
+::view-transition-group(hubseg){animation:none}
+::view-transition-old(hubseg){display:none} ::view-transition-new(hubseg){animation:none}
+::view-transition-old(root),::view-transition-new(root),::view-transition-old(subnav),::view-transition-new(subnav){animation-duration:.38s;animation-timing-function:cubic-bezier(.25,.8,.25,1);animation-fill-mode:both}
+html[data-vt="fwd"]::view-transition-old(root),html[data-vt="in-fwd"]::view-transition-old(root),html[data-vt="fwd"]::view-transition-old(subnav){animation-name:vtOutL}
+html[data-vt="fwd"]::view-transition-new(root),html[data-vt="in-fwd"]::view-transition-new(root),html[data-vt="fwd"]::view-transition-new(subnav){animation-name:vtInR}
+html[data-vt="back"]::view-transition-old(root),html[data-vt="in-back"]::view-transition-old(root),html[data-vt="back"]::view-transition-old(subnav){animation-name:vtOutR}
+html[data-vt="back"]::view-transition-new(root),html[data-vt="in-back"]::view-transition-new(root),html[data-vt="back"]::view-transition-new(subnav){animation-name:vtInL}
 html[data-vt="seg-fwd"]::view-transition-old(root){animation-name:vtFadeOut} html[data-vt="seg-fwd"]::view-transition-new(root){animation-name:vtSegR}
 html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} html[data-vt="seg-back"]::view-transition-new(root){animation-name:vtSegL}
 @keyframes vtOutL{to{opacity:0;transform:translateX(-48px) scale(.985);filter:blur(3px)}}
@@ -1194,7 +1210,7 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 @keyframes vtFadeOut{to{opacity:0}}
 @keyframes vtSegR{from{opacity:0;transform:translateX(24px)}}
 @keyframes vtSegL{from{opacity:0;transform:translateX(-24px)}}
-@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important} .hubthumb{transition:none}}
 
 /* ---------- make your own test ---------- */
 .tbcard{display:grid;gap:14px}
@@ -1260,6 +1276,7 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 </div>
 
 <main>
+<div class="hubseg" id="hubseg" role="tablist" hidden></div>
 <!-- ================= TODAY ================= -->
 <section class="panel" id="panel-today">
   <div class="lvlcard">
@@ -1718,7 +1735,6 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
   <button type="button" class="wtool" data-tool="board" aria-label="Whiteboard"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75zm17.7-10.2a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"/></svg><span>Board</span></button>
   <button type="button" class="wtool" data-tool="meds" aria-label="Dose calculators"><svg viewBox="0 0 24 24"><path d="M7 2h10v2h-1v3.2l4.6 8A3.5 3.5 0 0 1 17.6 21H6.4a3.5 3.5 0 0 1-3-5.8L8 7.2V4H7zm3 2v3.7L7.6 12h8.8L14 7.7V4z"/></svg><span>Doses</span></button>
   <button type="button" class="wtool" data-tool="code" aria-label="Code timer"><svg viewBox="0 0 24 24"><path d="M9 1h6v2H9zm3 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zm0 2a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm-1 2h2v5.4l3.3 2-1 1.7L11 14.5z"/></svg><span>Code</span></button>
-  <button type="button" class="wtool" data-tool="listen" aria-label="Listen"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><span>Listen</span></button>
 </div>
 <button class="calcfab" id="calc-open" type="button" aria-label="Tools" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></button>
 <div class="wb" id="wb" hidden>
@@ -2030,13 +2046,13 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
       sub.innerHTML=items.map(p=>{ const on=p.startsWith("hub:")?hubOf(id)===p.slice(4):p===id; return `<button type="button" class="pill" data-p="${p}" aria-selected="${on?"true":"false"}">${p.startsWith("hub:")?HUBNAME[p.slice(4)]:LABEL[p]}</button>`; }).join("");
       (window.requestAnimationFrame||setTimeout)(()=>{ const over=sub.scrollWidth>sub.clientWidth+2; sub.classList.toggle("scrolls",over); sub.classList.toggle("atend",!over||sub.scrollLeft+sub.clientWidth>=sub.scrollWidth-2); const on=sub.querySelector('.pill[aria-selected="true"]'); if(on&&over) on.scrollIntoView({inline:"nearest",block:"nearest"}); });
       ALLP.forEach(p=>{ const el=$("panel-"+p); if(!el) return; const was=el.hidden; el.hidden=p!==id; if(p===id&&was&&!vt){ el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); } });
-      // the hub's segmented control sits at the top of each of its pages
-      if(hb){ const el=$("panel-"+id); if(el){ let seg=el.querySelector(".hubseg"); if(!seg&&el.insertBefore){ seg=document.createElement("div"); seg.className="hubseg"; seg.setAttribute("role","tablist"); seg.setAttribute("aria-label",HUBNAME[hb]); el.insertBefore(seg,el.firstChild); }
-        if(seg) seg.innerHTML=HUBS[hb].map(p=>`<button type="button" role="tab" data-hub="${p}" aria-selected="${p===id?"true":"false"}">${SEG[p]}</button>`).join(""); } }
+      // one segmented control serves both hubs; it stays put while its thumb slides to the new section
+      const hs=$("hubseg"); if(hs){ if(hb){ const n=HUBS[hb].length, i=HUBS[hb].indexOf(id); if(hs.dataset.hub!==hb){ hs.dataset.hub=hb; hs.setAttribute("aria-label",HUBNAME[hb]); hs.innerHTML='<span class="hubthumb" aria-hidden="true"></span>'+HUBS[hb].map(p=>`<button type="button" role="tab" data-hub="${p}">${SEG[p]}</button>`).join(""); }
+        if(hs.style&&hs.style.setProperty){ hs.style.setProperty("--n",String(n)); hs.style.setProperty("--i",String(i)); } hs.querySelectorAll("[data-hub]").forEach(b=>b.setAttribute("aria-selected",b.dataset.hub===id?"true":"false")); hs.hidden=false; } else hs.hidden=true; }
       replayCascade(document.getElementById("panel-"+id));
       document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
       document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false"); };
-    if(vt){ const de=document.documentElement; de.dataset.vt=hb&&hubOf(from)===hb?(dirOf(from,id,opts)==="fwd"?"seg-fwd":"seg-back"):dirOf(from,id,opts); try{ const t=document.startViewTransition(swap); const clr=()=>{ delete de.dataset.vt; }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; swap(); } }
+    if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=hb&&hubOf(from)===hb?"seg-"+dir:groupOf(from)===g?"in-"+dir:dir; try{ const t=document.startViewTransition(swap); const clr=()=>{ delete de.dataset.vt; }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; swap(); } }
     else swap();
   }
   document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(b.dataset.g==="prep"?hubLast("tests"):NAV[b.dataset.g][0])));
@@ -5656,7 +5672,9 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     window.ttsOK=ok;
     const bar=$("ttsbar"); if(!ok){ document.body.classList.add("notts"); return; }
     let list=[], di=0, parts=[], pi=0, playing=false, timer=null, cur=null;
-    let quiz=!!store.get("mm-ttsquiz",false), rate=+store.get("mm-ttsrate",1)||1;
+    // one time, everyone moves to the new defaults: the deepest male voice at 0.9x
+    if(!store.get("mm-ttsdef2",false)){ store.set("mm-ttsdef2",true); store.set("mm-ttsrate",0.9); store.set("mm-ttsvoice",null); }
+    let quiz=!!store.get("mm-ttsquiz",false), rate=+store.get("mm-ttsrate",0.9)||0.9;
     const RT_SAY={"IV/IO":"I V or I O",IM:"I M",IN:"intranasal",ET:"down the E T tube",Infusion:"as an infusion",Neb:"nebulized",PO:"by mouth",SL:"under the tongue",Buccal:"between cheek and gum",Rectal:"rectally",Topical:"topically",Inhaled:"inhaled"};
     const SUB=[
       [/\bmcg\/kg\/min\b/g,"micrograms per kilogram per minute"],[/\bmg\/kg\/hr\b/g,"milligrams per kilogram per hour"],[/\bmg\/kg\/min\b/g,"milligrams per kilogram per minute"],[/\bmcg\/kg\/hr\b/g,"micrograms per kilogram per hour"],
@@ -5695,7 +5713,11 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     const vsel=$("tts-voice");
     const fillSel=(list,cur)=>{ vsel.innerHTML=list.map(v=>`<option value="${v.voiceURI}"${cur&&v.voiceURI===cur.voiceURI?" selected":""}>${v.name.replace(/^Microsoft |^Google /,"").replace(/ - English.*$/,"").replace(/\(.*\)/,"").trim()}${/en[-_]GB/i.test(v.lang)?" (UK)":/en[-_]AU/i.test(v.lang)?" (AU)":""}</option>`).join("")||`<option>Default voice</option>`; };
     if(NAT){ NAT.getSupportedVoices().then(r=>{ natVoices=((r&&r.voices)||[]).map((v,i)=>Object.assign({idx:i},v)); voices=natVoices.filter(v=>/^en/i.test(v.lang||"")); if(!voices.length) voices=natVoices; fillSel(voices,voice()); }).catch(()=>{}); }
-    const defVoice=()=>voices.find(v=>/en[-_]US/i.test(v.lang)&&/Google|Samantha|Natural|Premium|Enhanced/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||voices[0]||null;
+    // the default is the deepest male voice the device has: known deep voices first, in order, then anything marked male, then any English voice
+    const DEEP=[/en-us-x-iom/i,/en-us-x-tpd/i,/en-us-x-iol/i,/en-gb-x-gbd/i,/en-gb-x-rjs/i,/en-gb-x-gbb/i,/en-au-x-aud/i,/en-au-x-aub/i,/\bGuy\b/i,/Christopher/i,/Andrew/i,/\bEric\b/i,/\bDavis\b/i,/\bRoger\b/i,/\bBrian\b/i,/Steffan/i,/\bArthur\b/i,/\bAaron\b/i,/\bDaniel\b/i,/\bGordon\b/i,/\bReed\b/i,/\bEvan\b/i,/\bNathan\b/i,/\bTom\b/i,/\bFred\b/i,/\bRishi\b/i,/Google UK English Male/i,/\bDavid\b/i,/\bMark\b/i,/\bGeorge\b/i,/\bRyan\b/i,/\bmale\b/i];
+    const NOVELTY=/Grandpa|Ralph|Rocko|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Junior|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Albert|Jester|Eddy|Flo|Grandma|Sandy|Shelley|female/i;
+    const vkey=v=>`${v.name||""} ${v.voiceURI||""}`;
+    const defVoice=()=>{ const pool=voices.filter(v=>!NOVELTY.test(vkey(v))); for(const re of DEEP){ const hit=pool.find(v=>re.test(vkey(v))&&/^en/i.test(v.lang||"en")); if(hit) return hit; } return voices.find(v=>/en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||voices[0]||null; };
     const loadVoices=()=>{ if(NAT) return; voices=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); if(!voices.length) voices=speechSynthesis.getVoices()||[]; fillSel(voices,voice()); };
     function voice(){ if(!NAT&&!voices.length) voices=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); return voices.find(v=>v.voiceURI===pickURI)||defVoice(); }
     if(!NAT){ loadVoices(); if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=loadVoices; }
@@ -5779,7 +5801,6 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       else if(tool==="board"&&window.openBoard) openBoard();
       else if(tool==="meds"&&window.openMedCalc) openMedCalc();
       else if(tool==="code"&&window.openCode) openCode();
-      else if(tool==="listen"){ if(!window.ttsStart) return; const openCard=document.querySelector("details.drug[open]"); if(openCard) ttsStart([openCard.id.replace("drug-","")],0); else { if(!document.getElementById("panel-drugs")||document.getElementById("panel-drugs").hidden) showPanel("drugs"); const ids=window.visibleDrugIds?visibleDrugIds():[]; if(ids.length) ttsStart(ids,0); } }
     }
     const toolAt=(x,y)=>{ const el=document.elementFromPoint(x,y); return el&&el.closest?el.closest(".wtool"):null; };
     fab.addEventListener("pointerdown",e=>{ e.preventDefault(); holding=false; try{ fab.setPointerCapture(e.pointerId); }catch(x){} holdT=setTimeout(()=>{ holding=true; setOpen(true); feedback(true); },220); });
