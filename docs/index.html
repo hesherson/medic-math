@@ -965,6 +965,15 @@ header.top h1 .mark{width:28px;height:28px;border-radius:50%;vertical-align:-6px
 /* the motto drops in under the name and settles */
 /* both intro canvases cover the whole screen: the glyphs start at its edges, and the lines are drawn in page pixels */
 #splash-cv,#splash-ln{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* the intro heart, its one beat, and the black border cut round the words so they never mesh with the drawing */
+.splash-heart{transform-origin:50% 56%;will-change:transform}
+.splash-heart.beat{animation:lzBeat 1.15s cubic-bezier(.3,0,.3,1) both}
+@keyframes lzBeat{0%{transform:scale(1)}16%{transform:scale(.95)}36%{transform:scale(1.006)}48%{transform:scale(.975)}70%,100%{transform:scale(1)}}
+.splash-t.halo,.splash-m.halo{text-shadow:.055em 0 0 #000,-.055em 0 0 #000,0 .055em 0 #000,0 -.055em 0 #000,.04em .04em 0 #000,-.04em .04em 0 #000,.04em -.04em 0 #000,-.04em -.04em 0 #000,0 0 .14em #000}
+.splash-t .ch.lock,.splash-m .ch.lock{animation:lzLock .3s ease-out}
+@keyframes lzLock{0%{color:#fff;text-shadow:0 0 .3em rgba(255,255,255,.7),.055em 0 0 #000,-.055em 0 0 #000,0 .055em 0 #000,0 -.055em 0 #000}100%{}}
+@media (prefers-reduced-motion:reduce){.splash-heart.beat{animation:none}}
 .splash-m.fall{animation:lzFall .9s cubic-bezier(.3,.7,.3,1) both}
 @keyframes lzFall{0%{opacity:0;transform:translateY(-26px)}55%{opacity:1}72%{transform:translateY(3px)}88%{transform:translateY(-1px)}100%{opacity:1;transform:none}}
 
@@ -6587,12 +6596,12 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
   function imageTarget(img, createCanvas, cx, cy, size, light){
     const N=320, c=createCanvas(N,N), g=c.getContext('2d'); g.clearRect(0,0,N,N); g.drawImage(img,0,0,N,N);
     const d=g.getImageData(0,0,N,N).data, pts=[]; const sc=size/N;
-    for(let y=0;y<N;y+=1) for(let x=0;x<N;x+=1){ const al=d[(y*N+x)*4+3]; const o=(y*N+x)*4; if(al>90&&(!light||d[o]*.3+d[o+1]*.59+d[o+2]*.11>140)) pts.push([cx+(x-N/2)*sc,cy+(y-N/2)*sc,.7+.3*al/255]); }
+    for(let y=0;y<N;y+=1) for(let x=0;x<N;x+=1){ const al=d[(y*N+x)*4+3]; const o=(y*N+x)*4; if(al>90&&(!light||d[o]*.3+d[o+1]*.59+d[o+2]*.11>(light===true?140:light))) pts.push([cx+(x-N/2)*sc,cy+(y-N/2)*sc,.7+.3*al/255]); }
     if(pts.length<200) return null;
     const out=new Array(COUNT); for(let i=0;i<COUNT;i++){ const src=pts[Math.floor(hash(i+COUNT*30)*pts.length)]; const j=(hash(i+COUNT*31)-.5)*1.2, k=(hash(i+COUNT*32)-.5)*1.2; out[i]=[src[0]+j,src[1]+k,src[2]]; }
     return out;
   }
-  function addImageTarget(img, cx, cy, size, light){ if(typeof document==='undefined') return false; const createCanvas=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;}; let t=null; try{ t=imageTarget(img,createCanvas,cx==null?300:cx,cy==null?300:cy,size||260,!!light); }catch(e){ t=null; } if(!t) return false; TARGETS.push(t); DURATION=landAt(TARGETS.length); api.duration=DURATION; api.shapes=TARGETS.length; return true; }
+  function addImageTarget(img, cx, cy, size, light){ if(typeof document==='undefined') return false; const createCanvas=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;}; let t=null; try{ t=imageTarget(img,createCanvas,cx==null?300:cx,cy==null?300:cy,size||260,typeof light==="number"?light:!!light); }catch(e){ t=null; } if(!t) return false; TARGETS.push(t); DURATION=landAt(TARGETS.length); api.duration=DURATION; api.shapes=TARGETS.length; return true; }
   function addTextTarget(text, font, cy){ if(typeof document==='undefined') return false; const createCanvas=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;}; const t=textTarget(text,font||'"Barlow Condensed","Arial Narrow",Arial,sans-serif',createCanvas,cy); if(!t) return false; TARGETS.push(t); DURATION=landAt(TARGETS.length); api.duration=DURATION; api.shapes=TARGETS.length; return true; }
   // settled(time, shapeIndex): 0 while the shape before is still holding, 1 once the median particle has landed on that shape.
   // Uses the same smoothstep and per-particle delay as draw(), so anything driven by it moves in step with the glyphs.
@@ -6758,33 +6767,37 @@ function play(canvas,options={}){
  timer=setTimeout(finish,Math.max(0,3000-(performance.now()-start)));
  return {ready,destroy(){if(dead)return;dead=true;cancelAnimationFrame(frame);clearTimeout(timer);if(renderer)renderer.destroy();if(observer)observer.disconnect();else window.removeEventListener('resize',resize);document.removeEventListener('visibilitychange',refresh);media.removeEventListener('change',refresh);}};
 }
-return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
+// the finished frame on its own, for intros that build the heart some other way and end on the same picture
+function still(canvas){return assets().then(images=>{canvas.width=canvas.height=SIZE;const r=setupGL(canvas,images)||setup2D(canvas,images);r.draw(3);return r;});}
+return {name:'LAZARUS SA Node',duration:3,size:SIZE,play,still,preload:assets};
 });
 
 
   // ---------- boot ----------
   const h0=location.hash.replace("#","");
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
-  // ---------- intro: three versions, picked at random, never the same one twice running.
-  // Heart: a drop falls onto the SA node and the conduction traces draw the heart out like a fuse; then the name and the motto burn in the same way.
-  // Glyphs: scrambled glyphs creep in from the edges of the screen and settle into LAZARUS.
-  // Lines: a vertical line sweeps across the name with a sharp ease, leaving a line for every vertical line each letter really has; then the letters fill in. The motto gets the same.
-  // Both end the same way: the name steps back, the motto slides up into its place, larger, and melts from the Latin into English. ----------
+  // ---------- intro: three ways to draw the same picture, picked at random and never the same one twice running.
+  // Every version ends on the same anatomical heart, then the heart beats once and LAZARUS draws in over its lower right, cut out in black so it never meshes with the lines,
+  // with the motto under the heart. Then the heart and the name clear, the motto slides up into the middle, larger, and melts from the Latin into English.
+  //   Heart:  a drop lands on the SA node and the conduction traces branch out into the heart; the letters burn in along their outlines like a fuse.
+  //   Glyphs: scrambled glyphs stream in from off screen and settle into the heart's lines before the drawing takes over; the letters decode out of scrambled glyphs.
+  //   Lines:  vertical lines drop into a geometric outline of the heart and a sweep reveals the drawing; a sweep leaves a line for every vertical stroke and the letters fill in. ----------
   (function splash(){ const sp=document.getElementById("splash"); if(!sp) return;
-    const cv=document.getElementById("splash-cv"), ln=document.getElementById("splash-ln"), glow=sp.querySelector(".splash-glow"), title=sp.querySelector(".splash-t"), motto=sp.querySelector(".splash-m");
-    const P=window.MedicMathParticles;
+    const cv=document.getElementById("splash-cv"), ln=document.getElementById("splash-ln"), title=sp.querySelector(".splash-t"), motto=sp.querySelector(".splash-m");
+    const P=window.MedicMathParticles, SA=window.LazarusSANode;
     const quick=(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)||!title||!motto||!ln||!ln.getContext;
-    let h=null, done=false, fin=false, risen=false, raf=0; const timers=[]; const htm=document.documentElement; if(htm&&htm.classList) htm.classList.add("splashing");
+    let h=null, done=false, risen=false, raf=0; const timers=[]; const htm=document.documentElement; if(htm&&htm.classList) htm.classList.add("splashing");
     const later=(f,ms)=>{ timers.push(setTimeout(f,ms)); };
     const gone=()=>{ if(done) return; done=true; timers.forEach(clearTimeout); if(raf) cancelAnimationFrame(raf); sp.classList.add("out"); setTimeout(()=>{ sp.remove(); if(htm&&htm.classList) htm.classList.remove("splashing"); try{ h&&h.destroy(); }catch(e){} },480); };
     const fade=(el,ms,to)=>{ if(!el) return; el.style.transition=`opacity ${ms}ms ease`; el.style.opacity=String(to); };
     sp.addEventListener("click",gone);
     if(quick){ sp.classList.add("plain","ending"); later(gone,1600); return; }
     const sm=x=>{ x=Math.max(0,Math.min(1,x)); return x*x*(3-2*x); };
-    const eIO=x=>{ x=Math.max(0,Math.min(1,x)); return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; };
+    const eQ=x=>{ x=Math.max(0,Math.min(1,x)); return x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2; };
+    const eO=x=>{ x=Math.max(0,Math.min(1,x)); return 1-Math.pow(1-x,3); };
     const ls=(k,v)=>{ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } };
     const forced=ls("mm-intro"), last=ls("mm-intro-last");
-    const avail=["glyph","line","heart"].filter(m=>m==="glyph"?!!(P&&P.addPointsTarget&&cv):m==="heart"?!!(window.LazarusSANode&&LazarusSANode.play):true);
+    const avail=["glyph","line","heart"].filter(m=>m==="glyph"?!!(P&&P.addPointsTarget&&cv):m==="heart"?!!(SA&&SA.play):true);
     let mode=avail.includes(forced)?forced:(()=>{ const pool=avail.filter(m=>m!==last), L=pool.length?pool:avail; return L[Math.floor(Math.random()*L.length)]; })();
     ls("mm-intro-last",mode); sp.dataset.intro=mode;
 
@@ -6793,65 +6806,45 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
     const split=node=>{ if(!node) return []; const t=node.textContent; node.textContent=""; return [...t].map(ch=>{ const c=document.createElement("span"); c.className="ch"; c.textContent=ch; node.appendChild(c); return c; }); };
     const melt=()=>{ if(!la||!en) return;
       const A=split(la), B=split(en), wave=.36, rnd=.09; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.28+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
-      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("wobble","melting"); if(glow) glow.classList.add("swell");
+      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("wobble","melting");
       try{ document.getElementById("lz-melt-s").beginElement(); document.getElementById("lz-melt-f").beginElement(); }catch(e){}
       later(()=>motto.classList.remove("wobble"),1650); };
 
-    // ----- geometry: the name sits at the middle of a 600 square that grows with the screen up to 640 px -----
+    // ----- one layout for every version: the heart in a square near the middle, the name over its lower right third, the motto under the heart -----
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
-    let font=fallback, size=120;
-    const geo=()=>{ const r=sp.getBoundingClientRect(), side=Math.min(r.width,r.height,640), k=side/600; return {W:r.width,H:r.height,k,ox:(r.width-side)/2,oy:(r.height-side)/2}; };
-    const fit=f=>{ const c=document.createElement("canvas"), g=c.getContext&&c.getContext("2d"); if(!g) return 120; let s=120; for(;s>40;s-=4){ g.font=`700 ${s}px ${f}`; if(g.measureText("LAZARUS").width<=540) break; } return s; };
-    // the heart version stacks the heart above the name, the pair centred on the screen
-    const heartGeo=()=>{ const r=sp.getBoundingClientRect(), G=geo(), fs=size*G.k, S=Math.min(r.width*.82,r.height*.46,460), total=S+14+fs*.8+28+18, top=Math.max(6,(r.height-total)/2-r.height*.02); return {S,left:(r.width-S)/2,top,cy:top+S+14+fs*.4,fs}; };
-    const place=()=>{ if(risen) return; const G=geo(), cy=mode==="heart"?heartGeo().cy:G.oy+300*G.k, fs=size*G.k;
-      Object.assign(title.style,{top:cy+"px",transform:"translateY(-50%)",fontSize:fs+"px",fontFamily:font}); motto.style.top=(cy+fs*.62+10)+"px"; };
-    Object.assign(title.style,{transition:"none",opacity:"0"}); Object.assign(motto.style,{transition:"none",opacity:"0"});
+    let font=fallback;
+    const lay=()=>{ const r=sp.getBoundingClientRect(), W=r.width, H=r.height, S=Math.min(W*.94,H*.56,560), mH=26, top=Math.max(8,(H-(S+16+mH))/2-H*.03), left=(W-S)/2;
+      const g=document.createElement("canvas").getContext("2d"); let w100=370; if(g){ g.font=`700 100px ${font}`; w100=g.measureText("LAZARUS").width||370; }
+      const fs=Math.max(26,.6*S*100/w100); return {W,H,S,left,top,fs,right:W-(left+S*.965),cy:top+S*.845,mTop:top+S+14}; };
+    let L=null, hc=null; const fuseCvs=[];
+    const place=()=>{ if(risen) return; L=lay();
+      Object.assign(title.style,{left:"auto",right:L.right+"px",width:"auto",textAlign:"right",top:L.cy+"px",transform:"translateY(-50%)",fontSize:L.fs+"px",fontFamily:font});
+      motto.style.top=L.mTop+"px"; if(hc) Object.assign(hc.style,{left:L.left+"px",top:L.top+"px",width:L.S+"px",height:L.S+"px"}); };
+    Object.assign(title.style,{transition:"none",opacity:"0"}); Object.assign(motto.style,{transition:"none",opacity:"0"}); title.classList.add("halo"); motto.classList.add("halo");
+    // the heart sits under the line layer, so the black cut-outs drawn there cover it
+    const makeHeart=()=>{ hc=document.createElement("canvas"); hc.className="splash-heart"; hc.setAttribute("aria-hidden","true"); Object.assign(hc.style,{position:"absolute",margin:"0",gridArea:"auto",transition:"none",opacity:"1",background:"#000"}); sp.insertBefore(hc,ln); place(); return hc; };
+    // the heart's single beat: a firm squeeze, a release, a softer second squeeze
+    const beat=()=>{ if(hc){ hc.classList.remove("beat"); void hc.offsetWidth; hc.classList.add("beat"); } };
 
-    // ----- the shared ending: the name steps back and the motto slides up into its place, larger, holds, melts into English, holds, then the app shows through -----
-    const rise=()=>{ if(risen||done) return; risen=true; if(raf){ cancelAnimationFrame(raf); raf=0; } if(cv) cv.style.opacity="0";
-      const G=geo(), r0=sp.getBoundingClientRect(), cy=mode==="heart"?G.H/2:G.oy+300*G.k; if(heartCv) fade(heartCv,700,0); fuseCvs.forEach(c=>c.remove());
+    // ----- the shared ending: the heart and the name clear, the motto slides up into the middle, larger, holds, melts into English, holds, then the app shows through -----
+    const rise=()=>{ if(risen||done) return; risen=true; if(raf){ cancelAnimationFrame(raf); raf=0; } if(cv) cv.style.opacity="0"; if(hc) fade(hc,700,0); fuseCvs.forEach(c=>c.remove());
+      try{ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); }catch(e){}
+      const r0=sp.getBoundingClientRect(), W=r0.width, cy=r0.height/2;
       motto.style.transition="none"; motto.style.transform="none"; const m=motto.getBoundingClientRect();
       // as large as the Latin allows, then the English gives up some letter spacing so it still fits once it melts in
       const fs=parseFloat(getComputedStyle(motto).fontSize)||15, laW=Math.max(1,(la?la.getBoundingClientRect().width:m.width)-24), enW=Math.max(1,(en?en.getBoundingClientRect().width:m.width)-24), nE=en?en.textContent.length:1, gap=.12*fs;
-      let S=Math.max(1,Math.min(1.6,.86*G.W/laW)); const room=.9*G.W/S;
-      if(en&&enW>room){ const cut=(enW-room)/Math.max(1,nE); if(cut<=gap) en.style.letterSpacing=(gap-cut).toFixed(2)+"px"; else { en.style.letterSpacing="0px"; S=Math.max(1,.9*G.W/Math.max(1,enW-nE*gap)); } }
-      const dy=cy-(m.top-r0.top+m.height/2), from=mode==="glyph";
+      let S=Math.max(1,Math.min(1.6,.86*W/laW)); const room=.9*W/S;
+      if(en&&enW>room){ const cut=(enW-room)/Math.max(1,nE); if(cut<=gap) en.style.letterSpacing=(gap-cut).toFixed(2)+"px"; else { en.style.letterSpacing="0px"; S=Math.max(1,.9*W/Math.max(1,enW-nE*gap)); } }
+      const dy=cy-(m.top-r0.top+m.height/2);
       Object.assign(title.style,{transition:"opacity .7s ease, transform .9s cubic-bezier(.3,.7,.2,1), filter .7s ease",opacity:"0",transform:"translateY(calc(-50% - 22px)) scale(.94)",filter:"blur(3px)"});
-      if(from){ motto.style.transform=`translateY(${dy+70}px) scale(${(S*.94).toFixed(3)})`; motto.style.opacity="0"; void motto.offsetWidth; }
       Object.assign(motto.style,{transition:"transform 1s cubic-bezier(.2,.8,.2,1), opacity .8s ease",transform:`translateY(${dy}px) scale(${S.toFixed(3)})`,opacity:"1"});
-      motto.classList.add("hero");
-      if(glow){ glow.style.top=cy+"px"; later(()=>glow.classList.add("on"),500); }
-      later(melt,1500); later(()=>{ fade(motto,600,0); if(glow) glow.classList.remove("on","swell"); },3600); later(gone,4200); };
+      later(melt,1500); later(()=>fade(motto,600,0),3600); later(gone,4200); };
 
-    // ================= glyphs: scrambled glyphs stream in from off screen on every side and settle into the name =================
-    function glyphIntro(){
-      Object.assign(cv.style,{transition:"none",opacity:"0"});
-      const glyphs=(()=>{ try{ const n=themeNow(); return (n.themes[n.name]||{}).glyphs||null; }catch(e){ return null; } })();
-      try{ P.clearTargets(); }catch(e){}
-      // the edges of the screen in the 600 space; every glyph starts somewhere beyond them, so none is visible until it flies in
-      const G=geo(), X0=-G.ox/G.k, X1=(G.W-G.ox)/G.k, Y0=-G.oy/G.k, Y1=(G.H-G.oy)/G.k, w=X1-X0, hh=Y1-Y0, per=2*(w+hh), pts=[];
-      for(let i=0;i<4000;i++){ let u=Math.random()*per; const d=-(26+280*Math.random()), j=Math.random(); let x,y;
-        if(u<w){ x=X0+u; y=Y0+d; } else if((u-=w)<hh){ x=X1-d; y=Y0+u; } else if((u-=hh)<w){ x=X1-u; y=Y1-d; } else { u-=w; x=X0+d; y=Y1-u; }
-        pts.push([x,y,.55+.45*j]); }
-      P.addPointsTarget(pts); P.setTiming(0,{hold:.05,morph:2.5});
-      let textShape=-1, landed=false;
-      const onFrame=t=>{ if(done||risen) return; const fi=1;
-        if(textShape<0){ cv.style.opacity=fi.toFixed(3); return; }
-        const land=P.landAt(textShape), co=1-sm((t-(land-.1))/.8);
-        cv.style.opacity=(fi*co).toFixed(3); cv.style.filter=co<1?`blur(${(5*(1-co)).toFixed(1)}px)`:"";
-        if(!landed) title.style.opacity=sm((t-(land-.45))/.7).toFixed(3);
-        if(!landed&&t>=land+.55){ landed=true; cv.style.opacity="0"; title.style.opacity="1"; later(rise,500); } };
-      const start=()=>{ if(done) return; try{ if(P.addTextTarget("LAZARUS",font,300)) textShape=P.shapes-1; }catch(e){} place();
-        const dpr=Math.min(window.devicePixelRatio||1,2);
-        try{ h=P.mount(cv,{background:false,loop:false,onFrame,colors:glyphs,scramble:true,curl:.3,easeOut:2.4,maxSide:640*dpr,onComplete:()=>later(()=>{ if(!landed){ landed=true; title.style.opacity="1"; later(rise,400); } },60)}); }catch(e){ title.style.transition="opacity .8s ease"; title.style.opacity="1"; later(rise,1200); } };
-      return start; }
-
-    // ================= lines: a vertical line sweeps across, leaving a line for every vertical line each letter really has, then the letters fill in =================
-    const eQ=x=>{ x=Math.max(0,Math.min(1,x)); return x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2; };
-    const eO=x=>{ x=Math.max(0,Math.min(1,x)); return 1-Math.pow(1-x,3); };
+    // ----- the line layer: a full-screen canvas in page pixels -----
     const lg=ln.getContext("2d"); let LDPR=1;
     const sizeLn=()=>{ const r=sp.getBoundingClientRect(); LDPR=Math.min(window.devicePixelRatio||1,2); ln.width=Math.round(r.width*LDPR); ln.height=Math.round(r.height*LDPR); };
+    const clearLn=()=>{ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); lg.setTransform(LDPR,0,0,LDPR,0,0); };
+    const vline=(x,y0,y1,a,w)=>{ if(a<=.003) return; lg.strokeStyle=`rgba(239,232,220,${(a*.18).toFixed(3)})`; lg.lineWidth=w*3.5; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); lg.strokeStyle=`rgba(239,232,220,${a.toFixed(3)})`; lg.lineWidth=w; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); };
     // the vertical lines of one character, read off the font itself: it is drawn large, every straight vertical edge is traced,
     // and the two sides of a stem become one line down its middle, so an L gives its stem (long) and the end of its foot (short)
     const VL={};
@@ -6882,40 +6875,46 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
         const x0=okm?x-m.actualBoundingBoxLeft:x+.04*fs, x1=okm?x+m.actualBoundingBoxRight:x+m.width-.04*fs, y0=okm?base-m.actualBoundingBoxAscent:base-.7*fs, y1=okm?base+m.actualBoundingBoxDescent:base;
         const L=vLines(ch,font,fs).map(l=>({x:x+l.x,y0:base+l.y0,y1:base+l.y1}));
         return {span:c,sx:x,sw:r.width,x0,x1,y0,y1,c:(x0+x1)/2,L}; }).filter(Boolean); }
-    // one pass: the sweep, the lines it leaves behind, then each letter filling in from its middle, its lines going as the fill reaches them
-    function pass(el,lw,sweep,stag,open){ const B=boxes(el); if(!B.length) return null;
+
+    // ================= the three ways of drawing the words; each returns draw(t) from 0, its length, and done() to hand over to the crisp text =================
+    // each letter of an element: where it sits, its ink box, and its vertical lines in page pixels
+    function boxes(el){ const r0=sp.getBoundingClientRect(), cs=getComputedStyle(el), fs=parseFloat(cs.fontSize)||16, spans=split(el), font=`${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
+      const mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; el.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
+      const g=document.createElement("canvas").getContext("2d"); g.font=font;
+      const B=spans.map(c=>{ const ch=c.textContent.toUpperCase(); if(!ch.trim()) return null; const r=c.getBoundingClientRect(), x=r.left-r0.left, m=g.measureText(ch);
+        const okm=m.actualBoundingBoxAscent!=null&&isFinite(m.actualBoundingBoxRight);
+        const x0=okm?x-m.actualBoundingBoxLeft:x+.04*fs, x1=okm?x+m.actualBoundingBoxRight:x+m.width-.04*fs, y0=okm?base-m.actualBoundingBoxAscent:base-.7*fs, y1=okm?base+m.actualBoundingBoxDescent:base;
+        const Ls=vLines(ch,font,fs).map(l=>({x:x+l.x,y0:base+l.y0,y1:base+l.y1}));
+        return {span:c,ch,sx:x,sw:r.width,x0,x1,y0,y1,c:(x0+x1)/2,L:Ls}; }).filter(Boolean); B.font=font; B.fs=fs; B.base=base; return B; }
+    // lines: a vertical sweep leaves a line for every vertical stroke, a black border is cut round each letter as its first line lands, then each letter opens out from its middle
+    function lineText(el,o){ const B=boxes(el); if(!B.length) return null; const lw=o.lw, hr=B.fs*.06;
       const caps=B.filter(b=>b.y1-b.y0>(B[0].y1-B[0].y0)*.5), top=Math.min(...caps.map(b=>b.y0)), bot=Math.max(...caps.map(b=>b.y1)), pad=(bot-top)*.35;
       const left=Math.min(...B.map(b=>b.x0))-14, right=Math.max(...B.map(b=>b.x1))+14;
-      // when the sweep reaches each line, found by searching the ease
-      const at=x=>{ const f=(x-left)/(right-left); let lo=0, hi=1; for(let k=0;k<24;k++){ const mid=(lo+hi)/2; if(eQ(mid)<f) lo=mid; else hi=mid; } return lo*sweep; };
-      B.forEach(b=>{ b.L.forEach(l=>{ l.hit=at(l.x); }); b.span.style.clipPath=`inset(-40% ${(b.sx+b.sw-b.c).toFixed(1)}px -40% ${(b.c-b.sx).toFixed(1)}px)`; });
-      const fill0=sweep+.3; B.forEach((b,i)=>{ b.fill=fill0+i*stag; }); el.style.opacity="1";
-      return {B,lw,sweep,open,left,right,top:top-pad,bot:bot+pad,end:fill0+(B.length-1)*stag+open}; }
-    function drawPass(S,t){ if(!S||t<0) return; lg.lineCap="butt";
-      const line=(x,y0,y1,a,w)=>{ if(a<=.003) return; lg.strokeStyle=`rgba(239,232,220,${(a*.18).toFixed(3)})`; lg.lineWidth=w*3.5; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); lg.strokeStyle=`rgba(239,232,220,${a.toFixed(3)})`; lg.lineWidth=w; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); };
-      // the sweep: fast through the middle, slow at both ends, gone once it reaches the far side
-      if(t<=S.sweep+.12){ const x=S.left+(S.right-S.left)*eQ(t/S.sweep), a=1-sm((t-S.sweep*.8)/(S.sweep*.2+.12)); line(x,S.top,S.bot,a,S.lw*1.1); }
-      S.B.forEach(b=>{ const q=(t-b.fill)/S.open, e=q>0?eQ(q):0, Lx=b.c-(b.c-b.x0)*e, Rx=b.c+(b.x1-b.c)*e;
-        if(q>0) b.span.style.clipPath=q>=1?"none":`inset(-40% ${((b.sx+b.sw-b.c)*(1-e)-4*e).toFixed(1)}px -40% ${((b.c-b.sx)*(1-e)-4*e).toFixed(1)}px)`;
-        b.L.forEach(l=>{ if(t<l.hit) return; const d=eO((t-l.hit)/.22), y0=S.top+(l.y0-S.top)*d, y1=S.bot+(l.y1-S.bot)*d;
-          // a line fades as the fill sweeps over it
-          const cov=q>0?(l.x>=b.c?Rx-l.x:l.x-Lx):-1, a=.92*(1-sm((cov+2)/8));
-          line(l.x,y0,y1,a,S.lw); }); }); }
-    function lineIntro(){ const start=()=>{ if(done) return; place(); sizeLn();
-        motto.style.opacity="0"; const T=pass(title,1.6,.85,.06,.55); const M=pass(la||motto,1,.75,.02,.45); if(motto&&M) motto.style.opacity="1";
-        const mAt=T?T.sweep+.3+(T.B.length-1)*.06+.15:0, riseAt=mAt+(M?M.end:0)+.35; let tt=0, lastT=null;
-        const frame=now=>{ raf=0; if(done||risen) return; if(lastT!=null) tt+=Math.min(.05,Math.max(0,(now-lastT)/1000)); lastT=now;
-          lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); lg.setTransform(LDPR,0,0,LDPR,0,0);
-          drawPass(T,tt); drawPass(M,tt-mAt);
-          if(tt>=riseAt){ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); [T,M].forEach(S=>S&&S.B.forEach(b=>b.span.style.clipPath="none")); rise(); return; }
-          raf=requestAnimationFrame(frame); };
-        raf=requestAnimationFrame(frame); };
-      return start; }
-
-    // ================= heart: the SA-node heart draws itself, then the name and the motto burn in along their outlines like a fuse, and fill =================
-    let heartCv=null; const fuseCvs=[];
+      const at=x=>{ const f=(x-left)/(right-left); let lo=0, hi=1; for(let k=0;k<24;k++){ const mid=(lo+hi)/2; if(eQ(mid)<f) lo=mid; else hi=mid; } return lo*o.sweep; };
+      B.forEach(b=>{ b.L.forEach(l=>{ l.hit=at(l.x); }); b.cut=b.L.length?Math.min(...b.L.map(l=>l.hit)):at(b.c); b.span.style.clipPath=`inset(-40% ${(b.sx+b.sw-b.c).toFixed(1)}px -40% ${(b.c-b.sx).toFixed(1)}px)`; });
+      const fill0=o.sweep+.3; B.forEach((b,i)=>{ b.fill=fill0+i*o.stag; }); el.style.opacity="1";
+      const end=fill0+(B.length-1)*o.stag+o.open;
+      function draw(t){ if(t<0) return; lg.lineCap="butt";
+        // the cut-outs first, so the lines and the letters sit on clean black
+        lg.font=B.font; lg.lineJoin="round"; lg.lineWidth=hr*2; B.forEach(b=>{ const a=sm((t-b.cut)/.15); if(a<=0) return; lg.fillStyle=lg.strokeStyle=`rgba(0,0,0,${a.toFixed(3)})`; lg.strokeText(b.ch,b.sx,B.base); lg.fillText(b.ch,b.sx,B.base); });
+        if(t<=o.sweep+.12){ const x=left+(right-left)*eQ(t/o.sweep), a=1-sm((t-o.sweep*.8)/(o.sweep*.2+.12)); vline(x,top-pad,bot+pad,a,lw*1.1); }
+        B.forEach(b=>{ const q=(t-b.fill)/o.open, e=q>0?eQ(q):0, Lx=b.c-(b.c-b.x0)*e, Rx=b.c+(b.x1-b.c)*e;
+          if(q>0) b.span.style.clipPath=q>=1?"none":`inset(-40% ${((b.sx+b.sw-b.c)*(1-e)-4*e).toFixed(1)}px -40% ${((b.c-b.sx)*(1-e)-4*e).toFixed(1)}px)`;
+          b.L.forEach(l=>{ if(t<l.hit) return; const d=eO((t-l.hit)/.22), y0=top-pad+(l.y0-top+pad)*d, y1=bot+pad+(l.y1-bot-pad)*d;
+            const cov=q>0?(l.x>=b.c?Rx-l.x:l.x-Lx):-1; vline(l.x,y0,y1,.92*(1-sm((cov+2)/8)),lw); }); }); }
+      return {draw,end,done(){ B.forEach(b=>b.span.style.clipPath="none"); }}; }
+    // glyphs: each letter flicks through scrambled glyphs and locks onto itself, left to right
+    function decodeText(el,o){ const spans=split(el); if(!spans.length) return null; const real=spans.map(c=>c.textContent), GL="0123456789XYZMLG+-=/%#";
+      spans.forEach(c=>{ const w=c.getBoundingClientRect().width; Object.assign(c.style,{display:"inline-block",width:w+"px",textAlign:"center",opacity:"0"}); });
+      el.style.opacity="1"; const n=spans.length, end=(n-1)*o.stag+o.spin+.05;
+      function draw(t){ spans.forEach((c,i)=>{ if(!real[i].trim()) return; const t0=i*o.stag; if(t<t0){ c.style.opacity="0"; return; } c.style.opacity=String(Math.min(1,(t-t0)/.08));
+          if(t>=t0+o.spin){ if(c.textContent!==real[i]){ c.textContent=real[i]; c.classList.add("lock"); } } else c.textContent=GL[(Math.floor(t*26)+i*5)%GL.length]; }); }
+      return {draw,end,done(){ spans.forEach((c,i)=>{ c.textContent=real[i]; c.style.opacity="1"; }); }}; }
+    // heart: the outline of every letter burns round from one point, with a bright tip at each front, then the letter fills
+    function fuseText(el,o){ const F=fuse(el,o); if(!F) return null; return {draw:F.draw,end:F.end,done(){ fade(el,350,1); later(()=>fade(F.c,450,0),120); }}; }
     // an element's letters drawn into a canvas over it; the outline of every letter is lit from one point and burns round, with a bright tip at each front, then the letter fills
-    function fuse(el,o){ const r0=sp.getBoundingClientRect(), cs=getComputedStyle(el), fs=parseFloat(cs.fontSize)||16, spans=split(el);
+    function fuse(el,o){ // a black border is cut round the letters as they light, so they never mesh with the heart behind
+ const r0=sp.getBoundingClientRect(), cs=getComputedStyle(el), fs=parseFloat(cs.fontSize)||16, spans=split(el);
       const mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; el.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
       const CH=spans.map(c=>{ const r=c.getBoundingClientRect(); return {ch:c.textContent.toUpperCase(),x:r.left-r0.left,w:r.width}; }).filter(c=>c.ch.trim()); if(!CH.length) return null;
       const D=Math.min(window.devicePixelRatio||1,2), pad=fs*.2, left=Math.min(...CH.map(c=>c.x))-pad, right=Math.max(...CH.map(c=>c.x+c.w))+pad, top=base-fs*1.05, bot=base+fs*.35;
@@ -6929,6 +6928,10 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
       for(let i=0;i<N;i++) if(!ink(i)) dist[i]=0;
       for(let y=0;y<H;y++) for(let x=0;x<W;x++){ const i=y*W+x; if(!dist[i]) continue; let d=dist[i]; if(x>0) d=Math.min(d,dist[i-1]+1); if(y>0){ d=Math.min(d,dist[i-W]+1); if(x>0) d=Math.min(d,dist[i-W-1]+1.414); if(x<W-1) d=Math.min(d,dist[i-W+1]+1.414); } else d=Math.min(d,1); dist[i]=d; }
       for(let y=H-1;y>=0;y--) for(let x=W-1;x>=0;x--){ const i=y*W+x; if(!dist[i]) continue; let d=dist[i]; if(x<W-1) d=Math.min(d,dist[i+1]+1); if(y<H-1){ d=Math.min(d,dist[i+W]+1); if(x<W-1) d=Math.min(d,dist[i+W+1]+1.414); if(x>0) d=Math.min(d,dist[i+W-1]+1.414); } else d=Math.min(d,1); dist[i]=d; }
+      const dout=new Float32Array(N).fill(1e9); for(let i=0;i<N;i++) if(ink(i)) dout[i]=0;
+      for(let y=0;y<H;y++) for(let x=0;x<W;x++){ const i=y*W+x; if(!dout[i]) continue; let d=dout[i]; if(x>0) d=Math.min(d,dout[i-1]+1); if(y>0){ d=Math.min(d,dout[i-W]+1); if(x>0) d=Math.min(d,dout[i-W-1]+1.414); if(x<W-1) d=Math.min(d,dout[i-W+1]+1.414); } dout[i]=d; }
+      for(let y=H-1;y>=0;y--) for(let x=W-1;x>=0;x--){ const i=y*W+x; if(!dout[i]) continue; let d=dout[i]; if(x<W-1) d=Math.min(d,dout[i+1]+1); if(y<H-1){ d=Math.min(d,dout[i+W]+1); if(x<W-1) d=Math.min(d,dout[i+W+1]+1.414); if(x>0) d=Math.min(d,dout[i+W-1]+1.414); } dout[i]=d; }
+      const hr=fs*.06*D, halo=[]; for(let i=0;i<N;i++) if(!ink(i)&&A[i]===0&&dout[i]<=hr+1) halo.push(i);
       const bw=Math.max(1.6,1.2*D), band=new Uint8Array(N); for(let i=0;i<N;i++) if(A[i]>0&&dist[i]<=bw) band[i]=1;
       // each loop of outline is lit at its top-left and burns both ways; its letter sets when it starts
       const R=new Float32Array(N).fill(BIG), comp=new Int32Array(N).fill(-1), comps=[]; const letterOf=px=>{ const x=px/D+left; let k=0; for(let j=0;j<CH.length;j++) if(x>=CH[j].x-1) k=j; return k; };
@@ -6941,11 +6944,14 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
       // the inside of each letter fills once its outline has gone round
       const F=new Float32Array(N).fill(BIG); for(let i=0;i<N;i++) if(A[i]>0&&!band[i]) F[i]=letterOf(i%W)*o.stag+o.burn*.8;
       const lit=[]; for(let i=0;i<N;i++) if(A[i]>0) lit.push(i);
+      const LT=new Int16Array(N); for(const i of lit) LT[i]=letterOf(i%W); for(const i of halo) LT[i]=letterOf(i%W); const knock=(k,t)=>sm((t-k*o.stag)/.15);
       const img=g.createImageData(W,H), px=img.data, end=(CH.length-1)*o.stag+o.burn*.8+o.fill;
-      function draw(t){ for(const i of lit){ const a=A[i]/255, k=i*4; let al=0, hot=0;
+      function draw(t){ for(const i of halo){ const k=i*4; px[k]=px[k+1]=px[k+2]=0; px[k+3]=Math.round(255*knock(LT[i],t)*Math.max(0,Math.min(1,hr+.5-dout[i]))); }
+        for(const i of lit){ const a=A[i]/255, k=i*4; let al=0, hot=0;
           if(band[i]){ const age=t-R[i]; if(age>=0){ al=sm(age/.05)*.95; hot=Math.exp(-Math.pow(age/.04,2)); } }
           else { const f=sm((t-F[i])/o.fill); al=f*.97; }
-          const v=Math.min(1,al+hot*.6)*a; px[k]=239+16*hot; px[k+1]=232+23*hot; px[k+2]=220+35*hot; px[k+3]=Math.round(255*v); }
+          // the letter's own area is cut out too, so what shows inside it is only what has been drawn
+          const v=Math.min(1,al+hot*.6)*a, cut=Math.max(knock(LT[i],t),v), q=v/Math.max(.001,cut); px[k]=(239+16*hot)*q; px[k+1]=(232+23*hot)*q; px[k+2]=(220+35*hot)*q; px[k+3]=Math.round(255*cut); }
         g.putImageData(img,0,0);
         // a soft bright tip at every front still burning
         g.globalCompositeOperation="lighter"; const rr=3.6*D*o.tip;
@@ -6954,29 +6960,72 @@ return {name:'LAZARUS SA Node',duration:3,play,preload:assets};
           pts.forEach(([x,y])=>{ const gr=g.createRadialGradient(x,y,0,x,y,rr); gr.addColorStop(0,"rgba(255,255,255,.95)"); gr.addColorStop(.25,"rgba(255,255,255,.5)"); gr.addColorStop(1,"rgba(255,255,255,0)"); g.fillStyle=gr; g.fillRect(x-rr,y-rr,rr*2,rr*2); }); });
         g.globalCompositeOperation="source-over"; }
       return {c,draw,end}; }
-    function heartIntro(){ const art=LazarusSANode.preload?LazarusSANode.preload().catch(()=>null):Promise.resolve();
-      const start=()=>art.then(()=>{ if(done) return; place();
-        const L=heartGeo(); heartCv=document.createElement("canvas"); heartCv.setAttribute("aria-hidden","true"); Object.assign(heartCv.style,{position:"absolute",left:L.left+"px",top:L.top+"px",width:L.S+"px",height:L.S+"px",margin:"0",gridArea:"auto",transition:"none",opacity:"1",background:"#000"}); sp.insertBefore(heartCv,title);
-        // the letters are measured and traced first, while the screen is still black, so nothing stalls once the heart is moving
-        motto.style.opacity="0"; const T=fuse(title,{stag:.11,burn:.55,fill:.45,tip:1}), M=fuse(la||motto,{stag:.028,burn:.32,fill:.3,tip:.6});
-        let hp=null; try{ hp=LazarusSANode.play(heartCv,{}); }catch(e){ hp=null; } const t0=performance.now();
-        h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }};
-        const tAt=2.35, mAt=tAt+(T?T.end*.62:0); let tDone=false, mDone=false, riseAt=Infinity;
-        const frame=now=>{ raf=0; if(done||risen) return; const tt=(now-t0)/1000;
-          if(T&&tt>=tAt&&!tDone){ T.draw(tt-tAt); if(tt-tAt>=T.end){ tDone=true; fade(title,350,1); later(()=>fade(T.c,450,0),120); } }
-          if(M&&tt>=mAt&&!mDone){ M.draw(tt-mAt); if(tt-mAt>=M.end){ mDone=true; fade(motto,350,1); later(()=>fade(M.c,450,0),120); riseAt=tt+.6; } }
-          if((!T||tDone)&&(!M||mDone)&&riseAt===Infinity) riseAt=tt+.9;
+
+    // ================= the heart, three ways; each calls ready() once the finished drawing is on screen =================
+    // the drawing's own lines in grey, from the artwork's line channel, for the glyphs to settle into and the outline to be cut from
+    const artCanvas=imgs=>{ const c=document.createElement("canvas"); c.width=c.height=768; const g=c.getContext("2d"); g.drawImage(imgs[0],0,0); const d=g.getImageData(0,0,768,768); const p=d.data; for(let i=0;i<p.length;i+=4){ p[i+1]=p[i+2]=p[i]; p[i+3]=255; } g.putImageData(d,0,0); return c; };
+    // the heart's outline as vertical lines: every tenth pixel across, the runs of the inside of the drawing, squared off to an 8 pixel grid
+    function heartColumns(art){ const n=192, d=art.getContext("2d").getImageData(0,0,768,768).data, ink=new Uint8Array(n*n);
+      for(let y=0;y<n;y++) for(let x=0;x<n;x++){ let m=0; for(let yy=0;yy<4;yy++) for(let xx=0;xx<4;xx++){ const v=d[((y*4+yy)*768+(x*4+xx))*4]; if(v>m) m=v; } ink[y*n+x]=m>34?1:0; }
+      const thick=new Uint8Array(n*n); for(let y=0;y<n;y++) for(let x=0;x<n;x++){ let f=0; for(let oy=-1;oy<=1&&!f;oy++) for(let ox=-1;ox<=1;ox++){ const X=x+ox, Y=y+oy; if(X>=0&&Y>=0&&X<n&&Y<n&&ink[Y*n+X]){ f=1; break; } } thick[y*n+x]=f; }
+      const out=new Uint8Array(n*n), q=[]; const push=i=>{ if(!out[i]&&!thick[i]){ out[i]=1; q.push(i); } };
+      for(let i=0;i<n;i++){ push(i); push((n-1)*n+i); push(i*n); push(i*n+n-1); }
+      while(q.length){ const i=q.pop(), x=i%n, y=(i/n)|0; if(x>0) push(i-1); if(x<n-1) push(i+1); if(y>0) push(i-n); if(y<n-1) push(i+n); }
+      const cols=[]; for(let X=5;X<768;X+=10){ const cx=Math.min(n-1,X>>2); let y=0; while(y<n){ if(!out[y*n+cx]){ const y0=y; while(y<n&&!out[y*n+cx]) y++; if(y-y0>=5) cols.push({x:X,y0:Math.floor(y0*4/8)*8,y1:Math.ceil(y*4/8)*8,r:Math.random()}); } else y++; } }
+      return cols; }
+    function heartByFuse(ready){ makeHeart(); let hp=null; try{ hp=SA.play(hc,{}); }catch(e){ hp=null; } h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }}; later(ready,2950); }
+    function heartByGlyphs(imgs,ready){ makeHeart(); hc.style.opacity="0"; SA.still(hc).catch(()=>{}); const art=artCanvas(imgs);
+      const glyphs=(()=>{ try{ const n=themeNow(); return (n.themes[n.name]||{}).glyphs||null; }catch(e){ return null; } })();
+      try{ P.clearTargets(); }catch(e){}
+      // the edges of the screen in the particle space; every glyph starts somewhere beyond them, so none is visible until it flies in
+      const r=sp.getBoundingClientRect(), side=Math.min(r.width,r.height,640), k=side/600, ox=(r.width-side)/2, oy=(r.height-side)/2;
+      const X0=-ox/k, X1=(r.width-ox)/k, Y0=-oy/k, Y1=(r.height-oy)/k, w=X1-X0, hh=Y1-Y0, per=2*(w+hh), pts=[];
+      for(let i=0;i<4000;i++){ let u=Math.random()*per; const d=-(26+280*Math.random()), j=Math.random(); let x,y;
+        if(u<w){ x=X0+u; y=Y0+d; } else if((u-=w)<hh){ x=X1-d; y=Y0+u; } else if((u-=hh)<w){ x=X1-u; y=Y1-d; } else { u-=w; x=X0+d; y=Y1-u; } pts.push([x,y,.55+.45*j]); }
+      P.addPointsTarget(pts); P.setTiming(0,{hold:.05,morph:2.3});
+      const ok=P.addImageTarget(art,(L.left+L.S/2-ox)/k,(L.top+L.S/2-oy)/k,L.S/k,46); let fired=false;
+      const fire=()=>{ if(fired) return; fired=true; cv.style.opacity="0"; hc.style.opacity="1"; ready(); };
+      if(!ok){ hc.style.transition="opacity .8s ease"; hc.style.opacity="1"; later(fire,900); return; }
+      // the glyphs settle into the heart's lines, the drawing comes up through them, and the glyphs let go
+      const onFrame=t=>{ if(done||risen||fired) return; const land=P.landAt(1); hc.style.opacity=sm((t-(land-.5))/.8).toFixed(3); const co=1-sm((t-(land-.1))/.7); cv.style.opacity=co.toFixed(3); cv.style.filter=co<1?`blur(${(3*(1-co)).toFixed(1)}px)`:""; if(t>=land+.6) fire(); };
+      Object.assign(cv.style,{transition:"none",opacity:"1"});
+      try{ const dpr=Math.min(window.devicePixelRatio||1,2); h=P.mount(cv,{background:false,loop:false,onFrame,colors:glyphs,scramble:true,curl:.3,easeOut:2.4,maxSide:640*dpr,onComplete:()=>later(fire,60)}); }catch(e){ fire(); } }
+    function heartByLines(imgs,ready){ makeHeart(); hc.style.clipPath="inset(0 100% 0 0)"; SA.still(hc).catch(()=>{}); const cols=heartColumns(artCanvas(imgs)), u=L.S/768, n=cols.length;
+      // each line drops from above the screen into its place, sweeping in from the left with a little scatter
+      cols.forEach(c=>{ c.d=(c.x/768)*.85+c.r*.18; c.off=L.top+(c.y1-c.y0)*u+40+c.r*120; });
+      const land=Math.max(...cols.map(c=>c.d))+.6, sw0=land+.12, swD=.8, x0=L.left-14, x1=L.left+L.S+14; let t=0, lastT=null;
+      const frame=now=>{ raf=0; if(done||risen) return; if(lastT!=null) t+=Math.min(.05,Math.max(0,(now-lastT)/1000)); lastT=now; clearLn();
+        const sx=t<sw0?-1e9:x0+(x1-x0)*eQ((t-sw0)/swD);
+        cols.forEach(c=>{ const q=(t-c.d)/.6; if(q<=0) return; const X=L.left+c.x*u, y0=L.top+c.y0*u, y1=L.top+c.y1*u, dy=-c.off*(1-eO(q)); const a=.85*(1-sm((sx-X)/36)); vline(X,y0+dy,y1+dy,a*Math.min(1,q*3),1.2); });
+        if(t>=sw0){ const q=(t-sw0)/swD; hc.style.clipPath=q>=1?"none":`inset(0 ${Math.max(0,L.left+L.S-sx).toFixed(1)}px 0 0)`; if(q<1.15) vline(sx,L.top-10,L.top+L.S+10,1-sm((q-.85)/.3),1.4); }
+        if(t>=sw0+swD+.15){ clearLn(); hc.style.clipPath="none"; ready(); return; }
+        raf=requestAnimationFrame(frame); };
+      raf=requestAnimationFrame(frame); }
+
+    // ================= the run: the heart forms, beats once while the name draws in, the motto follows, then the shared ending =================
+    function words(){ if(mode==="heart") return [fuseText(title,{stag:.11,burn:.55,fill:.45,tip:1}),fuseText(la||motto,{stag:.028,burn:.32,fill:.3,tip:.6})];
+      if(mode==="line") return [lineText(title,{lw:1.6,sweep:.7,stag:.05,open:.45}),lineText(la||motto,{lw:1,sweep:.55,stag:.012,open:.3})];
+      return [decodeText(title,{stag:.1,spin:.6}),decodeText(la||motto,{stag:.03,spin:.45})]; }
+    function run(imgs){ if(done) return; place(); sizeLn();
+      // the words are measured and traced first, while the screen is still black, so nothing stalls once the heart is moving
+      const [T,M]=words(); if(M&&mode!=="heart") motto.style.opacity="1";
+      const ready=()=>{ if(done||risen) return; beat(); const t0=performance.now(), mAt=T?T.end*.6:0; let tD=!T, mD=!M, riseAt=Infinity;
+        const frame=now=>{ raf=0; if(done||risen) return; const tt=(now-t0)/1000; if(mode==="line") clearLn();
+          if(T&&!tD){ T.draw(tt); if(tt>=T.end){ tD=true; T.done(); } } else if(T&&mode==="line") T.draw(T.end);
+          if(M&&!mD&&tt>=mAt){ M.draw(tt-mAt); if(tt-mAt>=M.end){ mD=true; M.done(); if(mode==="heart") fade(motto,350,1); } } else if(M&&mD&&mode==="line") M.draw(M.end);
+          if(tD&&mD&&riseAt===Infinity) riseAt=tt+.6;
           if(tt>=riseAt){ rise(); return; }
           raf=requestAnimationFrame(frame); };
-        raf=requestAnimationFrame(frame); });
-      return start; }
+        raf=requestAnimationFrame(frame); };
+      if(!SA||!imgs){ ready(); return; }
+      if(mode==="heart") heartByFuse(ready); else if(mode==="glyph") heartByGlyphs(imgs,ready); else heartByLines(imgs,ready); }
 
-    // a short beat of black, then start once the font is in so the letters measure true
-    const run=mode==="glyph"?glyphIntro():mode==="heart"?heartIntro():lineIntro();
-    let beat=false, ready=false, began=false; const go=()=>{ if(began||!beat||!ready) return; began=true; run(); };
-    const fontIn=f=>{ if(ready) return; font=f; size=fit(f); ready=true; go(); };
+    // a short beat of black, then start once the font and the artwork are in so the letters measure true and nothing decodes mid-motion
+    const art=SA&&SA.preload?SA.preload().catch(()=>null):Promise.resolve(null);
+    let beatDone=false, fontOk=false, imgs=null, began=false; const go=()=>{ if(began||!beatDone||!fontOk) return; began=true; art.then(i=>{ imgs=i; run(imgs); }); };
+    const fontIn=f=>{ if(fontOk) return; font=f; fontOk=true; go(); };
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 100px "Barlow Condensed"').then(fs=>fontIn(fs&&fs.length?barlow:fallback),()=>fontIn(fallback)); setTimeout(()=>fontIn(document.fonts.check('700 100px "Barlow Condensed"')?barlow:fallback),1200); } else fontIn(fallback);
-    later(()=>{ beat=true; go(); },650);
+    later(()=>{ beatDone=true; go(); },650);
     window.addEventListener("resize",place); })();
   if("serviceWorker" in navigator&&location.protocol.startsWith("http")){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }); }
 })();
