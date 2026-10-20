@@ -1564,6 +1564,32 @@ details.sec,details.method,.rule-card,details.scen,.rcard,.calc,.qcard,.statcard
 .plan .pcard,.plan .plancards{box-shadow:none}
 /* the open drug's pinned header must hide what scrolls under it, so it stays solid */
 details.drug[open]>summary{background-color:var(--surface);background-image:linear-gradient(162deg,var(--sheen),transparent 60%);background-repeat:no-repeat}
+
+/* ================= the page strip: the same control under the header in every tab that has more than one page =================
+   A glass track holds the page names; a red thumb sits behind the open one and slides to the next as the page changes.
+   When the names are wider than the screen the track scrolls, and its edges fade where more names wait. */
+.top .subnav{display:block;padding-top:8px;padding-bottom:8px;background:var(--bg)} .top .subnav[hidden]{display:none}
+.ptrack{position:relative;display:flex;align-items:stretch;gap:2px;padding:4px;border-radius:14px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  background-color:color-mix(in srgb,var(--surface) 82%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
+.ptrack::-webkit-scrollbar{display:none}
+.ptab{position:relative;z-index:1;flex:1 1 auto;appearance:none;border:0;background:transparent;color:var(--muted);font:600 14px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+  padding:10px 13px;border-radius:10px;cursor:pointer;transition:color .3s ease,transform .12s ease;-webkit-tap-highlight-color:transparent}
+.ptab[aria-selected="true"]{color:var(--teal-ink)}
+.ptab:not([aria-selected="true"]):hover{color:var(--ink)}
+.ptab:active{transform:scale(.96)}
+.ptab:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+.pthumb{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:10px;pointer-events:none;background:var(--teal);
+  box-shadow:0 6px 14px -8px color-mix(in srgb,var(--teal) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.16);
+  transition:transform .42s cubic-bezier(.3,.8,.25,1),width .42s cubic-bezier(.3,.8,.25,1)}
+.psep{flex:0 0 1px;margin:9px 5px;background:color-mix(in srgb,var(--line) 80%,var(--muted))}
+.ptrack.scrolls:not(.atend):not(.atstart){-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 36px),transparent)}
+.ptrack.scrolls.atstart:not(.atend){-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent)}
+.ptrack.scrolls.atend:not(.atstart){-webkit-mask-image:linear-gradient(to right,transparent,#000 28px);mask-image:linear-gradient(to right,transparent,#000 28px)}
+.ptrack.s1 .ptab{font-size:13px;padding:10px 9px} .ptrack.s2 .ptab{font-size:12.5px;letter-spacing:.03em;padding:10px 7px} .ptrack.s3 .ptab{font-size:12px;letter-spacing:.02em;padding:10px 5px} .ptrack.s2 .psep,.ptrack.s3 .psep{margin:9px 3px}
+/* the thumb glides and the names re-colour together with the page change */
+::view-transition-group(ptthumb){animation-duration:.42s;animation-timing-function:cubic-bezier(.3,.8,.25,1)}
+::view-transition-old(ptthumb){display:none} ::view-transition-new(ptthumb){animation:none}
+::view-transition-group(*.ptab){animation-duration:.42s} ::view-transition-old(*.ptab),::view-transition-new(*.ptab){animation-duration:.36s}
 </style>
 </head>
 <body>
@@ -1619,7 +1645,6 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
 </div>
 
 <main>
-<div class="hubseg" id="hubseg" role="tablist" hidden></div>
 <!-- ================= TODAY ================= -->
 <section class="panel" id="panel-today">
   <div class="hello" id="hello"><h1 id="hello-h"></h1><p id="hello-p"></p></div>
@@ -2341,13 +2366,12 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   // two-level navigation
   const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["sim","scen","review","quiz","exam","tests"],more:["proctor","settings"]};
   const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",sim:"Patient Sim",review:"Review",tests:"Tests",progress:"Progress",registry:"Registry",proctor:"Proctor",settings:"Settings"};
-  // Test Prep holds two hubs; each hub's sections are their own pages, switched by a segmented control at the top
-  // Practice comes first in Test Prep, and quizzes come before exams
-  const HUBS={practice:["sim","scen","review"],tests:["quiz","exam","tests"]};
-  const HUBNAME={tests:"Tests",practice:"Practice"};
-  const SEG={exam:"Exams",quiz:"Quizzes",tests:"Make your own",sim:"Patients",scen:"Scenarios",review:"Review"};
-  const hubOf=id=>Object.keys(HUBS).find(h=>HUBS[h].includes(id));
-  const hubLast=h=>{ const v=store.get("mm-hub-"+h,HUBS[h][0]); return HUBS[h].includes(v)?v:HUBS[h][0]; };
+  // every tab with more than one page shows them the same way: one strip under the header, a thumb sliding to the open page
+  // Test Prep lists its practice pages first, then its tests, with a divider between the two; quizzes come before exams
+  const TAB={exam:"Exams",quiz:"Quizzes",tests:"Custom",sim:"Patients",scen:"Scenarios",review:"Review"};
+  const GNAME={learn:"Learn",prep:"Test Prep",more:"More"}, SPLIT={prep:3};
+  // each tab reopens the page you were last on in it
+  const lastOf=g=>{ const v=store.get("mm-last-"+g,NAV[g][0]); return NAV[g].includes(v)?v:NAV[g][0]; };
   // pages reached from inside a group without their own pill
   // Progress and the registry page open from their boxes on the dashboard
   const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today"};
@@ -2389,39 +2413,57 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   const dirOf=(a,b,o)=>o&&o.back?"back":ORDER.indexOf(b)>=ORDER.indexOf(a)?"fwd":"back";
   // work that needs the new page laid out waits for the swap when a transition is running
   let swapDone=null; window.afterPanel=fn=>{ if(swapDone) swapDone.then(()=>fn()); else fn(); };
+  // ----- the page strip: built once per tab, then only its selection and thumb change -----
+  function strip(g,id,vt){ const sub=$("subnav"), items=NAV[g]; sub.hidden=items.length<2; if(sub.hidden){ sub.dataset.g=""; return; }
+    if(sub.dataset.g!==g){ sub.dataset.g=g; sub.innerHTML=`<div class="ptrack" role="tablist" aria-label="${GNAME[g]||""} pages"><span class="pthumb" aria-hidden="true"></span>${items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join("")}</div>`; thumb(false,id); }
+    sub.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
+    fit(); thumb(!vt&&!reduceMotion(),id); edges();
+    // bring the open page into view along the strip, once the page change has played
+    const on=sub.querySelector('.ptab[aria-selected="true"]'), tr=sub.querySelector(".ptrack");
+    if(on&&tr&&tr.scrollWidth>tr.clientWidth+2) setTimeout(()=>{ const l=on.offsetLeft-24, r=on.offsetLeft+on.offsetWidth+24; if(l<tr.scrollLeft||r>tr.scrollLeft+tr.clientWidth) tr.scrollTo({left:l<tr.scrollLeft?l:r-tr.clientWidth,behavior:reduceMotion()?"auto":"smooth"}); },vt?420:0); }
+  function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
+    if(!anim){ th.style.transition="none"; }
+    th.style.width=on.offsetWidth+"px"; th.style.transform=`translateX(${on.offsetLeft}px)`;
+    if(!anim){ void th.offsetWidth; th.style.transition=""; } }
+  // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll
+  function fit(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["","s1","s2","s3"]; tr.classList.remove("s1","s2","s3");
+    for(const c of S){ if(c){ tr.classList.remove(...S.filter(Boolean)); tr.classList.add(c); } if(tr.scrollWidth<=tr.clientWidth+1) return; } }
+  function edges(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const over=tr.scrollWidth>tr.clientWidth+2; tr.classList.toggle("scrolls",over); tr.classList.toggle("atstart",!over||tr.scrollLeft<=2); tr.classList.toggle("atend",!over||tr.scrollLeft+tr.clientWidth>=tr.scrollWidth-2); }
+  function nameStrip(on){ const sub=$("subnav"); const th=sub.querySelector(".pthumb"); if(th) th.style.viewTransitionName=on?"ptthumb":"";
+    sub.querySelectorAll(".ptab").forEach((b,i)=>{ b.style.viewTransitionName=on?"ptab"+i:""; try{ b.style.viewTransitionClass=on?"ptab":""; }catch(e){} }); }
   function showPanel(id,opts){
     if(!ALLP.includes(id)) id="today"; const g=groupOf(id), from=curPanel;
     if(!(opts&&opts.back)&&from&&from!==id){ navStack.push(from); if(navStack.length>60) navStack.shift(); }
     curPanel=id; store.set("mm-panel",id); try{ history.replaceState(null,"","#"+id); }catch(e){}
-    const hb=hubOf(id); if(hb) store.set("mm-hub-"+hb,id);
+    if(NAV[g].length>1&&NAV[g].includes(id)) store.set("mm-last-"+g,id);
     const vt=!!(from&&from!==id&&document.startViewTransition&&!reduceMotion()&&!document.hidden);
     let zs=null, zd=null; if(vt){ if(ZOOM[id]&&from==="today"){ zs=$(ZOOM[id]); zd=()=>ztop(id); } else if(ZOOM[from]&&id==="today"){ zs=ztop(from); zd=()=>$(ZOOM[from]); } if(!zs){ zs=zd=null; } }
     const swap=()=>{
       document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
-      const sub=$("subnav"); const items=g==="prep"?Object.keys(HUBS).map(h=>"hub:"+h):NAV[g]; sub.hidden=items.length<2;
-      sub.innerHTML=items.map(p=>{ const on=p.startsWith("hub:")?hubOf(id)===p.slice(4):p===id; return `<button type="button" class="pill" data-p="${p}" aria-selected="${on?"true":"false"}">${p.startsWith("hub:")?HUBNAME[p.slice(4)]:LABEL[p]}</button>`; }).join("");
-      (window.requestAnimationFrame||setTimeout)(()=>{ const over=sub.scrollWidth>sub.clientWidth+2; sub.classList.toggle("scrolls",over); sub.classList.toggle("atend",!over||sub.scrollLeft+sub.clientWidth>=sub.scrollWidth-2); const on=sub.querySelector('.pill[aria-selected="true"]'); if(on&&over) on.scrollIntoView({inline:"nearest",block:"nearest"}); });
+      strip(g,id,vt);
       ALLP.forEach(p=>{ const el=$("panel-"+p); if(!el) return; const was=el.hidden; el.hidden=p!==id; if(p===id&&was&&!vt){ el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); } });
-      // one segmented control serves both hubs; it stays put while its thumb slides to the new section
-      const hs=$("hubseg"); if(hs){ if(hb){ const n=HUBS[hb].length, i=HUBS[hb].indexOf(id); if(hs.dataset.hub!==hb){ hs.dataset.hub=hb; hs.setAttribute("aria-label",HUBNAME[hb]); hs.innerHTML='<span class="hubthumb" aria-hidden="true"></span>'+HUBS[hb].map(p=>`<button type="button" role="tab" data-hub="${p}">${SEG[p]}</button>`).join(""); }
-        if(hs.style&&hs.style.setProperty){ hs.style.setProperty("--n",String(n)); hs.style.setProperty("--i",String(i)); } hs.querySelectorAll("[data-hub]").forEach(b=>b.setAttribute("aria-selected",b.dataset.hub===id?"true":"false")); hs.hidden=false; } else hs.hidden=true; }
       replayCascade(document.getElementById("panel-"+id));
       document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
       document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false"); };
-    if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=zs?"zoom":hb&&hubOf(from)===hb?"seg-"+dir:groupOf(from)===g?"in-"+dir:dir;
+    // within one tab the strip stays put and only its thumb and labels move, so they get names of their own for the page change
+    const inTab=!zs&&groupOf(from)===g&&NAV[g].length>1&&NAV[g].includes(id)&&NAV[g].includes(from);
+    if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=zs?"zoom":groupOf(from)===g?"in-"+dir:dir; if(inTab) nameStrip(true);
       if(zs) zs.style.viewTransitionName="vzoom"; let zel=null; const run=zs?()=>{ zs.style.viewTransitionName=""; swap(); zel=zd(); if(zel) zel.style.viewTransitionName="vzoom"; }:swap;
-      try{ const t=document.startViewTransition(run); if(zs){ const off=()=>{ if(zel) zel.style.viewTransitionName=""; }; t.finished.then(off,off); } const clr=()=>{ delete de.dataset.vt; }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; if(zs) zs.style.viewTransitionName=""; swap(); } }
+      try{ const t=document.startViewTransition(run); if(zs){ const off=()=>{ if(zel) zel.style.viewTransitionName=""; }; t.finished.then(off,off); } const clr=()=>{ delete de.dataset.vt; if(inTab) nameStrip(false); }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; if(zs) zs.style.viewTransitionName=""; nameStrip(false); swap(); } }
     else swap();
   }
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-backto]"); if(b) showPanel(b.dataset.backto,{back:true}); });
-  document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(b.dataset.g==="prep"?hubLast("practice"):NAV[b.dataset.g][0])));
-  $("subnav").addEventListener("click",e=>{ const b=e.target.closest(".pill"); if(!b) return; const p=b.dataset.p; showPanel(p.startsWith("hub:")?hubLast(p.slice(4)):p); });
-  document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-hub]"); if(b) showPanel(b.dataset.hub); });
-  $("subnav").addEventListener("scroll",()=>{ const sub=$("subnav"); sub.classList.toggle("atend",sub.scrollLeft+sub.clientWidth>=sub.scrollWidth-2); },{passive:true});
+  document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(lastOf(b.dataset.g))));
+  $("subnav").addEventListener("click",e=>{ const b=e.target.closest(".ptab"); if(b) showPanel(b.dataset.p); });
+  // arrow keys move along the strip like any tab list
+  $("subnav").addEventListener("keydown",e=>{ if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return; const L=[...$("subnav").querySelectorAll(".ptab")], i=L.findIndex(b=>b.getAttribute("aria-selected")==="true"), n=L[i+(e.key==="ArrowRight"?1:-1)]; if(n){ e.preventDefault(); showPanel(n.dataset.p); n.focus(); } });
+  $("subnav").addEventListener("scroll",()=>edges(),{passive:true,capture:true});
+  window.addEventListener("resize",()=>{ const t=$("subnav").querySelector(".ptrack"); if(t&&!$("subnav").hidden){ fit(); thumb(false); edges(); } });
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(!$("subnav").hidden){ fit(); thumb(false); edges(); } });
   // swipe between top-level groups on touch screens
   (function swipe(){ let x0=null,y0=null; const groups=Object.keys(NAV); const main=document.querySelector("main");
     main.addEventListener("touchstart",e=>{ if(e.target.closest("input,select,textarea,.tblwrap,.drawer,.exbar,.lesson,.wb")) return; x0=e.touches[0].clientX; y0=e.touches[0].clientY; },{passive:true});
-    main.addEventListener("touchend",e=>{ if(x0==null) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; x0=null; if(Math.abs(dx)>80&&Math.abs(dy)<50){ const gi=groups.indexOf(groupOf(curPanel)); const ni=dx<0?gi+1:gi-1; if(ni>=0&&ni<groups.length) showPanel(NAV[groups[ni]][0]); } },{passive:true}); })();
+    main.addEventListener("touchend",e=>{ if(x0==null) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; x0=null; if(Math.abs(dx)>80&&Math.abs(dy)<50){ const gi=groups.indexOf(groupOf(curPanel)); const ni=dx<0?gi+1:gi-1; if(ni>=0&&ni<groups.length) showPanel(lastOf(groups[ni])); } },{passive:true}); })();
   document.addEventListener("keydown",e=>{ if(e.key==="/"&&!e.target.closest("input,textarea,select")){ e.preventDefault(); $("calc-open").click(); } });
   // back button: close an open layer first; on the main screen ask before leaving the app
   (function backButton(){
