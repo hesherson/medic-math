@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="splashing">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -697,8 +697,6 @@ details.method[open]>summary::after{content:"\2212"}
 .expick .exbar .btn{min-height:44px;background:var(--surface);border:1px solid var(--line)}
 .mrule{color:var(--ink);border-left:3px solid var(--amber);padding-left:8px}
 .nw{white-space:nowrap}
-body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
-@media (max-width:600px){ body:has(.ttsbar:not([hidden])) .calcfab{bottom:calc(228px + env(safe-area-inset-bottom,0px))} .ttsctl #tts-stop{margin-left:auto} }
 
 /* reveal on scroll */
 /* entrance animations fill backwards only, so each block lets go of its GPU layer the moment it lands */
@@ -757,8 +755,7 @@ body.teach .board{display:grid}
 .wtool.hot,.wtool:hover{background:var(--amber)}
 .wtool.hot svg,.wtool:hover svg{fill:#1a1208}
 .wtool.hot span,.wtool:hover span{color:#1a1208}
-body:has(.ttsbar:not([hidden])) .wheel{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
-@media (max-width:600px){ .wheel{bottom:calc(84px + env(safe-area-inset-bottom,0px))} body:has(.ttsbar:not([hidden])) .wheel{bottom:calc(228px + env(safe-area-inset-bottom,0px))} }
+@media (max-width:600px){ .wheel{bottom:calc(84px + env(safe-area-inset-bottom,0px))} }
 body.focus .wheel{display:none}
 
 /* whiteboard */
@@ -804,7 +801,8 @@ body.wbopen{overflow:hidden}
 /* the finale: everything clears except the motto, and the theme color sinks to black under it */
 .splash.night{background-color:#000}
 /* no page scrollbar while the intro is up */
-html:has(#splash:not(.out)),html.splashing{overflow:hidden;scrollbar-width:none} html:has(#splash:not(.out))::-webkit-scrollbar,html.splashing::-webkit-scrollbar{display:none}
+/* no :has() on the root or body anywhere: those make every change on the page re-check the whole document */
+html.splashing{overflow:hidden;scrollbar-width:none} html.splashing::-webkit-scrollbar{display:none}
 .splash.out{opacity:0;pointer-events:none}
 .splash canvas{grid-area:1/1;display:block;width:min(100vw,100svh,640px);height:min(100vw,100svh,640px);transition:opacity 1.1s ease,filter 1.1s ease,transform 1.1s ease}
 .splash.ending canvas{opacity:0;filter:blur(6px);transform:scale(1.04)}
@@ -1209,7 +1207,6 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 .hubseg button{position:relative;z-index:1;flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13.5px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 8px;border-radius:9px;cursor:pointer;transition:color .3s}
 .hubseg button[aria-selected="true"]{color:var(--ink)}
 .hubseg button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
-main:has(#panel-sim.simon:not([hidden])) #hubseg{display:none}
 /* ---------- moving between pages: the page slides the way you are going ---------- */
 /* the header bar never moves; its old picture is dropped at once so the new tab highlight shows straight away */
 /* names only while a page change runs: a named element cannot see behind itself, which would stop the glass bars from blurring */
@@ -1261,7 +1258,7 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 .rcard h2{font-size:18px;line-height:1.15}
 .rcard{padding:16px;gap:12px;border-radius:14px}
 /* the disclaimer sits on Drugs and Settings only */
-main>footer{display:none} body:has(#panel-drugs:not([hidden])) main>footer,body:has(#panel-settings:not([hidden])) main>footer{display:block}
+main>footer{display:none} body[data-panel="drugs"] main>footer,body[data-panel="settings"] main>footer{display:block}
 
 /* ----- folds: a row that opens to its options ----- */
 details.fold{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;overflow:hidden}
@@ -1277,7 +1274,8 @@ details.fold[open]>.fbody,details.subfold[open]>:not(summary){animation:foldin .
 @keyframes foldin{from{opacity:0;transform:translateY(-6px)}}
 .fold .rcard{background:none;border:0;padding:0;border-radius:0}
 .fold .rcard>header>.eyebrow{display:none}
-.fold .rcard>header h2{font-size:15px;font-weight:600;color:var(--muted);font-family:var(--body)}
+/* inside a fold the card repeats what the fold row already says, so its own heading steps aside */
+.fold .rcard>header h2{display:none}
 /* a lighter fold that lives inside a card */
 details.subfold{border-top:1px solid var(--line);margin:4px -14px -14px;padding:0}
 details.subfold>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;cursor:pointer;font-size:14px;color:var(--muted);font-weight:600}
@@ -1478,7 +1476,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 #panel-today .pcard{padding:10px 40px 10px 14px}
 @media (max-height:760px){ #panel-today:not([hidden]){gap:8px} #panel-today .hello h1{font-size:23px} #panel-today .hello p{display:none} #panel-today .pcard{padding:7px 40px 7px 14px} #panel-today .lvlcard{padding:10px 36px 10px 12px;grid-template-columns:64px 1fr;gap:12px} #panel-today .lvlring svg{width:64px;height:64px} #panel-today .lvlinfo h2{font-size:21px;margin-bottom:6px} #panel-today .statline{margin-top:5px} #panel-today .regbox{padding:9px 40px 9px 14px} #panel-today .regbox .rbd{font-size:17px} #panel-today .plan{padding:10px 12px;gap:6px} #panel-today .planhead h2{font-size:17px} #panel-today .planprog .btn{padding:8px 14px} }
 /* on short phones the dashboard needs the whole screen, so the tools button steps aside there */
-@media (max-height:760px){ body:has(#panel-today:not([hidden])) .calcfab{display:none} }
+@media (max-height:760px){ body[data-panel="today"] .calcfab{display:none} }
 /* boxes that open a page: the whole box is the button, with a chevron to say so */
 .tapbox{position:relative;cursor:pointer;transition:transform .15s ease,border-color .2s ease,background-color .2s ease;-webkit-tap-highlight-color:transparent}
 @media (hover:hover){ .tapbox:hover{border-color:color-mix(in srgb,var(--teal) 40%,var(--line))} } .tapbox:active{transform:scale(.985)}
@@ -1507,8 +1505,8 @@ html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn .42s cubic-be
 
 /* the day streak, today's XP and mastered drugs run along the bottom of the XP box in one line */
 .lvlcard>.statline{grid-column:1/-1;margin:2px 0 0;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);flex-wrap:nowrap;justify-content:space-between;white-space:nowrap}
-body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
-@media (max-height:700px){ #panel-today:not([hidden]){gap:6px} #panel-today .hello h1{font-size:21px} #panel-today .pcard{padding:6px 40px 6px 14px} #panel-today .lvlcard{padding:8px 36px 8px 12px} #panel-today .lvlcard>.statline{padding-top:6px} #panel-today .regbox{padding:8px 40px 8px 14px} body:has(#panel-today:not([hidden])) main{padding-top:12px} }
+body[data-panel="today"] main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+@media (max-height:700px){ #panel-today:not([hidden]){gap:6px} #panel-today .hello h1{font-size:21px} #panel-today .pcard{padding:6px 40px 6px 14px} #panel-today .lvlcard{padding:8px 36px 8px 12px} #panel-today .lvlcard>.statline{padding-top:6px} #panel-today .regbox{padding:8px 40px 8px 14px} body[data-panel="today"] main{padding-top:12px} }
 
 /* games: one category dropdown and the count */
 .gtools.gsel{display:flex;align-items:center;gap:10px;margin:0 0 14px} .gtools.gsel label{flex:1;display:flex;align-items:center;gap:8px} .gtools.gsel select{flex:1;max-width:280px;font-size:15px;padding:9px 12px;min-height:40px}
@@ -1531,18 +1529,14 @@ body:has(#panel-today:not([hidden])) main{padding-bottom:calc(72px + env(safe-ar
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--glass-a:76%;--sheen:rgba(255,255,255,.06);--sheen2:rgba(255,255,255,.025);--glass-edge:rgba(255,255,255,.09);--glass-shadow:0 12px 26px -16px rgba(0,0,0,.6);
   --bk-red:color-mix(in srgb,var(--teal) 21%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 15%,transparent);--bk-pale:rgba(239,232,220,.07);--bk-o:1}}
 
-/* the backdrop: the page colour, and seven soft lights that wander a few percent of the screen over a minute or more */
+/* the backdrop: the page colour, and a wide field of soft lights in three depths. Each depth is the screen plus four tab-steps wide;
+   every bottom tab looks at its own stretch of it, and each light still wanders a little on its own */
 .bokeh{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--bg);contain:strict}
-.bokeh i{position:absolute;display:block;border-radius:50%;opacity:var(--bk-o);will-change:transform;
+.bkl{position:absolute;top:0;left:0;height:100%;width:calc(100vw + 4 * var(--stepx) * 1vw);will-change:transform;transform-origin:50vw 50%}
+.bokeh i{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);display:block;border-radius:50%;
+  opacity:calc(var(--bk-o) * var(--o,1));will-change:transform;
   background:radial-gradient(circle closest-side,var(--c) 0,var(--c) 38%,color-mix(in srgb,var(--c) 60%,transparent) 64%,color-mix(in srgb,var(--c) 18%,transparent) 86%,transparent 100%);
-  animation:bkA var(--d,90s) ease-in-out infinite alternate;animation-delay:var(--dl,0s)}
-.bokeh i:nth-child(1){--c:var(--bk-red);width:260px;height:260px;left:-70px;top:22%;--d:96s;--dl:-20s}
-.bokeh i:nth-child(2){--c:var(--bk-gold);width:170px;height:170px;right:-30px;top:58%;--d:84s;--dl:-55s;animation-name:bkB}
-.bokeh i:nth-child(3){--c:var(--bk-pale);width:120px;height:120px;left:58%;top:24%;--d:72s;--dl:-10s;animation-name:bkC}
-.bokeh i:nth-child(4){--c:var(--bk-red);width:150px;height:150px;left:46%;top:66%;--d:110s;--dl:-70s;animation-name:bkB}
-.bokeh i:nth-child(5){--c:var(--bk-gold);width:90px;height:90px;left:12%;top:60%;--d:78s;--dl:-35s;animation-name:bkC}
-.bokeh i:nth-child(6){--c:var(--bk-pale);width:70px;height:70px;left:76%;top:36%;--d:66s;--dl:-48s}
-.bokeh i:nth-child(7){--c:var(--bk-red);width:200px;height:200px;right:-80px;top:30%;--d:120s;--dl:-90s;animation-name:bkC}
+  animation:var(--an,bkA) var(--d,90s) ease-in-out infinite alternate;animation-delay:var(--dl,0s)}
 @keyframes bkA{0%{transform:translate(0,0)}35%{transform:translate(9vw,-4vh)}70%{transform:translate(4vw,6vh)}100%{transform:translate(-5vw,2vh)}}
 @keyframes bkB{0%{transform:translate(0,0)}40%{transform:translate(-8vw,-6vh)}75%{transform:translate(-3vw,4vh)}100%{transform:translate(5vw,-2vh)}}
 @keyframes bkC{0%{transform:translate(0,0)}30%{transform:translate(-5vw,5vh)}65%{transform:translate(6vw,3vh)}100%{transform:translate(2vw,-6vh)}}
@@ -1551,7 +1545,7 @@ html.splashing .bokeh i{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.bokeh i{animation:none}}
 /* a lesson is a full screen of its own: the lights rise above the page and show through it */
 .lesson{background:var(--bg)}
-@supports selector(:has(a)){ html:has(#lesson:not([hidden])) .bokeh{z-index:57} .lesson{background:transparent} }
+body.lessonopen .bokeh{z-index:57} .lesson{background:transparent}
 
 details.sec,details.method,.rule-card,details.scen,.rcard,.calc,.qcard,.statcards .k,.plan,.fcard,details.drug,details.trick,.lstats .k,.lnode,.lopt,.gcard,.lvlcard,.actcard,.badgecard,.lrow,.rqbox>div,.rqi,.simcase,.stile,.regbox,.regstats>div,details.fold,.cold,.review li,.sprint,.mci,.mcout,.pkrow,.ltile,.simfeed li{
   background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);
@@ -1659,10 +1653,29 @@ details.subfold.quizopts>summary .qsum{margin-left:auto;font-weight:500;font-siz
 details.drug.reading{border-color:color-mix(in srgb,var(--teal) 70%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--teal) 45%,transparent),0 10px 30px -14px color-mix(in srgb,var(--teal) 70%,transparent)}
 details.drug .speaking{position:relative;border-radius:var(--r-ctl);background-color:color-mix(in srgb,var(--teal) 14%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--teal) 14%,transparent);transition:background-color .35s ease,box-shadow .35s ease}
 details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
+
+/* the page sliding away is only a picture of where you were: it takes no taps */
+.panel.leaving{pointer-events:none}
+
+/* ================= one type system everywhere: Barlow Condensed for names and labels, IBM Plex for reading, Plex Mono for codes =================
+   Form controls and drawn text otherwise fall back to the system font, which is what made Settings look like another app */
+button,input,select,textarea,option{font-family:inherit}
+textarea{font-family:var(--mono)}
+svg text{font-family:var(--body)}
+.setrow b{font-weight:600}
+
+/* ================= long lists only style and lay out what is near the screen; the rest keeps its last size until it scrolls close ================= */
+details.drug{content-visibility:auto;contain-intrinsic-size:auto 145px}
+details.trick{content-visibility:auto;contain-intrinsic-size:auto 44px}
+details.method{content-visibility:auto;contain-intrinsic-size:auto 70px}
+details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
+.rule-card{content-visibility:auto;contain-intrinsic-size:auto 87px}
+.simcase{content-visibility:auto;contain-intrinsic-size:auto 65px}
+.gt{content-visibility:auto;contain-intrinsic-size:auto 138px}
 </style>
 </head>
 <body>
-<div class="bokeh" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="bokeh" aria-hidden="true"><div class="bkl far" style="--stepx:22"><i style="--x:7.7%;--y:61%;--s:66px;--c:var(--bk-red);--an:bkA;--d:105s;--dl:-63s;--o:0.57"></i><i style="--x:13.0%;--y:48%;--s:50px;--c:var(--bk-red);--an:bkA;--d:99s;--dl:-28s;--o:0.71"></i><i style="--x:28.0%;--y:30%;--s:48px;--c:var(--bk-red);--an:bkA;--d:111s;--dl:-34s;--o:0.67"></i><i style="--x:37.1%;--y:62%;--s:59px;--c:var(--bk-pale);--an:bkB;--d:109s;--dl:-11s;--o:0.8"></i><i style="--x:52.3%;--y:63%;--s:51px;--c:var(--bk-red);--an:bkC;--d:67s;--dl:-64s;--o:0.8"></i><i style="--x:65.0%;--y:33%;--s:66px;--c:var(--bk-red);--an:bkC;--d:102s;--dl:-17s;--o:0.57"></i><i style="--x:68.7%;--y:27%;--s:58px;--c:var(--bk-pale);--an:bkB;--d:108s;--dl:-24s;--o:0.55"></i><i style="--x:85.1%;--y:69%;--s:86px;--c:var(--bk-red);--an:bkC;--d:72s;--dl:-86s;--o:0.59"></i><i style="--x:93.6%;--y:61%;--s:57px;--c:var(--bk-gold);--an:bkB;--d:86s;--dl:-58s;--o:0.66"></i></div><div class="bkl mid" style="--stepx:40"><i style="--x:8.1%;--y:34%;--s:91px;--c:var(--bk-gold);--an:bkC;--d:76s;--dl:-8s;--o:0.93"></i><i style="--x:17.8%;--y:50%;--s:99px;--c:var(--bk-pale);--an:bkA;--d:67s;--dl:-14s;--o:0.91"></i><i style="--x:31.6%;--y:68%;--s:101px;--c:var(--bk-red);--an:bkB;--d:100s;--dl:-20s;--o:0.82"></i><i style="--x:42.7%;--y:58%;--s:113px;--c:var(--bk-gold);--an:bkC;--d:92s;--dl:-86s;--o:0.86"></i><i style="--x:51.5%;--y:42%;--s:111px;--c:var(--bk-red);--an:bkC;--d:69s;--dl:-34s;--o:0.98"></i><i style="--x:64.5%;--y:47%;--s:132px;--c:var(--bk-red);--an:bkC;--d:110s;--dl:-48s;--o:0.99"></i><i style="--x:71.4%;--y:34%;--s:118px;--c:var(--bk-gold);--an:bkC;--d:64s;--dl:-55s;--o:0.83"></i><i style="--x:85.6%;--y:47%;--s:145px;--c:var(--bk-pale);--an:bkB;--d:85s;--dl:-6s;--o:0.94"></i><i style="--x:98.1%;--y:44%;--s:127px;--c:var(--bk-red);--an:bkC;--d:72s;--dl:-8s;--o:0.8"></i></div><div class="bkl near" style="--stepx:62"><i style="--x:9.5%;--y:32%;--s:250px;--c:var(--bk-red);--an:bkB;--d:112s;--dl:-69s;--o:0.88"></i><i style="--x:18.8%;--y:70%;--s:194px;--c:var(--bk-gold);--an:bkA;--d:74s;--dl:-69s;--o:0.9"></i><i style="--x:27.7%;--y:37%;--s:233px;--c:var(--bk-pale);--an:bkB;--d:105s;--dl:-59s;--o:0.98"></i><i style="--x:47.7%;--y:24%;--s:177px;--c:var(--bk-red);--an:bkB;--d:90s;--dl:-26s;--o:0.86"></i><i style="--x:54.3%;--y:42%;--s:243px;--c:var(--bk-gold);--an:bkB;--d:85s;--dl:-64s;--o:0.99"></i><i style="--x:68.1%;--y:30%;--s:163px;--c:var(--bk-red);--an:bkC;--d:68s;--dl:-1s;--o:0.85"></i><i style="--x:81.4%;--y:68%;--s:225px;--c:var(--bk-red);--an:bkC;--d:86s;--dl:-15s;--o:0.95"></i><i style="--x:95.2%;--y:69%;--s:183px;--c:var(--bk-red);--an:bkA;--d:75s;--dl:-7s;--o:0.91"></i></div></div>
 <div class="splash" id="splash" aria-hidden="true">
   <canvas id="splash-cv" aria-label="Loading" role="img"></canvas>
   <canvas id="splash-ln" aria-hidden="true"></canvas>
@@ -2429,19 +2442,19 @@ details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
     if(SET.sound){ try{ audio=audio||new (window.AudioContext||window.webkitAudioContext)(); const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=ok?880:220; g.gain.value=0.05; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(ok?0.08:0.18)); }catch(e){} }
   }
   // two-level navigation
-  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["sim","review","quiz","exam","tests"],more:["proctor","settings"]};
+  const NAV={today:["today"],learn:["drugs","methods","rules","ref","tricks"],games:["games"],prep:["sim","quiz","exam","tests"],more:["proctor","settings"]};
   const LABEL={today:"Dashboard",methods:"Formulas",rules:"Rules",ref:"Reference",tricks:"Tricks",drugs:"Drugs",games:"Games",lesson:"Drug Exercises",quiz:"Quiz",scen:"Scenarios",exam:"Exam",sim:"Patient Sim",review:"Review",tests:"Tests",progress:"Progress",registry:"Registry",proctor:"Proctor",settings:"Settings"};
   // every tab with more than one page shows them the same way: one strip under the header, a thumb sliding to the open page
   // Test Prep lists its practice pages first, then its tests, with a divider between the two; quizzes come before exams
   const TAB={exam:"Exams",quiz:"Quizzes",tests:"Custom",sim:"Patient Sim",review:"Review"};
-  const GNAME={learn:"Learn",prep:"Test Prep",more:"More"}, SPLIT={prep:2};
+  const GNAME={learn:"Learn",prep:"Test Prep",more:"More"}, SPLIT={prep:1};
   // pages opened from inside another page keep that page lit in the strip
   const PARENT={scen:"sim"};
   // each tab reopens the page you were last on in it
   const lastOf=g=>{ const v=store.get("mm-last-"+g,NAV[g][0]); return NAV[g].includes(v)?v:NAV[g][0]; };
   // pages reached from inside a group without their own pill
   // Progress and the registry page open from their boxes on the dashboard
-  const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today",scen:"prep"};
+  const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today",scen:"prep",review:"prep"};
   // a dashboard box and the card at the top of the page it opens grow into each other
   const ZOOM={progress:"lv-card",registry:"exam-card"}, ZTOP={progress:"#pg-tiles .pgt.wide",registry:"#reg-body .reghero"};
   const ztop=id=>document.querySelector(ZTOP[id]);
@@ -2449,7 +2462,10 @@ details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
   function groupOf(id){ return HIDDEN[id]||Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
   let curPanel=null;
   // cascade and fade animations replay every time something is shown, not only on first render
-  window.replayCascade=root=>{ if(!root) return; const list=(root.classList&&root.classList.contains("cascade")?[root]:[]).concat([...root.querySelectorAll(".cascade")]); list.forEach(c=>{ c.classList.remove("cascade"); void c.offsetWidth; c.classList.add("cascade"); }); };
+  window.replayCascade=root=>{ if(!root) return;
+    // only what can be seen replays (nothing inside a closed fold), and all of it restarts off one layout instead of one per group
+    const list=(root.classList&&root.classList.contains("cascade")?[root]:[]).concat([...root.querySelectorAll(".cascade")]).filter(c=>!c.closest("details:not([open])"));
+    if(!list.length) return; list.forEach(c=>c.classList.remove("cascade")); void root.offsetWidth; list.forEach(c=>c.classList.add("cascade")); };
   document.addEventListener("toggle",e=>{ const d=e.target; if(d&&d.tagName==="DETAILS"&&d.open) replayCascade(d); },true);
   // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
   (function reveal(){
@@ -2471,26 +2487,32 @@ details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
   window.smoothScrollTo=(getTop,ms)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||520; const hold=380; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=x=>1-Math.pow(1-x,3); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop)); window.scrollTo(0,p<1?start+(target-start)*ease(p):target); if(el<ms+hold) requestAnimationFrame(step); else done(); }; requestAnimationFrame(step); };
   (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const de=document.documentElement, sub=document.getElementById("subnav");
     // --hdr is the whole header, --barh just the coloured bar above the page strip, which the glass bar behind it is sized to
-    const set=()=>{ try{ de.style.setProperty("--hdr",Math.round(h.getBoundingClientRect().height)+"px"); de.style.setProperty("--barh",Math.round(sub&&!sub.hidden?sub.offsetTop:h.offsetHeight)+"px"); }catch(e){} };
+    // set where they are used and only when they change: a variable changed on the root makes every element on the page restyle
+    const main=document.querySelector("main"); let lh=null, lb=null;
+    const set=()=>{ try{ const hv=Math.round(h.getBoundingClientRect().height)+"px", bv=Math.round(sub&&!sub.hidden?sub.offsetTop:h.offsetHeight)+"px"; if(hv!==lh){ lh=hv; (main||de).style.setProperty("--hdr",hv); } if(bv!==lb){ lb=bv; h.style.setProperty("--barh",bv); } }catch(e){} };
     set(); if(window.ResizeObserver) new ResizeObserver(set).observe(h); window.addEventListener("resize",set);
     // scrolling down squashes the bar, and it stays squashed until the page is back at the very top
     let min=false, tick=0; window.addEventListener("scroll",()=>{ if(tick) return; tick=requestAnimationFrame(()=>{ tick=0; const y=window.scrollY||0; if(!min&&y>48){ min=true; de.classList.add("hdrmin"); } else if(min&&y<6){ min=false; de.classList.remove("hdrmin"); } }); },{passive:true}); })();
-  // ----- the lights behind the glass. A change of bottom tab pushes them like bubbles in a liquid: each is carried along by its depth,
-  // drifts nearer or farther, swings back a little and settles. Every push starts from wherever the last one left them, so rapid taps never jump. -----
-  (function bokeh(){ const B=[...document.querySelectorAll(".bokeh i")]; if(!B.length||!B[0].animate) return;
-    const P=B.map((el,i)=>({depth:[1,.55,.35,.75,.45,.3,.85][i%7], hz:[.34,.42,.48,.38,.45,.5,.36][i%7], vy:[-.5,.8,.35,-.7,.6,-.3,.45][i%7], sz:[.16,-.12,.1,-.15,.13,-.1,.14][i%7]}));
-    let live=[]; const N=40, D=3600;
-    const imp=(T,hz,z)=>{ const w=2*Math.PI*hz, wd=w*Math.sqrt(1-z*z), pk=Math.atan(Math.sqrt(1-z*z)/z)/wd, nm=Math.exp(-z*w*pk)*Math.sin(wd*pk); return Math.exp(-z*w*T)*Math.sin(wd*T)/nm; };
-    const back=T=>Math.exp(-2.2*T)*(1+2.2*T);
-    const num=(v,d)=>{ const n=parseFloat(v); return isFinite(n)?n:d; };
-    window.bokehStir=dir=>{ if(document.hidden||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)) return; const k=Math.min(1.4,Math.max(.8,(window.innerWidth||400)/400));
-      const from=B.map(el=>{ const cs=getComputedStyle(el), t=(cs.translate||"none").split(" "); return {x:t[0]==="none"?0:num(t[0],0), y:num(t[1],0), s:cs.scale&&cs.scale!=="none"?num(cs.scale,1):1}; });
+  // ----- the lights behind the glass are a wide field in three depths, one stretch of it per bottom tab. Changing tab pans the field over:
+  // the near lights travel furthest, the far ones least, and each depth eases in with a soft overshoot and settles as if it hung in a liquid.
+  // Only the three depth layers move, by transform, so the compositor does all of it. -----
+  (function bokeh(){ const L=[...document.querySelectorAll(".bokeh .bkl")]; if(!L.length) return;
+    const SPR=[{z:.7,hz:.42,s:-.035,y:6},{z:.64,hz:.5,s:.025,y:-10},{z:.58,hz:.58,s:.06,y:16}];
+    let at=0, live=[];
+    const step=el=>parseFloat(getComputedStyle(el).getPropertyValue("--stepx"))*(window.innerWidth||400)/100||0;
+    const place=()=>{ live.forEach(a=>a.cancel()); live=[]; L.forEach(el=>{ el.style.transform=`translate3d(${(-at*step(el)).toFixed(1)}px,0,0)`; }); };
+    // a damped spring from where a layer is now to where it is going; the bump peaks mid-move and carries the depth's push in or out
+    const resp=(t,z,hz)=>{ const w=2*Math.PI*hz, wd=w*Math.sqrt(1-z*z); return Math.exp(-z*w*t)*(Math.cos(wd*t)+(z*w/wd)*Math.sin(wd*t)); };
+    window.bokehGo=idx=>{ if(idx<0||idx===at) return; const was=at; at=idx;
+      if(document.hidden||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){ place(); return; }
+      const cur=L.map(el=>{ const m=new DOMMatrixReadOnly(getComputedStyle(el).transform); return {x:m.m41,y:m.m42,s:m.a||1}; });
       live.forEach(a=>a.cancel()); live=[];
-      B.forEach((el,i)=>{ const p=P[i], f=from[i], A=-dir*(34+60*p.depth)*k, Ay=p.vy*30*p.depth*k, S=p.sz*(.6+p.depth*.6), fr=[];
-        for(let j=0;j<=N;j++){ const T=j/N*D/1000, b=back(T), x=f.x*b+A*imp(T,p.hz,.5), y=f.y*b+Ay*imp(T,p.hz*.8,.52), sc=1+(f.s-1)*b+S*imp(T,p.hz*.7,.55);
-          fr.push({translate:`${x.toFixed(1)}px ${y.toFixed(1)}px`,scale:sc.toFixed(4)}); }
-        try{ live.push(el.animate(fr,{duration:D,easing:"linear",fill:"none"})); }catch(e){} }); };
-  })();
+      L.forEach((el,k)=>{ const sp=SPR[k%3], to=-at*step(el), c=cur[k], D=3200, N=48, fr=[], far=Math.min(1,Math.abs(idx-was)/2+.5);
+        for(let n=0;n<=N;n++){ const t=n/N*D/1000, r=resp(t,sp.z,sp.hz), x=to+(c.x-to)*r, b=Math.max(0,Math.min(1,1-r))*Math.max(0,r)*4, sc=1+(c.s-1)*Math.max(0,r)+sp.s*b*far, y=c.y*Math.max(0,r)+sp.y*b*far;
+          fr.push({transform:`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) scale(${sc.toFixed(4)})`}); }
+        el.style.transform=`translate3d(${to.toFixed(1)}px,0,0)`;
+        try{ live.push(el.animate(fr,{duration:D,easing:"linear"})); }catch(e){} }); };
+    place(); window.addEventListener("resize",place); })();
   // pages visited, so the back gesture walks back through them
   const navStack=[];
   window.showPanel=(id,o)=>showPanel(id,o);
@@ -2502,13 +2524,15 @@ details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
   // work that needs the new page laid out waits for the swap when a transition is running
   let swapDone=null; window.afterPanel=fn=>{ if(swapDone) swapDone.then(()=>fn()); else fn(); };
   // ----- the page strip: built once per tab, then only its selection and thumb change -----
-  function strip(g,id,vt){ const sub=$("subnav"), items=NAV[g]; sub.hidden=items.length<2; if(sub.hidden){ sub.dataset.g=""; return; }
-    if(sub.dataset.g!==g){ sub.dataset.g=g; sub.innerHTML=`<div class="ptrack" role="tablist" aria-label="${GNAME[g]||""} pages"><span class="pthumb" aria-hidden="true"></span>${items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join("")}</div>`; thumb(false,id); }
+  function strip(g,id,anim){ const sub=$("subnav"), items=NAV[g]; sub.hidden=items.length<2; if(sub.hidden){ sub.dataset.g=""; return; }
+    const fresh=sub.dataset.g!==g;
+    if(fresh){ sub.dataset.g=g; sub.innerHTML=`<div class="ptrack" role="tablist" aria-label="${GNAME[g]||""} pages"><span class="pthumb" aria-hidden="true"></span>${items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join("")}</div>`; }
     id=PARENT[id]||id; sub.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
-    fit(); thumb(!vt&&!reduceMotion(),id); edges();
-    // bring the open page into view along the strip, once the page change has played
-    const on=sub.querySelector('.ptab[aria-selected="true"]'), tr=sub.querySelector(".ptrack");
-    if(on&&tr&&tr.scrollWidth>tr.clientWidth+2) setTimeout(()=>{ const l=on.offsetLeft-24, r=on.offsetLeft+on.offsetWidth+24; if(l<tr.scrollLeft||r>tr.scrollLeft+tr.clientWidth) tr.scrollTo({left:l<tr.scrollLeft?l:r-tr.clientWidth,behavior:reduceMotion()?"auto":"smooth"}); },vt?420:0); }
+    const tr=sub.querySelector(".ptrack");
+    requestAnimationFrame(()=>{ if(sub.dataset.g!==g) return; if(fresh) fit(); thumb(anim&&!fresh,id); edges();
+      if(fresh&&anim&&tr&&tr.animate) tr.animate([{opacity:0,transform:"translateY(-4px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.8,.24,1)"});
+      // bring the open page into view along the strip
+      const on=sub.querySelector('.ptab[aria-selected="true"]'); if(on&&tr&&tr.scrollWidth>tr.clientWidth+2){ const l=on.offsetLeft-24, r=on.offsetLeft+on.offsetWidth+24; if(l<tr.scrollLeft||r>tr.scrollLeft+tr.clientWidth) tr.scrollTo({left:l<tr.scrollLeft?l:r-tr.clientWidth,behavior:reduceMotion()?"auto":"smooth"}); } }); }
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
     if(!anim){ th.style.transition="none"; }
     th.style.width=on.offsetWidth+"px"; th.style.transform=`translateX(${on.offsetLeft}px)`;
@@ -2517,30 +2541,43 @@ details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
   function fit(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["","s1","s2","s3"]; tr.classList.remove("s1","s2","s3");
     for(const c of S){ if(c){ tr.classList.remove(...S.filter(Boolean)); tr.classList.add(c); } if(tr.scrollWidth<=tr.clientWidth+1) return; } }
   function edges(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const over=tr.scrollWidth>tr.clientWidth+2; tr.classList.toggle("scrolls",over); tr.classList.toggle("atstart",!over||tr.scrollLeft<=2); tr.classList.toggle("atend",!over||tr.scrollLeft+tr.clientWidth>=tr.scrollWidth-2); }
-  function nameStrip(on){ const sub=$("subnav"); const th=sub.querySelector(".pthumb"); if(th) th.style.viewTransitionName=on?"ptthumb":"";
-    sub.querySelectorAll(".ptab").forEach((b,i)=>{ b.style.viewTransitionName=on?"ptab"+i:""; try{ b.style.viewTransitionClass=on?"ptab":""; }catch(e){} }); }
+  // ----- moving between pages happens on the live page, never on snapshots: the old page is lifted out exactly where it sits and slides away
+  // while the new one slides in, so nothing waits on a capture, the glass and the lights stay live, and nothing jumps when it ends -----
+  const EASE="cubic-bezier(.22,.8,.24,1)";
+  let leaving=null, entering=null;
+  function settle(){ if(entering){ try{ entering.finish(); }catch(e){} entering=null; } if(!leaving) return; const L=leaving; leaving=null; try{ L.anim.cancel(); }catch(e){} L.el.hidden=L.el.id!=="panel-"+curPanel; L.el.classList.remove("leaving"); L.el.style.cssText=L.css; }
+  function lift(el){ const r=el.getBoundingClientRect(), css=el.style.cssText; Object.assign(el.style,{position:"fixed",top:r.top+"px",left:r.left+"px",width:r.width+"px",margin:"0",zIndex:"1"}); el.classList.add("leaving"); return css; }
   function showPanel(id,opts){
     if(!ALLP.includes(id)) id="today"; const g=groupOf(id), from=curPanel;
     if(!(opts&&opts.back)&&from&&from!==id){ navStack.push(from); if(navStack.length>60) navStack.shift(); }
+    settle();
     curPanel=id; store.set("mm-panel",id); try{ history.replaceState(null,"","#"+id); }catch(e){}
     if(NAV[g].length>1&&NAV[g].includes(PARENT[id]||id)) store.set("mm-last-"+g,PARENT[id]||id);
-    const vt=!!(from&&from!==id&&document.startViewTransition&&!reduceMotion()&&!document.hidden);
-    let zs=null, zd=null; if(vt){ if(ZOOM[id]&&from==="today"){ zs=$(ZOOM[id]); zd=()=>ztop(id); } else if(ZOOM[from]&&id==="today"){ zs=ztop(from); zd=()=>$(ZOOM[from]); } if(!zs){ zs=zd=null; } }
-    const swap=()=>{
-      document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
-      strip(g,id,vt);
-      ALLP.forEach(p=>{ const el=$("panel-"+p); if(!el) return; const was=el.hidden; el.hidden=p!==id; if(p===id&&was&&!vt){ el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); } });
-      replayCascade(document.getElementById("panel-"+id));
-      document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
-      document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false"); };
-    // a change of bottom tab stirs the lights behind the glass, as if they hang in a fluid the page just moved through
-    const gFrom=from?groupOf(from):null; if(gFrom&&gFrom!==g&&!zs&&window.bokehStir){ const G=Object.keys(NAV); bokehStir(Math.sign(G.indexOf(g)-G.indexOf(gFrom))||1); }
-    // within one tab the strip stays put and only its thumb and labels move, so they get names of their own for the page change
-    const inTab=!zs&&groupOf(from)===g&&NAV[g].length>1&&NAV[g].includes(id)&&NAV[g].includes(from);
-    if(vt){ const de=document.documentElement; const dir=dirOf(from,id,opts); de.dataset.vt=zs?"zoom":groupOf(from)===g?"in-"+dir:dir; if(inTab) nameStrip(true);
-      if(zs) zs.style.viewTransitionName="vzoom"; let zel=null; const run=zs?()=>{ zs.style.viewTransitionName=""; swap(); zel=zd(); if(zel) zel.style.viewTransitionName="vzoom"; }:swap;
-      try{ const t=document.startViewTransition(run); if(zs){ const off=()=>{ if(zel) zel.style.viewTransitionName=""; }; t.finished.then(off,off); } const clr=()=>{ delete de.dataset.vt; if(inTab) nameStrip(false); }; t.finished.then(clr,clr); const p=swapDone=t.updateCallbackDone.then(()=>{ if(swapDone===p) swapDone=null; },()=>{ if(swapDone===p) swapDone=null; }); }catch(e){ delete de.dataset.vt; if(zs) zs.style.viewTransitionName=""; nameStrip(false); swap(); } }
-    else swap();
+    const oldEl=from&&from!==id?$("panel-"+from):null, move=!!(oldEl&&!oldEl.hidden&&!reduceMotion()&&!document.hidden);
+    const zoom=(ZOOM[id]&&from==="today")||(ZOOM[from]&&id==="today"), dir=dirOf(from,id,opts)==="fwd"?1:-1, near=groupOf(from)===g;
+    // the dashboard box and the card at the top of the page it opens grow into each other
+    const zsrc=move&&zoom?(ZOOM[id]&&from==="today"?$(ZOOM[id]):ztop(from)):null, zr=zsrc?zsrc.getBoundingClientRect():null;
+    const css=move?lift(oldEl):null;
+    document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false"));
+    strip(g,id,move);
+    ALLP.forEach(p=>{ const el=$("panel-"+p); if(el) el.hidden=p!==id; });
+    if(document.body&&document.body.setAttribute) document.body.setAttribute("data-panel",id);
+    replayCascade(document.getElementById("panel-"+id));
+    document.dispatchEvent(new CustomEvent("panel",{detail:id})); window.scrollTo({top:0,behavior:"instant"});
+    document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false");
+    // a change of bottom tab pans the lights behind the glass over to that tab's part of the field
+    if(window.bokehGo&&from&&groupOf(from)!==g) bokehGo(Object.keys(NAV).indexOf(g));
+    if(!move) return;
+    oldEl.hidden=false; const nw=$("panel-"+id), dx=near?26:46;
+    const out=zoom?[{opacity:1},{opacity:0}]:[{transform:"none",opacity:1},{transform:`translateX(${-dir*dx}px)`,opacity:0}];
+    const anim=oldEl.animate(out,{duration:zoom?170:230,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"});
+    leaving={el:oldEl,css,anim}; anim.finished.then(()=>{ if(leaving&&leaving.el===oldEl) settle(); },()=>{});
+    const zdst=zoom?(ZOOM[id]&&from==="today"?ztop(id):$(ZOOM[from])):null;
+    if(zdst&&zr){ const r=zdst.getBoundingClientRect(); if(r.width&&r.height){ const sx=zr.width/r.width, sy=zr.height/r.height, tx=zr.left-r.left, ty=zr.top-r.top;
+        zdst.animate([{transformOrigin:"0 0",transform:`translate(${tx}px,${ty}px) scale(${sx},${sy})`},{transformOrigin:"0 0",transform:"none"}],{duration:420,easing:EASE}); }
+      entering=nw.animate([{opacity:0},{opacity:1}],{duration:300,easing:"ease-out",delay:40,fill:"backwards"}); }
+    else entering=nw.animate([{transform:`translateX(${dir*dx}px)`,opacity:0},{transform:"none",opacity:1}],{duration:near?300:360,easing:EASE});
+    entering.finished.then(()=>{ entering=null; },()=>{});
   }
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-backto]"); if(b) showPanel(b.dataset.backto,{back:true}); });
   document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPanel(lastOf(b.dataset.g))));
@@ -7035,7 +7072,7 @@ return {name:'LAZARUS SA Node',duration:3,size:SIZE,play,still,preload:assets};
   //   Heart:  a drop lands on the SA node and the conduction traces branch out into the heart; the letters burn in along their outlines like a fuse.
   //   Glyphs: scrambled glyphs stream in from off screen and settle into the heart's lines before the drawing takes over; the letters decode out of scrambled glyphs.
   //   Lines:  vertical lines drop into a geometric outline of the heart and a sweep reveals the drawing; a sweep leaves a line for every vertical stroke and the letters fill in. ----------
-  (function splash(){ const sp=document.getElementById("splash"); if(!sp) return;
+  (function splash(){ const sp=document.getElementById("splash"); if(!sp){ document.documentElement.classList.remove("splashing"); return; }
     const cv=document.getElementById("splash-cv"), ln=document.getElementById("splash-ln"), title=sp.querySelector(".splash-t"), motto=sp.querySelector(".splash-m");
     const P=window.MedicMathParticles, SA=window.LazarusSANode;
     const quick=(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)||!title||!motto||!ln||!ln.getContext;
