@@ -973,7 +973,6 @@ header.top h1 .mark{width:28px;height:28px;border-radius:50%;vertical-align:-6px
 .splash-m.wobble{filter:url(#lz-melt)}
 .splash-m.melting .sm-en{opacity:1}
 .splash-m.melting .sm-la .ch{transform-origin:50% 0;animation:lzDrip .72s cubic-bezier(.45,0,.8,.35) both}
-.splash-m.melting-out .sm-la .ch{transform-origin:50% 0;animation:lzDrip .72s cubic-bezier(.45,0,.8,.35) both}
 .splash-m.melting .sm-en .ch{opacity:0;transform-origin:50% 100%;animation:lzRise .72s cubic-bezier(.2,.65,.25,1) both}
 @keyframes lzDrip{0%{transform:none;opacity:1;filter:blur(0)}30%{transform:translateY(1px) scaleY(1.12);opacity:.92}100%{transform:translateY(11px) scale(.86,1.75);opacity:0;filter:blur(2.5px)}}
 @keyframes lzRise{0%{transform:translateY(8px) scale(1.08,1.45);opacity:0;filter:blur(4px)}50%{opacity:.78;filter:blur(1.2px)}100%{transform:none;opacity:1;filter:blur(0)}}
@@ -6924,7 +6923,7 @@ return {name:'LAZARUS SA Node',duration:3,size:SIZE,play,still,preload:assets};
   showPanel("today");
   // ---------- intro: three ways to draw the same picture, picked at random and never the same one twice running.
   // Every version ends on the same anatomical heart, then LAZARUS draws in over its lower right, cut out in black so it never meshes with the lines,
-  // with the motto right under the name. Then the heart and the name clear while the motto melts away where it sits.
+  // with the motto right under the name. Then the heart and the name clear while the motto, where it sits, melts from the Latin into English.
   //   Heart:  a drop lands on the SA node and the conduction traces branch out into the heart; the letters burn in along their outlines like a fuse.
   //   Glyphs: scrambled glyphs stream in from off screen and settle into the heart's lines before the drawing takes over; the letters decode out of scrambled glyphs.
   //   Lines:  vertical lines drop into a geometric outline of the heart and a sweep reveals the drawing; a sweep leaves a line for every vertical stroke and the letters fill in. ----------
@@ -6950,13 +6949,14 @@ return {name:'LAZARUS SA Node',duration:3,size:SIZE,play,still,preload:assets};
     let mode=avail.includes(forced)?forced:(()=>{ const pool=avail.filter(m=>m!==last), L=pool.length?pool:avail; return L[Math.floor(Math.random()*L.length)]; })();
     ls("mm-intro-last",mode); sp.dataset.intro=mode;
 
-    // ----- the motto: it melts away where it sits, letter by letter, each one dripping down and out -----
+    // ----- the motto: it melts where it sits, letter by letter, each Latin letter dripping away while the English letter in the same spot rises out of it -----
     const la=motto.querySelector(".sm-la"), en=motto.querySelector(".sm-en");
     const split=node=>{ if(!node) return []; const t=node.textContent; node.textContent=""; return [...t].map(ch=>{ const c=document.createElement("span"); c.className="ch"; c.textContent=ch; node.appendChild(c); return c; }); };
-    const melt=()=>{ if(!la) return;
-      const A=split(la), wave=.36, rnd=.09; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
-      motto.classList.add("wobble","melting-out");
-      try{ document.getElementById("lz-melt-s").beginElement(); document.getElementById("lz-melt-f").beginElement(); }catch(e){} };
+    const melt=()=>{ if(!la||!en) return;
+      const A=split(la), B=split(en), wave=.36, rnd=.09; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.28+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
+      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("wobble","melting");
+      try{ document.getElementById("lz-melt-s").beginElement(); document.getElementById("lz-melt-f").beginElement(); }catch(e){}
+      later(()=>motto.classList.remove("wobble"),1650); };
 
     // ----- one layout for every version: the heart in a square near the middle, the name over its lower right third, the motto under the heart -----
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
@@ -6974,11 +6974,13 @@ return {name:'LAZARUS SA Node',duration:3,size:SIZE,play,still,preload:assets};
     const makeHeart=()=>{ hc=document.createElement("canvas"); hc.className="splash-heart"; hc.setAttribute("aria-hidden","true"); Object.assign(hc.style,{position:"absolute",margin:"0",gridArea:"auto",transition:"none",opacity:"1",background:"#000"}); sp.insertBefore(hc,ln); place(); return hc; };
     const beat=()=>{};
 
-    // ----- the shared ending: the heart and the name clear while the motto melts away in place, then the app shows through -----
+    // ----- the shared ending: the heart and the name clear, the motto melts into English in place, holds, then the app shows through -----
     const rise=()=>{ if(risen||done) return; risen=true; if(raf){ cancelAnimationFrame(raf); raf=0; } if(cv) cv.style.opacity="0"; if(hc) fade(hc,700,0); fuseCvs.forEach(c=>c.remove());
       try{ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); }catch(e){}
       Object.assign(title.style,{transition:"opacity .7s ease, transform .9s cubic-bezier(.3,.7,.2,1), filter .7s ease",opacity:"0",transform:"translateY(calc(-50% - 22px)) scale(.94)",filter:"blur(3px)"});
-      motto.style.opacity="1"; later(melt,120); later(gone,1500); };
+      // the English line is longer than the Latin and lines up on the same right edge; if it would run off the left of the screen it gives up some letter spacing
+      if(en){ const r=en.getBoundingClientRect(), room=r.right-sp.getBoundingClientRect().left-10, n=en.textContent.length, gap=parseFloat(getComputedStyle(en).letterSpacing)||0; if(r.width>room&&n) en.style.letterSpacing=Math.max(0,gap-(r.width-room)/n).toFixed(2)+"px"; }
+      motto.style.opacity="1"; later(melt,350); later(()=>fade(motto,600,0),2900); later(gone,3500); };
 
     // ----- the line layer: a full-screen canvas in page pixels -----
     const lg=ln.getContext("2d"); let LDPR=1;
