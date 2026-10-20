@@ -6582,7 +6582,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
   showPanel(ALLP.includes(h0)?h0:store.get("mm-panel","today"));
   // ---------- intro: two versions, picked at random (the line version about one open in three, never twice running).
   // Glyphs: scrambled glyphs creep in from the edges of the screen and settle into LAZARUS.
-  // Lines: a vertical line sweeps across the name with a sharp ease, leaving a plain vertical line where each letter goes; then each letter opens out from its line. The motto gets the same.
+  // Lines: a vertical line sweeps across the name with a sharp ease, leaving a line for every vertical line each letter really has; then the letters fill in. The motto gets the same.
   // Both end the same way: the name steps back, the motto slides up into its place, larger, and melts from the Latin into English. ----------
   (function splash(){ const sp=document.getElementById("splash"); if(!sp) return;
     const cv=document.getElementById("splash-cv"), ln=document.getElementById("splash-ln"), glow=sp.querySelector(".splash-glow"), title=sp.querySelector(".splash-t"), motto=sp.querySelector(".splash-m");
@@ -6659,40 +6659,63 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
         try{ h=P.mount(cv,{background:false,loop:false,onFrame,colors:glyphs,scramble:true,curl:.3,easeOut:2.4,maxSide:640*dpr,onComplete:()=>later(()=>{ if(!landed){ landed=true; title.style.opacity="1"; later(rise,400); } },60)}); }catch(e){ title.style.transition="opacity .8s ease"; title.style.opacity="1"; later(rise,1200); } };
       return start; }
 
-    // ================= lines: a vertical line sweeps across, leaving a plain vertical line where each letter will be, then each letter opens out from its line =================
+    // ================= lines: a vertical line sweeps across, leaving a line for every vertical line each letter really has, then the letters fill in =================
     const eQ=x=>{ x=Math.max(0,Math.min(1,x)); return x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2; };
     const eO=x=>{ x=Math.max(0,Math.min(1,x)); return 1-Math.pow(1-x,3); };
     const lg=ln.getContext("2d"); let LDPR=1;
     const sizeLn=()=>{ const r=sp.getBoundingClientRect(); LDPR=Math.min(window.devicePixelRatio||1,2); ln.width=Math.round(r.width*LDPR); ln.height=Math.round(r.height*LDPR); };
-    // the ink box of every letter in an element, from its laid-out position and the font's own measurements
-    function boxes(el){ const r0=sp.getBoundingClientRect(), cs=getComputedStyle(el), fs=parseFloat(cs.fontSize)||16, spans=split(el);
+    // the vertical lines of one character, read off the font itself: it is drawn large, every straight vertical edge is traced,
+    // and the two sides of a stem become one line down its middle, so an L gives its stem (long) and the end of its foot (short)
+    const VL={};
+    function vLines(ch,font,fs){ const key=ch+"|"+font+"|"+fs; if(VL[key]) return VL[key]; const Z=3, W=Math.ceil(fs*1.6*Z)+8, H=Math.ceil(fs*1.5*Z)+8, pad=Math.ceil(fs*.3*Z), by=Math.ceil(fs*1.1*Z);
+      const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"); g.font=font.replace(/[\d.]+px/,(fs*Z)+"px"); g.fillStyle="#fff"; g.fillText(ch,pad,by);
+      let d; try{ d=g.getImageData(0,0,W,H).data; }catch(e){ return VL[key]=[]; } const A=(x,y)=>d[(y*W+x)*4+3];
+      // where the ink starts (t 0) and stops (t 1) on each row, to a fraction of a pixel
+      const rows=[]; for(let y=0;y<H;y++){ const r=[]; for(let x=1;x<W;x++){ const a=A(x-1,y), b=A(x,y); if(a<128&&b>=128) r.push({x:x-1+(128-a)/Math.max(1,b-a),t:0}); else if(a>=128&&b<128) r.push({x:x-1+(a-128)/Math.max(1,a-b),t:1}); } rows.push(r); }
+      // an edge that runs straight down, staying within a pixel of where it started, is a vertical edge
+      let live=[]; const E=[];
+      for(let y=0;y<H;y++){ const next=[]; for(const e of rows[y]){ const s=live.find(s=>s.t===e.t&&!s.used&&Math.abs(e.x-s.last)<=.9&&Math.abs(e.x-s.x0)<=1.5); if(s){ s.used=true; s.last=e.x; s.sum+=e.x; s.n++; s.y1=y; next.push(s); } else next.push({t:e.t,x0:e.x,last:e.x,sum:e.x,n:1,y0:y,y1:y}); }
+        live.forEach(s=>{ if(!s.used) E.push(s); }); next.forEach(s=>s.used=false); live=next; }
+      E.push(...live);
+      const minLen=Math.max(4,fs*Z*.07), edges=E.filter(s=>s.y1-s.y0+1>=minLen).map(s=>({x:s.sum/s.n,y0:s.y0,y1:s.y1+1,t:s.t}));
+      // pair the left and right side of each stem
+      const maxStem=fs*Z*.28, lines=[], used=new Set();
+      edges.filter(e=>e.t===0).forEach(L=>{ const Rs=edges.filter(R=>R.t===1&&!used.has(R)&&R.x>L.x&&R.x-L.x<=maxStem&&Math.min(L.y1,R.y1)-Math.max(L.y0,R.y0)>=.5*Math.min(L.y1-L.y0,R.y1-R.y0));
+        if(!Rs.length) return; const nx=Math.min(...Rs.map(R=>R.x)), mine=Rs.filter(R=>R.x-nx<2.5); mine.forEach(R=>used.add(R)); used.add(L);
+        lines.push({x:(L.x+mine.reduce((a,R)=>a+R.x,0)/mine.length)/2,y0:Math.min(L.y0,...mine.map(R=>R.y0)),y1:Math.max(L.y1,...mine.map(R=>R.y1))}); });
+      edges.filter(e=>!used.has(e)).forEach(e=>lines.push({x:e.x,y0:e.y0,y1:e.y1}));
+      return VL[key]=lines.map(l=>({x:(l.x-pad)/Z,y0:(l.y0-by)/Z,y1:(l.y1-by)/Z})).sort((a,b)=>a.x-b.x); }
+    // each letter of an element: where it sits, its ink box, and its vertical lines in page pixels
+    function boxes(el){ const r0=sp.getBoundingClientRect(), cs=getComputedStyle(el), fs=parseFloat(cs.fontSize)||16, spans=split(el), font=`${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
       const mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; el.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
-      const g=document.createElement("canvas").getContext("2d"); g.font=`${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
+      const g=document.createElement("canvas").getContext("2d"); g.font=font;
       return spans.map(c=>{ const ch=c.textContent.toUpperCase(); if(!ch.trim()) return null; const r=c.getBoundingClientRect(), x=r.left-r0.left, m=g.measureText(ch);
         const okm=m.actualBoundingBoxAscent!=null&&isFinite(m.actualBoundingBoxRight);
         const x0=okm?x-m.actualBoundingBoxLeft:x+.04*fs, x1=okm?x+m.actualBoundingBoxRight:x+m.width-.04*fs, y0=okm?base-m.actualBoundingBoxAscent:base-.7*fs, y1=okm?base+m.actualBoundingBoxDescent:base;
-        return {span:c,sx:x,sw:r.width,x0,x1,y0,y1,c:(x0+x1)/2}; }).filter(Boolean); }
-    // one pass: the sweep, the line it leaves at each letter, and each letter opening out from its line as the line splits to the letter's edges
+        const L=vLines(ch,font,fs).map(l=>({x:x+l.x,y0:base+l.y0,y1:base+l.y1}));
+        return {span:c,sx:x,sw:r.width,x0,x1,y0,y1,c:(x0+x1)/2,L}; }).filter(Boolean); }
+    // one pass: the sweep, the lines it leaves behind, then each letter filling in from its middle, its lines going as the fill reaches them
     function pass(el,lw,sweep,stag,open){ const B=boxes(el); if(!B.length) return null;
       const caps=B.filter(b=>b.y1-b.y0>(B[0].y1-B[0].y0)*.5), top=Math.min(...caps.map(b=>b.y0)), bot=Math.max(...caps.map(b=>b.y1)), pad=(bot-top)*.35;
       const left=Math.min(...B.map(b=>b.x0))-14, right=Math.max(...B.map(b=>b.x1))+14;
-      // when the sweep reaches each letter's middle, found by searching the ease
-      B.forEach(b=>{ const f=(b.c-left)/(right-left); let lo=0, hi=1; for(let k=0;k<24;k++){ const mid=(lo+hi)/2; if(eQ(mid)<f) lo=mid; else hi=mid; } b.hit=lo*sweep; b.span.style.clipPath=`inset(-40% ${(b.sx+b.sw-b.c).toFixed(1)}px -40% ${(b.c-b.sx).toFixed(1)}px)`; });
-      const fill0=sweep+.18; B.forEach((b,i)=>{ b.fill=fill0+i*stag; }); el.style.opacity="1";
+      // when the sweep reaches each line, found by searching the ease
+      const at=x=>{ const f=(x-left)/(right-left); let lo=0, hi=1; for(let k=0;k<24;k++){ const mid=(lo+hi)/2; if(eQ(mid)<f) lo=mid; else hi=mid; } return lo*sweep; };
+      B.forEach(b=>{ b.L.forEach(l=>{ l.hit=at(l.x); }); b.span.style.clipPath=`inset(-40% ${(b.sx+b.sw-b.c).toFixed(1)}px -40% ${(b.c-b.sx).toFixed(1)}px)`; });
+      const fill0=sweep+.3; B.forEach((b,i)=>{ b.fill=fill0+i*stag; }); el.style.opacity="1";
       return {B,lw,sweep,open,left,right,top:top-pad,bot:bot+pad,end:fill0+(B.length-1)*stag+open}; }
     function drawPass(S,t){ if(!S||t<0) return; lg.lineCap="butt";
       const line=(x,y0,y1,a,w)=>{ if(a<=.003) return; lg.strokeStyle=`rgba(239,232,220,${(a*.18).toFixed(3)})`; lg.lineWidth=w*3.5; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); lg.strokeStyle=`rgba(239,232,220,${a.toFixed(3)})`; lg.lineWidth=w; lg.beginPath(); lg.moveTo(x,y0); lg.lineTo(x,y1); lg.stroke(); };
       // the sweep: fast through the middle, slow at both ends, gone once it reaches the far side
       if(t<=S.sweep+.12){ const x=S.left+(S.right-S.left)*eQ(t/S.sweep), a=1-sm((t-S.sweep*.8)/(S.sweep*.2+.12)); line(x,S.top,S.bot,a,S.lw*1.1); }
-      S.B.forEach(b=>{ if(t<b.hit) return; const d=eO((t-b.hit)/.22), h=(S.bot-S.top)/2, mid=(b.y0+b.y1)/2, hh=h+((b.y1-b.y0)/2-h)*d;
-        const q=(t-b.fill)/S.open;
-        if(q<=0){ line(b.c,mid-hh,mid+hh,.92,S.lw); return; }
-        const e=eQ(q), L=b.c-(b.c-b.x0)*e, R=b.c+(b.x1-b.c)*e, a=.92*Math.pow(Math.max(0,1-e),.7);
-        b.span.style.clipPath=q>=1?"none":`inset(-40% ${((b.sx+b.sw-b.c)*(1-e)-4*e).toFixed(1)}px -40% ${((b.c-b.sx)*(1-e)-4*e).toFixed(1)}px)`;
-        line(L,mid-hh,mid+hh,a,S.lw); line(R,mid-hh,mid+hh,a,S.lw); }); }
+      S.B.forEach(b=>{ const q=(t-b.fill)/S.open, e=q>0?eQ(q):0, Lx=b.c-(b.c-b.x0)*e, Rx=b.c+(b.x1-b.c)*e;
+        if(q>0) b.span.style.clipPath=q>=1?"none":`inset(-40% ${((b.sx+b.sw-b.c)*(1-e)-4*e).toFixed(1)}px -40% ${((b.c-b.sx)*(1-e)-4*e).toFixed(1)}px)`;
+        b.L.forEach(l=>{ if(t<l.hit) return; const d=eO((t-l.hit)/.22), y0=S.top+(l.y0-S.top)*d, y1=S.bot+(l.y1-S.bot)*d;
+          // a line fades as the fill sweeps over it
+          const cov=q>0?(l.x>=b.c?Rx-l.x:l.x-Lx):-1, a=.92*(1-sm((cov+2)/8));
+          line(l.x,y0,y1,a,S.lw); }); }); }
     function lineIntro(){ const start=()=>{ if(done) return; place(); sizeLn();
         motto.style.opacity="0"; const T=pass(title,1.6,.85,.06,.55); const M=pass(la||motto,1,.75,.02,.45); if(motto&&M) motto.style.opacity="1";
-        const mAt=T?T.sweep+.18+(T.B.length-1)*.06+.15:0, riseAt=mAt+(M?M.end:0)+.35; let tt=0, lastT=null;
+        const mAt=T?T.sweep+.3+(T.B.length-1)*.06+.15:0, riseAt=mAt+(M?M.end:0)+.35; let tt=0, lastT=null;
         const frame=now=>{ raf=0; if(done||risen) return; if(lastT!=null) tt+=Math.min(.05,Math.max(0,(now-lastT)/1000)); lastT=now;
           lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); lg.setTransform(LDPR,0,0,LDPR,0,0);
           drawPass(T,tt); drawPass(M,tt-mAt);
