@@ -287,15 +287,15 @@ footer{color:var(--muted);font-size:12px;margin-top:28px}
 /* motion */
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.panel.enter{animation:rise 0.272s cubic-bezier(.2,.7,.2,1)}
-details.sec[open]>.body,details.method[open]>.mbody,details.scen[open]>.sc-body{animation:rise 0.238s cubic-bezier(.2,.7,.2,1)}
+.panel.enter{animation:rise 0.272s var(--eq)}
+details.sec[open]>.body,details.method[open]>.mbody,details.scen[open]>.sc-body{animation:rise 0.238s var(--eq)}
 details>summary{transition:background 0.153s}
 details.method>summary:hover,details.sec>summary:hover,details.scen>summary:hover{background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
-.verdict:not([hidden]){animation:rise 0.238s cubic-bezier(.2,.7,.2,1)}
-.steps li{animation:rise 0.289s cubic-bezier(.2,.7,.2,1) backwards}
+.verdict:not([hidden]){animation:rise 0.238s var(--eq)}
+.steps li{animation:rise 0.289s var(--eq) backwards}
 .steps li:nth-child(1){animation-delay:0.017s}.steps li:nth-child(2){animation-delay:0.06s}.steps li:nth-child(3){animation-delay:0.102s}.steps li:nth-child(4){animation-delay:0.145s}.steps li:nth-child(5){animation-delay:0.187s}.steps li:nth-child(6){animation-delay:0.23s}.steps li:nth-child(7){animation-delay:0.272s}
-.qcard.swap{animation:rise 0.255s cubic-bezier(.2,.7,.2,1)}
-.summary:not([hidden]){animation:rise 0.297s cubic-bezier(.2,.7,.2,1)}
+.qcard.swap{animation:rise 0.255s var(--eq)}
+.summary:not([hidden]){animation:rise 0.297s var(--eq)}
 .extable:not([hidden]){animation:fade 0.212s ease-out}
 .board{animation:fade 0.212s ease-out}
 .tab{transition:background 0.17s,color 0.17s,opacity 0.17s}
@@ -305,7 +305,7 @@ details.method>summary:hover,details.sec>summary:hover,details.scen>summary:hove
 .dkeys button,.dquick button{transition:background 0.102s,transform 0.068s}
 .rule-card,.rcard,.cold,.k{transition:transform 0.128s,box-shadow 0.128s}
 .rule-card:hover,.cold:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
-.mbar i{transition:width 0.425s cubic-bezier(.2,.7,.2,1)}
+.mbar i{transition:width 0.425s var(--eq)}
 .clock{transition:color 0.17s}
 .calcfab{transition:transform 0.128s,box-shadow 0.128s}
 .calcfab:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
@@ -667,7 +667,7 @@ body.focus .quizwrap{max-width:720px;margin:0 auto}
 }
 
 /* cascade: children rise in one after another whenever their container is shown or opened */
-.cascade>*{animation:rise 0.357s cubic-bezier(.2,.7,.2,1) backwards}
+.cascade>*{animation:rise 0.357s var(--eq) backwards}
 .cascade>*:nth-child(1){animation-delay:0.017s}.cascade>*:nth-child(2){animation-delay:0.06s}.cascade>*:nth-child(3){animation-delay:0.102s}.cascade>*:nth-child(4){animation-delay:0.145s}.cascade>*:nth-child(5){animation-delay:0.187s}.cascade>*:nth-child(6){animation-delay:0.23s}.cascade>*:nth-child(7){animation-delay:0.272s}.cascade>*:nth-child(8){animation-delay:0.315s}.cascade>*:nth-child(9){animation-delay:0.357s}.cascade>*:nth-child(10){animation-delay:0.399s}.cascade>*:nth-child(11){animation-delay:0.442s}.cascade>*:nth-child(12){animation-delay:0.484s}
 .cascade>*:nth-child(n+13){animation-delay:0.51s}
 details.method[open]>.mbody,details.scen[open]>.sc-body,.dg-body{animation:none}
@@ -698,13 +698,11 @@ details.method[open]>summary::after{content:"\2212"}
 .mrule{color:var(--ink);border-left:3px solid var(--amber);padding-left:8px}
 .nw{white-space:nowrap}
 
-/* reveal on scroll */
-/* entrance animations fill backwards only, so each block lets go of its GPU layer the moment it lands */
-.reveal:not(.in){opacity:0}
-/* no end frame: each item rises to its own resting look, so a dimmed (locked) one stays dimmed instead of flashing bright first */
-@keyframes revealUp{from{opacity:0;transform:translateY(14px)}}
-.reveal.in{animation:revealUp 0.51s cubic-bezier(.2,.7,.2,1) backwards}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1}.reveal.in{animation:none}}
+/* reveal on scroll: --rv is how far a block has come through the band above the bottom edge (0 to 1), set as you scroll. The script moves
+   it on its own translate while it rises, so it never fights a transform something else is running on the same block */
+.reveal{opacity:var(--rv,1)}
+.reveal.lrow.locked{opacity:calc(var(--rv,1) * .55)}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1}}
 
 /* tricks */
 .tricks{display:grid;gap:8px}
@@ -807,7 +805,7 @@ html.splashing{overflow:hidden;scrollbar-width:none} html.splashing::-webkit-scr
 .splash.out{opacity:0;pointer-events:none}
 .splash canvas{grid-area:1/1;display:block;width:min(100vw,100svh,640px);height:min(100vw,100svh,640px);transition:opacity 1.1s ease,filter 1.1s ease,transform 1.1s ease}
 .splash.ending canvas{opacity:0;filter:blur(6px);transform:scale(1.04)}
-.splash-t{position:absolute;left:0;right:0;top:50%;transform:translateY(calc(-50% + 10px));text-align:center;font-family:var(--display);font-size:38px;font-weight:700;letter-spacing:0;line-height:1;text-transform:uppercase;color:#EFE8DC;opacity:0;transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.splash-t{position:absolute;left:0;right:0;top:50%;transform:translateY(calc(-50% + 10px));text-align:center;font-family:var(--display);font-size:38px;font-weight:700;letter-spacing:0;line-height:1;text-transform:uppercase;color:#EFE8DC;opacity:0;transition:opacity 1s ease,transform 1s var(--eq)}
 .splash.ending .splash-t{opacity:1;transform:translateY(-50%)}
 .splash.plain .splash-t{letter-spacing:.08em}
 @media (prefers-reduced-motion:reduce){.splash canvas,.splash-t{transition:none}}
@@ -843,7 +841,7 @@ body.lessonopen{overflow:hidden}
 .lesson[hidden]{display:none}
 .ltop{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 96px 8px 16px;position:relative;min-height:56px}
 .lbar{flex:1;height:14px;border-radius:999px;background:var(--surface-2);overflow:hidden}
-.lbar i{display:block;height:100%;width:0;background:var(--good);border-radius:999px;transition:width 0.34s cubic-bezier(.2,.7,.2,1)}
+.lbar i{display:block;height:100%;width:0;background:var(--good);border-radius:999px;transition:width 0.34s var(--eq)}
 .lxp{font-family:var(--display);font-weight:700;color:var(--amber);min-width:56px;text-align:right;font-size:16px}
 .lbody{overflow:auto;padding:6px 16px 28px;-webkit-overflow-scrolling:touch}
 .lq .eyebrow{color:var(--teal)}
@@ -871,7 +869,7 @@ body.lessonopen{overflow:hidden}
 .lfoot{border-top:1px solid var(--line);padding:8px 16px calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;background:var(--surface);transition:background 0.17s;max-height:50vh;position:relative}
 .lfoot.lifted,.lfoot.dragging{max-height:none}
 .lfoot.good{background:var(--good-soft);border-color:var(--good)} .lfoot.bad{background:var(--bad-soft);border-color:var(--bad)}
-.lmsg:empty{display:none} .lmsg{display:grid;gap:4px;font-size:14px;line-height:1.4;max-height:118px;overflow:hidden;position:relative;transition:max-height 0.272s cubic-bezier(.2,.8,.2,1);overscroll-behavior:contain}
+.lmsg:empty{display:none} .lmsg{display:grid;gap:4px;font-size:14px;line-height:1.4;max-height:118px;overflow:hidden;position:relative;transition:max-height 0.272s var(--eq);overscroll-behavior:contain}
 .lfoot.lifted .lmsg{overflow:auto} .lfoot.dragging .lmsg{transition:none;overflow:hidden}
 /* when there is more to read, the cut edge fades so it is plain the sheet slides up */
 .lfoot:not(.lifted):not(.dragging) .lmsg.more{-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
@@ -1204,7 +1202,7 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 /* ---------- hubs: Tests and Practice share one segmented control above their pages ---------- */
 .hubseg{position:relative;display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;margin:0 0 16px;max-width:560px;--n:3;--i:0}
 .hubseg[hidden]{display:none}
-.hubthumb{position:absolute;top:4px;bottom:4px;left:calc(4px + var(--i) * ((100% - 8px - (var(--n) - 1) * 4px) / var(--n) + 4px));width:calc((100% - 8px - (var(--n) - 1) * 4px) / var(--n));border-radius:9px;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.16);transition:left 0.34s cubic-bezier(.3,.8,.25,1);pointer-events:none}
+.hubthumb{position:absolute;top:4px;bottom:4px;left:calc(4px + var(--i) * ((100% - 8px - (var(--n) - 1) * 4px) / var(--n) + 4px));width:calc((100% - 8px - (var(--n) - 1) * 4px) / var(--n));border-radius:9px;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.16);transition:left 0.34s var(--eq);pointer-events:none}
 .hubseg button{position:relative;z-index:1;flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13.5px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 8px;border-radius:9px;cursor:pointer;transition:color 0.255s}
 .hubseg button[aria-selected="true"]{color:var(--ink)}
 .hubseg button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
@@ -1224,7 +1222,7 @@ html[data-vt^="in-"]::view-transition-new(subnav),html[data-vt^="seg-"]::view-tr
 html[data-vt^="seg-"] #hubseg{view-transition-name:hubseg}
 ::view-transition-group(hubseg){animation:none}
 ::view-transition-old(hubseg){display:none} ::view-transition-new(hubseg){animation:none}
-::view-transition-old(root),::view-transition-new(root),::view-transition-old(subnav),::view-transition-new(subnav){animation-duration:0.323s;animation-timing-function:cubic-bezier(.25,.8,.25,1);animation-fill-mode:both}
+::view-transition-old(root),::view-transition-new(root),::view-transition-old(subnav),::view-transition-new(subnav){animation-duration:0.323s;animation-timing-function:var(--eq);animation-fill-mode:both}
 html[data-vt="fwd"]::view-transition-old(root),html[data-vt="in-fwd"]::view-transition-old(root),html[data-vt="fwd"]::view-transition-old(subnav){animation-name:vtOutL}
 html[data-vt="fwd"]::view-transition-new(root),html[data-vt="in-fwd"]::view-transition-new(root),html[data-vt="fwd"]::view-transition-new(subnav){animation-name:vtInR}
 html[data-vt="back"]::view-transition-old(root),html[data-vt="in-back"]::view-transition-old(root),html[data-vt="back"]::view-transition-old(subnav){animation-name:vtOutR}
@@ -1387,7 +1385,7 @@ details.drug:not([open]) .fact:nth-child(3)>span:last-child{-webkit-line-clamp:1
 .gline{font-size:12.5px;color:var(--muted)}
 .gbar{display:block;height:5px;border-radius:99px;background:color-mix(in srgb,var(--line) 70%,transparent);overflow:hidden;margin-top:auto}
 .gt .gbar{margin-top:10px}
-.gbar i{display:block;height:100%;border-radius:99px;background:hsl(var(--h) var(--gs) var(--gl));transition:width 0.51s cubic-bezier(.2,.7,.2,1)}
+.gbar i{display:block;height:100%;border-radius:99px;background:hsl(var(--h) var(--gs) var(--gl));transition:width 0.51s var(--eq)}
 .gt.going{border-color:color-mix(in srgb,var(--amber) 45%,var(--line))} .gt.going .gline{color:var(--ink)}
 .gt.done .gbar i{background:var(--good)}
 #panel-games>.lhead{display:none}
@@ -1444,12 +1442,12 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 .pgt b{font-family:var(--display);font-size:26px;line-height:1.05;font-weight:700;color:var(--ink)} .pgt.wide b{font-size:22px}
 .pgt .eyebrow{margin:0} .pgt .note{font-size:12px}
 .pgbar,.abar{display:block;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:6px 0 2px}
-.pgbar i,.abar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),color-mix(in srgb,var(--teal) 60%,var(--amber)));transition:width 0.51s cubic-bezier(.2,.7,.2,1)}
+.pgbar i,.abar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),color-mix(in srgb,var(--teal) 60%,var(--amber)));transition:width 0.51s var(--eq)}
 .pgcard{margin:0 0 12px}
 .rcard header.pghead{display:flex;align-items:center;justify-content:space-between;gap:14px} .pghead>div{display:grid;gap:2px;min-width:0} .pghead .note{font-size:12px}
 .pgring{position:relative;width:68px;height:68px;flex:0 0 auto}
 .pgring svg{width:100%;height:100%;display:block} .pgring circle{fill:none;stroke-width:6;stroke-linecap:round}
-.pgring .rt{stroke:var(--surface-2)} .pgring .rv{stroke:var(--teal);transition:stroke-dasharray 0.68s cubic-bezier(.2,.7,.2,1)}
+.pgring .rt{stroke:var(--surface-2)} .pgring .rv{stroke:var(--teal);transition:stroke-dasharray 0.68s var(--eq)}
 .pgring .rv.low{stroke:var(--bad)} .pgring .rv.mid{stroke:var(--amber)} .pgring .rv.good{stroke:color-mix(in srgb,var(--good) 70%,var(--amber))} .pgring .rv.top{stroke:var(--good)} .pgring .rv.none{stroke:transparent}
 .pgring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:20px;font-weight:700} .pgring small{font-size:11px;margin-left:1px;color:var(--muted)}
 .pgring b{grid-auto-flow:column;align-content:center;justify-content:center}
@@ -1465,7 +1463,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 /* ----- greeting and the three questions ----- */
 .hello{margin:4px 0 16px} .hello h1{margin:0;font-family:var(--display);font-size:32px;line-height:1.05;font-weight:700;letter-spacing:.01em;color:var(--ink)}
 .hello p{margin:6px 0 0;color:var(--muted);font-size:14.5px;max-width:52ch}
-.hello.in h1{animation:hellin 0.595s cubic-bezier(.2,.7,.2,1) backwards} .hello.in p{animation:hellin 0.595s 0.102s cubic-bezier(.2,.7,.2,1) backwards}
+.hello.in h1{animation:hellin 0.595s var(--eq) backwards} .hello.in p{animation:hellin 0.595s 0.102s var(--eq) backwards}
 @keyframes hellin{from{opacity:0;transform:translateY(8px);filter:blur(3px)}}
 .obme{gap:16px;max-width:460px}
 .obme h2{margin:4px 0 0}
@@ -1507,9 +1505,9 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 .regstats>div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:2px} .regstats .eyebrow{margin:0} .regstats b{font-family:var(--display);font-size:26px;line-height:1.05} .regstats .note{font-size:12px}
 /* a dashboard box grows into its page, and shrinks back */
 html[data-vt="zoom"]::view-transition-old(root){animation:vtFadeOut 0.221s ease both}
-html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn 0.357s cubic-bezier(.2,.8,.2,1) 0.051s both}
-::view-transition-group(vzoom){animation-duration:0.391s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
-::view-transition-old(vzoom),::view-transition-new(vzoom){animation-duration:0.391s;animation-timing-function:cubic-bezier(.2,.8,.2,1);height:100%;object-fit:cover;object-position:left top}
+html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn 0.357s var(--eq) 0.051s both}
+::view-transition-group(vzoom){animation-duration:0.391s;animation-timing-function:var(--eq)}
+::view-transition-old(vzoom),::view-transition-new(vzoom){animation-duration:0.391s;animation-timing-function:var(--eq);height:100%;object-fit:cover;object-position:left top}
 @keyframes vtZoomIn{from{opacity:0}}
 
 /* the day streak, today's XP and mastered drugs run along the bottom of the XP box in one line */
@@ -1583,14 +1581,14 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
 .ptab:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 .pthumb{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:10px;pointer-events:none;background:var(--teal);
   box-shadow:0 6px 14px -8px color-mix(in srgb,var(--teal) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.16);
-  transition:transform 0.357s cubic-bezier(.3,.8,.25,1),width 0.357s cubic-bezier(.3,.8,.25,1)}
+  transition:transform 0.357s var(--eq),width 0.357s var(--eq)}
 .psep{flex:0 0 1px;margin:9px 5px;background:color-mix(in srgb,var(--line) 80%,var(--muted))}
 .ptrack.scrolls:not(.atend):not(.atstart){-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 36px),transparent)}
 .ptrack.scrolls.atstart:not(.atend){-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent)}
 .ptrack.scrolls.atend:not(.atstart){-webkit-mask-image:linear-gradient(to right,transparent,#000 28px);mask-image:linear-gradient(to right,transparent,#000 28px)}
 .ptrack.s1 .ptab{font-size:13px;padding:10px 9px} .ptrack.s2 .ptab{font-size:12.5px;letter-spacing:.03em;padding:10px 7px} .ptrack.s3 .ptab{font-size:12px;letter-spacing:.02em;padding:10px 5px} .ptrack.s2 .psep,.ptrack.s3 .psep{margin:9px 3px}
 /* the thumb glides and the names re-colour together with the page change */
-::view-transition-group(ptthumb){animation-duration:0.357s;animation-timing-function:cubic-bezier(.3,.8,.25,1)}
+::view-transition-group(ptthumb){animation-duration:0.357s;animation-timing-function:var(--eq)}
 ::view-transition-old(ptthumb){display:none} ::view-transition-new(ptthumb){animation:none}
 ::view-transition-group(*.ptab){animation-duration:0.357s} ::view-transition-old(*.ptab),::view-transition-new(*.ptab){animation-duration:0.306s}
 
@@ -1615,13 +1613,13 @@ header.top{background:transparent;box-shadow:none}
 header.top::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--barh,58px);z-index:-1;pointer-events:none;
   background-color:color-mix(in srgb,var(--teal) 86%,transparent);background-image:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0) 64%);
   box-shadow:inset 0 -1px 0 rgba(255,255,255,.12),0 8px 20px -12px rgba(0,0,0,.55);
-  -webkit-backdrop-filter:blur(14px) saturate(1.35);backdrop-filter:blur(14px) saturate(1.35);transition:transform 0.289s cubic-bezier(.3,.8,.25,1)}
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);transition:transform 0.289s var(--eq)}
 /* the page strip floats on the page with no band behind it; its own glass blurs what scrolls beneath */
 .top .subnav{background:transparent}
 .ptrack{background-color:color-mix(in srgb,var(--surface) 74%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.25);backdrop-filter:blur(12px) saturate(1.25);box-shadow:inset 0 1px 0 var(--glass-edge),0 8px 18px -12px rgba(0,0,0,.5)}
 @media (max-width:600px){
   .nav{background-color:color-mix(in srgb,var(--teal) 86%,transparent);background-image:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 70%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 -8px 20px -12px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(14px) saturate(1.35);backdrop-filter:blur(14px) saturate(1.35)}
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 -8px 20px -12px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4)}
   .nav button[aria-selected="true"]{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
 }
 /* a page change is drawn from snapshots that cannot see behind themselves, so for that moment the glass takes the colour it would show over the page */
@@ -1632,7 +1630,7 @@ html[data-vt] .ptrack{background-color:color-mix(in srgb,var(--surface) 74%,var(
 
 /* ================= scrolling down squashes the bar a little: the colour slides up, the name and the patient chip shrink, the strip follows ================= */
 @media (max-width:600px){
-  .top .row h1,.top .row .ptchip,.top .subnav{transition:transform 0.289s cubic-bezier(.3,.8,.25,1)}
+  .top .row h1,.top .row .ptchip,.top .subnav{transition:transform 0.289s var(--eq)}
   .top .row h1{transform-origin:0 50%} .top .row .ptchip{transform-origin:100% 50%}
   html.hdrmin header.top::before{transform:translateY(-16px)}
   html.hdrmin .top .row h1,html.hdrmin .top .row .ptchip{transform:translateY(-8px) scale(.84)}
@@ -1703,7 +1701,7 @@ details.subfold.quizopts>summary .qsum{font-family:var(--body)}
 .navthumb{display:none}
 @media (max-width:600px){
   .navthumb{display:block;position:absolute;left:0;top:0;width:0;height:0;border-radius:var(--r-ctl);pointer-events:none;z-index:0;background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
-    transition:transform 0.357s cubic-bezier(.3,.8,.25,1),width 0.357s cubic-bezier(.3,.8,.25,1)}
+    transition:transform 0.357s var(--eq),width 0.357s var(--eq)}
   .nav button{position:relative;z-index:1;opacity:1;color:color-mix(in srgb,var(--teal-ink) 70%,transparent);transition:color 0.255s ease}
   .nav button:hover{opacity:1}
   .nav button[aria-selected="true"]{background:transparent!important;box-shadow:none!important;color:var(--teal-ink)}
@@ -1783,14 +1781,14 @@ details.drug .insec{border-color:color-mix(in srgb,var(--teal) 55%,var(--line))!
 header.top::after{content:"";position:absolute;left:0;right:0;top:var(--barh,58px);bottom:0;z-index:-2;pointer-events:none;
   background:color-mix(in srgb,var(--bg) 46%,transparent);-webkit-backdrop-filter:blur(9px) saturate(1.1);backdrop-filter:blur(9px) saturate(1.1);
   -webkit-mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 14px),transparent);
-  transition:transform 0.289s cubic-bezier(.3,.8,.25,1)}
+  transition:transform 0.289s var(--eq)}
 @media (max-width:600px){ html.hdrmin header.top::after{transform:translateY(-16px)} }
 html.hdrnow header.top::after{transition:none!important}
 /* the strip no longer needs a blur of its own: the layer under it already softens the page */
 .ptrack{-webkit-backdrop-filter:none;backdrop-filter:none}
 /* the glass bars slide by their position, never by a transform: a moved backdrop layer stops blurring what is under it in Chromium */
-header.top::before{transition:top 0.289s cubic-bezier(.3,.8,.25,1)}
-header.top::after{transition:top 0.289s cubic-bezier(.3,.8,.25,1),bottom 0.289s cubic-bezier(.3,.8,.25,1)}
+header.top::before{transition:top 0.289s var(--eq)}
+header.top::after{transition:top 0.289s var(--eq),bottom 0.289s var(--eq)}
 @media (max-width:600px){
   html.hdrmin header.top::before{transform:none;top:-16px}
   html.hdrmin header.top::after{transform:none;top:calc(var(--barh,58px) - 16px);bottom:16px}
@@ -1928,7 +1926,7 @@ header.top::after{transition:top 0.289s var(--eq),bottom 0.289s var(--eq),opacit
 @media (max-width:600px){ html.hdrmin header.top::after{bottom:-2px} }
 html.drugopen header.top::after{opacity:0}
 details.drug[open]>summary::before{content:"";position:absolute;left:0;right:0;top:100%;height:22px;pointer-events:none;opacity:0;transition:opacity 0.297s ease;
-  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
+  -webkit-backdrop-filter:blur(13px);backdrop-filter:blur(13px);-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
 details.drug[open]>summary.stuck::before{opacity:1}
 .navveil{display:none}
 @media (max-width:600px){ .navveil{display:block;position:fixed;left:0;right:0;bottom:70px;height:24px;z-index:19;pointer-events:none;
@@ -1938,8 +1936,6 @@ html.splashing .navveil{display:none}
 .ptrack.ptsel select{color:var(--ink);background-color:color-mix(in srgb,var(--surface) 80%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));
   box-shadow:inset 0 1px 0 var(--glass-edge);font:500 15px/1.2 var(--body);letter-spacing:0;text-transform:none;padding:7px 34px 7px 12px;min-height:34px}
 .ptsw::after{color:var(--muted);opacity:1}
-/* ----- the scroll reveal runs on the house easing everywhere ----- */
-.reveal.in{animation:revealUp 0.527s var(--eq) backwards}
 /* the XP box's counts change into tiles on the same easing */
 .lvlcard>.statline>span{transition:background-color 0.51s var(--eq),border-color 0.51s var(--eq),box-shadow 0.51s var(--eq)}
 .lvlcard:not(.open) .lvbadges i.ov{display:none}
@@ -2029,26 +2025,26 @@ html.hdrnow .hvin{transition:none!important}
   mask-image:linear-gradient(transparent calc(var(--r) * 3),#000 calc(var(--r) * 3),#000 calc(100% - var(--r) * 3),transparent calc(100% - var(--r) * 3))}
 /* under the header: strongest right under the bar and behind the strip, easing off over the first few pixels of the page */
 .hveil{bottom:-12px}
-.hveil b:nth-child(1){top:0;bottom:0;--r:.5px}
-.hveil b:nth-child(2){top:0;bottom:3px;--r:1px}
-.hveil b:nth-child(3){top:0;bottom:7px;--r:2px}
-.hveil b:nth-child(4){top:0;bottom:12px;--r:4px}
-.hveil b:nth-child(5){top:0;bottom:18px;--r:8px}
-.hveil b:nth-child(6){top:0;bottom:26px;--r:14px;--s:1.35}
+.hveil b:nth-child(1){top:0;bottom:0;--r:0.8px}
+.hveil b:nth-child(2){top:0;bottom:3px;--r:1.6px}
+.hveil b:nth-child(3){top:0;bottom:7px;--r:3.2px}
+.hveil b:nth-child(4){top:0;bottom:12px;--r:6.4px}
+.hveil b:nth-child(5){top:0;bottom:18px;--r:12.8px}
+.hveil b:nth-child(6){top:0;bottom:26px;--r:22.4px;--s:1.35}
 .hvin::after{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 46%,transparent),color-mix(in srgb,var(--bg) 42%,transparent) calc(100% - 24px),color-mix(in srgb,var(--bg) 16%,transparent) calc(100% - 10px),transparent)}
 @media (max-width:600px){ html.hdrmin .hveil{top:calc(var(--barh,58px) - 16px);bottom:4px} }
 /* above the bottom bar: the same, rising from the bar */
 @media (max-width:600px){ .navveil{height:30px}
-  .navveil b:nth-child(1){bottom:0;top:0;--r:.5px}
-  .navveil b:nth-child(2){bottom:0;top:6px;--r:1px}
-  .navveil b:nth-child(3){bottom:0;top:12px;--r:2px}
-  .navveil b:nth-child(4){bottom:0;top:18px;--r:4px}
-  .navveil b:nth-child(5){bottom:0;top:24px;--r:8px;--s:1.3} }
+  .navveil b:nth-child(1){bottom:0;top:0;--r:0.8px}
+  .navveil b:nth-child(2){bottom:0;top:6px;--r:1.6px}
+  .navveil b:nth-child(3){bottom:0;top:12px;--r:3.2px}
+  .navveil b:nth-child(4){bottom:0;top:18px;--r:6.4px}
+  .navveil b:nth-child(5){bottom:0;top:24px;--r:12.8px;--s:1.3} }
 /* under a pinned drug card header */
-.sband b:nth-child(1){top:0;bottom:0;--r:.5px}
-.sband b:nth-child(2){top:0;bottom:7px;--r:1.2px}
-.sband b:nth-child(3){top:0;bottom:15px;--r:2.5px}
-.sband b:nth-child(4){top:0;bottom:23px;--r:5px}
+.sband b:nth-child(1){top:0;bottom:0;--r:0.8px}
+.sband b:nth-child(2){top:0;bottom:7px;--r:1.9px}
+.sband b:nth-child(3){top:0;bottom:15px;--r:4px}
+.sband b:nth-child(4){top:0;bottom:23px;--r:8px}
 /* v70: numbers in the open dashboard keep the app's number face; they only grow, so opening and closing never swaps the font */
 #lv-card .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:0}
 #lv-card .num.nil{letter-spacing:-.3em;padding-right:.3em}
@@ -2058,12 +2054,12 @@ html.hdrnow .hvin{transition:none!important}
 .navveil{display:none!important}
 .hveil{bottom:0}
 @media (max-width:600px){ html.hdrmin .hveil{bottom:16px} }
-.hveil b:nth-child(1){top:0;bottom:0;--r:.5px}
-.hveil b:nth-child(2){top:0;bottom:2px;--r:1px}
-.hveil b:nth-child(3){top:0;bottom:5px;--r:2px}
-.hveil b:nth-child(4){top:0;bottom:8px;--r:4px}
-.hveil b:nth-child(5){top:0;bottom:14px;--r:8px}
-.hveil b:nth-child(6){top:0;bottom:22px;--r:14px;--s:1.35}
+.hveil b:nth-child(1){top:0;bottom:0;--r:0.8px}
+.hveil b:nth-child(2){top:0;bottom:2px;--r:1.6px}
+.hveil b:nth-child(3){top:0;bottom:5px;--r:3.2px}
+.hveil b:nth-child(4){top:0;bottom:8px;--r:6.4px}
+.hveil b:nth-child(5){top:0;bottom:14px;--r:12.8px}
+.hveil b:nth-child(6){top:0;bottom:22px;--r:22.4px;--s:1.35}
 .hvin::after{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 46%,transparent),color-mix(in srgb,var(--bg) 40%,transparent) calc(100% - 10px),transparent)}
 /* v72: the page ends with room to spare: the last line of every page scrolls clear of the + button, with a clear gap above the notes */
 footer{margin-top:44px}
@@ -2102,8 +2098,6 @@ details.drug.jut{box-shadow:-3px 0 0 0 var(--fam,var(--teal))}
 li.tnode .l1.nolead .lead{display:none} li.tnode .l1.nolead{gap:8px} li.tnode .l1.nolead .dose{margin-left:auto}
 li.tnode .l1.fs1 .use{font-size:12.5px;letter-spacing:-.005em} li.tnode .l1.fs1 .dose{letter-spacing:-.035em}
 li.tnode .l1.fs2 .use{font-size:12px;letter-spacing:-.01em} li.tnode .l1.fs2 .dose{font-size:11.5px;letter-spacing:-.045em}
-/* v73: a block the fold is moving does not also run its scroll-reveal rise */
-.reveal.fmv{animation:none!important}
 
 /* v73: the highlighter over the key phrases of How it works; it lives only while drawn */
 .dg-body .how mark.hl{background-color:transparent;color:inherit;padding:0 .06em;margin:0 -.06em;border-radius:3px;background-image:linear-gradient(color-mix(in srgb,var(--amber) 42%,transparent),color-mix(in srgb,var(--amber) 42%,transparent));background-repeat:no-repeat;background-size:0% 64%;background-position:0% 92%;-webkit-box-decoration-break:slice;box-decoration-break:slice}
@@ -2217,6 +2211,12 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
 .tbmnote{margin:0}
 /* the topics and results scroll under a soft edge, not a hard cut */
 .tb:not([data-mode="play"]) .tbview{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16px);mask-image:linear-gradient(to bottom,transparent 0,#000 16px)}
+/* v74: a highlight Show info keeps drawn */
+.dg-body .how mark.hl.hlon{background-size:100% 64%}
+.dg-body .how mark.hl .hc{text-shadow:none}
+/* v74: the bars sit out the first frames after the app comes back, then fade in where they belong */
+html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
+.nav{transition:opacity 0.153s ease} .calcfab{transition:transform 0.128s,box-shadow 0.128s,opacity 0.153s ease}
 </style>
 </head>
 <body>
@@ -2912,8 +2912,9 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       const K=kids.map(k=>{ const r=k.getBoundingClientRect(), on=r.height>0&&r.bottom>-40&&r.top<vh+40; const x={k,on,s:kd+Math.min(j,9)*spd(42)}; if(on) j++; return x; });
       const T=Math.max(DD,...K.filter(x=>x.on).map(x=>x.s+dk)); return {DD,dk,K,T}; }
     // the piece that lands last, so nothing still moving is cut short when the fold is wrapped up
-    // what the fold moves is the fold's alone while it moves: shown, and kept out of the scroll reveal, whose own rise would fight the move
-    const hold=(d,els)=>{ if(d._mv) d._mv.forEach(el=>el.classList.remove("fmv")); d._mv=els; els.forEach(el=>el.classList.add("fmv","in")); };
+    // what the fold moves is marked while it moves, and the scroll reveal follows it frame by frame, so a block gliding into the bottom band
+    // fades exactly as far as it has come
+    const hold=(d,els,ms)=>{ if(d._mv) d._mv.forEach(el=>el.classList.remove("fmv")); d._mv=els; els.forEach(el=>el.classList.add("fmv")); if(window.revealTrack) revealTrack((ms||D)+120); };
     const last=A=>A.reduce((m,a)=>{ const t=a.effect.getComputedTiming(); return t.endTime>(m.effect.getComputedTiming().endTime)?a:m; },A[0]);
     function open(d,o){ o=o||{}; if(d._fa) finish(d); if(d.open) return;
       const S=shells(d), B=below(d,0), h0=d.getBoundingClientRect().height; d._ch=h0; d.dataset.fold="1";
@@ -2925,7 +2926,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(dh,r)},{clipPath:clip(0,r)}],t)); });
       B.forEach(([el,t0])=>{ const t1=el.getBoundingClientRect().top; if(Math.abs(t1-t0)>.5) A.push(el.animate([{transform:`translateY(${(t0-t1).toFixed(1)}px)`},{transform:"none"}],t)); });
       P.K.forEach(x=>A.push(x.k.animate([{offset:0,opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:x.s+dl,easing:EQ,fill:"backwards"})));
-      hold(d,B.map(b=>b[0]).concat(P.K.map(x=>x.k))); d._fa=A; d._fo=o; last(A).finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
+      hold(d,B.map(b=>b[0]).concat(P.K.map(x=>x.k)),P.T+dl); d._fa=A; d._fo=o; last(A).finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
     // closing is the opening played backwards: the pieces inside lift away first, last one first, then the box folds up and what is under it
     // glides back, every move on the reversed curve, so everything leaves along the path it came in by
     function close(d,o){ o=o||{}; if(d._fa) finish(d); if(!d.open) return;
@@ -2937,7 +2938,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(0,r)},{clipPath:clip(dh,r)}],t)); });
       B.forEach(([el])=>A.push(el.animate([{transform:"none"},{transform:`translateY(${(-dh).toFixed(1)}px)`}],t)));
       P.K.forEach(x=>{ if(x.on) A.push(x.k.animate([{offset:1,opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:Math.max(0,P.T-x.s-P.dk)+dl,easing:EQR,fill:"both"})); });
-      hold(d,B.map(b=>b[0]).concat(P.K.map(x=>x.k))); d._fa=A; d._fo=o; last(A).finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
+      hold(d,B.map(b=>b[0]).concat(P.K.map(x=>x.k)),P.T+dl); d._fa=A; d._fo=o; last(A).finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
     // land whatever is running on its end state at once
     function finish(d){ const A=d._fa, o=d._fo||{}; d._fa=null; d._fo=null; if(d._mv){ d._mv.forEach(el=>el.classList.remove("fmv")); d._mv=null; }
       if(d._closing){ d._closing=false; if(o.end) o.end(); d.open=false; }
@@ -2948,32 +2949,65 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
     document.addEventListener("click",e=>{ const sm=e.target.closest&&e.target.closest("summary"); if(!sm) return; const d=sm.parentElement; if(!d||!d.matches(SEL)) return;
       const ctl=e.target.closest("a,button,input,select,textarea,label"); if(ctl&&sm.contains(ctl)) return; e.preventDefault(); toggle(d); },true);
     return {open,close,toggle,finish,EQ,EQR,D,isBox,below,clip,rad}; })();
-  // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
+  // reveal on scroll, tied to where each block is: a block crossing the band above the bottom edge stands at the share of the band it has
+  // crossed, so a card stopped halfway in is half drawn, and it fills in or fades back exactly as far as you scroll. Nothing runs on a clock,
+  // so nothing can restart, flash or be left blank. A page that opens brings what is on screen in with one short cascade.
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
     const SEL="details.drug,details.trick,.dg-grid>section,.dg-body>.how,.rcard,.rule-card,details.method,details.scen,.pcard,.calc,.mgroup,.rgroup>h2,.statcards .k,.streakcard,.plan,.qcard,.examwrap>*,.lnode,.lrow,.lstats .k,.lcontinue,.gt,.gsech,.ghero,.lvmore>*,.shcard,.simcase,.simscen,details.fold";
-    // enter when the block crosses a line 12% above the bottom edge; leave only once it is fully off screen, so nothing flickers at the line
-    // both watchers can report a block in one batch, the stale report after the fresh one; so each block is judged from where it is now,
-    // which keeps a block that came straight back on screen from being hidden by a late "it left" (the blank gap in the drug list)
-    const latest=es=>{ const m=new Map(); es.forEach(e=>m.set(e.target,e)); return [...m.values()]; };
-    const io=new IntersectionObserver(es=>{ let i=0; latest(es).forEach(e=>{ const el=e.target; if(e.isIntersecting&&!el.classList.contains("in")){ el.style.animationDelay=(Math.min(i++,6)*spd(70))+"ms"; el.classList.add("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
-    const out=new IntersectionObserver(es=>{ const h=window.innerHeight||800; latest(es).forEach(e=>{ if(e.isIntersecting||!e.boundingClientRect.height||e.target.classList.contains("fmv")) return; const r=e.target.getBoundingClientRect(); if(r.bottom<-60||r.top>h+60) e.target.classList.remove("in"); }); },{rootMargin:"60px 0px 60px 0px",threshold:0});
-    const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); out.observe(el); } }); };
+    const EQ="cubic-bezier(.7,0,.2,1)", still=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const band=()=>Math.min(170,(window.innerHeight||800)*.22);
+    // the rise is written on the block only while it is under way: a block at rest carries no translate at all, so it never becomes a
+    // containing block or a stacking context for what is inside it
+    const cur=el=>el._rv==null?1:el._rv;
+    const put=(el,p)=>{ p=Math.round(p*1000)/1000; if(cur(el)===p) return; el._rv=p; el.style.setProperty("--rv",p); el.style.translate=p<1?`0 ${((1-p)*14).toFixed(2)}px`:""; };
+    // where a block should stand. A block not laid out (inside a closed fold or a hidden page) counts as shown, and is judged again when it
+    // appears. Its own rise is taken back out of where it is measured, so the offset never feeds into the next reading
+    const want=(el,H,B)=>{ if(still()) return 1; const r=el.getBoundingClientRect(); if(!r.height&&!r.width) return 1; return Math.max(0,Math.min(1,(H-(r.top-(1-cur(el))*14))/B)); };
+    // every block in a batch is measured first and written after, so the page is laid out once however many blocks there are
+    const apply=els=>{ if(!els.length) return; const H=window.innerHeight||800, B=band(); const v=els.map(el=>want(el,H,B)); els.forEach((el,i)=>put(el,v[i])); };
+    const judge=el=>apply([el]);
+    // only blocks near the band are measured while scrolling; a block leaving it is judged once on the way out, so a fast fling never
+    // strands one half drawn
+    const near=new Set();
+    const io=new IntersectionObserver(es=>{ const L=[]; es.forEach(e=>{ const el=e.target; if(e.isIntersecting) near.add(el); else near.delete(el); L.push(el); }); apply(L); },{rootMargin:"-60% 0px 35% 0px",threshold:0});
+    let raf=0, until=0; const frame=()=>{ raf=0; apply([...near]); if(performance.now()<until) raf=requestAnimationFrame(frame); };
+    const soon=()=>{ if(!raf) raf=requestAnimationFrame(frame); };
+    // anything that moves the page under the blocks (a fold, a scripted scroll) keeps them in step for as long as it runs
+    window.revealTrack=ms=>{ until=Math.max(until,performance.now()+(ms||600)); soon(); };
+    const mark=root=>{ if(!root||!root.querySelectorAll) return; const L=[]; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal","in"); io.observe(el); L.push(el); } }); apply(L); };
     mark(document);
-    const sweep=()=>{ const h=window.innerHeight||800; document.querySelectorAll(".reveal:not(.in)").forEach(el=>{ const r=el.getBoundingClientRect(); if(r.bottom>-60&&r.top<h*1.12){ el.style.animationDelay="0ms"; el.classList.add("in"); } }); };
-    window.revealSweep=sweep;
-    // and a safety net: whenever scrolling or a fold settles, anything on screen that is still waiting to rise in does, so no block can be
-    // left blank by a report that came in out of order
-    { let st=0; const later=()=>{ clearTimeout(st); st=setTimeout(sweep,140); }; window.addEventListener("scroll",later,{passive:true}); document.addEventListener("foldsettled",later); }
-    document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ sweep(); setTimeout(sweep,250); } }); window.addEventListener("pageshow",sweep); window.addEventListener("focus",sweep); window.addEventListener("resize",()=>setTimeout(sweep,120)); window.addEventListener("orientationchange",()=>setTimeout(sweep,300));
+    // a whole page is judged only as far down as the watched zone reaches; blocks further down are put in place by the watcher before
+    // they come near the screen, so opening a long page never touches every block on it
+    const all=root=>{ const H=window.innerHeight||800; apply([...(root||document).querySelectorAll(".reveal")].filter(el=>{ const r=el.getBoundingClientRect(); return (r.height||r.width)&&r.top<=H*1.3; })); };
+    window.revealSweep=()=>all(document.querySelector(".panel:not([hidden])")||document);
+    // a page coming on screen: every block is put where it stands, then the ones in view come in, one after another
+    window.revealEnter=root=>{ if(!root) return; mark(root); all(root); if(still()) return; const H=window.innerHeight||800; let i=0;
+      const on=[...root.querySelectorAll(".reveal")].filter(el=>{ if(!cur(el)) return false; const r=el.getBoundingClientRect(); return r.height&&r.bottom>=0&&r.top<=H; });
+      on.forEach(el=>el.animate([{offset:0,opacity:0,translate:"0 12px"}],{duration:spd(460),delay:Math.min(i++,7)*spd(45),easing:EQ,fill:"backwards"})); };
+    window.addEventListener("scroll",soon,{passive:true});
+    document.addEventListener("foldsettled",()=>{ window.revealSweep(); soon(); });
+    document.addEventListener("visibilitychange",()=>{ if(!document.hidden) window.revealSweep(); }); window.addEventListener("pageshow",()=>window.revealSweep());
+    window.addEventListener("resize",()=>setTimeout(window.revealSweep,60)); window.addEventListener("orientationchange",()=>setTimeout(window.revealSweep,300));
     // blocks taken off the page stop being watched, so re-rendered lists never pile up observers over a long session
-    const drop=n=>{ if(n.nodeType!==1||n.isConnected) return; const els=n.classList.contains("reveal")?[n]:[]; n.querySelectorAll(".reveal").forEach(x=>els.push(x)); els.forEach(el=>{ io.unobserve(el); out.unobserve(el); el.classList.remove("reveal","in"); }); };
+    const drop=n=>{ if(n.nodeType!==1||n.isConnected) return; const els=n.classList.contains("reveal")?[n]:[]; n.querySelectorAll(".reveal").forEach(x=>els.push(x)); els.forEach(el=>{ io.unobserve(el); near.delete(el); el.classList.remove("reveal","in"); }); };
     new MutationObserver(ms=>ms.forEach(m=>{ m.removedNodes.forEach(drop); m.addedNodes.forEach(n=>{ if(n.nodeType===1&&n.isConnected) mark(n); }); })).observe(document.body,{childList:true,subtree:true});
   })();
+  // coming back to the app, iOS can draw the fixed bars for a frame against a viewport that is still settling, which put the tray in the
+  // middle of the screen. The bars are put away as the app goes to the background and come back once the viewport has settled, with a
+  // short fade, so the first frames after returning never show them out of place.
+  (function resume(){ const de=document.documentElement; let t=0;
+    const away=()=>{ clearTimeout(t); de.classList.add("resuming"); };
+    const back=()=>{ clearTimeout(t); de.classList.add("resuming"); requestAnimationFrame(()=>requestAnimationFrame(()=>{ t=setTimeout(()=>de.classList.remove("resuming"),spd(90)); })); };
+    document.addEventListener("visibilitychange",()=>{ if(document.hidden) away(); else back(); }); window.addEventListener("pagehide",away); window.addEventListener("pageshow",e=>{ if(e.persisted||de.classList.contains("resuming")) back(); }); })();
   // scroll the page under script control; touches and wheel are ignored until it lands
   // a CSS cubic-bezier as a function, so a scroll can move in step with a transition on the same curve
   window.bez=(x1,y1,x2,y2)=>{ const f=(a,b,t)=>3*a*t*(1-t)*(1-t)+3*b*t*t*(1-t)+t*t*t; return x=>{ if(x<=0) return 0; if(x>=1) return 1; let lo=0, hi=1, t=x; for(let i=0;i<24;i++){ const v=f(x1,x2,t); if(Math.abs(v-x)<1e-5) break; if(v<x) lo=t; else hi=t; t=(lo+hi)/2; } return f(y1,y2,t); }; };
-  window.smoothScrollTo=(getTop,ms,curve,hold)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||spd(520); hold=hold==null?380:hold; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=curve||(x=>1-Math.pow(1-x,3)); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop)); window.scrollTo(0,p<1?start+(target-start)*ease(p):target); if(el<ms+hold) requestAnimationFrame(step); else done(); }; requestAnimationFrame(step); };
+  window.smoothScrollTo=(getTop,ms,curve,hold)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||spd(520); hold=hold==null?380:hold; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=curve||(x=>1-Math.pow(1-x,3)); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; // a target that moves part way (the header tucking away, a card above taking its real height) is followed through a short smoothing,
+    // so the glide bends towards the new place instead of stepping
+    let tf=null, last=t0; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop));
+      const dt=Math.max(0,now-last); last=now; tf=tf==null?target:tf+(target-tf)*(1-Math.exp(-dt/70)); if(Math.abs(target-tf)<.5) tf=target;
+      window.scrollTo(0,p<1?start+(tf-start)*ease(p):tf); if(el<ms+hold||Math.abs(window.scrollY-target)>1&&el<ms+hold+600) requestAnimationFrame(step); else done(); }; requestAnimationFrame(step); };
   (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const de=document.documentElement, sub=document.getElementById("subnav");
     // --hdr is the whole header, --barh just the coloured bar above the page strip, which the glass bar behind it is sized to
     // set where they are used and only when they change: a variable changed on the root makes every element on the page restyle
@@ -3068,13 +3102,15 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
   // the pill is three pieces, two round ends and a middle, moved only by transform, so the compositor slides it at full frame rate whatever
   // the page change is doing on the main thread, and its corners never stretch
   const pillAt=(x,w)=>[`translateX(${x.toFixed(1)}px)`,`translateX(${(x+9).toFixed(1)}px) scaleX(${(Math.max(0,w-18)/100).toFixed(4)})`,`translateX(${(x+w-20).toFixed(1)}px)`];
+  // the page thumb leaves its place gently, crosses on a sharp curve and settles briefly: the house curve
+  const EASE_T="cubic-bezier(.7,0,.2,1)";
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
     const to=pillAt(on.offsetLeft,on.offsetWidth), go=anim&&!reduceMotion(), key=to.join("|");
     // the tap starts the slide and the page swap asks for it again when it lands: a slide already on its way there is left alone, so it
     // never restarts mid-flight (a restart picks the curve up again at full speed, which is the hitch)
     if(go&&th._to===key) return; th._to=key;
     [...th.children].forEach((p,i)=>{ const from=go?getComputedStyle(p).transform:null; p.getAnimations().forEach(a=>a.cancel()); p.style.transform=to[i];
-      if(go&&from&&from!=="none") p.animate([{transform:from},{transform:to[i]}],{duration:spd(440),easing:"cubic-bezier(.3,.8,.25,1)"}); }); }
+      if(go&&from&&from!=="none") p.animate([{transform:from},{transform:to[i]}],{duration:spd(420),easing:EASE_T}); }); }
   // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll.
   // It is worked out before the strip is first drawn and remembered per tab and width, so the names never visibly change size.
   function fit(g){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["s1","s2","s3"]; g=g||$("subnav").dataset.g; const key=g+"@"+(window.innerWidth||0);
@@ -3087,7 +3123,8 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
   // ----- moving between pages, as a quick fade-through on the live page. The tap answers at once: the tab lights, the strip's thumb slides,
   // the lights start to pan and the old page eases out. A tenth of a second later the new page takes its place and settles in.
   // Pages never overlap, so nothing ghosts through, and nothing is ever drawn from a snapshot. -----
-  const EASE="cubic-bezier(.22,.8,.24,1)", OUT=spd(110);
+  // every move in the shell is on the house curve: a short, gentle start, a quick sure middle and a short settle into place
+  const EASE="cubic-bezier(.7,0,.2,1)", OUT=spd(110);
   let pend=null, entering=null;
   function settleIn(){ if(entering){ try{ entering.finish(); }catch(e){} entering=null; } }
   // what changes on the tap itself, before the page does
@@ -3141,8 +3178,9 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
     // the bar opens back up at once on a new page, rather than easing open while the page arrives
     const de=document.documentElement; if(de&&de.classList&&de.classList.contains("hdrmin")){ de.classList.add("hdrnow"); de.classList.remove("hdrmin"); requestAnimationFrame(()=>requestAnimationFrame(()=>de.classList.remove("hdrnow"))); }
     window.scrollTo({top:0,behavior:"instant"}); if(window.bokehScrollReset) bokehScrollReset();
-    { const pe=$("panel-"+id), vh=window.innerHeight||800; if(pe&&pe.querySelectorAll) pe.querySelectorAll(".reveal.in").forEach(el=>{ if(el.getBoundingClientRect().top>vh*.88) el.classList.remove("in"); }); }
     document.dispatchEvent(new CustomEvent("panel",{detail:id}));
+    // the page is built by now (a page that re-renders does it on the event above), so its blocks come in from the first drawn frame
+    if(window.revealEnter) revealEnter($("panel-"+id));
     document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false");
     if(!P) return;
     const nw=$("panel-"+id), zoom=(ZOOM[id]&&from==="today")||(ZOOM[from]&&id==="today");
@@ -3421,11 +3459,11 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       how:"Albuterol is a selective beta-2 agonist. Beta-2 receptors on bronchial smooth muscle raise cyclic AMP inside the cell when stimulated, and that relaxes the muscle and opens narrowed airways within minutes. Beta-2 stimulation also drives potassium into cells, which is why nebulized albuterol is used as a temporizing measure in hyperkalemia. Some of the dose reaches beta-1 receptors in the heart, and that is the tachycardia and tremor.",
       doses:[{l:"Bronchospasm",pop:"adult",kind:"fixed",lo:2.5,hi:2.5,unit:"mg",route:"Neb",t:"in 3 mL saline, nebulizer or in-line with the BVM; may repeat"}],stocks:[{l:"2.5 mg / 3 mL unit dose",c:2.5/3,u:"mg"}]},
     {id:"amiodarone",name:"Amiodarone",brands:["Cordarone"],cls:["Antidysrhythmic"],supply:["Prefilled syringe"],
-      moa:["Blocks sodium, potassium and calcium channels","Prolongs the action potential and repolarization","Lengthens PR and QT intervals"],ind:["Ventricular fibrillation","Pulseless ventricular tachycardia","Wide complex tachycardia"],contra:["Cardiogenic shock","Hemodynamically significant bradycardia","Second and third degree heart block","Hemodynamically significant hypotension"],adverse:["Bradycardia","Hypotension","Heart block","Congestive heart failure"],routes:["IV","IO","Infusion"],onset:["1 to 3 minutes"],
+      moa:["Blocks sodium, potassium and calcium channels","Prolongs the action potential and repolarization","Lengthens PR and QT intervals"],ind:["Ventricular fibrillation","pVT","Wide complex tachycardia"],contra:["Cardiogenic shock","Hemodynamically significant bradycardia","Second and third degree heart block","Hemodynamically significant hypotension"],adverse:["Bradycardia","Hypotension","Heart block","Congestive heart failure"],routes:["IV","IO","Infusion"],onset:["1 to 3 minutes"],
       adult:["Cardiac arrest: 300 mg","No response: 150 mg over 3 to 5 minutes","Tachydysrhythmias: 150 mg in 250 mL over 10 minutes"],peds:["VF: 5 mg/kg, may repeat every 5 minutes twice, max 300 mg","VT: 5 mg/kg over 20 minutes, may repeat twice"],special:["Peak effect 10 minutes","Duration variable"],
       quick:{moa:"Prolongs repolarization, decreases cardiac excitability.",ind:"VT, VF.",dose:"300 mg IV/IO in arrest, 150 mg for stable VT.",key:"Avoid in bradycardia or heart block."},
-      how:"Amiodarone blocks potassium channels, which lengthens repolarization and the refractory period in every part of the heart, and it also blocks sodium and calcium channels and has some beta-blocking effect. A longer refractory period makes it harder for a re-entrant ventricular circuit to keep running, which is why it is the drug for shock-refractory VF and pulseless VT and for stable wide-complex tachycardia. The same effects slow the sinus node and AV conduction and relax vessels, so bradycardia, heart block and hypotension are the trade, and it is given slowly whenever there is a pulse.",
-      bags:[{mix:"150 mg in 250 mL",conc:"0.6 mg/mL",use:"Stable VT: the whole bag over 10 minutes.",why:"One 150 mg syringe, one small bag, one time."},{mix:"900 mg in 500 mL",conc:"1.8 mg/mL",use:"Maintenance 1 mg/min for 6 hours (33 mL/hr), then 0.5 mg/min (17 mL/hr).",why:"Six syringes in a 500 mL bag; the rates stay low and the bag lasts the day.",tag:"hospital"}],doses:[{l:"Cardiac arrest, initial dose",pop:"adult",kind:"fixed",lo:300,hi:300,unit:"mg",route:"IV/IO",t:"push"},{l:"Cardiac arrest, second dose",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"IV/IO",t:"if no response; over 3 to 5 min"},{l:"Stable wide-complex tachycardia",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"Infusion",t:"into 250 mL, run over 10 min"},{l:"Maintenance, first 6 hr",pop:"adult",kind:"infmin",lo:1,hi:1,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"Maintenance, next 18 hr",pop:"adult",kind:"infmin",lo:0.5,hi:0.5,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"VF or pulseless VT",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"IV/IO",t:"may repeat every 5 min, twice"},{l:"VT with a pulse",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"Infusion",t:"over 20 min, may repeat twice"}],stocks:[{l:"150 mg / 3 mL",c:50,u:"mg"},{l:"900 mg / 500 mL (1.8 mg/mL)",c:1.8,u:"mg",bag:true}]},
+      how:"Amiodarone blocks potassium channels, which lengthens repolarization and the refractory period in every part of the heart, and it also blocks sodium and calcium channels and has some beta-blocking effect. A longer refractory period makes it harder for a re-entrant ventricular circuit to keep running, which is why it is the drug for shock-refractory VF and pVT and for stable wide-complex tachycardia. The same effects slow the sinus node and AV conduction and relax vessels, so bradycardia, heart block and hypotension are the trade, and it is given slowly whenever there is a pulse.",
+      bags:[{mix:"150 mg in 250 mL",conc:"0.6 mg/mL",use:"Stable VT: the whole bag over 10 minutes.",why:"One 150 mg syringe, one small bag, one time."},{mix:"900 mg in 500 mL",conc:"1.8 mg/mL",use:"Maintenance 1 mg/min for 6 hours (33 mL/hr), then 0.5 mg/min (17 mL/hr).",why:"Six syringes in a 500 mL bag; the rates stay low and the bag lasts the day.",tag:"hospital"}],doses:[{l:"Cardiac arrest, initial dose",pop:"adult",kind:"fixed",lo:300,hi:300,unit:"mg",route:"IV/IO",t:"push"},{l:"Cardiac arrest, second dose",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"IV/IO",t:"if no response; over 3 to 5 min"},{l:"Stable wide-complex tachycardia",pop:"adult",kind:"fixed",lo:150,hi:150,unit:"mg",route:"Infusion",t:"into 250 mL, run over 10 min"},{l:"Maintenance, first 6 hr",pop:"adult",kind:"infmin",lo:1,hi:1,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"Maintenance, next 18 hr",pop:"adult",kind:"infmin",lo:0.5,hi:0.5,unit:"mg",route:"Infusion",stock:1,tag:"hospital"},{l:"VF or pVT",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"IV/IO",t:"may repeat every 5 min, twice"},{l:"VT with a pulse",pop:"peds",kind:"perkg",lo:5,hi:5,unit:"mg",max:300,route:"Infusion",t:"over 20 min, may repeat twice"}],stocks:[{l:"150 mg / 3 mL",c:50,u:"mg"},{l:"900 mg / 500 mL (1.8 mg/mL)",c:1.8,u:"mg",bag:true}]},
     {id:"atropine",name:"Atropine sulfate",brands:[],cls:["Anticholinergic","Parasympathetic blocker","Antidote"],supply:["Prefilled syringe","Vial"],
       moa:["Blocks the action of acetylcholine","Increases the heart rate","Reverses cholinergic poisoning"],ind:["Hemodynamically significant bradycardia","Organophosphate poisoning","Carbamate poisoning","Nerve agent exposure"],contra:["Known hypersensitivity","Tachycardia","Hypothermia-induced bradycardia"],adverse:["Tachycardia","Palpitations","Flushed, hot, dry skin","Dizziness"],routes:["IV","IO","ET"],onset:["Immediate"],
       adult:["Bradycardia: 1 mg, repeat every 3 to 5 minutes to max 3 mg","Organophosphate, carbamate, nerve agent: 1 to 4 mg, may double every 5 minutes","ET: 2 to 2.5 mg diluted in 10 mL saline"],peds:["Bradycardia: 0.02 mg/kg, repeat every 3 to 5 minutes, max 1 mg child, 2 mg adolescent","Organophosphate: 0.03 to 0.05 mg/kg every 10 to 20 minutes"],special:["Consider transcutaneous pacing for refractory bradycardia"],
@@ -3492,7 +3530,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       how:"Dopamine is a catecholamine whose effect changes with the dose. At low rates it stimulates dopamine receptors in the kidney and gut vessels; in the middle range beta-1 stimulation raises heart rate and contractility; above about 10 mcg/kg/min alpha stimulation takes over and constricts vessels to raise blood pressure. That is why the infusion is titrated and why the profile lists responses by dose band. It raises myocardial oxygen demand and provokes arrhythmias, and it is harmful in hypovolemic shock because it squeezes an empty tank, so volume comes first.",
       bags:[{mix:"400 mg in 250 mL",conc:"1600 mcg/mL",alt:"800 mg in 500 mL is the same strength.",use:"5 mcg/kg/min on 80 kg is 15 mL/hr; 20 is 60 mL/hr.",why:"Standard premix. At 1600 mcg/mL the whole 2 to 20 range runs between 6 and 60 mL/hr on an adult."}],doses:[{l:"Shock, symptomatic bradycardia",pop:"adult",kind:"infkg",lo:5,hi:20,unit:"mcg",route:"Infusion",t:"titrate to effect",note:"2 to 5 has little effect, 5 to 10 is beta for rate and squeeze, 10 to 20 is alpha for vasoconstriction, and over 20 rate and oxygen demand climb."}],stocks:[{l:"400 mg / 250 mL (1600 mcg/mL)",c:1600,u:"mcg",bag:true},{l:"800 mg / 500 mL (1600 mcg/mL)",c:1600,u:"mcg",bag:true}]},
     {id:"epinephrine",name:"Epinephrine",brands:["Adrenalin","EpiPen","EpiPen Jr"],cls:["Sympathomimetic"],supply:["Prefilled syringe","Vial","Ampule","Auto-injector"],
-      moa:["Alpha: vasoconstriction","Beta1: increases heart rate and contractility","Beta2: bronchodilation","Blocks histamine receptors"],ind:["Cardiac arrest: asystole, PEA, VF, pulseless VT","Asthma","Bronchospasm with chronic bronchitis and emphysema","Allergic reaction","Anaphylaxis","Hemodynamically significant bradycardia","Hypotension from a cause other than hypovolemia"],contra:[],adverse:["Extravasation may cause tissue necrosis","Tachycardia","Increased myocardial oxygen demand","Hypertension","Dysrhythmias"],routes:["IV","IO","IM","ET","Infusion"],onset:["IV/IO/ET/infusion under 2 minutes","IM 3 to 10 minutes"],
+      moa:["Alpha: vasoconstriction","Beta1: increases heart rate and contractility","Beta2: bronchodilation","Blocks histamine receptors"],ind:["Cardiac arrest: asystole, PEA, VF, pVT","Asthma","Bronchospasm with chronic bronchitis and emphysema","Allergic reaction","Anaphylaxis","Hemodynamically significant bradycardia","Hypotension from a cause other than hypovolemia"],contra:[],adverse:["Extravasation may cause tissue necrosis","Tachycardia","Increased myocardial oxygen demand","Hypertension","Dysrhythmias"],routes:["IV","IO","IM","ET","Infusion"],onset:["IV/IO/ET/infusion under 2 minutes","IM 3 to 10 minutes"],
       adult:["Cardiac arrest: 1 mg (1:10,000) IV/IO every 3 to 5 minutes","Cardiac arrest ET: 2 to 2.5 mg (1:1000) in 10 mL saline","Bradycardia or hypotension: 2 to 10 mcg/min infusion","Bronchospasm or anaphylaxis: 0.3 to 0.5 mg (1:1000) IM"],peds:["Cardiac arrest: 0.01 mg/kg (1:10,000) IV/IO every 3 to 5 minutes","Cardiac arrest ET: 0.1 mg/kg (1:1000) in 3 to 5 mL saline","Bradycardia: 0.01 mg/kg (1:10,000) IV/IO","Bronchospasm: 0.01 mg/kg (1:1000) IM"],special:["Effects add with other sympathomimetics"],
       quick:{moa:"Alpha and beta stimulation: rate, vasoconstriction, bronchodilation.",ind:"Cardiac arrest, anaphylaxis, severe asthma.",dose:"1 mg IV in arrest; 0.3 to 0.5 mg IM for anaphylaxis.",key:"Tachycardia and hypertension."},
       how:"Epinephrine stimulates alpha-1, beta-1 and beta-2 receptors at the same time. Alpha-1 constricts arterioles, raising diastolic pressure and, in arrest, the coronary and cerebral perfusion pressure generated by compressions, which is the reason it is repeated every few minutes in CPR. Beta-1 raises heart rate and contractility, and beta-2 relaxes bronchial smooth muscle and stabilizes mast cells, so in anaphylaxis one IM dose opens the airway, raises the pressure and reduces further histamine release at once. The concentration matters: 1:1000 is for IM use and 1:10,000 for IV push, and the same milligram given IV from the wrong syringe can cause a hypertensive crisis or VT.",
@@ -3541,10 +3579,10 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       bags:[{mix:"500 mg in 250 mL",conc:"2 mg/mL",use:"Analgesia runs 0.1 to 0.3 mg/kg/hr and sedation 0.5 to 2 mg/kg/hr.",why:"One 500 mg vial, one standard bag. On 80 kg analgesia runs 4 to 12 mL/hr and sedation 20 to 80 mL/hr, both easy to titrate.",tag:"common practice"},{mix:"Low-dose pain: 0.3 mg/kg into 100 mL",conc:"about 0.25 mg/mL on 80 kg",use:"Run over 15 min, which is 400 mL/hr.",why:"Sub-dissociative ketamine given slowly causes fewer dysphoric reactions than a syringe push.",tag:"common practice"}],doses:[{l:"Sedation, RSI",pop:"adult",kind:"perkg",lo:1,hi:2,unit:"mg",route:"IV/IO",t:"over 1 min"},{l:"Sedation, chemical restraint",pop:"adult",kind:"perkg",lo:2,hi:4,unit:"mg",route:"IM"},{l:"Analgesia drip",pop:"adult",kind:"infkghr",lo:0.1,hi:0.3,unit:"mg",route:"Infusion",stock:3,tag:"common practice"},{l:"Sedation drip",pop:"adult",kind:"infkghr",lo:0.5,hi:2,unit:"mg",route:"Infusion",stock:3,tag:"common practice"}],stocks:[{l:"500 mg / 10 mL (50 mg/mL)",c:50,u:"mg"},{l:"500 mg / 5 mL (100 mg/mL)",c:100,u:"mg"},{l:"200 mg / 20 mL (10 mg/mL)",c:10,u:"mg"},{l:"500 mg / 250 mL (2 mg/mL)",c:2,u:"mg",bag:true}]},
     {id:"lidocaine",name:"Lidocaine",brands:["Xylocaine"],cls:["Antidysrhythmic"],supply:["Prefilled syringe","Premix bag"],
       moa:["Suppresses ventricular ectopic activity","Raises the ventricular fibrillation threshold"],ind:["Ventricular fibrillation","Ventricular tachycardia","Ventricular dysrhythmias, frequent PVCs and couplets","Monomorphic wide-complex tachycardia"],contra:["Known hypersensitivity","PVCs with bradycardia","Second and third degree heart block"],adverse:["Drowsiness","Confusion","Anxiety","Dizziness"],routes:["IV","IO","ET","Infusion"],onset:["1 to 5 minutes"],
-      adult:["VF and pulseless VT: 1 to 1.5 mg/kg, repeat 0.5 to 0.75 mg/kg every 3 to 5 minutes, max 3 mg/kg","Ventricular dysrhythmias with a pulse: 1 to 1.5 mg/kg, repeat 0.5 to 0.75 in 5 to 10 minutes, max 3 mg/kg","Maintenance infusion 2 to 4 mg/min","ET: 2 to 2.5 times the bolus in 10 mL saline"],peds:["VF and pulseless VT: 1 mg/kg, repeat once in 3 to 5 minutes","With a pulse: 1 mg/kg, repeat in 5 to 10 minutes, max 3 mg/kg","Maintenance infusion 20 to 50 mcg/kg/min"],special:["Decrease dose for the elderly and liver disease","Peak 5 to 10 minutes, duration 10 to 20 minutes","Pump when possible"],
+      adult:["VF and pVT: 1 to 1.5 mg/kg, repeat 0.5 to 0.75 mg/kg every 3 to 5 minutes, max 3 mg/kg","Ventricular dysrhythmias with a pulse: 1 to 1.5 mg/kg, repeat 0.5 to 0.75 in 5 to 10 minutes, max 3 mg/kg","Maintenance infusion 2 to 4 mg/min","ET: 2 to 2.5 times the bolus in 10 mL saline"],peds:["VF and pVT: 1 mg/kg, repeat once in 3 to 5 minutes","With a pulse: 1 mg/kg, repeat in 5 to 10 minutes, max 3 mg/kg","Maintenance infusion 20 to 50 mcg/kg/min"],special:["Decrease dose for the elderly and liver disease","Peak 5 to 10 minutes, duration 10 to 20 minutes","Pump when possible"],
       quick:{moa:"Sodium channel blocker, reduces ventricular arrhythmias.",ind:"VT, VF.",dose:"1 to 1.5 mg/kg IV.",key:"Watch for toxicity: seizures, CNS depression."},
-      how:"Lidocaine blocks fast sodium channels, which slows the upstroke of the action potential in ventricular muscle and Purkinje fibers, most of all in damaged, rapidly firing tissue, so ectopic ventricular beats and re-entrant VT are suppressed while normal conduction is left largely alone. It is the alternative to amiodarone for shock-refractory VF and pulseless VT. The liver clears it, so the dose comes down in the elderly and in liver disease, and toxicity shows first in the brain as drowsiness, confusion, tingling and seizures. As a local anesthetic the same sodium channel block stops pain signals in the nerve.",
-      bags:[{mix:"2 g in 500 mL (premix)",conc:"4 mg/mL",use:"1 to 4 mg/min is 15 to 60 mL/hr.",why:"Each mg/min is 15 mL/hr on this bag, so the rate is 15 times the dose."}],doses:[{l:"VF, pulseless VT, initial dose",pop:"adult",kind:"perkg",lo:1,hi:1.5,unit:"mg",route:"IV/IO",t:"max total 3 mg/kg"},{l:"VF, pulseless VT, repeat dose",pop:"adult",kind:"perkg",lo:0.5,hi:0.75,unit:"mg",route:"IV/IO",t:"every 3 to 5 min (5 to 10 min with a pulse); max 3 mg/kg"},{l:"No vascular access",pop:"adult",kind:"text",route:"ET",t:"2 to 2.5 times the IV bolus, in 10 mL saline."},{l:"Maintenance after conversion",pop:"adult",kind:"infmin",lo:2,hi:4,unit:"mg",route:"Infusion",stock:1},{l:"VF, pulseless VT",pop:"peds",kind:"perkg",lo:1,hi:1,unit:"mg",route:"IV/IO",t:"repeat once in 3 to 5 min (5 to 10 with a pulse); max 3 mg/kg"},{l:"Maintenance",pop:"peds",kind:"infkg",lo:20,hi:50,unit:"mcg",route:"Infusion",stock:2}],stocks:[{l:"100 mg / 5 mL prefilled (2%)",c:20,u:"mg"},{l:"2 g / 500 mL premix (4 mg/mL)",c:4,u:"mg",bag:true},{l:"2 g / 500 mL premix (4000 mcg/mL)",c:4000,u:"mcg",bag:true}]},
+      how:"Lidocaine blocks fast sodium channels, which slows the upstroke of the action potential in ventricular muscle and Purkinje fibers, most of all in damaged, rapidly firing tissue, so ectopic ventricular beats and re-entrant VT are suppressed while normal conduction is left largely alone. It is the alternative to amiodarone for shock-refractory VF and pVT. The liver clears it, so the dose comes down in the elderly and in liver disease, and toxicity shows first in the brain as drowsiness, confusion, tingling and seizures. As a local anesthetic the same sodium channel block stops pain signals in the nerve.",
+      bags:[{mix:"2 g in 500 mL (premix)",conc:"4 mg/mL",use:"1 to 4 mg/min is 15 to 60 mL/hr.",why:"Each mg/min is 15 mL/hr on this bag, so the rate is 15 times the dose."}],doses:[{l:"VF, pVT, initial dose",pop:"adult",kind:"perkg",lo:1,hi:1.5,unit:"mg",route:"IV/IO",t:"max total 3 mg/kg"},{l:"VF, pVT, repeat dose",pop:"adult",kind:"perkg",lo:0.5,hi:0.75,unit:"mg",route:"IV/IO",t:"every 3 to 5 min (5 to 10 min with a pulse); max 3 mg/kg"},{l:"No vascular access",pop:"adult",kind:"text",route:"ET",t:"2 to 2.5 times the IV bolus, in 10 mL saline."},{l:"Maintenance after conversion",pop:"adult",kind:"infmin",lo:2,hi:4,unit:"mg",route:"Infusion",stock:1},{l:"VF, pVT",pop:"peds",kind:"perkg",lo:1,hi:1,unit:"mg",route:"IV/IO",t:"repeat once in 3 to 5 min (5 to 10 with a pulse); max 3 mg/kg"},{l:"Maintenance",pop:"peds",kind:"infkg",lo:20,hi:50,unit:"mcg",route:"Infusion",stock:2}],stocks:[{l:"100 mg / 5 mL prefilled (2%)",c:20,u:"mg"},{l:"2 g / 500 mL premix (4 mg/mL)",c:4,u:"mg",bag:true},{l:"2 g / 500 mL premix (4000 mcg/mL)",c:4000,u:"mcg",bag:true}]},
     {id:"lorazepam",name:"Lorazepam",brands:["Ativan"],cls:["Benzodiazepine","Anticonvulsant","Sedative","Hypnotic"],supply:["Vial"],
       moa:["Sedation via the limbic system, thalamus and cortex","Binds GABA benzodiazepine receptors","Raises the seizure threshold","Antianxiety effect"],ind:["Seizure activity","Status epilepticus","Procedural sedation for intubation and cardioversion","Chemical restraint for agitated delirium","Severe anxiety"],contra:["Known hypersensitivity"],adverse:["Sedation","Transient amnesia","Respiratory depression","Respiratory arrest","Bradycardia","Hypotension"],routes:["IV","IO","IM"],onset:["IV/IO 1 to 5 minutes","IM 15 to 30 minutes"],
       adult:["Seizure IV/IO: 2 to 5 mg over 2 minutes","Seizure IM: 2 to 5 mg","Procedural sedation IV/IO: 2 mg over 2 minutes","Procedural sedation IM: 4 mg","Max 10 mg"],peds:["Seizure IV/IO/IM: 0.05 to 0.1 mg/kg over 2 minutes, max 4 mg"],special:["Longer sedation in the elderly","Peak IV under 15 minutes, IM 2 to 3 hours","Duration 6 to 8 hours"],
@@ -3552,7 +3590,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       how:"Lorazepam enhances GABA-A receptor activity, increasing chloride flow into neurons so they are harder to excite, which stops seizures, calms agitation and causes sedation and amnesia. It is less lipid soluble than diazepam, so it enters the brain a little more slowly but stays there longer, giving a longer anti-seizure effect, which is why it is often preferred in status epilepticus. It is absorbed reliably IM. Respiratory depression and hypotension are the main risks, particularly combined with opioids or alcohol.",
       doses:[{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:5,unit:"mg",max:10,route:"IV/IO",t:"over 2 min; max 10 mg total"},{l:"Seizure",pop:"adult",kind:"fixed",lo:2,hi:5,unit:"mg",max:10,route:"IM",t:"max 10 mg total"},{l:"Procedural sedation",pop:"adult",kind:"fixed",lo:2,hi:2,unit:"mg",route:"IV/IO",t:"over 2 min"},{l:"Procedural sedation",pop:"adult",kind:"fixed",lo:4,hi:4,unit:"mg",route:"IM"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.05,hi:0.1,unit:"mg",max:4,route:"IV/IO",t:"over 2 min; max 4 mg"},{l:"Seizure",pop:"peds",kind:"perkg",lo:0.05,hi:0.1,unit:"mg",max:4,route:"IM",t:"max 4 mg"}],stocks:[{l:"2 mg / 1 mL",c:2,u:"mg"},{l:"4 mg / 1 mL",c:4,u:"mg"}]},
     {id:"magnesium",name:"Magnesium sulfate",brands:[],cls:["Electrolyte","Anti-inflammatory","Tocolytic"],supply:["Vial"],
-      moa:["Decreases ventricular irritability","Decreases acetylcholine release","Uterine relaxation","Bronchodilation","Raises the seizure threshold in eclampsia"],ind:["Seizures of toxemia of pregnancy","Pre-eclampsia and eclampsia","Pre-term labor","Torsades de Pointes","VF and pulseless VT refractory to amiodarone or lidocaine","Reactive airway conditions"],contra:["Hemodynamically significant heart block"],adverse:["CNS depression","Drowsiness","Hypotension","Respiratory depression","Dysrhythmias"],routes:["IV","IO","Infusion"],onset:["Immediate"],
+      moa:["Decreases ventricular irritability","Decreases acetylcholine release","Uterine relaxation","Bronchodilation","Raises the seizure threshold in eclampsia"],ind:["Seizures of toxemia of pregnancy","Pre-eclampsia and eclampsia","Pre-term labor","Torsades de Pointes","VF and pVT refractory to amiodarone or lidocaine","Reactive airway conditions"],contra:["Hemodynamically significant heart block"],adverse:["CNS depression","Drowsiness","Hypotension","Respiratory depression","Dysrhythmias"],routes:["IV","IO","Infusion"],onset:["Immediate"],
       adult:["Torsades: 1 to 2 g in 50 to 100 mL over 5 minutes, may repeat 1 to 2 g over 1 hour","Pre-term labor, pre-eclampsia, eclampsia: 3 to 6 g in 100 mL over 10 to 20 minutes","Maintenance infusion 1 to 4 g/hour","Reactive airway: 2 g in 50 mL over 5 to 10 minutes","Cardiac arrest: 1 to 2 g IV/IO over 1 to 2 minutes"],peds:["Reactive airway: 25 to 50 mg/kg over 15 to 30 minutes, max 2 g"],special:["Duration 1 hour","Pump when possible"],
       quick:{moa:"Relaxes smooth muscle, stabilizes cardiac cells.",ind:"Torsades, eclampsia, severe asthma.",dose:"1 to 2 g IV.",key:"Hypotension and respiratory depression."},
       how:"Magnesium is a physiological calcium antagonist. In the heart it stabilizes membranes and shortens the time the ventricles spend repolarizing, which is why it terminates torsades de pointes, the polymorphic VT driven by a long QT. In the airway it relaxes bronchial smooth muscle by blocking calcium entry, adding bronchodilation in a severe asthma attack that is not responding. In pre-eclampsia and eclampsia it raises the seizure threshold and relaxes vessels. Overdose shows as loss of reflexes, then respiratory depression and hypotension, and calcium is the antidote.",
@@ -3729,7 +3767,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
     fil.innerHTML=`<option value="">All classes</option>`+classes.map(c=>`<option>${c}</option>`).join("");
     const li=(arr)=>arr.length?`<ul>${arr.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p class="note">None listed</p>`;
     const tag=t=>t?`<i class="tag">${t}</i>`:"";
-    const SHORT=[[/VF, pulseless VT/,"VF / pulseless VT"],[/VF or pulseless VT/,"VF / pulseless VT"],[/VT with a pulse/,"VT w/ pulse"],[/A-fib with RVR/,"AFib w/ rapid rate"],[/Stable wide-complex tachycardia/,"Stable wide-complex tachy"],[/Cardiac arrest, no vascular access/,"Arrest, no IV/IO"],[/No vascular access/,"No IV/IO"],[/Anaphylaxis, severe bronchospasm/,"Anaphylaxis / bronchospasm"],[/Reactive airway, anaphylaxis/,"Reactive airway / anaphylaxis"],[/Hyperkalemia, CCB overdose/,"Hyperkalemia / calcium blocker OD"],[/Opioid overdose/,"Opioid OD"],[/Pulmonary edema, CHF/,"Pulmonary edema / CHF"],[/Pulmonary edema, not on furosemide/,"Pulmonary edema, no home furosemide"],[/Pulmonary edema, already on it/,"Pulmonary edema, on home furosemide"],[/Organophosphate, nerve agent/,"Organophosphate / nerve agent"],[/Acidosis, hyperkalemia, TCA overdose/,"Acidosis / hyperkalemia / tricyclic OD"],[/Acidosis, as 4.2%/,"Acidosis, 4.2% strength"],[/Eclampsia, pre-term labor/,"Eclampsia / pre-term labor"],[/Allergic reaction, anaphylaxis/,"Allergic reaction / anaphylaxis"],[/Sedation, chemical restraint/,"Sedation / chemical restraint"],[/Sedation, RSI/,"RSI induction / sedation"],[/Hypoglycemia, able to swallow/,"Hypoglycemia, can swallow"],[/Hypoglycemia, no IV access/,"Hypoglycemia, no IV"],[/Nausea, vomiting/,"Nausea / vomiting"],[/Nausea, 4 to 14 yr/,"Nausea / vomiting, 4 to 14 yr"],[/Chest pain, pulmonary edema/,"Chest pain / pulmonary edema"],[/Shock, symptomatic bradycardia/,"Shock / symptomatic bradycardia"],[/Bradycardia or hypotension/,"Bradycardia / hypotension"],[/Poisoning, within 1 hr/,"Poisoning, under 1 hr"],[/Under 20 kg, or 5 yr and younger/,"Under 20 kg or 5 yr and under"],[/Over 20 kg, or over 5 yr/,"Over 20 kg or over 5 yr"],[/Hypoxia, distress, arrest/,"Hypoxia / distress / arrest"],[/Maintenance after conversion/,"Maintenance drip"],[/Acute coronary syndrome/,"ACS"]];
+    const SHORT=[[/VF, pVT/,"VF / pVT"],[/VF or pVT/,"VF / pVT"],[/VT with a pulse/,"VT w/ pulse"],[/A-fib with RVR/,"AFib w/ rapid rate"],[/Stable wide-complex tachycardia/,"Stable wide-complex tachy"],[/Cardiac arrest, no vascular access/,"Arrest, no IV/IO"],[/No vascular access/,"No IV/IO"],[/Anaphylaxis, severe bronchospasm/,"Anaphylaxis / bronchospasm"],[/Reactive airway, anaphylaxis/,"Reactive airway / anaphylaxis"],[/Hyperkalemia, CCB overdose/,"Hyperkalemia / calcium blocker OD"],[/Opioid overdose/,"Opioid OD"],[/Pulmonary edema, CHF/,"Pulmonary edema / CHF"],[/Pulmonary edema, not on furosemide/,"Pulmonary edema, no home furosemide"],[/Pulmonary edema, already on it/,"Pulmonary edema, on home furosemide"],[/Organophosphate, nerve agent/,"Organophosphate / nerve agent"],[/Acidosis, hyperkalemia, TCA overdose/,"Acidosis / hyperkalemia / tricyclic OD"],[/Acidosis, as 4.2%/,"Acidosis, 4.2% strength"],[/Eclampsia, pre-term labor/,"Eclampsia / pre-term labor"],[/Allergic reaction, anaphylaxis/,"Allergic reaction / anaphylaxis"],[/Sedation, chemical restraint/,"Sedation / chemical restraint"],[/Sedation, RSI/,"RSI induction / sedation"],[/Hypoglycemia, able to swallow/,"Hypoglycemia, can swallow"],[/Hypoglycemia, no IV access/,"Hypoglycemia, no IV"],[/Nausea, vomiting/,"Nausea / vomiting"],[/Nausea, 4 to 14 yr/,"Nausea / vomiting, 4 to 14 yr"],[/Chest pain, pulmonary edema/,"Chest pain / pulmonary edema"],[/Shock, symptomatic bradycardia/,"Shock / symptomatic bradycardia"],[/Bradycardia or hypotension/,"Bradycardia / hypotension"],[/Poisoning, within 1 hr/,"Poisoning, under 1 hr"],[/Under 20 kg, or 5 yr and younger/,"Under 20 kg or 5 yr and under"],[/Over 20 kg, or over 5 yr/,"Over 20 kg or over 5 yr"],[/Hypoxia, distress, arrest/,"Hypoxia / distress / arrest"],[/Maintenance after conversion/,"Maintenance drip"],[/Acute coronary syndrome/,"ACS"]];
     const TSHORT=[[/every (\d+) to (\d+) min/g,"q$1-$2 min"],[/every (\d+) min/g,"q$1 min"],[/every (\d+) to (\d+) s\b/g,"q$1-$2 s"],[/rapid push over 1 to 3 s, then a 20 mL flush/,"rapid push 1 to 3 s, 20 mL flush"],[/if no response in (\d+) to (\d+) min; rapid push, 20 mL flush/,"no response in $1-$2 min; rapid push, 20 mL flush"],[/if no response in (\d+) to (\d+) min/,"no response in $1-$2 min"],[/if no response; /,"no response; "],[/titrate to effect/,"titrate"],[/while the drip is set up/,"while the drip is mixed"]];
     const dash=t=>tight(t);
     const shortL=l=>{ for(const [re,rep] of SHORT) l=l.replace(re,rep); return l; };
@@ -3753,21 +3791,41 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       const forGroup=g=>items.filter(it=>it.rt===g||(it.rt==null&&drugGroups.includes(g)&&!items.some(x=>x.rt===g&&x.k===it.k)));
       return `<ul class="dlist">${groups.map(g=>`<li class="rtitem"><span class="rtname">${RT_LABEL[g]||g}</span><ul class="tree">${forGroup(g).map(it=>`<li class="tnode"><div class="l1"><span class="use">${it.k}</span><span class="lead"></span><span class="dose">${dash(shortTime(it.v))}</span></div></li>`).join("")}</ul></li>`).join("")}</ul>`;
     }
-    // the most important line or two of each drug's How it works, marked so a highlighter can be drawn over them once the card is open
-    const HL={"asa":["irreversibly blocks the COX-1 enzyme inside platelets","a single chewed dose dampens aggregation for the life of those platelets"],"charcoal":["many drugs and toxins bind to that surface while still in the gut","the useful window is about an hour"],"adenosine":["acts on A1 receptors in the AV node","a few seconds of block breaks the loop"],"albuterol":["selective beta-2 agonist","relaxes the muscle and opens narrowed airways within minutes"],"amiodarone":["lengthens repolarization and the refractory period","the drug for shock-refractory VF and pulseless VT"],"atropine":["takes the parasympathetic brake off","treats symptomatic bradycardia that originates above the ventricles"],"bumetanide":["blocks the sodium-potassium-chloride transporter in the thick ascending loop of Henle","shed volume and lower the pressure backing up into the lungs"],"cacl":["about three times as much per millilitre as calcium gluconate","stabilizes the membrane and narrows the QRS within minutes"],"cagel":["supplies calcium at the surface so the fluoride is bound","Relief of pain is the sign it is working"],"cagluc":["roughly a third as much per millilitre as the chloride salt","stabilizes cardiac membranes in hyperkalemia"],"dexamethasone":["changes gene transcription, switching off production of inflammatory mediators","the onset is hours"],"d50":["raises blood glucose within a minute of reaching the circulation","extremely hypertonic"],"diazepam":["makes the receptor respond more strongly to GABA","a higher seizure threshold"],"diltiazem":["slows how fast they fire and conduct","controls the rate in atrial fibrillation and flutter without converting them"],"diphenhydramine":["blocks H1 histamine receptors","It does not reverse airway obstruction or hypotension"],"dopamine":["effect changes with the dose","above about 10 mcg/kg/min alpha stimulation takes over"],"epinephrine":["stimulates alpha-1, beta-1 and beta-2 receptors at the same time","the coronary and cerebral perfusion pressure generated by compressions"],"etomidate":["unconsciousness within about 15 seconds","almost no drop in blood pressure or cardiac output"],"fentanyl":["roughly a hundred times as potent as morphine by weight","causes less hypotension than morphine"],"furosemide":["blocks the sodium-potassium-chloride transporter in the thick ascending limb of the loop of Henle","dilates veins within minutes"],"glucagon":["break stored glycogen down into glucose","works only if the liver has glycogen to give"],"hydroxocobalamin":["blocking cytochrome oxidase in the mitochondria","binds cyanide more tightly than the enzyme does"],"ipratropium":["the larger airways relax and secretions fall","works through a separate pathway"],"ketamine":["blocks NMDA glutamate receptors","airway reflexes and breathing are largely preserved"],"lidocaine":["blocks fast sodium channels","the alternative to amiodarone for shock-refractory VF and pulseless VT"],"lorazepam":["stops seizures, calms agitation and causes sedation and amnesia","giving a longer anti-seizure effect"],"magnesium":["physiological calcium antagonist","terminates torsades de pointes"],"methylpred":["turn down the genes that make inflammatory mediators","Nothing happens in the first hour"],"midazolam":["stops seizures within minutes","absorbed well IM and across the nasal mucosa"],"morphine":["binds mu opioid receptors in the spinal cord and brain","triggers histamine release and dilates veins"],"naloxone":["pure opioid antagonist","is shorter than most opioids"],"nitroglycerin":["converted in the vessel wall to nitric oxide","lowering preload and the work and oxygen the heart needs"],"nitrous":["analgesia and mild sedation without loss of consciousness","Self-administration is a safety feature"],"norepinephrine":["potent alpha-1 agonist with modest beta-1 activity","first-line vasopressor in septic and other vasodilated shock"],"ondansetron":["blocks serotonin 5-HT3 receptors","lengthen the QT interval"],"oralglucose":["absorbed through the lining of the mouth and the stomach","only for a patient who is awake enough to protect their own airway and swallow"],"oxygen":["raises the partial pressure of oxygen in the alveoli","Titrate to a saturation target"],"oxytocin":["makes the uterus contract harder and more often","stops bleeding once the placenta has delivered"],"bicarb":["buffers hydrogen ions","pull the drug off cardiac sodium channels and narrow the QRS"]};
+    // the facts that tell you what the drug is for at a glance: what it acts on, what that does, and the one rule that matters most
+    const HL={"asa":["irreversibly blocks the COX-1 enzyme inside platelets","can no longer make thromboxane A2","dampens aggregation for the life of those platelets"],"charcoal":["many drugs and toxins bind to that surface while still in the gut","the useful window is about an hour","does nothing for substances that do not bind to carbon"],"adenosine":["acts on A1 receptors in the AV node","which briefly stops conduction through the node","a few seconds of block breaks the loop"],"albuterol":["selective beta-2 agonist","relaxes the muscle and opens narrowed airways within minutes","drives potassium into cells"],"amiodarone":["blocks potassium channels","lengthens repolarization and the refractory period","the drug for shock-refractory VF and pVT"],"atropine":["blocks muscarinic acetylcholine receptors","takes the parasympathetic brake off","treats symptomatic bradycardia that originates above the ventricles"],"bumetanide":["loop diuretic","blocks the sodium-potassium-chloride transporter","shed volume and lower the pressure backing up into the lungs"],"cacl":["about three times as much per millilitre as calcium gluconate","stabilizes the membrane and narrows the QRS within minutes","without lowering the potassium level at all"],"cagel":["supplies calcium at the surface so the fluoride is bound","Relief of pain is the sign it is working"],"cagluc":["roughly a third as much per millilitre as the chloride salt","stabilizes cardiac membranes in hyperkalemia","In digoxin toxicity extra calcium can worsen the arrhythmias"],"dexamethasone":["switching off production of inflammatory mediators","the onset is hours","given early so that it is working by the time the bronchodilators wear off"],"d50":["raises blood glucose within a minute of reaching the circulation","extremely hypertonic","confirm hypoglycemia first"],"diazepam":["makes the receptor respond more strongly to GABA","a higher seizure threshold","absorbed poorly and unpredictably IM"],"diltiazem":["Blocking L-type calcium channels in the SA and AV nodes","controls the rate in atrial fibrillation and flutter without converting them","a wide-complex rhythm never gets diltiazem"],"diphenhydramine":["blocks H1 histamine receptors","does not reverse airway obstruction or hypotension","reverses the dystonic reactions"],"dopamine":["effect changes with the dose","alpha stimulation takes over and constricts vessels to raise blood pressure","volume comes first"],"epinephrine":["stimulates alpha-1, beta-1 and beta-2 receptors","the coronary and cerebral perfusion pressure generated by compressions","one IM dose opens the airway, raises the pressure and reduces further histamine release"],"etomidate":["unconsciousness within about 15 seconds that lasts only a few minutes","almost no drop in blood pressure or cardiac output","no analgesic effect"],"fentanyl":["binds mu opioid receptors in the spinal cord and brain","less hypotension than morphine","respiratory depression is the danger"],"furosemide":["blocks the sodium-potassium-chloride transporter","dilates veins within minutes","the diagnosis matters more than the drug"],"glucagon":["break stored glycogen down into glucose","works only if the liver has glycogen to give","bypasses beta receptors"],"hydroxocobalamin":["blocking cytochrome oxidase in the mitochondria","binds cyanide more tightly than the enzyme does","turns skin, urine and lab samples red"],"ipratropium":["inhaled anticholinergic","the larger airways relax and secretions fall","the two are given together in a severe attack"],"ketamine":["blocks NMDA glutamate receptors","airway reflexes and breathing are largely preserved","heart rate and blood pressure usually rise rather than fall"],"lidocaine":["blocks fast sodium channels","ectopic ventricular beats and re-entrant VT are suppressed","toxicity shows first in the brain"],"lorazepam":["enhances GABA-A receptor activity","giving a longer anti-seizure effect","Respiratory depression and hypotension are the main risks"],"magnesium":["physiological calcium antagonist","terminates torsades de pointes","calcium is the antidote"],"methylpred":["turn down the genes that make inflammatory mediators","reduces the capillary leak","Nothing happens in the first hour"],"midazolam":["stops seizures within minutes","absorbed well IM and across the nasal mucosa","respiratory depression and hypotension"],"morphine":["binds mu opioid receptors in the spinal cord and brain","dilates veins, which lowers preload","harmful in a patient who is hypotensive or hypovolemic"],"naloxone":["pure opioid antagonist","respiratory drive returns within a couple of minutes","shorter than most opioids"],"nitroglycerin":["lowering preload and the work and oxygen the heart needs","the coronary arteries dilate","combined with a phosphodiesterase-5 inhibitor the vasodilation is unopposed and can be fatal"],"nitrous":["analgesia and mild sedation without loss of consciousness","Self-administration is a safety feature","avoided with pneumothorax, bowel obstruction"],"norepinephrine":["potent alpha-1 agonist","raising systemic vascular resistance","first-line vasopressor in septic and other vasodilated shock"],"ondansetron":["blocks serotonin 5-HT3 receptors","does not sedate","lengthen the QT interval"],"oralglucose":["absorbed through the lining of the mouth","only for a patient who is awake enough to protect their own airway"],"oxygen":["drives more of it across into the blood","does far less for a patient whose problem is delivery","Titrate to a saturation target"],"oxytocin":["makes the uterus contract harder and more often","stops bleeding once the placenta has delivered","Given before the placenta is out"],"bicarb":["buffers hydrogen ions","shifts potassium into cells","pull the drug off cardiac sodium channels and narrow the QRS"]};
     const marks=(id,x)=>{ (HL[id]||[]).forEach((ph,k)=>{ const i=x.indexOf(ph); if(i>=0) x=x.slice(0,i)+`<mark class="hl" data-k="${k}">${ph}</mark>`+x.slice(i+ph.length); }); return x; };
     function howBlock(d){
       const t=d.how||d.quick.moa; const parts=t.replace(/([.!?])\s+(?=[A-Z])/g,"$1\n").split("\n").filter(Boolean).map(x=>marks(d.id,x));
       return `<p class="hlead">${parts[0]}</p>${parts.length>1?`<ul>${parts.slice(1).map(x=>`<li>${x}</li>`).join("")}</ul>`:""}`;
     }
-    // ----- the highlighter: once the card has opened, a highlight draws across each key phrase in reading order, holds a moment, then its
-    // start slides along to its end like a slinky and it is gone; the next one begins after a short breath -----
-    window.drugHighlights=d=>{ if(reducedM()) return; const ms=[...d.querySelectorAll(".dg-body>.how mark.hl")].sort((a,b)=>a.dataset.k-b.dataset.k); if(!ms.length) return;
-      if(d._hl) d._hl(); const A=[]; let alive=true; d._hl=()=>{ alive=false; A.forEach(a=>{ try{ a.cancel(); }catch(e){} }); d._hl=null; };
-      const DRAW=spd(560), HOLD=spd(300), SLIP=spd(560), GAP=spd(240), tot=DRAW+HOLD+SLIP; let at=spd(120);
-      ms.forEach(m=>{ const a=m.animate([{offset:0,backgroundSize:"0% 64%",backgroundPosition:"0% 92%",easing:"cubic-bezier(.7,0,.2,1)"},{offset:DRAW/tot,backgroundSize:"100% 64%",backgroundPosition:"0% 92%",easing:"linear"},{offset:(DRAW+HOLD)/tot,backgroundSize:"100% 64%",backgroundPosition:"100% 92%",easing:"cubic-bezier(.3,0,.15,1)"},{offset:1,backgroundSize:"0% 64%",backgroundPosition:"100% 92%"}],{duration:tot,delay:at,fill:"both"});
-        A.push(a); at+=tot-spd(180)+GAP; });
-      Promise.all(A.map(a=>a.finished)).then(()=>{ if(alive&&d._hl){ d._hl(); } },()=>{}); };
+    // ----- the highlighter: once the card has opened, a highlight draws across each key phrase in reading order. The letters thicken as
+    // the highlight reaches them, so the phrase stands out while it is read, then ease back to their normal weight a moment after. Normally
+    // the highlight holds, then its start slides along to its end like a slinky and it is gone, and the next one begins after a short
+    // breath. With Show info on, the highlights stay drawn until Show info is turned off. -----
+    const hesc=c=>c==="&"?"&amp;":c==="<"?"&lt;":c===">"?"&gt;":c;
+    const letters=m=>{ if(!m._ch){ const t=m.textContent; m.innerHTML=[...t].map(c=>c===" "?" ":`<span class="hc">${hesc(c)}</span>`).join(""); m._ch=[...m.querySelectorAll(".hc")]; } return m._ch; };
+    const HQ=window.bez?bez(.7,0,.2,1):(x=>x), HS=window.bez?bez(.3,0,.15,1):(x=>x);
+    // the moment the highlight's edge reaches a point along the phrase, on the same curve the edge moves on
+    const when=(f,curve)=>{ let lo=0, hi=1; for(let i=0;i<20;i++){ const m=(lo+hi)/2; if(curve(m)<f) lo=m; else hi=m; } return (lo+hi)/2; };
+    const weight=m=>{ const c=getComputedStyle(m).color, z=c.replace(/rgba?\(([^)]+)\)/,(x,v)=>`rgba(${v.split(",").slice(0,3).join(",")},0)`); const w=".032em";
+      return {on:`${w} 0 0 ${c}, -${w} 0 0 ${c}`, off:`${w} 0 0 ${z}, -${w} 0 0 ${z}`}; };
+    const marksOf=d=>[...d.querySelectorAll(".dg-body>.how mark.hl")].sort((a,b)=>a.dataset.k-b.dataset.k);
+    window.drugHighlights=(d,o)=>{ o=o||{}; if(reducedM()){ if(o.hold) marksOf(d).forEach(m=>m.classList.add("hlon")); return; } const ms=marksOf(d); if(!ms.length) return;
+      if(d._hl) d._hl(); const A=[]; let alive=true; d._hl=()=>{ alive=false; A.forEach(a=>{ try{ a.cancel(); }catch(e){} }); ms.forEach(m=>m.classList.remove("hlon")); d._hl=null; };
+      const DRAW=spd(600), HOLD=spd(520), SLIP=spd(600), GAP=spd(200), RISE=spd(160), LINGER=spd(900), tot=DRAW+HOLD+SLIP; let at=spd(120);
+      ms.forEach(m=>{ m.classList.remove("hlon"); const W=weight(m), ch=letters(m), n=Math.max(1,ch.length-1);
+        if(o.hold){ const a=m.animate([{backgroundSize:"0% 64%",backgroundPosition:"0% 92%"},{backgroundSize:"100% 64%",backgroundPosition:"0% 92%"}],{duration:DRAW,delay:at,easing:"cubic-bezier(.7,0,.2,1)",fill:"both"}); A.push(a);
+          a.finished.then(()=>{ if(!alive) return; m.classList.add("hlon"); a.cancel(); },()=>{}); }
+        else A.push(m.animate([{offset:0,backgroundSize:"0% 64%",backgroundPosition:"0% 92%",easing:"cubic-bezier(.7,0,.2,1)"},{offset:DRAW/tot,backgroundSize:"100% 64%",backgroundPosition:"0% 92%",easing:"linear"},{offset:(DRAW+HOLD)/tot,backgroundSize:"100% 64%",backgroundPosition:"100% 92%",easing:"cubic-bezier(.3,0,.15,1)"},{offset:1,backgroundSize:"0% 64%",backgroundPosition:"100% 92%"}],{duration:tot,delay:at,fill:"both"}));
+        // each letter: heavier as the edge reaches it, held while the phrase is being read, then back to normal weight slowly, after the
+        // highlight has left it (or, when the highlight stays, a moment after it was drawn)
+        ch.forEach((c,i)=>{ const f=i/n, on=DRAW*when(f,HQ), off=o.hold?on+HOLD+spd(260):DRAW+HOLD+SLIP*when(f,HS)+spd(80), end=off+LINGER;
+          A.push(c.animate([{offset:0,textShadow:W.off},{offset:on/end,textShadow:W.off},{offset:Math.min(1,(on+RISE)/end),textShadow:W.on},{offset:off/end,textShadow:W.on,easing:"cubic-bezier(.4,0,.2,1)"},{offset:1,textShadow:W.off}],{duration:end,delay:at,fill:"backwards"})); });
+        at+=(o.hold?DRAW+spd(160):tot-spd(180))+GAP; });
+      if(!o.hold) Promise.all(A.map(a=>a.finished)).then(()=>{ if(alive&&d._hl){ d._hl(); } },()=>{}); };
+    // Show info turned off: highlights that were left drawn slide away the way a passing one does
+    window.drugHighlightsOff=d=>{ if(d._hl) d._hl(); const ms=marksOf(d).filter(m=>m.classList.contains("hlon")); ms.forEach(m=>m.classList.remove("hlon")); if(reducedM()) return; let at=0;
+      ms.forEach(m=>{ m.animate([{backgroundSize:"100% 64%",backgroundPosition:"100% 92%"},{backgroundSize:"0% 64%",backgroundPosition:"100% 92%"}],{duration:spd(520),delay:at,easing:"cubic-bezier(.3,0,.15,1)",fill:"backwards"}); at+=spd(90); }); };
     function card(d){
       const hasDose=d.doses.length>0, inS=study.has(d.id);
       return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
@@ -3818,10 +3876,11 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
     }
     function renderDoses(){ document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); }); }
     function headerH(){ const h=document.querySelector("header.top"); if(!h) return 0; if(document.documentElement.classList.contains("drugopen")){ const sub=$("subnav"), min=document.documentElement.classList.contains("hdrmin")&&window.innerWidth<=600; return (sub&&!sub.hidden?sub.offsetTop:h.offsetHeight)-(min?16:0); } return h.getBoundingClientRect().height; }
-    // the target follows the card (cards above it that had never been drawn take their real height as the page passes them), but it is
-    // only measured every few frames, so the glide never forces the page to lay itself out on every frame
+    // the glide to an opened card runs on the house curve (slow start, quick middle, short settle) and follows the card every frame, so a
+    // card above it that takes its real height part way along bends the path instead of kinking it
+    const GLIDE=window.bez?bez(.7,0,.2,1):null;
     function scrollToCard(el){ const at=()=>el.getBoundingClientRect().top+window.scrollY-headerH()-8; const y0=at(); if(Math.abs(y0-window.scrollY)<2) return;
-      let t=performance.now(), v=y0; smoothScrollTo(()=>{ const n=performance.now(); if(n-t>90){ t=n; v=at(); } return v; }); }
+      smoothScrollTo(at,spd(640),GLIDE,spd(220)); if(window.revealTrack) revealTrack(spd(900)); }
     window.revealDrug=(id,scroll)=>{ const el=$("drug-"+id); if(!el) return false; fill(el); if(!el.open) openCard(el); else if(scroll!==false) scrollToCard(el); return true; };
     // ----- a drug card opens on the shared fold, with steps of its own: the preview's facts fade where they sit, the faint rule glides from
     // above them to the foot of the card's header and widens to the full card, the tools come in, the page strip slides up out of the way so
@@ -3872,7 +3931,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       const lead=reducedM()?0:Math.round(WIPE*.7); d.classList.add("jut");
       FOLD.open(d,{before:()=>fill(d), kids:parts, duration:spd(520), kidDelay:spd(110), delay:lead,
         after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(!reducedM()) wipe(d,true); },
-        done:()=>{ if(window.drugHighlights) drugHighlights(d); } });
+        done:()=>{ if(window.drugHighlights) drugHighlights(d,{hold:!!store.get("mm-showinfo",false)}); } });
       scrollToCard(d); }
     function closeCard(d){
       if(d._fa) FOLD.finish(d); if(!d.open) return; const lead=reducedM()?0:Math.round(WIPE*.7);
@@ -3923,7 +3982,9 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       root.querySelectorAll(".dg-tools").forEach(t=>t.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; e.preventDefault(); e.stopPropagation();
         if(b.hasAttribute("data-math")){ store.set("mm-showmath",!store.get("mm-showmath",false)); applyLayers(); }
         else if(b.hasAttribute("data-lesson")){ if(window.openLesson) openLesson(b.dataset.lesson); }
-        else if(b.hasAttribute("data-info")){ store.set("mm-showinfo",!store.get("mm-showinfo",false)); applyLayers(); }
+        else if(b.hasAttribute("data-info")){ const on=!store.get("mm-showinfo",false); store.set("mm-showinfo",on); applyLayers();
+          // the open card draws its highlights again and keeps them while Show info is on; turning it off lets them go
+          root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o._closing) return; if(on) drugHighlights(o,{hold:true}); else drugHighlightsOff(o); }); }
         else if(b.dataset.listen){ if(window.ttsToggle) ttsToggle([b.dataset.listen],false); }
         else if(b.dataset.study){ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); } }));
       let seenD=store.get("mm-seenDrugs",{});
@@ -6041,8 +6102,8 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       let out="", p=0; [...cut].sort((a,b)=>a-b).forEach(i=>{ out+=esc(w.slice(p,i))+"­"; p=i; }); return out+esc(w.slice(p)); };
     const itemsFor=id=>id==="all"?TOPICS.flatMap(t=>all()[t.id]):(all()[id]||[]);
     const LENS=[["30","30 terms"],["60","60 terms"],["all","Every term"]];
-    // two ways to play: clear a board of a set size, or rush, 90 seconds on the clock, a second and a half back for every match
-    const MODES=[["clear","Clear the board"],["rush","Rush, 90 s"]]; const RUSH=90000, RUSH_HIT=1500, RUSH_MISS=3000;
+    // two ways to play: clear a board of a set size, or rush, three minutes on the clock, two seconds back for every match
+    const MODES=[["clear","Clear the board"],["rush","Rush, 3 min"]]; const RUSH=180000, RUSH_HIT=2000, RUSH_MISS=3000;
     const runKey=()=>TS.mode==="rush"?"rush":(TS.len||"60");
     const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
     // missed terms come first, then ones never matched, then the rest
@@ -6073,7 +6134,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       view.innerHTML=`<div class="tbsetup"><span class="eyebrow">Terminology</span><h2>Term Board</h2>
         <p class="intro">Read the explanation, tap its term. Quick taps score more and a streak multiplies everything. Matched terms drop off, the rest fall into place and new ones fall in, until the topic runs dry.</p>
         <div class="tblens" role="radiogroup" aria-label="How to play">${MODES.map(([k,l])=>`<button type="button" class="chip" role="radio" data-rmode="${k}" aria-checked="${k===(TS.mode||"clear")}" aria-pressed="${k===(TS.mode||"clear")}">${l}</button>`).join("")}</div>
-        ${rush?`<p class="note tbmnote">Match as many as you can before the clock runs out. Every match puts a second and a half back, every miss takes three.</p>`:`<div class="tblens" role="radiogroup" aria-label="How many terms">${LENS.map(([k,l])=>`<button type="button" class="chip" role="radio" data-len="${k}" aria-checked="${k===len}" aria-pressed="${k===len}">${l}</button>`).join("")}</div>`}
+        ${rush?`<p class="note tbmnote">Match as many as you can before the clock runs out. Every match puts two seconds back, every miss takes three.</p>`:`<div class="tblens" role="radiogroup" aria-label="How many terms">${LENS.map(([k,l])=>`<button type="button" class="chip" role="radio" data-len="${k}" aria-checked="${k===len}" aria-pressed="${k===len}">${l}</button>`).join("")}</div>`}
         <div class="tbtopics">${tile("all","Everything","Every topic mixed",38,total)}${TOPICS.map(t=>tile(t.id,t.n,t.d,t.h,(all()[t.id]||[]).length)).join("")}</div></div>`;
       leftEl.textContent=""; scoreEl.textContent=fmtN(0); combo(0,true); }
     function bind(){
@@ -6089,7 +6150,9 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
     // ----- one run -----
     const MULT=[1,1,1,2,2,2,3,3,3,3,4,4,4,4,4,5];
     const multOf=s=>MULT[Math.min(s,MULT.length-1)];
-    const WIN=10000; // the speed bonus drains over this long
+    // each explanation gives you a long, unhurried while: the speed bonus drains over WIN, a third of the wrong tiles clear at T1 and
+    // another third at T2, and the answer glows at T3
+    const WIN=30000, T1=20000, T2=27000, T3=35000;
     function start(id,len){ stopGame(); const rush=len==="rush"; const pool=poolFor(id,rush?"all":len); if(!pool.length) return; setMode("play"); ov.dataset.run=rush?"rush":"clear";
       view.innerHTML=`<div class="tbplay"><div class="tbclue" id="tb-clue" aria-live="polite"><span class="eyebrow" id="tb-ctop"></span><p id="tb-ctext"></p><div class="tbnote" id="tb-note"></div><span class="tbtime"><i id="tb-time"></i></span></div><div class="tbboard" id="tb-board"><div class="tbgrid" id="tb-grid"></div><canvas class="tbfx" id="tb-fx" aria-hidden="true"></canvas></div></div>`;
       const board=view.querySelector("#tb-board"), grid=view.querySelector("#tb-grid");
@@ -6120,10 +6183,10 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       tl.el.querySelector(".tbin").animate([{transform:"scale(1,1)"},{transform:"scale(1.035,.93)",offset:.4},{transform:"scale(1,1)"}],{duration:spd(230),delay:(delay||0)+dur,easing:"ease-out"}); }
     // long words step down a size until they fit their tile
     // only a word too wide for its tile gets its break points, so short words never split just to fill a line
-    const meas=document.createElement("canvas").getContext("2d");
+    let mc=null; const meas=()=>mc||(mc=document.createElement("canvas").getContext("2d"));
     function fit(tl){ const w=tl.el.querySelector(".tbw"), words=tl.it.t.split(" ");
-      for(const s of ["","s1","s2","s3"]){ w.className="tbw"+(s?" "+s:""); const cs=getComputedStyle(w); meas.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; const room=w.clientWidth-1;
-        w.innerHTML=words.map(x=>meas.measureText(x).width>room?soft(x):esc(x)).join(" ");
+      for(const s of ["","s1","s2","s3"]){ w.className="tbw"+(s?" "+s:""); const cs=getComputedStyle(w); const M=meas(); M.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; const room=w.clientWidth-1;
+        w.innerHTML=words.map(x=>M.measureText(x).width>room?soft(x):esc(x)).join(" ");
         if(w.scrollWidth<=w.clientWidth+1&&w.scrollHeight<=tl.el.clientHeight-10) return; }
       w.classList.add("brk"); }
     const fitAll=()=>G.cols.flat().forEach(fit);
@@ -6152,9 +6215,9 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
       g.t0=performance.now(); g.paused=0; if(g.rush&&!g.tEnd){ g.tEnd=g.t0+RUSH; g.tick=setInterval(clock,200); }
       // left too long, the board helps: wrong tiles clear away in thirds, then the answer glows
       const wrong=shuffle(on.filter(t=>t!==pick)), third=Math.ceil(wrong.length/3);
-      g.timers.push(setTimeout(()=>wrong.slice(0,third).forEach(t=>t.el.classList.add("out")),7000));
-      g.timers.push(setTimeout(()=>wrong.slice(third,third*2).forEach(t=>t.el.classList.add("out")),10500));
-      g.timers.push(setTimeout(()=>{ pick.el.classList.add("hint"); g.revealed=true; },14000)); g.revealed=false; }
+      g.timers.push(setTimeout(()=>wrong.slice(0,third).forEach(t=>t.el.classList.add("out")),T1));
+      g.timers.push(setTimeout(()=>wrong.slice(third,third*2).forEach(t=>t.el.classList.add("out")),T2));
+      g.timers.push(setTimeout(()=>{ pick.el.classList.add("hint"); g.revealed=true; },T3)); g.revealed=false; }
     function tap(tl){ const g=G; if(!g||g.ended||g.busy||!g.target||tl.el.classList.contains("out")) return; const ms=performance.now()-g.t0;
       if(tl===g.target) hit(tl,ms); else miss(tl); }
     function hit(tl,ms){ const g=G; g.busy=true; clearTimers(); try{ feedback(true); }catch(e){}
@@ -6222,8 +6285,8 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
     document.addEventListener("visibilitychange",()=>{ const g=G; if(!g||g.ended||!g.target) return; const bar=view.querySelector("#tb-time");
       if(document.hidden){ g.hiddenAt=performance.now(); clearTimers(); clearInterval(g.tick); if(bar&&bar._a) bar._a.pause(); }
       else if(g.hiddenAt){ const away=performance.now()-g.hiddenAt; g.t0+=away; if(g.rush&&g.tEnd){ g.tEnd+=away; g.tick=setInterval(clock,200); } g.hiddenAt=0; if(bar&&bar._a) bar._a.play(); const el=performance.now()-g.t0, on=g.cols.flat(), wrong=shuffle(on.filter(t=>t!==g.target&&!t.el.classList.contains("out"))), half=Math.ceil(wrong.length/2), tg=g.target;
-        if(el<10500) g.timers.push(setTimeout(()=>wrong.slice(0,half).forEach(t=>t.el.classList.add("out")),Math.max(0,(el<7000?7000:10500)-el)));
-        g.timers.push(setTimeout(()=>{ tg.el.classList.add("hint"); g.revealed=true; },Math.max(0,14000-el))); } });
+        if(el<T2) g.timers.push(setTimeout(()=>wrong.slice(0,half).forEach(t=>t.el.classList.add("out")),Math.max(0,(el<T1?T1:T2)-el)));
+        g.timers.push(setTimeout(()=>{ tg.el.classList.add("hint"); g.revealed=true; },Math.max(0,T3-el))); } });
     window.addEventListener("resize",()=>{ if(!G||G.ended) return; const C=G.C; layout(); if(G.C!==C){ G.C=C; } G.cols.forEach(col=>col.forEach(t=>{ t.el.style.width=G.tw+"px"; t.el.style.height=G.th+"px"; t.i=-1; const i=col.indexOf(t); t.i=i; const [x,y]=xy(t.c,i); t.el.style.transform=`translate3d(${x}px,${y}px,0)`; })); fitAll(); });
     window.openTermBoard=open;
     // the glossary is sorted once, in idle time after the intro, so the games page never waits on it
