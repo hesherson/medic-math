@@ -1737,7 +1737,7 @@ li.tnode .l1.stack .dose{flex:1 1 100%;text-align:left;white-space:normal}
 .dg-name{flex-direction:column;align-items:flex-start;gap:3px}
 .dg-brand{display:block;font-size:12.5px;line-height:1.25;padding-left:26px}
 /* the title grows and shrinks with the card instead of jumping */
-.dg-name h3{transition:font-size .6s cubic-bezier(.83,0,.17,1)}
+.dg-name h3{transition:font-size .6s cubic-bezier(.7,0,.2,1)}
 details.drug.closing .dg-name h3{font-size:18px}
 /* every box inside a card is the same lighter pane of glass, "How it works" included, with the same type */
 .how,.dg-grid section{background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);background-repeat:no-repeat;
@@ -1797,7 +1797,7 @@ html.hdrmin .stickybar{top:auto}
 .lvlcard.open,.lvlcard.folding{cursor:auto}
 .lvlcard.open:active,.lvlcard.folding:active{transform:none;filter:none}
 .lvlcard.open>:not(.lvmore){cursor:pointer}
-.lvlcard .tapgo{transition:transform .72s cubic-bezier(.83,0,.17,1),top .72s cubic-bezier(.83,0,.17,1)}
+.lvlcard .tapgo{transition:transform .72s cubic-bezier(.7,0,.2,1),top .72s cubic-bezier(.7,0,.2,1)}
 .lvlcard.open .tapgo{top:56px;transform:rotate(90deg)}
 /* the three counts spread out into tiles of their own */
 .lvlcard>.statline b{display:inline-block;transform-origin:0 60%}
@@ -1876,12 +1876,12 @@ details.scen>summary{position:relative;padding:12px 44px 12px 14px}
 details.scen{contain-intrinsic-size:auto 62px}
 
 /* ================= v66 ================= */
-:root{--eq:cubic-bezier(.83,0,.17,1)}
+:root{--eq:cubic-bezier(.7,0,.2,1)}
 /* ----- an open/close arrow only ever turns: it never moves up, down or sideways ----- */
-details.drug>summary::after{top:18px;margin-top:0;transition:transform .45s var(--eq)}
-details.method>summary::after,details.trick>summary::after,details.scen>summary::after,details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{top:50%;margin-top:-5px;transition:transform .45s var(--eq)}
-details.fold>summary::after,details.subfold>summary::after{transition:transform .45s var(--eq)}
-.lvlcard .tapgo,.lvlcard.open .tapgo{top:47px;margin-top:0;transition:transform .72s var(--eq)}
+details.drug>summary::after{top:18px;margin-top:0;transition:transform .38s var(--eq)}
+details.method>summary::after,details.trick>summary::after,details.scen>summary::after,details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{top:50%;margin-top:-5px;transition:transform .38s var(--eq)}
+details.fold>summary::after,details.subfold>summary::after{transition:transform .38s var(--eq)}
+.lvlcard .tapgo,.lvlcard.open .tapgo{top:47px;margin-top:0;transition:transform .6s var(--eq)}
 @media (max-height:760px){ #panel-today .lvlcard .tapgo{top:33px} }
 /* the trick's one-line summary stays put when it opens, so its header never changes height */
 details.trick[open] .tk-prev{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
@@ -1910,7 +1910,7 @@ details.drug.rulemove .dg-facts{border-top-color:transparent!important}
 .popgrp.adult li.rtitem::before{background:var(--adult)} .popgrp.peds li.rtitem::before{background:var(--peds)}
 /* ----- an open drug card pushes the page strip up under the bar and pins right below it; folding it lets the strip back down ----- */
 .top .subnav{clip-path:inset(0 -60px -60px -60px)}
-.top .subnav>.ptrack{transition:transform .6s var(--eq),opacity .45s var(--eq)}
+.top .subnav>.ptrack{transition:transform .5s var(--eq),opacity .4s var(--eq)}
 html.drugopen .top .subnav>.ptrack{transform:translateY(calc(-100% - 14px));opacity:0;pointer-events:none}
 html.drugopen details.drug[open]>summary{top:calc(var(--barh,58px) + env(safe-area-inset-top,0px))}
 @media (max-width:600px){ html.drugopen.hdrmin details.drug[open]>summary{top:calc(var(--barh,58px) - 16px + env(safe-area-inset-top,0px))} }
@@ -1930,9 +1930,9 @@ html.splashing .navveil{display:none}
   box-shadow:inset 0 1px 0 var(--glass-edge);font:500 15px/1.2 var(--body);letter-spacing:0;text-transform:none;padding:7px 34px 7px 12px;min-height:34px}
 .ptsw::after{color:var(--muted);opacity:1}
 /* ----- the scroll reveal runs on the house easing everywhere ----- */
-.reveal.in{animation:revealUp .75s var(--eq) backwards}
+.reveal.in{animation:revealUp .62s var(--eq) backwards}
 /* the XP box's counts change into tiles on the same easing */
-.lvlcard>.statline>span{transition:background-color .72s var(--eq),border-color .72s var(--eq),box-shadow .72s var(--eq)}
+.lvlcard>.statline>span{transition:background-color .6s var(--eq),border-color .6s var(--eq),box-shadow .6s var(--eq)}
 .lvlcard:not(.open) .lvbadges i.ov{display:none}
 .lvlcard.open .lvbadges i.more{display:none}
 /* the intro: the name sits on a black cut-out exactly its width */
@@ -1954,6 +1954,60 @@ html.drugopen header.top .ptrack{pointer-events:none}
 .pthumb>i{position:absolute;top:0;bottom:0;left:0;background:var(--teal);transform-origin:0 0;will-change:transform;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
 .pthumb>.pt-l,.pthumb>.pt-r{width:20px;border-radius:var(--r-ctl)} .pthumb>.pt-l{clip-path:inset(0 50% 0 0)} .pthumb>.pt-r{clip-path:inset(0 0 0 50%)}
 .pthumb>.pt-m{width:100px;box-shadow:0 6px 14px -8px color-mix(in srgb,var(--teal) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.16)}
+
+/* ================= v68: progressive blur under the bars ================= */
+/* Safari draws a blur with a fading mask as a hard-edged box, so each soft edge is built from stacked layers instead: the blur is strongest
+   right at the bar and steps down in small amounts to nothing, with a tint that fades the same way, so the page goes soft as it slides under. */
+details.drug[open]>summary::before{content:none}
+.sband{display:none}
+details.drug[open]>summary .sband{display:block;visibility:hidden;position:absolute;left:0;right:0;top:100%;height:32px;pointer-events:none}
+details.drug[open]>summary.stuck .sband{visibility:visible}
+.sband b,.hveil b,.navveil b{position:absolute;left:0;right:0;display:block;pointer-events:none}
+.sband b{top:0}
+.sband b:nth-child(1){height:100%;-webkit-backdrop-filter:blur(.8px);backdrop-filter:blur(.8px)}
+.sband b:nth-child(2){height:70%;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.sband b:nth-child(3){height:42%;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.sband b:nth-child(4){height:18%;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+.sband::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,color-mix(in srgb,var(--surface) 62%,transparent),color-mix(in srgb,var(--surface) 22%,transparent) 45%,transparent)}
+/* the header: one even frosted layer behind the strip, then a progressive edge under it while the page is scrolled */
+header.top::after{content:none}
+.hveil{position:absolute;left:0;right:0;top:var(--barh,58px);bottom:0;z-index:-2;pointer-events:none;transition:top .34s var(--eq),bottom .34s var(--eq)}
+.hveil b{top:0}
+.hveil b:nth-child(1){bottom:0;-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px)}
+.hveil b:nth-child(2){bottom:7px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.hveil b:nth-child(3){bottom:13px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.hveil b:nth-child(4){bottom:19px;-webkit-backdrop-filter:blur(9px) saturate(1.1);backdrop-filter:blur(9px) saturate(1.1)}
+.hvin::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 46%,transparent),color-mix(in srgb,var(--bg) 46%,transparent) calc(100% - 20px),transparent)}
+@media (max-width:600px){ html.hdrmin .hveil{top:calc(var(--barh,58px) - 16px);bottom:-4px} }
+html.hdrnow .hveil{transition:none!important}
+/* the bottom bar: the same edge, rising from the bar */
+@media (max-width:600px){ .navveil{-webkit-backdrop-filter:none;backdrop-filter:none;-webkit-mask-image:none;mask-image:none;height:28px}
+  .navveil b{bottom:0}
+  .navveil b:nth-child(1){height:100%;-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px)}
+  .navveil b:nth-child(2){height:62%;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  .navveil b:nth-child(3){height:30%;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .navveil::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,color-mix(in srgb,var(--bg) 40%,transparent),transparent)} }
+
+/* the drug card header's line is drawn by the wiper while the card changes, so the real one never fades in or out on its own */
+details.drug>summary{transition:transform .14s cubic-bezier(.3,.7,.3,1),filter .14s ease,background-color .36s var(--eq)}
+/* v68: a closing card keeps its header pinned under the bar while the strip comes back down, so the header never jumps */
+details.drug.shut[open]>summary{top:calc(var(--barh,58px) + env(safe-area-inset-top,0px))}
+@media (max-width:600px){ html.hdrmin details.drug.shut[open]>summary{top:calc(var(--barh,58px) - 16px + env(safe-area-inset-top,0px))} }
+/* v68: the soft band under the header rides with the page strip: it slides up out of sight with it when a drug card pins, and comes back down with it */
+.hveil{overflow:hidden}
+.hvin{position:absolute;inset:0;transition:transform .5s var(--eq)}
+html.drugopen .hvin{transform:translateY(calc(-100% - 14px))}
+html.hdrnow .hvin{transition:none!important}
+.dg-ruleg>b{position:absolute;inset:0;display:block;background:color-mix(in srgb,var(--ink) 42%,transparent);opacity:0}
+/* v68: the stat tiles' glass is a plate behind them that fades in after they open out and fades off before they fold back, so their change of shape never shows */
+.lvlcard.open>.statline>span{background:none;border-color:transparent;box-shadow:none;position:relative;z-index:0}
+.lvlcard.open>.statline>span::before{content:"";position:absolute;inset:-1px;border-radius:inherit;z-index:-1;pointer-events:none;background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge);animation:lvchin .6s var(--eq) both}
+.lvlcard.open.chromeout>.statline>span::before{animation:lvchout var(--cho,.36s) cubic-bezier(.8,0,.3,1) both}
+@keyframes lvchin{from{opacity:0}to{opacity:1}}
+@keyframes lvchout{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){ .lvlcard.open>.statline>span::before,.lvlcard.open.chromeout>.statline>span::before{animation:none} }
+.statline>span>i{font-style:normal}
+.lvlcard>.statline>span>i{display:inline-block}
 </style>
 </head>
 <body>
@@ -1981,7 +2035,8 @@ html.drugopen header.top .ptrack{pointer-events:none}
     <div class="chips"><button type="button" class="chip" data-ptset="10">10</button><button type="button" class="chip" data-ptset="20">20</button><button type="button" class="chip" data-ptset="50">50</button><button type="button" class="chip" data-ptset="70">70</button><button type="button" class="chip" data-ptset="80">80</button><button type="button" class="chip" data-ptset="100">100</button><button type="button" class="chip" data-ptset="120">120</button><button type="button" class="btn alt" id="pt-close">Done</button></div>
     <p class="note">Every drug card and calculator uses this weight.</p>
   </div>
-  <i class="navveil" aria-hidden="true"></i>
+  <i class="hveil" aria-hidden="true"><i class="hvin"><b></b><b></b><b></b><b></b></i></i>
+  <i class="navveil" aria-hidden="true"><b></b><b></b><b></b></i>
   <nav class="nav" aria-label="Sections">
     <span class="navthumb" aria-hidden="true"></span>
     <button type="button" data-g="today" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8V11h-8zm0-18v6h8V3z"/></svg><span>Dashboard</span></button>
@@ -2018,7 +2073,7 @@ html.drugopen header.top .ptrack{pointer-events:none}
     <svg class="tapgo" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
     <div class="lvlring" id="lv-ring"></div>
     <div class="lvlinfo"><div class="lvtop"><span class="eyebrow">Level <b id="lv-n">1</b></span><span class="lvbadges" id="lv-badges" hidden></span></div><h2 id="lv-title">Candidate</h2><div class="xpbar"><i id="lv-bar"></i></div><span class="note" id="lv-next"></span></div>
-    <div class="statline"><span><b class="num" id="t-streak">0</b> day streak</span><span><b class="num" id="t-xpday">0</b> XP today</span><span><b class="num" id="t-mastered">0</b> mastered</span></div>
+    <div class="statline"><span><b class="num" id="t-streak">0</b> <i>day streak</i></span><span><b class="num" id="t-xpday">0</b> <i>XP today</i></span><span><b class="num" id="t-mastered">0</b> <i>mastered</i></span></div>
   </div>
   <div class="regbox tapbox" id="exam-card" role="button" tabindex="0" aria-label="Open your registry date"></div>
   <div class="actcard" id="assign-card" hidden></div>
@@ -2622,7 +2677,7 @@ html.drugopen header.top .ptrack{pointer-events:none}
   // finish), everything below it glides out of the way, and what is inside drops in one piece after another; closing runs it back.
   // Nothing jumps: the box and the boxes it sits in are revealed by a clip, and the blocks under it move by transform. -----
   window.FOLD=(function(){
-    const EQ="cubic-bezier(.83,0,.17,1)", D=640;
+    const EQ="cubic-bezier(.7,0,.2,1)", D=540;
     const still=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
     const clear=c=>c==="rgba(0, 0, 0, 0)"||c==="transparent";
     const isBox=el=>{ const cs=getComputedStyle(el); return !clear(cs.backgroundColor)||cs.backgroundImage!=="none"||parseFloat(cs.borderBottomWidth)>0; };
@@ -2638,26 +2693,34 @@ html.drugopen header.top .ptrack{pointer-events:none}
     const clip=(b,r)=>`inset(-60px 0 ${b}px 0 round 0 0 ${r} ${r})`;
     // the closed height of a fold that was opened some other way: closed for one measurement, then opened again before anything is drawn
     function closedH(d){ d.dataset.fold="1"; d.open=false; const h=d.getBoundingClientRect().height; d.open=true; return h; }
+    // the timing of one fold: the box and what is under it take DD; the pieces inside start one after another (only the ones on screen
+    // are counted, so a long fold never waits on pieces you cannot see) and each takes dk. T is when the last thing lands.
+    const EQR="cubic-bezier(.8,0,.3,1)"; // the house curve run backwards in time, so a fold closes as the exact reverse of how it opened
+    function plan(o,kids){ const DD=o.duration||D, kd=o.kidDelay!=null?o.kidDelay:50, dk=Math.max(300,DD-120), vh=window.innerHeight||800; let j=0;
+      const K=kids.map(k=>{ const r=k.getBoundingClientRect(), on=r.height>0&&r.bottom>-40&&r.top<vh+40; const x={k,on,s:kd+Math.min(j,9)*42}; if(on) j++; return x; });
+      const T=Math.max(DD,...K.filter(x=>x.on).map(x=>x.s+dk)); return {DD,dk,K,T}; }
     function open(d,o){ o=o||{}; if(d._fa) finish(d); if(d.open) return;
       const S=shells(d), B=below(d,0), h0=d.getBoundingClientRect().height; d._ch=h0; d.dataset.fold="1";
       if(o.before) o.before(); d.open=true; if(o.after) o.after();
       const h1=d.getBoundingClientRect().height, dh=h1-h0;
       if(still()||dh<2){ delete d.dataset.fold; if(o.done) o.done(); return; }
-      const A=[], R=rad(d), t={duration:D,easing:EQ};
+      const P=plan(o,o.kids?o.kids(d):kidsOf(d)), A=[], R=rad(d), t={duration:P.DD,easing:EQ};
       A.push(d.animate([{clipPath:clip(dh,R)},{clipPath:clip(0,R)}],t));
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(dh,r)},{clipPath:clip(0,r)}],t)); });
       B.forEach(([el,t0])=>{ const t1=el.getBoundingClientRect().top; if(Math.abs(t1-t0)>.5) A.push(el.animate([{transform:`translateY(${(t0-t1).toFixed(1)}px)`},{transform:"none"}],t)); });
-      (o.kids?o.kids(d):kidsOf(d)).forEach((k,i)=>A.push(k.animate([{opacity:0,transform:"translateY(-14px)"},{opacity:1,transform:"none"}],{duration:D-100,delay:60+Math.min(i,9)*48,easing:EQ,fill:"backwards"})));
+      P.K.forEach(x=>A.push(x.k.animate([{opacity:0,transform:"translateY(-14px)"},{opacity:1,transform:"none"}],{duration:P.dk,delay:x.s,easing:EQ,fill:"backwards"})));
       d._fa=A; d._fo=o; A[0].finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
+    // closing is the opening played backwards: the pieces inside lift away first, last one first, then the box folds up and what is under it
+    // glides back, every move on the reversed curve, so everything leaves along the path it came in by
     function close(d,o){ o=o||{}; if(d._fa) finish(d); if(!d.open) return;
       const h1=d.getBoundingClientRect().height; let h0=d._ch; if(!h0||h0>=h1) h0=closedH(d); const dh=h1-h0;
-      if(still()||dh<2){ if(o.before) o.before(); if(o.end) o.end(); d.open=false; if(o.done) o.done(); return; }
-      const S=shells(d), B=below(d,dh+60); d.dataset.fold="1"; d._closing=true; if(o.before) o.before();
-      const A=[], R=rad(d), t={duration:D,easing:EQ,fill:"forwards"};
+      if(still()||dh<2){ if(o.before) o.before({T:0}); if(o.end) o.end(); d.open=false; if(o.done) o.done(); return; }
+      const S=shells(d), B=below(d,dh+60), P=plan(o,o.kids?o.kids(d):kidsOf(d)); d.dataset.fold="1"; d._closing=true; if(o.before) o.before(P);
+      const A=[], R=rad(d), t={duration:P.DD,delay:P.T-P.DD,easing:EQR,fill:"both"};
       A.push(d.animate([{clipPath:clip(0,R)},{clipPath:clip(dh,R)}],t));
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(0,r)},{clipPath:clip(dh,r)}],t)); });
       B.forEach(([el])=>A.push(el.animate([{transform:"none"},{transform:`translateY(${(-dh).toFixed(1)}px)`}],t)));
-      (o.kids?o.kids(d):kidsOf(d)).reverse().forEach((k,i)=>A.push(k.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-10px)"}],{duration:280,delay:Math.min(i,8)*22,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"})));
+      P.K.forEach(x=>{ if(x.on) A.push(x.k.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:Math.max(0,P.T-x.s-P.dk),easing:EQR,fill:"both"})); });
       d._fa=A; d._fo=o; A[0].finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
     // land whatever is running on its end state at once
     function finish(d){ const A=d._fa, o=d._fo||{}; d._fa=null; d._fo=null;
@@ -2668,7 +2731,7 @@ html.drugopen header.top .ptrack{pointer-events:none}
     const SEL="details.trick,details.method,details.scen,details.fold,details.subfold";
     document.addEventListener("click",e=>{ const sm=e.target.closest&&e.target.closest("summary"); if(!sm) return; const d=sm.parentElement; if(!d||!d.matches(SEL)) return;
       const ctl=e.target.closest("a,button,input,select,textarea,label"); if(ctl&&sm.contains(ctl)) return; e.preventDefault(); toggle(d); },true);
-    return {open,close,toggle,finish,EQ,D,isBox,below,clip,rad}; })();
+    return {open,close,toggle,finish,EQ,EQR,D,isBox,below,clip,rad}; })();
   // reveal on scroll: blocks rise in as they enter the viewport, every time they enter
   (function reveal(){
     if(!("IntersectionObserver" in window)||!("MutationObserver" in window)||!document.body) return;
@@ -2686,7 +2749,9 @@ html.drugopen header.top .ptrack{pointer-events:none}
     new MutationObserver(ms=>ms.forEach(m=>{ m.removedNodes.forEach(drop); m.addedNodes.forEach(n=>{ if(n.nodeType===1&&n.isConnected) mark(n); }); })).observe(document.body,{childList:true,subtree:true});
   })();
   // scroll the page under script control; touches and wheel are ignored until it lands
-  window.smoothScrollTo=(getTop,ms)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||520; const hold=380; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=x=>1-Math.pow(1-x,3); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop)); window.scrollTo(0,p<1?start+(target-start)*ease(p):target); if(el<ms+hold) requestAnimationFrame(step); else done(); }; requestAnimationFrame(step); };
+  // a CSS cubic-bezier as a function, so a scroll can move in step with a transition on the same curve
+  window.bez=(x1,y1,x2,y2)=>{ const f=(a,b,t)=>3*a*t*(1-t)*(1-t)+3*b*t*t*(1-t)+t*t*t; return x=>{ if(x<=0) return 0; if(x>=1) return 1; let lo=0, hi=1, t=x; for(let i=0;i<24;i++){ const v=f(x1,x2,t); if(Math.abs(v-x)<1e-5) break; if(v<x) lo=t; else hi=t; t=(lo+hi)/2; } return f(y1,y2,t); }; };
+  window.smoothScrollTo=(getTop,ms,curve,hold)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||520; hold=hold==null?380:hold; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=curve||(x=>1-Math.pow(1-x,3)); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop)); window.scrollTo(0,p<1?start+(target-start)*ease(p):target); if(el<ms+hold) requestAnimationFrame(step); else done(); }; requestAnimationFrame(step); };
   (function hdr(){ const h=document.querySelector("header.top"); if(!h) return; const de=document.documentElement, sub=document.getElementById("subnav");
     // --hdr is the whole header, --barh just the coloured bar above the page strip, which the glass bar behind it is sized to
     // set where they are used and only when they change: a variable changed on the root makes every element on the page restyle
@@ -2741,7 +2806,7 @@ html.drugopen header.top .ptrack{pointer-events:none}
   // the blur-through for a page that changes in place: the old view blurs out to nothing, the new one comes into focus
   window.blurSwap=(el,fn)=>{ if(!el||!el.animate||reduceMotion()||document.hidden){ fn(); return; }
     const o=el.animate([{opacity:1,filter:"blur(0px)"},{opacity:0,filter:"blur(9px)"}],{duration:180,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"});
-    o.finished.then(()=>{ fn(); o.cancel(); el.animate([{opacity:0,filter:"blur(10px)",transform:"scale(.985)"},{opacity:1,filter:"blur(0px)",transform:"none"}],{duration:480,easing:"cubic-bezier(.83,0,.17,1)"}); },()=>{ fn(); }); };
+    o.finished.then(()=>{ fn(); o.cancel(); el.animate([{opacity:0,filter:"blur(10px)",transform:"scale(.985)"},{opacity:1,filter:"blur(0px)",transform:"none"}],{duration:480,easing:"cubic-bezier(.7,0,.2,1)"}); },()=>{ fn(); }); };
   // which way the page slides: deeper into the app goes left, back goes right
   const dirOf=(a,b,o)=>o&&o.back?"back":ORDER.indexOf(b)>=ORDER.indexOf(a)?"fwd":"back";
   // work that needs the new page laid out waits for the swap when a transition is running
@@ -2845,7 +2910,7 @@ html.drugopen header.top .ptrack{pointer-events:none}
     const zdst=zoom&&P.zr?(ZOOM[id]&&from==="today"?ztop(id):$(ZOOM[from])):null;
     if(zdst){ const r=zdst.getBoundingClientRect(), zr=P.zr; if(r.width&&r.height) zdst.animate([{transformOrigin:"0 0",transform:`translate(${zr.left-r.left}px,${zr.top-r.top}px) scale(${zr.width/r.width},${zr.height/r.height})`},{transformOrigin:"0 0",transform:"none"}],{duration:380,easing:EASE});
       entering=nw.animate([{opacity:0},{opacity:1}],{duration:220,easing:"ease-out"}); }
-    else if(P.blur) entering=nw.animate([{opacity:0,filter:"blur(10px)",transform:"scale(.985)"},{opacity:1,filter:"blur(0px)",transform:"none"}],{duration:480,easing:"cubic-bezier(.83,0,.17,1)"});
+    else if(P.blur) entering=nw.animate([{opacity:0,filter:"blur(10px)",transform:"scale(.985)"},{opacity:1,filter:"blur(0px)",transform:"none"}],{duration:480,easing:"cubic-bezier(.7,0,.2,1)"});
     else entering=nw.animate([{opacity:0,transform:`translateX(${P.dir*(P.near?18:30)}px)`},{opacity:1,transform:"none"}],{duration:P.near?240:280,easing:EASE});
     entering.finished.then(()=>{ entering=null; },()=>{});
   }
@@ -3458,7 +3523,7 @@ html.drugopen header.top .ptrack{pointer-events:none}
           <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span>${(d.quick.lines||[]).length?`<div class="dlines">${d.quick.lines.map(l=>`<div class="dl"><span class="rt">${l.tag}</span><span class="dv"><b>${tight(l.text)}</b>${l.ctx?` <span class="dx">${l.ctx}</span>`:""}</span></div>`).join("")}</div>`:`<b>${tight(d.quick.dose.replace(/\.$/,""))}</b>`}</div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
-        <div class="dg-tools"><button type="button" class="chip listen" data-listen="${d.id}" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen</button>${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
+        <div class="dg-tools"><button type="button" class="chip listen" data-listen="${d.id}" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen</button>${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div><i class="sband" aria-hidden="true"><b></b><b></b><b></b><b></b></i></summary>
         <div class="dg-body" data-lazy="1"></div></details>`;
     }
     // the open card's full body, built the first time it opens so the closed list stays light
@@ -3502,8 +3567,10 @@ html.drugopen header.top .ptrack{pointer-events:none}
     }
     function renderDoses(){ document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); }); }
     function headerH(){ const h=document.querySelector("header.top"); if(!h) return 0; if(document.documentElement.classList.contains("drugopen")){ const sub=$("subnav"), min=document.documentElement.classList.contains("hdrmin")&&window.innerWidth<=600; return (sub&&!sub.hidden?sub.offsetTop:h.offsetHeight)-(min?16:0); } return h.getBoundingClientRect().height; }
-    // the target is worked out once: a card's top does not move while it opens or folds (only what is under it does)
-    function scrollToCard(el){ const y=el.getBoundingClientRect().top+window.scrollY-headerH()-8; if(Math.abs(y-window.scrollY)<2) return; smoothScrollTo(y); }
+    // the target follows the card (cards above it that had never been drawn take their real height as the page passes them), but it is
+    // only measured every few frames, so the glide never forces the page to lay itself out on every frame
+    function scrollToCard(el){ const at=()=>el.getBoundingClientRect().top+window.scrollY-headerH()-8; const y0=at(); if(Math.abs(y0-window.scrollY)<2) return;
+      let t=performance.now(), v=y0; smoothScrollTo(()=>{ const n=performance.now(); if(n-t>90){ t=n; v=at(); } return v; }); }
     window.revealDrug=(id,scroll)=>{ const el=$("drug-"+id); if(!el) return false; fill(el); if(!el.open) openCard(el); else if(scroll!==false) scrollToCard(el); return true; };
     // ----- a drug card opens on the shared fold, with steps of its own: the preview's facts fade where they sit, the faint rule glides from
     // above them to the foot of the card's header and widens to the full card, the tools come in, the page strip slides up out of the way so
@@ -3512,38 +3579,56 @@ html.drugopen header.top .ptrack{pointer-events:none}
     const HTML=document.documentElement;
     const drugOpen=on=>{ if(HTML.classList) HTML.classList.toggle("drugopen",!!on); };
     // where something sits inside the card, measured from the card's padding box
-    const rel=(el,d)=>{ const a=el.getBoundingClientRect(), b=d.getBoundingClientRect(); return {x:a.left-b.left-d.clientLeft,y:a.top-b.top-d.clientTop,w:a.width}; };
-    function ruleGhost(d,from,to){ const g=document.createElement("i"); g.className="dg-ruleg"; g.setAttribute("aria-hidden","true"); d.appendChild(g); const W=Math.max(1,d.clientWidth);
-      const tf=r=>`translate(${r.x.toFixed(1)}px,${r.y.toFixed(1)}px) scaleX(${Math.min(1,r.w/W).toFixed(4)})`; d.classList.add("rulemove");
-      const end=()=>{ g.remove(); if(!d.querySelector(".dg-ruleg")) d.classList.remove("rulemove"); };
-      g.animate([{transform:tf(from)},{transform:tf(to)}],{duration:FOLD.D,easing:FOLD.EQ,fill:"forwards"}).finished.then(end,end); }
-    // the preview's lines while the card changes: opening folds them up and away, the last line first; closing lets them back down into place
-    function factsGhost(d,r,mode,delay){ const f=d.querySelector(".dg-facts"); if(!f||!r) return null; const g=document.createElement("div"); g.className="dg-factsg"; g.setAttribute("aria-hidden","true"); g.innerHTML=f.innerHTML;
-      Object.assign(g.style,{left:r.x+"px",top:r.y+"px",width:r.w+"px"}); d.appendChild(g); const rows=[...g.children], E=FOLD.EQ;
-      if(mode==="out"){ const end=()=>g.remove();
-        g.animate([{clipPath:"inset(0 0 0 0)"},{clipPath:"inset(0 0 100% 0)"}],{duration:480,easing:E,fill:"forwards"}).finished.then(end,end);
-        rows.slice().reverse().forEach((row,i)=>row.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-14px)"}],{duration:380,delay:i*50,easing:E,fill:"forwards"})); }
-      else { delay=delay||0;
-        g.animate([{clipPath:"inset(0 0 100% 0)"},{clipPath:"inset(0 0 0 0)"}],{duration:460,delay,easing:E,fill:"backwards"});
-        rows.forEach((row,i)=>row.animate([{opacity:0,transform:"translateY(-14px)"},{opacity:1,transform:"none"}],{duration:400,delay:delay+i*55,easing:E,fill:"backwards"})); }
-      return g; }
-    const ruleOpen=d=>{ const sm=d.querySelector("summary"); return {x:0,y:sm.getBoundingClientRect().bottom-d.getBoundingClientRect().top-d.clientTop-1,w:d.clientWidth}; };
+    const rel=(el,d)=>{ const a=el.getBoundingClientRect(), b=d.getBoundingClientRect(); return {x:a.left-b.left-d.clientLeft,y:a.top-b.top-d.clientTop,w:a.width,h:a.height}; };
+    const ruleOpen=sm=>({x:0,y:sm.offsetHeight-sm.clientTop-1,w:sm.clientWidth});
+    // ----- the separator is the wiper. Opening: it sweeps down through the preview's lines, wiping them away as it passes and uncovering the
+    // buttons above it, then settles up into its place under the header. Closing runs it back: it dips, then sweeps up, wiping the buttons
+    // and uncovering the lines. It is the only thing that removes or reveals them, and every piece moves in step with it. -----
+    // opening runs the wiper on its curve; closing runs the same path backwards on the curve reversed in time
+    const WIPE=600, WE="cubic-bezier(.6,0,.25,1)", WER="cubic-bezier(.75,0,.4,1)";
+    const px=n=>n.toFixed(1)+"px";
+    function wipe(d,opening,delay){ const fr=d._fr, f=d.querySelector(".dg-facts"), sm=d.firstElementChild; if(!fr||!f||!sm) return; const W=Math.max(1,sm.clientWidth);
+      if(d._wipe) d._wipe.end(); const top=fr.y, bot=fr.y+fr.h, rest=ruleOpen(sm).y, S=opening?.7:.3;
+      const line=document.createElement("i"); line.className="dg-ruleg"; line.setAttribute("aria-hidden","true"); line.innerHTML="<b></b>";
+      const ghost=document.createElement("div"); ghost.className="dg-factsg"; ghost.setAttribute("aria-hidden","true"); ghost.innerHTML=f.innerHTML; Object.assign(ghost.style,{left:px(fr.x),top:px(fr.y),width:px(fr.w)});
+      sm.appendChild(ghost); sm.appendChild(line); d.classList.add("rulemove");
+      const at=(y,x,w)=>`translate(${px(x)},${px(y)}) scaleX(${Math.min(1,w/W).toFixed(4)})`, T={duration:WIPE,delay:delay||0,easing:opening?WE:WER,fill:"both"};
+      const all=`inset(${px(fr.h)} 0 0 0)`, none="inset(0px 0 0 0)";
+      const lineKF=opening?[{offset:0,transform:at(top,fr.x,fr.w)},{offset:S,transform:at(bot,fr.x,fr.w)},{offset:1,transform:at(rest,0,W)}]
+                          :[{offset:0,transform:at(rest,0,W)},{offset:S,transform:at(bot,fr.x,fr.w)},{offset:1,transform:at(top,fr.x,fr.w)}];
+      // the lines show below the wiper: opening wipes them from the top down, closing uncovers them from the bottom up
+      const factsKF=opening?[{offset:0,clipPath:none},{offset:S,clipPath:all},{offset:1,clipPath:all}]:[{offset:0,clipPath:all},{offset:S,clipPath:all},{offset:1,clipPath:none}];
+      const when=y=>{ const k=Math.max(0,Math.min(1,(y-top)/Math.max(1,bot-top))); return opening?S*k:S+(1-S)*(1-k); };
+      // the wiper brightens a little while it travels, so the eye can follow it, and is back to the plain rule colour at both ends
+      const glow=line.firstChild.animate([{offset:0,opacity:0},{offset:S*.6,opacity:1},{offset:.5*(S+1),opacity:1},{offset:1,opacity:0}],T);
+      const A=[line.animate(lineKF,T),ghost.animate(factsKF,T),glow];
+      // the buttons show above the wiper: uncovered as it passes down over them, wiped as it passes back up
+      [d.querySelector(".dg-tools"),d.querySelector(".dg-cls")].forEach(el=>{ if(!el||!el.offsetParent) return; const r=rel(el,sm), o1=when(r.y), o2=when(r.y+r.h), lo=Math.min(o1,o2), hi=Math.max(o1,o2)||.001;
+        const hid=`inset(0 0 ${px(r.h+2)} 0)`, shown="inset(0 0 0px 0)";
+        A.push(el.animate(opening?[{offset:0,clipPath:hid},{offset:lo,clipPath:hid},{offset:hi,clipPath:shown},{offset:1,clipPath:shown}]:[{offset:0,clipPath:shown},{offset:lo,clipPath:shown},{offset:hi,clipPath:hid},{offset:1,clipPath:hid}],T)); });
+      const end=()=>{ if(d._wipe!==W8) return; d._wipe=null; line.remove(); ghost.remove(); d.classList.remove("rulemove"); A.forEach(x=>{ try{ x.cancel(); }catch(e){} }); };
+      const W8={end}; d._wipe=W8; if(opening) A[0].finished.then(end,()=>{}); }
     function openCard(d){
       if(d._fa) FOLD.finish(d); if(d.open) return;
       // fold away any other open card at once, without moving the one you tapped
       root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o===d) return; if(o._fa) FOLD.finish(o); if(!o.open) return; const t0=d.getBoundingClientRect().top; o.dataset.auto="1"; o.open=false; const t1=d.getBoundingClientRect().top; if(Math.abs(t1-t0)>1) window.scrollTo(0,window.scrollY+(t1-t0)); });
-      const f=d.querySelector(".dg-facts"), fr=f?rel(f,d):null; d._fr=fr;
-      FOLD.open(d,{before:()=>fill(d), kids:parts,
-        after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(FOLD.D&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){ factsGhost(d,fr,"out"); if(fr) ruleGhost(d,fr,ruleOpen(d));
-            [d.querySelector(".dg-tools"),d.querySelector(".dg-cls")].forEach((x,i)=>{ if(x&&x.offsetParent) x.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:480,delay:200+i*40,easing:FOLD.EQ,fill:"backwards"}); }); } } });
+      const f=d.querySelector(".dg-facts"), fr=f?rel(f,d.firstElementChild):null; d._fr=fr; clearTimeout(d._sdt); d.classList.remove("shut");
+      FOLD.open(d,{before:()=>fill(d), kids:parts, duration:WIPE, kidDelay:260,
+        after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)) wipe(d,true); } });
       scrollToCard(d); }
     function closeCard(d){
       if(d._fa) FOLD.finish(d); if(!d.open) return;
-      FOLD.close(d,{kids:parts,
-        before:()=>{ drugOpen(false); if(d.getBoundingClientRect().top<headerH()) scrollToCard(d); if(d._fr) ruleGhost(d,ruleOpen(d),d._fr); const tl=d.querySelector(".dg-tools"); if(tl) tl.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(8px)"}],{duration:260,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"}).finished.then(()=>{},()=>{});
-          d._fg=factsGhost(d,d._fr,"in",230); },
-        end:()=>{ d.dataset.auto="1"; const tl=d.querySelector(".dg-tools"); if(tl&&tl.getAnimations) tl.getAnimations().forEach(a=>a.cancel()); },
-        done:()=>{ if(d._fg){ d._fg.remove(); d._fg=null; } } }); }
+      FOLD.close(d,{kids:parts, duration:WIPE, kidDelay:260,
+        // the wiper runs back in the last stretch, as it ran first on the way in; the strip comes back down at the very end, as it left first
+        before:P=>{ d.classList.add("shut"); const back=d.getBoundingClientRect().top<headerH()-1; if(back) scrollToCard(d); const T=(P&&P.T)||WIPE; wipe(d,false,Math.max(0,T-WIPE)); clearTimeout(d._sdt);
+          d._sdt=setTimeout(()=>{ const other=[...root.querySelectorAll("details.drug[open]")].some(o=>o!==d); if(!other&&(!d.open||d._closing)) dropStrip(d); },Math.max(back?540:0,T-500)); },
+        end:()=>{ d.dataset.auto="1"; if(d._wipe) d._wipe.end(); },
+        done:()=>{ if(d._wipe) d._wipe.end(); d.classList.remove("shut"); } }); }
+    // the page strip comes back down over the last half second, and the page glides down with it on the same curve, so the card's header
+    // never slips under the strip and never jumps
+    const STRIPE=window.bez?bez(.7,0,.2,1):null;
+    function dropStrip(d){ const was=d.getBoundingClientRect().top; drugOpen(false); const min=HTML.classList.contains("hdrmin")&&window.innerWidth<=600;
+      const need=headerH()-(min?16:0)+8-was; if(need>1) smoothScrollTo(Math.max(0,window.scrollY-need),500,STRIPE,0); }
     // the open card's header shows a soft blur under its lower edge only while it is pinned, so the page goes soft as it slides beneath
     { let tick=0; window.addEventListener("scroll",()=>{ if(tick) return; tick=requestAnimationFrame(()=>{ tick=0; const d=root.querySelector("details.drug[open]"); if(!d) return; const sm=d.firstElementChild; const st=sm.getBoundingClientRect().top-d.getBoundingClientRect().top>1; if(st!==sm.classList.contains("stuck")) sm.classList.toggle("stuck",st); }); },{passive:true}); }
     document.addEventListener("panel",e=>{ drugOpen(e.detail==="drugs"&&!!root.querySelector("details.drug[open]")); });
@@ -7311,41 +7396,78 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     // progress (registry areas, drugs, the last 30 days, badges, quiz mastery and speed) opens beneath them. Tapping the top folds it back.
     // Every element moves from where it was to where it goes, on the same slow start, quick rush and long soft finish as the rest of the app. -----
     (function xpBox(){ const card=$("lv-card"); if(!card) return;
-      const EQ="cubic-bezier(.83,0,.17,1)", D=720;
+      const EQ="cubic-bezier(.7,0,.2,1)", D=600;
       const still=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
       let more=null, live=[];
       function build(){ if(more) return more; more=document.createElement("div"); more.className="lvmore"; more.id="lv-more";
         const pg=$("panel-progress"); if(pg) [...pg.children].forEach(c=>{ if(!c.classList.contains("backchip")) more.appendChild(c); }); card.appendChild(more); more.querySelectorAll(".reveal").forEach(el=>{ if(el.parentElement!==more) el.classList.remove("reveal","in"); }); [...more.children].forEach(el=>el.classList.remove("in")); return more; }
       const movers=()=>[...card.querySelectorAll("#lv-ring,.lvtop>.eyebrow,#lv-badges>i,.lvlinfo>h2,.xpbar,#lv-next,.statline>span")];
       const rects=els=>new Map(els.map(el=>[el,el.getBoundingClientRect()]));
-      function stop(){ live.forEach(a=>{ try{ a.cancel(); }catch(e){} }); live=[]; card.classList.remove("folding","moving"); }
+      function stop(){ live.forEach(a=>{ try{ a.cancel(); }catch(e){} }); live=[]; card._gl=0; card.classList.remove("folding","moving","chromeout"); }
       // each element moves from where it was to where it goes; one that was hidden before grows in where it lands, one about to hide fades where it was
-      function flip(before,after){ let k=0; before.forEach((r0,el)=>{ const r1=after.get(el); if(!r1) return; const was=r0.width>0, is=r1.width>0;
-        if(!was&&is){ live.push(el.animate([{opacity:0,transform:"scale(.6)"},{opacity:1,transform:"none"}],{duration:D-120,delay:120+Math.min(k++,10)*40,easing:EQ,fill:"backwards"})); return; }
+      function flip(before,after,E){ E=E||EQ; let k=0; before.forEach((r0,el)=>{ const r1=after.get(el); if(!r1) return; const was=r0.width>0, is=r1.width>0;
+        if(!was&&is){ if(el.classList.contains("more")) return; live.push(el.animate([{opacity:0,transform:"scale(.6)"},{opacity:1,transform:"none"}],{duration:D-120,delay:120+Math.min(k++,10)*40,easing:E,fill:"backwards"})); return; }
         if(!is) return; const dx=r0.left-r1.left, dy=r0.top-r1.top; if(Math.abs(dx)<.5&&Math.abs(dy)<.5) return;
-        live.push(el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:D,easing:EQ})); }); }
-      function toggle(){ const open=!card.classList.contains("open"); stop(); build();
-        const els=movers(), b0=rects(els), h0=card.getBoundingClientRect().height;
+        live.push(el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:D,easing:E})); }); }
+      const EQR="cubic-bezier(.8,0,.3,1)";
+      // folding is the opening played backwards: first, with the box still open, what opened beneath lifts away (the last on screen first)
+      // and the extra badges shrink back out; then, as those finish, the box folds and every piece glides back on the reversed curve
+      const pieces=()=>[...card.querySelectorAll(".statline>span>b,.statline>span>i")];
+      // the number and the label inside each stat tile take their own path inside the tile as it moves, so neither jumps when the
+      // tile changes shape: the number shrinks into the line as the tile folds and grows out of it as the tile opens
+      function nest(S0,S1,Q0,Q1,open,E,pre){ const K=14/24; card.querySelectorAll(".statline>span").forEach(sp=>{ const s0=S0.get(sp), s1=S1.get(sp); if(!s0||!s1||!s0.width||!s1.width) return;
+        [...sp.children].forEach(c=>{ const c0=Q0.get(c), c1=Q1.get(c); if(!c0||!c1||!c0.width||!c1.width) return; const num=c.tagName==="B"; c.style.transformOrigin="0 0";
+          if(open){ const k=num?(pre?Math.max(.3,Math.min(1,c0.height/c1.height)):K):1, tx=(c0.left-c1.left)-(s0.left-s1.left), ty=(c0.top+c0.height/2-c1.top-c1.height*k/2)-(s0.top-s1.top);
+            live.push(c.animate([{transform:`translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${k.toFixed(4)})`},{transform:"none"}],{duration:D,easing:E})); }
+          else { const k=num?K:1, tx=(c1.left-c0.left)-(s1.left-s0.left), ty=(c1.top+c1.height/2-c0.top-c0.height*k/2)-(s1.top-s0.top);
+            live.push(c.animate([{transform:"none"},{transform:`translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${k.toFixed(4)})`}],{duration:D,easing:E,fill:"forwards"})); } }); }); }
+      // a tap while it is putting itself away sends everything back out from wherever it has got to
+      function back(fn){ const ks=more?[...more.children].map(k=>[k,+getComputedStyle(k).opacity]):[]; stop(); if(fn) fn();
+        ks.forEach(([k,o])=>{ if(o<.99) live.push(k.animate([{opacity:o},{opacity:1}],{duration:Math.round(D*.6),easing:EQ})); }); }
+      // folding is the opening played backwards: first, with the box still open, what opened beneath lifts away (the last on screen first)
+      // and the extra badges shrink back out; then every piece glides back to where it lives in the folded box, still in the open
+      // layout, and only when they have all arrived does the layout fold, so the last frame of the fold is the first frame of the opening
+      function toggle(){ if(card._ph){ clearTimeout(card._ph); card._ph=0; back(); card.setAttribute("aria-expanded","true"); return; }
+        if(card._gl){ const pre={b:rects(movers()),q:rects(pieces()),h:card.getBoundingClientRect().height}; card._gl=0; back(()=>swap(true,pre)); return; }
+        const open=!card.classList.contains("open"); stop(); build();
+        if(open||still()){ swap(open); return; }
+        const vh=window.innerHeight||800, kids=[...more.children].filter(k=>{ const r=k.getBoundingClientRect(); return r.height&&r.bottom>0&&r.top<vh; }), ov=[...card.querySelectorAll("#lv-badges i.ov")];
+        const KD=460, ST=60, n=kids.length;
+        kids.forEach((k,i)=>live.push(k.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(14px)"}],{duration:KD,delay:(n-1-i)*ST,easing:EQR,fill:"forwards"})));
+        ov.forEach((b,i)=>live.push(b.animate([{opacity:1,transform:"none"},{opacity:0,transform:"scale(.6)"}],{duration:300,delay:(ov.length-1-i)*30,easing:EQR,fill:"forwards"})));
+        const at=Math.max(n?((n-1)*ST+KD)*.6:0, ov.length?(ov.length-1)*30+300:0);
+        card.setAttribute("aria-expanded","false"); card._ph=setTimeout(()=>{ card._ph=0; fold(); },at); }
+      function fold(){ if(card.classList.contains("open")) swap(false); }
+      function swap(open,pre){
+        const els=movers(), b0=pre?pre.b:rects(els), q0=pre?pre.q:rects(pieces()), h0=pre?pre.h:card.getBoundingClientRect().height;
         if(open){ card.classList.add("open"); card.setAttribute("aria-expanded","true"); try{ render(); }catch(e){} try{ if(window.renderProgress) renderProgress(); }catch(e){} }
         else { card.classList.remove("open"); card.classList.add("folding"); card.setAttribute("aria-expanded","false"); }
         // the folded height is the box with its lower half put away
         let h1; if(open) h1=card.getBoundingClientRect().height; else { more.style.display="none"; h1=card.getBoundingClientRect().height; more.style.display=""; }
         if(still()){ card.classList.remove("folding"); return; }
-        const b1=rects(els); card.classList.add("moving");
-        const box=card.animate([{height:h0+"px"},{height:h1+"px"}],{duration:D,easing:EQ,fill:open?"none":"forwards"}); live.push(box); flip(b0,b1);
-        // what opens beneath rises in through the same scroll reveal as every other page, so it keeps fading in and out as you scroll it
+        const b1=rects(els), q1=rects(pieces()); card.classList.add("moving");
         const kids=[...more.children];
-        if(!open) kids.slice().reverse().forEach((k,i)=>live.push(k.animate([{opacity:1},{opacity:0,transform:"translateY(12px) scale(.99)"}],{duration:300,delay:Math.min(i,6)*25,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"})));
-        const sb=open?card.querySelectorAll(".statline b"):[]; if(sb.length){ const k=14/24; sb.forEach(b=>live.push(b.animate([{transform:`scale(${k})`},{transform:"none"}],{duration:D,easing:EQ}))); }
-        if(!open&&window.smoothScrollTo&&card.getBoundingClientRect().top<0) smoothScrollTo(()=>card.getBoundingClientRect().top+window.scrollY-((document.querySelector("header.top")||{}).offsetHeight||0)-8,D);
-        box.finished.then(()=>{ if(!live.includes(box)) return; stop(); if(!open) kids.forEach(k=>k.classList.remove("in")); },()=>{}); }
+        if(open){ const box=card.animate([{height:h0+"px"},{height:h1+"px"}],{duration:D,easing:EQ}); live.push(box); flip(b0,b1,EQ); nest(b0,b1,q0,q1,true,EQ,!!pre);
+          box.finished.then(()=>{ if(live.includes(box)) stop(); },()=>{}); return; }
+        // back to the open layout for the glide; the tiles' glass fades off on the way
+        card.classList.add("open"); card.classList.remove("folding"); card._gl=1; card.style.setProperty("--cho",D+"ms"); card.classList.add("chromeout");
+        const box=card.animate([{height:h0+"px"},{height:h1+"px"}],{duration:D,easing:EQR,fill:"forwards"}); live.push(box);
+        els.forEach(el=>{ const r0=b0.get(el), r1=b1.get(el); if(!r0||!r1||!r0.width) return;
+          if(!r1.width){ if(!el.getAnimations().length) live.push(el.animate([{opacity:1,transform:"none"},{opacity:0,transform:"scale(.6)"}],{duration:D-120,easing:EQR,fill:"forwards"})); return; }
+          const dx=r1.left-r0.left, dy=r1.top-r0.top; if(Math.abs(dx)<.5&&Math.abs(dy)<.5) return;
+          live.push(el.animate([{transform:"none"},{transform:`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px)`}],{duration:D,easing:EQR,fill:"forwards"})); });
+        nest(b0,b1,q0,q1,false,EQR);
+        kids.forEach(k=>{ if(!k.getAnimations().length) k.style.opacity="0"; });
+        if(window.smoothScrollTo&&card.getBoundingClientRect().top<0) smoothScrollTo(()=>card.getBoundingClientRect().top+window.scrollY-((document.querySelector("header.top")||{}).offsetHeight||0)-8,D);
+        box.finished.then(()=>{ if(!live.includes(box)) return; card._gl=0; card.classList.remove("open"); stop(); kids.forEach(k=>{ k.classList.remove("in"); k.style.opacity=""; });
+          const mc=card.querySelector("#lv-badges i.more"); if(mc) live.push(mc.animate([{opacity:0,transform:"scale(.6)"},{opacity:1,transform:"none"}],{duration:260,easing:EQ})); },()=>{}); }
       // the top of the box is the switch; whatever opens beneath it works on its own
       const isTop=t=>!t.closest(".lvmore");
       card.addEventListener("click",e=>{ if(!isTop(e.target)) return; e.preventDefault(); toggle(); });
       card.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target===card){ e.preventDefault(); toggle(); } });
       card.setAttribute("aria-expanded","false"); card.setAttribute("aria-label","Your progress: tap to open or close");
       // it is folded again whenever you come back to the dashboard
-      document.addEventListener("panel",e=>{ if(e.detail!=="today"&&card.classList.contains("open")){ stop(); card.classList.remove("open"); card.setAttribute("aria-expanded","false"); if(more) [...more.children].forEach(k=>k.classList.remove("in")); } });
+      document.addEventListener("panel",e=>{ if(e.detail!=="today"&&card.classList.contains("open")){ if(card._ph){ clearTimeout(card._ph); card._ph=0; } stop(); card.classList.remove("open"); card.setAttribute("aria-expanded","false"); if(more) [...more.children].forEach(k=>k.classList.remove("in")); } });
       window.xpBoxToggle=toggle; })();
   })();
   // ---------- who you are: three quick questions once, a greeting every time you come back ----------
@@ -7697,7 +7819,7 @@ return {name:'LAZARUS SA Node',duration:3,size:SIZE,play,still,preload:assets};
       // the words are measured and traced first, while the screen is still black, so nothing stalls once the heart is moving
       const [T,M]=words(); if(M&&mode!=="heart") motto.style.opacity="1"; makeCut();
       const ready=()=>{ if(done||risen) return; beat(); const t0=performance.now(), mAt=T?T.end*.6:0; let tD=!T, mD=!M, riseAt=Infinity;
-        if(cut){ cut.style.opacity="1"; try{ cut.animate([{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0 0 0)"}],{duration:Math.max(520,(T?T.end:1)*760),easing:"cubic-bezier(.83,0,.17,1)",fill:"backwards"}); }catch(e){} }
+        if(cut){ cut.style.opacity="1"; try{ cut.animate([{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0 0 0)"}],{duration:Math.max(520,(T?T.end:1)*760),easing:"cubic-bezier(.7,0,.2,1)",fill:"backwards"}); }catch(e){} }
         const frame=now=>{ raf=0; if(done||risen) return; const tt=(now-t0)/1000; if(mode==="line") clearLn();
           if(T&&!tD){ T.draw(tt); if(tt>=T.end){ tD=true; T.done(); } } else if(T&&mode==="line") T.draw(T.end);
           if(M&&!mD&&tt>=mAt){ M.draw(tt-mAt); if(tt-mAt>=M.end){ mD=true; M.done(); if(mode==="heart") fade(motto,350,1); } } else if(M&&mD&&mode==="line") M.draw(M.end);
