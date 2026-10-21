@@ -2317,6 +2317,12 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
 html.gliding .myth *,html.gliding .pvon *,html.gliding .pvon{animation-play-state:paused!important}
 .hveil{transition:top 0.272s var(--eq),bottom 0.272s var(--eq),opacity 0.144s ease}
 html.gliding .hveil{opacity:0}
+/* ================= v79 ================= */
+/* the lights glow brighter again, with fuller cores and a wider soft halo, so they shine through the glass */
+:root{--bk-red:color-mix(in srgb,var(--teal) 27%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 34%,transparent)}
+:root[data-theme="dark"]{--bk-red:color-mix(in srgb,var(--teal) 42%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 30%,transparent);--bk-pale:rgba(239,232,220,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bk-red:color-mix(in srgb,var(--teal) 42%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 30%,transparent);--bk-pale:rgba(239,232,220,.14)}}
+.bokeh i{background:radial-gradient(circle closest-side,var(--c) 0,var(--c) 32%,color-mix(in srgb,var(--c) 80%,transparent) 54%,color-mix(in srgb,var(--c) 44%,transparent) 75%,color-mix(in srgb,var(--c) 16%,transparent) 90%,transparent 100%)}
 /* ---------- Term Board, match style ---------- */
 /* the first tile you pick takes the same colour a picked chip does and holds it until you tap its partner; gold stays gold */
 .tbt.sel .tbin{border-color:var(--teal);background-color:color-mix(in srgb,color-mix(in srgb,var(--teal) 12%,var(--surface)) var(--glass-a),transparent);
@@ -2591,7 +2597,7 @@ html.gliding .hveil{opacity:0}
 .btier .badge{aspect-ratio:1/1;height:auto;grid-template-rows:auto auto;align-content:start;justify-items:center;padding:10px 6px 5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .btier .badge .bi{width:38px;height:38px}
 .btier .badge>b{margin-top:7px;font-size:13px;line-height:1.14;padding-bottom:1px}
-.btier .badge>span:not(.bi):not(.myth){display:none}
+.btier .badge>span:not(.bi):not(.myth):not(.bd){display:none}
 .btier .badge .bclaim{margin-top:5px;padding:3px 9px;font-size:11.5px}
 .btier .badge .myth{top:2px;width:54px;height:54px;margin:0 0 0 -27px}
 .btier .badge.mys>b,.btier .badge.r-m>b{margin-top:11px}
@@ -2603,6 +2609,49 @@ html.gliding .hveil{opacity:0}
 .bpop b{font:600 16px/1.15 var(--display);color:var(--ink)}
 .bpop>span:not(.eyebrow){font-size:12.5px;line-height:1.35;color:var(--ink-2,var(--ink))}
 .bpop .note{font-size:11.5px;color:var(--muted)}
+
+/* ---------- v79: the square holds its icon, name and a short line of what it is for, all set high in the box; Mythic squares are cut like
+   a gem, and anything new carries a small red dot that breathes ---------- */
+.btier .badge{padding:7px 5px 5px}
+.btier .badge .bi{width:28px;height:28px}
+.btier .badge .bi svg{width:21px;height:21px}
+.btier .badge>b{margin-top:4px;font-size:12.5px;line-height:1.1}
+.btier .badges .badge>span.bd{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-width:100%;margin-top:2px;font-size:10px;line-height:1.16;color:var(--muted);text-align:center}
+.btier .badge .bclaim{margin-top:4px}
+.btier .badge .myth{top:-5px;width:50px;height:50px;margin:0 0 0 -25px}
+.btier .badge.mys>b,.btier .badge.r-m>b{margin-top:9px}
+/* Mythic: a brilliant cut seen from above over a fine triangular lattice, lit by a slow prismatic sweep */
+.btier .badge.r-m{background-color:color-mix(in srgb,var(--rc-m) 9%,var(--bg));background-image:none;border-color:color-mix(in srgb,var(--rc-m) 52%,transparent)}
+.badge .mfx{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;pointer-events:none;opacity:.7;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cpath%20d='M70.3%2058.4%20L58.4%2070.3%20L41.6%2070.3%20L29.7%2058.4%20L29.7%2041.6%20L41.6%2029.7%20L58.4%2029.7%20L70.3%2041.6Z%20M98.0%2050.0%20L94.3%2068.4%20L83.9%2083.9%20L68.4%2094.3%20L50.0%2098.0%20L31.6%2094.3%20L16.1%2083.9%20L5.7%2068.4%20L2.0%2050.0%20L5.7%2031.6%20L16.1%2016.1%20L31.6%205.7%20L50.0%202.0%20L68.4%205.7%20L83.9%2016.1%20L94.3%2031.6Z%20M70.3%2058.4%20L74.0%2074.0%20L58.4%2070.3%20M58.4%2070.3%20L50.0%2084.0%20L41.6%2070.3%20M41.6%2070.3%20L26.0%2074.0%20L29.7%2058.4%20M29.7%2058.4%20L16.0%2050.0%20L29.7%2041.6%20M29.7%2041.6%20L26.0%2026.0%20L41.6%2029.7%20M41.6%2029.7%20L50.0%2016.0%20L58.4%2029.7%20M58.4%2029.7%20L74.0%2026.0%20L70.3%2041.6%20M70.3%2041.6%20L84.0%2050.0%20L70.3%2058.4%20M70.3%2058.4%20L94.3%2068.4%20M84.0%2050.0%20L94.3%2068.4%20L74.0%2074.0%20M58.4%2070.3%20L68.4%2094.3%20M74.0%2074.0%20L68.4%2094.3%20L50.0%2084.0%20M41.6%2070.3%20L31.6%2094.3%20M50.0%2084.0%20L31.6%2094.3%20L26.0%2074.0%20M29.7%2058.4%20L5.7%2068.4%20M26.0%2074.0%20L5.7%2068.4%20L16.0%2050.0%20M29.7%2041.6%20L5.7%2031.6%20M16.0%2050.0%20L5.7%2031.6%20L26.0%2026.0%20M41.6%2029.7%20L31.6%205.7%20M26.0%2026.0%20L31.6%205.7%20L50.0%2016.0%20M58.4%2029.7%20L68.4%205.7%20M50.0%2016.0%20L68.4%205.7%20L74.0%2026.0%20M70.3%2041.6%20L94.3%2031.6%20M74.0%2026.0%20L94.3%2031.6%20L84.0%2050.0%20M84.0%2050.0%20L97.1%2040.6%20M84.0%2050.0%20L97.1%2059.4%20M74.0%2074.0%20L89.9%2076.7%20M74.0%2074.0%20L76.7%2089.9%20M50.0%2084.0%20L59.4%2097.1%20M50.0%2084.0%20L40.6%2097.1%20M26.0%2074.0%20L23.3%2089.9%20M26.0%2074.0%20L10.1%2076.7%20M16.0%2050.0%20L2.9%2059.4%20M16.0%2050.0%20L2.9%2040.6%20M26.0%2026.0%20L10.1%2023.3%20M26.0%2026.0%20L23.3%2010.1%20M50.0%2016.0%20L40.6%202.9%20M50.0%2016.0%20L59.4%202.9%20M74.0%2026.0%20L76.7%2010.1%20M74.0%2026.0%20L89.9%2023.3'%20fill='none'%20stroke='rgb(232,218,255)'%20stroke-opacity='.26'%20stroke-width='.55'%20stroke-linejoin='round'/%3E%3C/svg%3E") 50% 10px/140% auto no-repeat,
+    repeating-linear-gradient(60deg,transparent 0 12px,rgba(214,190,255,.07) 12px 12.8px),repeating-linear-gradient(-60deg,transparent 0 12px,rgba(214,190,255,.07) 12px 12.8px),repeating-linear-gradient(0deg,transparent 0 10.4px,rgba(214,190,255,.05) 10.4px 11.2px),
+    conic-gradient(from 210deg at 50% 32%,rgba(154,92,246,.26),rgba(120,200,255,.13),rgba(240,186,255,.22),rgba(84,56,196,.18),rgba(170,230,255,.12),rgba(154,92,246,.26))}
+.badge.r-m.on .mfx{opacity:1}
+.badge.r-m.mys .mfx{opacity:.55}
+.badge .mfx::before{content:"";position:absolute;top:-30%;bottom:-30%;left:-70%;width:50%;background:linear-gradient(100deg,transparent,rgba(196,164,255,.2) 38%,rgba(168,232,255,.22) 50%,rgba(255,206,248,.18) 60%,transparent);
+  transform:translateX(0) skewX(-14deg);animation:mfxSweep 6.5s cubic-bezier(.7,0,.2,1) infinite;animation-play-state:paused}
+.badge .mfx::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 1px 0 rgba(236,222,255,.32),inset 0 0 0 1px rgba(214,190,255,.1),inset 0 -14px 22px -16px rgba(120,200,255,.35)}
+.badge.r-m:has(.myth.live) .mfx::before{animation-play-state:running}
+.badge.r-m:nth-child(2) .mfx::before{animation-delay:-1.3s} .badge.r-m:nth-child(3) .mfx::before{animation-delay:-2.6s} .badge.r-m:nth-child(4) .mfx::before{animation-delay:-3.9s} .badge.r-m:nth-child(5) .mfx::before{animation-delay:-5.2s} .badge.r-m:nth-child(6) .mfx::before{animation-delay:-.6s}
+@keyframes mfxSweep{0%,58%{transform:translateX(0) skewX(-14deg)}100%{transform:translateX(420%) skewX(-14deg)}}
+html.gliding .mfx::before{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){ .badge .mfx::before{display:none} }
+/* the new dot: small, red, and breathing slowly, a soft ring easing out of it now and then */
+.ndot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#ff4b4b;box-shadow:0 0 6px rgba(255,75,75,.55);z-index:3;pointer-events:none;animation:ndotBreathe 3.2s ease-in-out infinite}
+.ndot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#ff4b4b;animation:ndotRing 3.2s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes ndotBreathe{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(.82);opacity:.75}}
+@keyframes ndotRing{0%,40%{transform:scale(1);opacity:0}45%{opacity:.4}100%{transform:scale(2.6);opacity:0}}
+.lvshow{position:relative}
+.lvshow>.ndot{top:1px;right:-6px}
+#t-more>summary .ft{position:relative}
+#t-more>summary .ft>.ndot{position:relative;display:inline-block;top:-9px;right:auto;margin-left:5px;vertical-align:middle}
+:root[data-theme="light"] .ndot,:root[data-theme="light"] .ndot::after{background:#e5322d}
+@media (prefers-reduced-motion:reduce){ .ndot,.ndot::after{animation:none} }
+.btier .badge.r-m:not(.on):not(.mys)>.mfx{filter:none;opacity:.6}
+/* the facets quieten behind the name and the line under it, so the words stay clear on the gem */
+.badge .mfx{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 38%,rgba(0,0,0,.5) 62%,rgba(0,0,0,.42) 100%);mask-image:linear-gradient(180deg,#000 0,#000 38%,rgba(0,0,0,.5) 62%,rgba(0,0,0,.42) 100%)}
+.btier .badge.r-m>b{color:color-mix(in srgb,var(--ink) 92%,#e4d6ff)}
+.btier .badges .badge.r-m>span.bd{color:color-mix(in srgb,var(--muted) 70%,#d8c8ff)}
 </style>
 </head>
 <body>
@@ -4233,8 +4282,8 @@ html.gliding .hveil{opacity:0}
     }
     // ----- the highlighter: once the card has opened, a highlight draws across each key phrase in reading order. The letters thicken as
     // the highlight reaches them, so the phrase stands out while it is read, then ease back to their normal weight a moment after. Normally
-    // the highlight holds, then its start slides along to its end like a slinky and it is gone, and only then does the next one begin.
-    // With Show info on, the highlights stay drawn until Show info is turned off, and each starts once the last has finished drawing. -----
+    // the highlight holds, then its start slides along to its end like a slinky and it is gone, the next one starting as it goes.
+    // With Show info on, the highlights stay drawn until Show info is turned off, each starting as the last is nearly drawn. -----
     const hesc=c=>c==="&"?"&amp;":c==="<"?"&lt;":c===">"?"&gt;":c;
     const letters=m=>{ if(!m._ch){ const t=m.textContent; m.innerHTML=[...t].map(c=>c===" "?" ":`<span class="hc">${hesc(c)}</span>`).join(""); m._ch=[...m.querySelectorAll(".hc")]; } return m._ch; };
     const HQ=window.bez?bez(.7,0,.2,1):(x=>x), HS=window.bez?bez(.3,0,.15,1):(x=>x);
@@ -4245,9 +4294,9 @@ html.gliding .hveil{opacity:0}
     const marksOf=d=>[...d.querySelectorAll(".dg-body>.how mark.hl")].sort((a,b)=>a.dataset.k-b.dataset.k);
     window.drugHighlights=(d,o)=>{ o=o||{}; if(reducedM()){ if(o.hold) marksOf(d).forEach(m=>m.classList.add("hlon")); return; } const ms=marksOf(d); if(!ms.length) return;
       if(d._hl) d._hl(); const A=[]; let alive=true; d._hl=()=>{ alive=false; A.forEach(a=>{ try{ a.cancel(); }catch(e){} }); ms.forEach(m=>m.classList.remove("hlon")); d._hl=null; };
-      // one highlight at a time: the next phrase waits until the last highlight has slid away; the weight stays on after the highlight
-      // has gone, then eases back slowly while the next one draws
-      const DRAW=spd(640), HOLD=spd(820), SLIP=spd(660), RISE=spd(170), STAY=spd(900), LINGER=spd(2800), tot=DRAW+HOLD+SLIP, NEXT=o.hold?DRAW+spd(90):tot+spd(70); let at=spd(100);
+      // the next phrase starts drawing while the last highlight is still sliding away, so the two overlap for a moment; the weight stays on
+      // long after the highlight has gone, long enough to read the whole phrase, then eases back slowly
+      const DRAW=spd(640), HOLD=spd(820), SLIP=spd(660), RISE=spd(170), STAY=spd(3000), LINGER=spd(2600), tot=DRAW+HOLD+SLIP, NEXT=o.hold?DRAW*.7:DRAW+HOLD+SLIP*.45; let at=spd(100);
       ms.forEach(m=>{ m.classList.remove("hlon"); const W=weight(m), ch=letters(m), n=Math.max(1,ch.length-1);
         if(o.hold){ const a=m.animate([{backgroundSize:"0% 64%",backgroundPosition:"0% 92%"},{backgroundSize:"100% 64%",backgroundPosition:"0% 92%"}],{duration:DRAW,delay:at,easing:"cubic-bezier(.7,0,.2,1)",fill:"both"}); A.push(a);
           a.finished.then(()=>{ if(!alive) return; m.classList.add("hlon"); a.cancel(); },()=>{}); }
@@ -5528,11 +5577,26 @@ html.gliding .hveil{opacity:0}
       el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="actsvg" role="img" aria-label="Activity over the last 30 days"><line x1="0" y1="${H-18}" x2="${W}" y2="${H-18}" class="axis"/>${bars}</svg><div class="legend"><i class="green"></i>Session finished<i class="yellow"></i>Practiced<i class="red"></i>Opened only</div>`; }
     // a badge: earned in full colour; not yet, dimmed; hidden Mythic, a grey cutout of its shape behind ??? in the aura
     function badgeHTML(b){ const on=!!P.badges[b.id], hid=b.h&&!on; let claim=""; if(b.claim&&!on&&P.badges.regday) claim=`<button type="button" class="chip bclaim" data-claim="${b.id}">I passed</button>`;
-      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" data-b="${b.id}" role="button" tabindex="0" aria-label="${hid?"Hidden badge":esc(b.n)}">${b.r==="m"?MYTH():""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim}</div>`; }
+      const nw=on&&P.seenB&&!P.seenB[b.id]?`<i class="ndot" aria-hidden="true"></i>`:"";
+      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" data-b="${b.id}" role="button" tabindex="0" aria-label="${hid?"Hidden badge":esc(b.n)+(nw?", new":"")}">${b.r==="m"?`<i class="mfx" aria-hidden="true"></i>${MYTH()}`:""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim||`<span class="bd">${hid?"Hidden":esc(b.d)}</span>`}${nw}</div>`; }
+    // ----- something new: a small red dot that breathes slowly marks each badge you have not looked at yet, and the ways in to it (the
+    // Badges box and Show badges on the dashboard). A badge counts as seen once it has been on screen in the open box for a moment, or tapped.
+    // Badges earned before the dots existed count as seen. -----
+    if(!P.seenB){ P.seenB={}; Object.keys(P.badges).forEach(k=>P.seenB[k]=1); save(); }
+    const unseen=()=>BADGES.filter(b=>P.badges[b.id]&&!P.seenB[b.id]).length;
+    const dotIn=(el,on)=>{ if(!el) return; let d=el.querySelector(":scope>.ndot"); if(on&&!d){ d=document.createElement("i"); d.className="ndot"; d.setAttribute("aria-hidden","true"); el.appendChild(d); } else if(!on&&d) gone(d); };
+    const gone=d=>{ const a=d.animate([{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.3)"}],{duration:spd(260),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); const rm=()=>d.remove(); a.finished.then(rm,rm); };
+    function newDots(){ const n=unseen()>0; dotIn($("lv-show"),n); const sm=document.querySelector("#t-more>summary .ft"); dotIn(sm,n); }
+    window.newDots=newDots;
+    function seeB(id){ if(!P.badges[id]||P.seenB[id]) return; P.seenB[id]=1; save(); const t=document.querySelector(`#badges .badge[data-b="${id}"]`), d=t&&t.querySelector(":scope>.ndot"); if(d) gone(d); if(t) t.setAttribute("aria-label",t.getAttribute("aria-label").replace(/, new$/,"")); newDots(); }
+    let seenIO=null; const seenT=new Map();
+    function watchNew(){ if(!("IntersectionObserver" in window)) return; if(!seenIO) seenIO=new IntersectionObserver(es=>es.forEach(e=>{ const t=e.target.closest(".badge"), id=t&&t.dataset.b; if(!id) return;
+        if(e.isIntersecting&&e.intersectionRatio>.9){ if(!seenT.has(id)) seenT.set(id,setTimeout(()=>{ seenT.delete(id); if(!document.hidden) seeB(id); },1200)); } else { clearTimeout(seenT.get(id)); seenT.delete(id); } }),{threshold:[0,.95]});
+      seenIO.disconnect(); document.querySelectorAll("#badges .badge>.ndot").forEach(d=>seenIO.observe(d)); }
     // ----- a badge is a square of its icon and name; tapping it shows what it is for, and when it was earned, in a small pane beside it -----
     let pop=null;
     const closePop=()=>{ if(!pop) return; const p=pop; pop=null; const a=p.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(4px)"}],{duration:spd(160),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); const rm=()=>p.remove(); a.finished.then(rm,rm); };
-    function openPop(t){ const id=t.dataset.b, b=BADGES.find(x=>x.id===id); if(!b) return; if(pop&&pop._id===id){ closePop(); return; } closePop();
+    function openPop(t){ const id=t.dataset.b, b=BADGES.find(x=>x.id===id); if(!b) return; seeB(id); if(pop&&pop._id===id){ closePop(); return; } closePop();
       const on=P.badges[id], hid=b.h&&!on, d=on?new Date(on):null;
       const p=document.createElement("div"); p.className=`bpop r-${b.r}`; p._id=id; p.setAttribute("role","status");
       p.innerHTML=`<span class="eyebrow">${RN[b.r]}</span><b>${hid?"???":esc(b.n)}</b><span>${hid?"Hidden until you earn it.":esc(b.d)}</span><span class="note">${on?`Earned ${d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}`:"Not earned yet"}</span>`;
@@ -5555,7 +5619,7 @@ html.gliding .hveil{opacity:0}
       lvBadges();
       const bl=$("badges"); if(bl){ const earned=BADGES.filter(b=>P.badges[b.id]).length; $("badge-count").textContent=`${earned} of ${BADGES.length}`;
         // the list is only rebuilt when something on it changed, so the auras keep their motion
-        const bs=BADGES.map(b=>P.badges[b.id]?1:0).join("")+"|"+st.level+"|"+P.boost+"|"+P.cover; if(bl._sig!==bs){ bl._sig=bs; bl.innerHTML=badgesHTML(); } } watch(); }
+        const bs=BADGES.map(b=>P.badges[b.id]?1:0).join("")+"|"+st.level+"|"+P.boost+"|"+P.cover; if(bl._sig!==bs){ bl._sig=bs; bl.innerHTML=badgesHTML(); watchNew(); } } watch(); newDots(); }
     // the auras only move while they are on screen
     let io=null, seen=[]; function watch(){ if(!("IntersectionObserver" in window)) return; if(!io) io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle("live",e.isIntersecting)),{rootMargin:"60px"}); const now=[...document.querySelectorAll("#badges .myth,#lv-ring .myth")]; if(now.length===seen.length&&now.every((m,i)=>m===seen[i])) return; io.disconnect(); seen=now; now.forEach(m=>io.observe(m)); }
     document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-claim]"); if(!b) return; const id=b.dataset.claim; if(P.badges[id]) return; P.badges[id]=Date.now(); save(); const R=b.getBoundingClientRect(); confetti(R.left+R.width/2,R.top,{n:90}); const bd=BADGES.find(x=>x.id===id); toast(`<b>Badge: ${esc(bd.n)}</b><span>${RN[bd.r]} · Congratulations.</span>`); render(); });
