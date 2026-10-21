@@ -1942,6 +1942,18 @@ html.splashing .navveil{display:none}
 .lvlcard.moving .lvbadges{overflow:visible}
 /* buttons change state on the house easing too: a press still answers at once, the colour change rides the slow-fast-slow curve */
 .ptab,.chip,.btn,.backchip,.ptchip,.tapbox,.simcase,.simscen,.simrand,.gt,.gcard,.pcard,.lopt,.ltile,.opt,.stile,.shcard,details.fold>summary,details.drug>summary,details.method>summary,details.trick>summary,details.scen>summary,details.subfold>summary{transition:transform .14s cubic-bezier(.3,.7,.3,1),filter .14s ease,background-color .36s var(--eq),color .36s var(--eq),border-color .36s var(--eq),box-shadow .36s var(--eq)}
+
+/* ================= v67 ================= */
+/* only what you can see in the header takes a tap: its empty space (the gaps around the strip, the room the squashed bar gives back,
+   the strip's place while a drug card is pinned) lets taps through to whatever is showing there */
+header.top,header.top>.inner,header.top .subnav,header.top .row{pointer-events:none}
+header.top::before,header.top .ptchip,header.top .ptpop,header.top .nav,header.top .ptrack{pointer-events:auto}
+html.drugopen header.top .ptrack{pointer-events:none}
+/* the page strip's pill: two round ends and a middle, each moved by transform alone */
+.pthumb{width:0!important;background:none!important;box-shadow:none!important;transition:none!important;border-radius:0}
+.pthumb>i{position:absolute;top:0;bottom:0;left:0;background:var(--teal);transform-origin:0 0;will-change:transform;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
+.pthumb>.pt-l,.pthumb>.pt-r{width:20px;border-radius:var(--r-ctl)} .pthumb>.pt-l{clip-path:inset(0 50% 0 0)} .pthumb>.pt-r{clip-path:inset(0 0 0 50%)}
+.pthumb>.pt-m{width:100px;box-shadow:0 6px 14px -8px color-mix(in srgb,var(--teal) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.16)}
 </style>
 </head>
 <body>
@@ -2744,9 +2756,10 @@ html.splashing .navveil{display:none}
     // the category picker belongs to the games list itself, not to a lesson opened from it
     if(!hasStrip(g)||(g==="games"&&id!=="games")){ sub.hidden=true; sub.dataset.g=""; return; }
     const appear=sub.hidden; sub.hidden=false;
-    let tr=sub.querySelector(".ptrack"); if(!tr){ sub.innerHTML='<div class="ptrack"><span class="pthumb" aria-hidden="true"></span></div>'; tr=sub.querySelector(".ptrack"); }
+    let tr=sub.querySelector(".ptrack"); if(!tr){ sub.innerHTML='<div class="ptrack"><span class="pthumb" aria-hidden="true"><i class="pt-l"></i><i class="pt-m"></i><i class="pt-r"></i></span></div>'; tr=sub.querySelector(".ptrack"); }
     const th=tr.querySelector(".pthumb"), fresh=sub.dataset.g!==g, special=g==="games";
-    if(tr.getAnimations) tr.getAnimations({subtree:true}).forEach(a=>a.cancel());
+    // anything still running in the strip stops, except the pill's own slide, which carries on from wherever it is
+    if(tr.getAnimations) tr.getAnimations({subtree:true}).forEach(a=>{ const t=a.effect&&a.effect.target; if(!(t&&t.parentElement===th)) a.cancel(); });
     if(fresh){ sub.dataset.g=g; tr.classList.toggle("ptsel",special); tr.setAttribute("role",special?"group":"tablist"); tr.setAttribute("aria-label",special?"Game category":(GNAME[g]||"")+" pages");
       [...tr.children].forEach(c=>{ if(c!==th) c.remove(); }); tr.scrollLeft=0; tr.insertAdjacentHTML("beforeend",stripHTML(g)); fit(g); }
     id=PARENT[id]||id; tr.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
@@ -2759,10 +2772,13 @@ html.splashing .navveil{display:none}
     // bring the open page into view along the strip
     const on=tr.querySelector('.ptab[aria-selected="true"]'); if(on&&tr.scrollWidth>tr.clientWidth+2){ const l=on.offsetLeft-24, r=on.offsetLeft+on.offsetWidth+24; if(l<tr.scrollLeft||r>tr.scrollLeft+tr.clientWidth) tr.scrollTo({left:l<tr.scrollLeft?l:r-tr.clientWidth,behavior:reduceMotion()||fresh?"auto":"smooth"}); } }
   window.stripRefresh=()=>{ const sub=$("subnav"); if(sub&&sub.dataset.g){ const g=sub.dataset.g; sub.dataset.g=""; strip(g,curPanel,false); } };
+  // the pill is three pieces, two round ends and a middle, moved only by transform, so the compositor slides it at full frame rate whatever
+  // the page change is doing on the main thread, and its corners never stretch
+  const pillAt=(x,w)=>[`translateX(${x.toFixed(1)}px)`,`translateX(${(x+9).toFixed(1)}px) scaleX(${(Math.max(0,w-18)/100).toFixed(4)})`,`translateX(${(x+w-20).toFixed(1)}px)`];
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
-    if(!anim){ th.style.transition="none"; }
-    th.style.width=on.offsetWidth+"px"; th.style.transform=`translateX(${on.offsetLeft}px)`;
-    if(!anim){ void th.offsetWidth; th.style.transition=""; } }
+    const to=pillAt(on.offsetLeft,on.offsetWidth), go=anim&&!reduceMotion();
+    [...th.children].forEach((p,i)=>{ const from=go?getComputedStyle(p).transform:null; p.getAnimations().forEach(a=>a.cancel()); p.style.transform=to[i];
+      if(go&&from&&from!=="none") p.animate([{transform:from},{transform:to[i]}],{duration:440,easing:"cubic-bezier(.3,.8,.25,1)"}); }); }
   // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll.
   // It is worked out before the strip is first drawn and remembered per tab and width, so the names never visibly change size.
   function fit(g){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["s1","s2","s3"]; g=g||$("subnav").dataset.g; const key=g+"@"+(window.innerWidth||0);
@@ -3501,9 +3517,16 @@ html.splashing .navveil{display:none}
       const tf=r=>`translate(${r.x.toFixed(1)}px,${r.y.toFixed(1)}px) scaleX(${Math.min(1,r.w/W).toFixed(4)})`; d.classList.add("rulemove");
       const end=()=>{ g.remove(); if(!d.querySelector(".dg-ruleg")) d.classList.remove("rulemove"); };
       g.animate([{transform:tf(from)},{transform:tf(to)}],{duration:FOLD.D,easing:FOLD.EQ,fill:"forwards"}).finished.then(end,end); }
-    function factsGhost(d,r){ const f=d.querySelector(".dg-facts"); if(!f||!r) return; const g=document.createElement("div"); g.className="dg-factsg"; g.setAttribute("aria-hidden","true"); g.innerHTML=f.innerHTML;
-      Object.assign(g.style,{left:r.x+"px",top:r.y+"px",width:r.w+"px"}); d.appendChild(g); const end=()=>g.remove();
-      g.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-6px)"}],{duration:300,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"}).finished.then(end,end); }
+    // the preview's lines while the card changes: opening folds them up and away, the last line first; closing lets them back down into place
+    function factsGhost(d,r,mode,delay){ const f=d.querySelector(".dg-facts"); if(!f||!r) return null; const g=document.createElement("div"); g.className="dg-factsg"; g.setAttribute("aria-hidden","true"); g.innerHTML=f.innerHTML;
+      Object.assign(g.style,{left:r.x+"px",top:r.y+"px",width:r.w+"px"}); d.appendChild(g); const rows=[...g.children], E=FOLD.EQ;
+      if(mode==="out"){ const end=()=>g.remove();
+        g.animate([{clipPath:"inset(0 0 0 0)"},{clipPath:"inset(0 0 100% 0)"}],{duration:480,easing:E,fill:"forwards"}).finished.then(end,end);
+        rows.slice().reverse().forEach((row,i)=>row.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-14px)"}],{duration:380,delay:i*50,easing:E,fill:"forwards"})); }
+      else { delay=delay||0;
+        g.animate([{clipPath:"inset(0 0 100% 0)"},{clipPath:"inset(0 0 0 0)"}],{duration:460,delay,easing:E,fill:"backwards"});
+        rows.forEach((row,i)=>row.animate([{opacity:0,transform:"translateY(-14px)"},{opacity:1,transform:"none"}],{duration:400,delay:delay+i*55,easing:E,fill:"backwards"})); }
+      return g; }
     const ruleOpen=d=>{ const sm=d.querySelector("summary"); return {x:0,y:sm.getBoundingClientRect().bottom-d.getBoundingClientRect().top-d.clientTop-1,w:d.clientWidth}; };
     function openCard(d){
       if(d._fa) FOLD.finish(d); if(d.open) return;
@@ -3511,15 +3534,16 @@ html.splashing .navveil{display:none}
       root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o===d) return; if(o._fa) FOLD.finish(o); if(!o.open) return; const t0=d.getBoundingClientRect().top; o.dataset.auto="1"; o.open=false; const t1=d.getBoundingClientRect().top; if(Math.abs(t1-t0)>1) window.scrollTo(0,window.scrollY+(t1-t0)); });
       const f=d.querySelector(".dg-facts"), fr=f?rel(f,d):null; d._fr=fr;
       FOLD.open(d,{before:()=>fill(d), kids:parts,
-        after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(FOLD.D&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){ factsGhost(d,fr); if(fr) ruleGhost(d,fr,ruleOpen(d));
-            [d.querySelector(".dg-tools"),d.querySelector(".dg-cls")].forEach((x,i)=>{ if(x&&x.offsetParent) x.animate([{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],{duration:480,delay:60+i*40,easing:FOLD.EQ,fill:"backwards"}); }); } } });
+        after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(FOLD.D&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){ factsGhost(d,fr,"out"); if(fr) ruleGhost(d,fr,ruleOpen(d));
+            [d.querySelector(".dg-tools"),d.querySelector(".dg-cls")].forEach((x,i)=>{ if(x&&x.offsetParent) x.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:480,delay:200+i*40,easing:FOLD.EQ,fill:"backwards"}); }); } } });
       scrollToCard(d); }
     function closeCard(d){
       if(d._fa) FOLD.finish(d); if(!d.open) return;
       FOLD.close(d,{kids:parts,
-        before:()=>{ drugOpen(false); if(d.getBoundingClientRect().top<headerH()) scrollToCard(d); if(d._fr) ruleGhost(d,ruleOpen(d),d._fr); const tl=d.querySelector(".dg-tools"); if(tl) tl.animate([{opacity:1},{opacity:0}],{duration:260,easing:"ease-in",fill:"forwards"}).finished.then(()=>{},()=>{}); },
+        before:()=>{ drugOpen(false); if(d.getBoundingClientRect().top<headerH()) scrollToCard(d); if(d._fr) ruleGhost(d,ruleOpen(d),d._fr); const tl=d.querySelector(".dg-tools"); if(tl) tl.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(8px)"}],{duration:260,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"}).finished.then(()=>{},()=>{});
+          d._fg=factsGhost(d,d._fr,"in",230); },
         end:()=>{ d.dataset.auto="1"; const tl=d.querySelector(".dg-tools"); if(tl&&tl.getAnimations) tl.getAnimations().forEach(a=>a.cancel()); },
-        done:()=>{ if(d.open) return; const fc=d.querySelector(".dg-facts"); if(fc) fc.animate([{opacity:0,transform:"translateY(4px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.7,.2,1)"}); } }); }
+        done:()=>{ if(d._fg){ d._fg.remove(); d._fg=null; } } }); }
     // the open card's header shows a soft blur under its lower edge only while it is pinned, so the page goes soft as it slides beneath
     { let tick=0; window.addEventListener("scroll",()=>{ if(tick) return; tick=requestAnimationFrame(()=>{ tick=0; const d=root.querySelector("details.drug[open]"); if(!d) return; const sm=d.firstElementChild; const st=sm.getBoundingClientRect().top-d.getBoundingClientRect().top>1; if(st!==sm.classList.contains("stuck")) sm.classList.toggle("stuck",st); }); },{passive:true}); }
     document.addEventListener("panel",e=>{ drugOpen(e.detail==="drugs"&&!!root.querySelector("details.drug[open]")); });
