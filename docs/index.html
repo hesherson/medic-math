@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#8B1E2D">
-<script>try{const p=JSON.parse(localStorage.getItem("mm-palette"));if(p&&p.vars){for(const k in p.vars)document.documentElement.style.setProperty(k,p.vars[k]);document.documentElement.style.colorScheme=p.mode;}}catch(e){}</script>
+<script>document.documentElement.classList.add("splashing");try{const p=JSON.parse(localStorage.getItem("mm-palette"));if(p&&p.vars){for(const k in p.vars)document.documentElement.style.setProperty(k,p.vars[k]);document.documentElement.style.colorScheme=p.mode;}}catch(e){}</script>
 
 <meta name="description" content="Med math drills, drug profiles, dose calculator, scenarios and a registry simulator for medics.">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1705,6 +1705,18 @@ details.subfold.quizopts>summary .qsum{font-family:var(--body)}
    and phones zoom out to fit anything wider than the screen, which is what made the whole screen and the tab bar twitch ================= */
 main{overflow-x:clip}
 @supports not (overflow:clip){ body{overflow-x:hidden} }
+
+/* ================= taps leave nothing behind: no tap flash, no text picked up off a button, no browser focus ring
+   (the keyboard still gets the amber ring the rest of the app uses) ================= */
+*{-webkit-tap-highlight-color:transparent}
+button,summary,.nav,.subnav,.chip,.ptab,.tapbox,.backchip,.ptchip,.pill{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+:focus:not(:focus-visible){outline:none}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+/* ================= during the intro nothing can scroll, so no scroll bar or scroll indicator can show ================= */
+html.splashing,html.splashing body{overflow:hidden!important;height:100%;overscroll-behavior:none;scrollbar-width:none}
+html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
+.splash{touch-action:none;overscroll-behavior:none}
 </style>
 </head>
 <body>
