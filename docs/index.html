@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Lazarus</title>
-<style>@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/barlow-condensed-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/barlow-condensed-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/barlow-condensed-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2')}</style>
+<style>@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/barlow-condensed-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/barlow-condensed-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/barlow-condensed-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/ibm-plex-sans-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/geist-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Geist Mono';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/geist-mono-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Geist Mono';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/geist-mono-latin-600-normal.woff2) format('woff2')}</style>
 <style>
 /* Layout: kneeboard card. Sticky tab bar, one column of reference sections, calculators as live panels, quiz as a single focused card. */
 :root{
@@ -26,7 +26,7 @@
   --good:#3F7A57; --good-soft:#DDEDE2; --bad:#B0402F; --bad-soft:#F3DFDA;
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
-  --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+  --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;
   --branch:#A9A39A; --splash-bg:#000; --splash-ink:#EFE8DC;
 }
 /* the outline on a chosen answer: white on the dark theme, ink on the light one where white would vanish */
@@ -1717,6 +1717,163 @@ button,summary,.nav,.subnav,.chip,.ptab,.tapbox,.backchip,.ptchip,.pill{-webkit-
 html.splashing,html.splashing body{overflow:hidden!important;height:100%;overscroll-behavior:none;scrollbar-width:none}
 html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
 .splash{touch-action:none;overscroll-behavior:none}
+
+/* ================= v65: drug cards ================= */
+/* the family colour runs down the left edge of every card again, open or closed */
+details.drug,details.drug.reading{border-left:3px solid var(--fam,var(--teal))}
+/* routes are labels, so they stay in the text colours; only the drug's family carries a colour */
+li.rtitem::before,.popgrp.peds li.rtitem::before{background:color-mix(in srgb,var(--ink) 42%,transparent)}
+.rtname,.popgrp.peds .rtname{color:color-mix(in srgb,var(--ink) 86%,var(--muted))}
+.dl .rt{color:color-mix(in srgb,var(--ink) 88%,var(--muted));background:color-mix(in srgb,var(--ink) 9%,transparent)}
+/* doses: one cleaner monospace, a size down from the text around it */
+.fact b{font-size:13px;font-weight:500;letter-spacing:-.01em}
+details.drug:not([open]) .fact b{font-size:12.5px}
+li.tnode .dose{font-size:12px;font-weight:500;letter-spacing:-.01em}
+.dm dd{font-size:11.5px}
+/* a dose too long to share the line with its reason drops onto its own line, flush left, with no leader */
+li.tnode .l1.stack .lead{display:none}
+li.tnode .l1.stack .dose{flex:1 1 100%;text-align:left;white-space:normal}
+/* the brand names sit under the generic name on the open card too, as on the preview */
+.dg-name{flex-direction:column;align-items:flex-start;gap:3px}
+.dg-brand{display:block;font-size:12.5px;line-height:1.25;padding-left:26px}
+/* the title grows and shrinks with the card instead of jumping */
+.dg-name h3{transition:font-size .6s cubic-bezier(.83,0,.17,1)}
+details.drug.closing .dg-name h3{font-size:18px}
+/* every box inside a card is the same lighter pane of glass, "How it works" included, with the same type */
+.how,.dg-grid section{background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);background-repeat:no-repeat;
+  border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge);border-radius:var(--r-ctl);color:var(--ink);padding:10px 12px}
+.how{gap:6px} .how .eyebrow{color:var(--muted);opacity:1;font-size:11.5px;letter-spacing:.12em;font-weight:600}
+.how .hlead{font-size:14px;line-height:1.45;font-weight:600}
+.how ul{padding-left:16px;gap:4px;font-size:13px;line-height:1.45;color:var(--ink)} .how ul li{opacity:1}
+.dg-grid ul{line-height:1.45} .dg-grid .note{font-size:13px} .kc{font-size:13px}
+.dg-tools .chip.listen{margin-left:auto}
+/* listen: the line being read is lit and its box is outlined, so you can follow along */
+details.drug li.tnode.speaking{border-radius:var(--r-tag);background-color:color-mix(in srgb,var(--teal) 18%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 18%,transparent)}
+/* a bulleted line is lit from its bullet to the box edge */
+details.drug li:not(.tnode).speaking,details.drug .hlead.speaking{position:relative;isolation:isolate;background:none;box-shadow:none}
+details.drug li:not(.tnode).speaking::before,details.drug .hlead.speaking::before{content:"";position:absolute;z-index:-1;inset:-3px -6px -3px -20px;border-radius:var(--r-tag);background:color-mix(in srgb,var(--teal) 18%,transparent);animation:litin .3s ease-out}
+details.drug .hlead.speaking::before{left:-6px}
+@keyframes litin{from{opacity:0}to{opacity:1}}
+details.drug .insec{border-color:color-mix(in srgb,var(--teal) 55%,var(--line))!important;transition:border-color .3s ease}
+
+/* ================= v65: the top of the screen ================= */
+/* Games keeps its category picker in the page strip: the same glass bar, in the same place, the same height as every other tab's pages.
+   The picked category sits in the red pill the way the open page does on the other strips. */
+.ptrack.ptsel{align-items:center;gap:8px;padding:4px 4px 4px 12px}
+.ptrack.ptsel .pthumb{display:none}
+.ptsl{display:flex;align-items:center;gap:10px;flex:1 1 auto;min-width:0;margin:0}
+.ptk{font:600 11.5px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);flex:0 0 auto}
+.ptsw{position:relative;flex:1 1 auto;min-width:0;display:flex}
+.ptsw::after{content:"";position:absolute;right:13px;top:50%;width:6px;height:6px;margin-top:-5px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);pointer-events:none;color:var(--teal-ink);opacity:.8}
+.ptrack.ptsel select{-webkit-appearance:none;appearance:none;width:100%;min-width:0;min-height:34px;margin:0;font:600 14px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;color:var(--teal-ink);
+  background:var(--teal);background-image:none;border:0;border-radius:var(--r-ctl);padding:10px 32px 10px 13px;cursor:pointer;text-overflow:ellipsis;
+  box-shadow:0 6px 14px -8px color-mix(in srgb,var(--teal) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.16)}
+.ptn{font:600 12px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding:0 8px 0 2px;flex:0 0 auto}
+/* whatever scrolls up into the gaps around the strip is blurred and dimmed instead of showing through untouched:
+   one frosted layer under the strip, fading out at its lower edge so the page goes soft as it reaches the bars */
+header.top::after{content:"";position:absolute;left:0;right:0;top:var(--barh,58px);bottom:0;z-index:-2;pointer-events:none;
+  background:color-mix(in srgb,var(--bg) 46%,transparent);-webkit-backdrop-filter:blur(9px) saturate(1.1);backdrop-filter:blur(9px) saturate(1.1);
+  -webkit-mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 14px),transparent);
+  transition:transform .34s cubic-bezier(.3,.8,.25,1)}
+@media (max-width:600px){ html.hdrmin header.top::after{transform:translateY(-16px)} }
+html.hdrnow header.top::after{transition:none!important}
+/* the strip no longer needs a blur of its own: the layer under it already softens the page */
+.ptrack{-webkit-backdrop-filter:none;backdrop-filter:none}
+/* the glass bars slide by their position, never by a transform: a moved backdrop layer stops blurring what is under it in Chromium */
+header.top::before{transition:top .34s cubic-bezier(.3,.8,.25,1)}
+header.top::after{transition:top .34s cubic-bezier(.3,.8,.25,1),bottom .34s cubic-bezier(.3,.8,.25,1)}
+@media (max-width:600px){
+  html.hdrmin header.top::before{transform:none;top:-16px}
+  html.hdrmin header.top::after{transform:none;top:calc(var(--barh,58px) - 16px);bottom:16px}
+}
+/* Formulas: Teach mode is a plain row at the top of the page, not a solid band pinned under the strip */
+.stickybar{position:static;top:auto;z-index:auto;background:none;border:0;padding:0;margin:0 0 12px}
+html.hdrmin .stickybar{top:auto}
+
+/* ================= v65: the XP box unfolds in place ================= */
+.lvlcard .lvmore{display:none}
+.lvlcard.open .lvmore,.lvlcard.folding .lvmore{display:grid;gap:10px;grid-column:1/-1;margin-top:2px;cursor:auto}
+.lvlcard.moving{overflow:hidden}
+.lvlcard.open,.lvlcard.folding{cursor:auto}
+.lvlcard.open:active,.lvlcard.folding:active{transform:none;filter:none}
+.lvlcard.open>:not(.lvmore){cursor:pointer}
+.lvlcard .tapgo{transition:transform .72s cubic-bezier(.83,0,.17,1),top .72s cubic-bezier(.83,0,.17,1)}
+.lvlcard.open .tapgo{top:56px;transform:rotate(90deg)}
+/* the three counts spread out into tiles of their own */
+.lvlcard>.statline b{display:inline-block;transform-origin:0 60%}
+.lvlcard>.statline>span{border:1px solid transparent;border-radius:var(--r-ctl);transition:background-color .5s ease,border-color .5s ease,box-shadow .5s ease}
+.lvlcard.open>.statline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal;border-top-color:transparent;padding-top:6px}
+.lvlcard.open>.statline>span{display:grid;gap:3px;padding:10px 12px;font-size:12px;line-height:1.2;color:var(--muted);
+  background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);border-color:color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
+.lvlcard.open>.statline b{font-family:var(--display);font-size:24px;line-height:1;font-weight:700;margin:0}
+/* every earned badge shows once the box is open, wrapping onto more rows if it needs them */
+.lvlcard.open .lvtop{flex-wrap:wrap;row-gap:6px} .lvlcard.open .lvbadges{flex-wrap:wrap;overflow:visible;justify-content:flex-start;margin-left:0;flex-basis:100%}
+/* what opens beneath is the same lighter glass as any box inside a box */
+.lvmore .pgtiles{grid-template-columns:repeat(2,minmax(0,1fr));margin:0;gap:8px}
+.lvmore .pgcard,.lvmore details.fold{margin:0}
+.lvmore .rcard,.lvmore details.fold,.lvmore .pgt,.lvmore .statcards .k{background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);background-repeat:no-repeat;
+  border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge);border-radius:var(--r-ctl)}
+.lvmore .rcard{padding:12px 14px}
+.lvmore .pgt b{font-size:22px}
+
+/* ================= v65: Reference is the print sheets, one glass card each ================= */
+.shgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.shcard{-webkit-appearance:none;appearance:none;font:inherit;color:var(--ink);text-align:left;cursor:pointer;display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:14px;padding:12px 14px 12px 12px;margin:0;
+  border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));border-radius:var(--r-box);
+  background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge),var(--glass-shadow);
+  transition:transform .14s cubic-bezier(.3,.7,.3,1),filter .14s ease,border-color .2s ease}
+.shcard:active{transform:scale(.98);filter:brightness(1.1)}
+@media (hover:hover){ .shcard:hover{border-color:color-mix(in srgb,var(--teal) 40%,var(--line))} }
+.shcard:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.shthumb{width:72px;height:84px;display:grid;place-items:center;border-radius:var(--r-ctl);background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
+.shthumb svg{width:60px;height:70px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}
+.shthumb .pg{fill:#FBF8F3;stroke:rgba(0,0,0,.16);stroke-width:.5}
+.shthumb .eg path{stroke:#F1B9C1;stroke-width:.32}
+.shthumb .tr{fill:none;stroke:#2B2323;stroke-width:.75;stroke-linejoin:round;stroke-linecap:round}
+.shthumb .cd{fill:#FFFFFF;stroke:rgba(0,0,0,.2);stroke-width:.4}
+.shthumb .ln{stroke:#BDB4AA;stroke-width:1.1;stroke-linecap:round}
+.shthumb .hd{fill:#7A1F2B} .shthumb .rl{stroke:#DCD4CA;stroke-width:.6}
+.shtx{display:grid;gap:3px;min-width:0}
+.shtx .eyebrow{margin:0}
+.shtx b{font-family:var(--display);font-size:20px;font-weight:700;line-height:1.1;color:var(--ink)}
+.shtx .note{font-size:12.5px;line-height:1.38}
+.shgo{display:inline-flex;align-items:center;gap:5px;font:600 12.5px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;border-radius:var(--r-ctl);color:var(--ink);
+  background-color:color-mix(in srgb,var(--surface) 80%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
+.shgo svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.shcard.busy .shgo{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)} .shcard.busy .shgo svg{animation:shbusy .9s ease-in-out infinite}
+@keyframes shbusy{0%,100%{transform:translateY(-1px)}50%{transform:translateY(2px)}}
+.shmsg{margin:10px 2px 0;min-height:1.3em}
+@media (max-width:360px){ .shcard{grid-template-columns:60px minmax(0,1fr);} .shthumb{width:60px;height:72px} .shthumb svg{width:50px;height:60px} .shgo{grid-column:2;justify-self:start} }
+
+/* ================= v65: Tricks reads like the rest of Learn ================= */
+/* the same top as Drugs (search and a category picker, then the chips row), and closed cards like Formulas: the hook, then one line of what it stands for */
+.tricks{gap:8px} .tricks .mgroup{margin:18px 0 0} .tricks .mgroup:first-child{margin-top:0}
+details.trick>summary{padding:12px 44px 12px 16px;display:block}
+details.trick>summary::after{right:16px;top:10px;font-size:24px}
+details.trick .mhead h3{font-size:19px;line-height:1.15}
+details.trick .tk-prev{font-size:13.5px;line-height:1.35}
+details.trick:not([open]) .tk-prev{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+details.trick[open] .tk-prev{display:none}
+.tk-body{padding:0 16px 16px;gap:10px}
+.tk-x,.tk-lines{font-size:14px;line-height:1.5}
+.tk-lines b{color:var(--ink)}
+/* the pearl sits in the same lighter pane as any box inside a box */
+.tk-w{border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));border-radius:var(--r-ctl);padding:9px 12px;font-size:13px;line-height:1.45;color:var(--ink);
+  background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge)}
+details.trick{contain-intrinsic-size:auto 69px}
+
+/* ================= v65: one open/close mark everywhere: the chevron the folds and drug cards use ================= */
+details.method>summary::after,details.trick>summary::after,details.scen>summary::after{content:"";position:absolute;right:18px;top:50%;width:7px;height:7px;margin-top:-5px;padding:0;
+  border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .25s ease;font-size:0}
+details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{content:"";transform:rotate(45deg)}
+details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{top:26px}
+/* scenarios: the area on top, the case under it and the score at the right, as on the Patient Sim list */
+details.scen>summary{position:relative;padding:12px 44px 12px 14px}
+.sc-head{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tag prog" "title prog";gap:2px 12px;align-items:center}
+.sc-tag{grid-area:tag;font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:600;line-height:1.3}
+.sc-head h3{grid-area:title;font-size:17px;line-height:1.15;min-width:0}
+.sc-prog{grid-area:prog;font-size:12px;white-space:nowrap}
+details.scen{contain-intrinsic-size:auto 62px}
 </style>
 </head>
 <body>
@@ -1835,155 +1992,21 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
 
 <!-- ================= REFERENCE ================= -->
 <section class="panel" id="panel-ref" hidden>
-  <details class="fold pdffold"><summary><span class="ft">Print PDFs</span><span class="fs">Cards, strips, 12-leads</span></summary><div class="fbody">
-    <p class="note">Strips and 12-leads print on true ECG paper at 100% scale.</p>
-    <div class="pdfgrid"><button type="button" class="btn amber" data-pdf="cards">Drug cards<small>your study set, 4 a page</small></button><button type="button" class="btn" data-pdf="rhythms">Rhythm strips<small>every rhythm, 6 s each</small></button><button type="button" class="btn" data-pdf="twelve">12-lead atlas<small>13 patterns, landscape</small></button><button type="button" class="btn" data-pdf="ref">Quick reference<small>vitals, GCS, APGAR, triage, formulas</small></button></div>
-    <p class="note" id="pdf-msg"></p>
-  </div></details>
-  <div class="rule">
-    <span class="eyebrow" style="color:inherit;opacity:.8">The one rule</span>
-    <div class="big">% = grams in every 100 mL</div>
-    <div class="formulas"><code>% = g ÷ total mL × 100</code><code>g = % × total mL ÷ 100</code><code>% × 10 = mg/mL</code></div>
+  <div class="shgrid">
+    <button type="button" class="shcard lead" data-pdf="cards"><span class="shthumb"><svg viewBox="0 0 60 78" aria-hidden="true"><rect class="pg" x="1" y="1" width="58" height="76" rx="3"/><g transform="translate(6,7)"><rect class="cd" width="23" height="31" rx="2"/><rect width="23" height="4" rx="1.5" fill="#C0392B"/><path class="ln" d="M3 9h13M3 13h17M3 17h11M3 21h15M3 25h9"/></g><g transform="translate(31,7)"><rect class="cd" width="23" height="31" rx="2"/><rect width="23" height="4" rx="1.5" fill="#3A5BA0"/><path class="ln" d="M3 9h13M3 13h17M3 17h11M3 21h15M3 25h9"/></g><g transform="translate(6,40)"><rect class="cd" width="23" height="31" rx="2"/><rect width="23" height="4" rx="1.5" fill="#2E7D4F"/><path class="ln" d="M3 9h13M3 13h17M3 17h11M3 21h15M3 25h9"/></g><g transform="translate(31,40)"><rect class="cd" width="23" height="31" rx="2"/><rect width="23" height="4" rx="1.5" fill="#D9822B"/><path class="ln" d="M3 9h13M3 13h17M3 17h11M3 21h15M3 25h9"/></g></svg></span><span class="shtx"><span class="eyebrow">Your study set</span><b>Drug cards</b><span class="note">Four to a page, with doses, indications, contraindications and the key consideration.</span></span><span class="shgo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg>PDF</span></button>
+    <button type="button" class="shcard" data-pdf="rhythms"><span class="shthumb"><svg viewBox="0 0 60 78" aria-hidden="true"><rect class="pg" x="1" y="1" width="58" height="76" rx="3"/><g class="eg"><path d="M10.0 6v66"/><path d="M15.0 6v66"/><path d="M20.0 6v66"/><path d="M25.0 6v66"/><path d="M30.0 6v66"/><path d="M35.0 6v66"/><path d="M40.0 6v66"/><path d="M45.0 6v66"/><path d="M50.0 6v66"/><path d="M5 11.0h50"/><path d="M5 16.0h50"/><path d="M5 21.0h50"/><path d="M5 26.0h50"/><path d="M5 31.0h50"/><path d="M5 36.0h50"/><path d="M5 41.0h50"/><path d="M5 46.0h50"/><path d="M5 51.0h50"/><path d="M5 56.0h50"/><path d="M5 61.0h50"/><path d="M5 66.0h50"/><path d="M5 71.0h50"/></g><polyline class="tr" points="5.0,15.0 7.2,15.0 8.0,14.2 8.8,15.0 10.0,15.0 10.5,15.8 11.0,8.0 11.5,17.4 12.0,15.0 13.8,15.0 14.8,13.5 15.8,15.0 17.5,15.0 17.5,15.0 19.8,15.0 20.5,14.2 21.2,15.0 22.5,15.0 23.0,15.8 23.5,8.0 24.0,17.4 24.5,15.0 26.2,15.0 27.2,13.5 28.2,15.0 30.0,15.0 30.0,15.0 32.2,15.0 33.0,14.2 33.8,15.0 35.0,15.0 35.5,15.8 36.0,8.0 36.5,17.4 37.0,15.0 38.8,15.0 39.8,13.5 40.8,15.0 42.5,15.0 42.5,15.0 44.8,15.0 45.5,14.2 46.2,15.0 47.5,15.0 48.0,15.8 48.5,8.0 49.0,17.4 49.5,15.0 51.2,15.0 52.2,13.5 53.2,15.0 55.0,15.0"/><polyline class="tr" points="5.0,31.0 7.2,31.0 8.0,30.2 8.8,31.0 10.0,31.0 10.5,31.8 11.0,24.0 11.5,33.5 12.0,31.0 13.8,31.0 14.8,29.5 15.8,31.0 17.5,31.0 17.5,31.0 19.8,31.0 20.5,30.2 21.2,31.0 22.5,31.0 23.0,31.8 23.5,24.0 24.0,33.5 24.5,31.0 26.2,31.0 27.2,29.5 28.2,31.0 30.0,31.0 30.0,31.0 32.2,31.0 33.0,30.2 33.8,31.0 35.0,31.0 35.5,31.8 36.0,24.0 36.5,33.5 37.0,31.0 38.8,31.0 39.8,29.5 40.8,31.0 42.5,31.0 42.5,31.0 44.8,31.0 45.5,30.2 46.2,31.0 47.5,31.0 48.0,31.8 48.5,24.0 49.0,33.5 49.5,31.0 51.2,31.0 52.2,29.5 53.2,31.0 55.0,31.0"/><polyline class="tr" points="5.0,47.0 7.2,47.0 8.0,46.2 8.8,47.0 10.0,47.0 10.5,47.8 11.0,40.0 11.5,49.5 12.0,47.0 13.8,47.0 14.8,45.5 15.8,47.0 17.5,47.0 17.5,47.0 19.8,47.0 20.5,46.2 21.2,47.0 22.5,47.0 23.0,47.8 23.5,40.0 24.0,49.5 24.5,47.0 26.2,47.0 27.2,45.5 28.2,47.0 30.0,47.0 30.0,47.0 32.2,47.0 33.0,46.2 33.8,47.0 35.0,47.0 35.5,47.8 36.0,40.0 36.5,49.5 37.0,47.0 38.8,47.0 39.8,45.5 40.8,47.0 42.5,47.0 42.5,47.0 44.8,47.0 45.5,46.2 46.2,47.0 47.5,47.0 48.0,47.8 48.5,40.0 49.0,49.5 49.5,47.0 51.2,47.0 52.2,45.5 53.2,47.0 55.0,47.0"/><polyline class="tr" points="5.0,63.0 7.2,63.0 8.0,62.2 8.8,63.0 10.0,63.0 10.5,63.8 11.0,56.0 11.5,65.5 12.0,63.0 13.8,63.0 14.8,61.5 15.8,63.0 17.5,63.0 17.5,63.0 19.8,63.0 20.5,62.2 21.2,63.0 22.5,63.0 23.0,63.8 23.5,56.0 24.0,65.5 24.5,63.0 26.2,63.0 27.2,61.5 28.2,63.0 30.0,63.0 30.0,63.0 32.2,63.0 33.0,62.2 33.8,63.0 35.0,63.0 35.5,63.8 36.0,56.0 36.5,65.5 37.0,63.0 38.8,63.0 39.8,61.5 40.8,63.0 42.5,63.0 42.5,63.0 44.8,63.0 45.5,62.2 46.2,63.0 47.5,63.0 48.0,63.8 48.5,56.0 49.0,65.5 49.5,63.0 51.2,63.0 52.2,61.5 53.2,63.0 55.0,63.0"/></svg></span><span class="shtx"><span class="eyebrow">ECG paper</span><b>Rhythm strips</b><span class="note">Every rhythm, six seconds each, six to a page at 100% scale.</span></span><span class="shgo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg>PDF</span></button>
+    <button type="button" class="shcard" data-pdf="twelve"><span class="shthumb"><svg viewBox="0 0 78 60" aria-hidden="true"><rect class="pg" x="1" y="1" width="76" height="58" rx="3"/><g class="eg"><path d="M9.0 5v50"/><path d="M14.0 5v50"/><path d="M19.0 5v50"/><path d="M24.0 5v50"/><path d="M29.0 5v50"/><path d="M34.0 5v50"/><path d="M39.0 5v50"/><path d="M44.0 5v50"/><path d="M49.0 5v50"/><path d="M54.0 5v50"/><path d="M59.0 5v50"/><path d="M64.0 5v50"/><path d="M69.0 5v50"/><path d="M4 10.0h70"/><path d="M4 15.0h70"/><path d="M4 20.0h70"/><path d="M4 25.0h70"/><path d="M4 30.0h70"/><path d="M4 35.0h70"/><path d="M4 40.0h70"/><path d="M4 45.0h70"/><path d="M4 50.0h70"/></g><polyline class="tr" points="5.0,14.0 7.8,14.0 8.7,13.2 9.6,14.0 11.2,14.0 11.8,14.8 12.4,7.0 13.1,16.4 13.7,14.0 15.8,14.0 17.1,12.5 18.3,14.0 20.5,14.0"/><polyline class="tr" points="22.5,14.0 25.3,14.0 26.2,13.2 27.1,14.0 28.7,14.0 29.3,14.8 29.9,7.0 30.6,16.4 31.2,14.0 33.4,14.0 34.6,12.5 35.8,14.0 38.0,14.0"/><polyline class="tr" points="40.0,14.0 42.8,14.0 43.7,13.2 44.6,14.0 46.2,14.0 46.8,14.8 47.4,7.0 48.1,16.4 48.7,14.0 50.9,14.0 52.1,12.5 53.3,14.0 55.5,14.0"/><polyline class="tr" points="57.5,14.0 60.3,14.0 61.2,13.2 62.1,14.0 63.7,14.0 64.3,14.8 64.9,7.0 65.6,16.4 66.2,14.0 68.3,14.0 69.6,12.5 70.8,14.0 73.0,14.0"/><polyline class="tr" points="5.0,30.0 7.8,30.0 8.7,29.2 9.6,30.0 11.2,30.0 11.8,30.8 12.4,23.0 13.1,32.5 13.7,30.0 15.8,30.0 17.1,28.5 18.3,30.0 20.5,30.0"/><polyline class="tr" points="22.5,30.0 25.3,30.0 26.2,29.2 27.1,30.0 28.7,30.0 29.3,30.8 29.9,23.0 30.6,32.5 31.2,30.0 33.4,30.0 34.6,28.5 35.8,30.0 38.0,30.0"/><polyline class="tr" points="40.0,30.0 42.8,30.0 43.7,29.2 44.6,30.0 46.2,30.0 46.8,30.8 47.4,23.0 48.1,32.5 48.7,30.0 50.9,30.0 52.1,28.5 53.3,30.0 55.5,30.0"/><polyline class="tr" points="57.5,30.0 60.3,30.0 61.2,29.2 62.1,30.0 63.7,30.0 64.3,30.8 64.9,23.0 65.6,32.5 66.2,30.0 68.3,30.0 69.6,28.5 70.8,30.0 73.0,30.0"/><polyline class="tr" points="5.0,46.0 7.8,46.0 8.7,45.2 9.6,46.0 11.2,46.0 11.8,46.8 12.4,39.0 13.1,48.5 13.7,46.0 15.8,46.0 17.1,44.5 18.3,46.0 20.5,46.0"/><polyline class="tr" points="22.5,46.0 25.3,46.0 26.2,45.2 27.1,46.0 28.7,46.0 29.3,46.8 29.9,39.0 30.6,48.5 31.2,46.0 33.4,46.0 34.6,44.5 35.8,46.0 38.0,46.0"/><polyline class="tr" points="40.0,46.0 42.8,46.0 43.7,45.2 44.6,46.0 46.2,46.0 46.8,46.8 47.4,39.0 48.1,48.5 48.7,46.0 50.9,46.0 52.1,44.5 53.3,46.0 55.5,46.0"/><polyline class="tr" points="57.5,46.0 60.3,46.0 61.2,45.2 62.1,46.0 63.7,46.0 64.3,46.8 64.9,39.0 65.6,48.5 66.2,46.0 68.3,46.0 69.6,44.5 70.8,46.0 73.0,46.0"/></svg></span><span class="shtx"><span class="eyebrow">ECG paper, landscape</span><b>12-lead atlas</b><span class="note">Thirteen patterns, one to a landscape page, at 100% scale.</span></span><span class="shgo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg>PDF</span></button>
+    <button type="button" class="shcard" data-pdf="ref"><span class="shthumb"><svg viewBox="0 0 60 78" aria-hidden="true"><rect class="pg" x="1" y="1" width="58" height="76" rx="3"/><rect x="6" y="7" width="48" height="6" rx="1.5" class="hd"/><path class="ln" d="M6 20h20M30 20h24"/><path class="ln" d="M6 27h20M30 27h24"/><path class="ln" d="M6 34h20M30 34h24"/><path class="ln" d="M6 41h20M30 41h24"/><path class="ln" d="M6 48h20M30 48h24"/><path class="ln" d="M6 55h20M30 55h24"/><path class="ln" d="M6 62h20M30 62h24"/><path class="ln" d="M6 69h20M30 69h24"/><path class="rl" d="M28 17v55"/></svg></span><span class="shtx"><span class="eyebrow">One sheet</span><b>Quick reference</b><span class="note">Vitals, GCS, APGAR, triage and the formulas.</span></span><span class="shgo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg>PDF</span></button>
   </div>
-
-  <div class="refgrid">
-
-    <details class="fold refold"><summary><span class="ft">Read the vial</span><span class="fs">Labels</span></summary><div class="fbody">
-      <p class="lead">Total drug over total volume, and say the mg/mL out loud before you draw.</p>
-      <div class="kstrip"><div class="k"><b>× 10</b><span>percent to mg/mL</span></div><div class="k"><b>1 mg/mL</b><span>1:1000</span></div><div class="k"><b>0.1 mg/mL</b><span>1:10,000</span></div><div class="k"><b>0.01 mg/mL</b><span>1:100,000</span></div></div>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Label</th><th>Means</th><th class="num">mg/mL</th></tr>
-        <tr><td>2% lidocaine</td><td>2 g per 100 mL</td><td class="num">20</td></tr>
-        <tr><td>1% propofol</td><td>1 g per 100 mL</td><td class="num">10</td></tr>
-        <tr><td>D50</td><td>50 g per 100 mL</td><td class="num">500</td></tr>
-        <tr><td>Epi 1:1000</td><td>1 g in 1000 mL</td><td class="num">1</td></tr>
-        <tr><td>Epi 1:10,000</td><td>1 g in 10,000 mL</td><td class="num">0.1</td></tr>
-        <tr class="warn"><td>Ketamine 500 mg / 5 mL</td><td>divide</td><td class="num">100</td></tr>
-        <tr class="warn"><td>Ketamine 500 mg / 10 mL</td><td>divide</td><td class="num">50</td></tr>
-        <tr><td>Fentanyl 100 mcg / 2 mL</td><td>divide, unit is mcg</td><td class="num">0.05</td></tr>
-      </table></div>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">One D50 amp, four bags</span><span class="fs">Dilution</span></summary><div class="fbody">
-      <p class="lead">The 25 g never changes, only the volume, so only the label changes.</p>
-      <div class="kstrip"><div class="k"><b>25 g</b><span>one D50 amp, 50 mL</span></div><div class="k"><b>Waste 50</b><span>what you add</span></div><div class="k"><b>D8.3</b><span>if you skip the waste</span></div></div>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>25 g ends up in</th><th class="num">Math</th><th class="num">Label</th></tr>
-        <tr><td>50 mL, the amp</td><td class="num">25 ÷ 50 × 100</td><td class="num">D50</td></tr>
-        <tr><td>250 mL, wasted 50</td><td class="num">25 ÷ 250 × 100</td><td class="num">D10</td></tr>
-        <tr><td>300 mL, no waste</td><td class="num">25 ÷ 300 × 100</td><td class="num">D8.3</td></tr>
-        <tr><td>500 mL, wasted 50</td><td class="num">25 ÷ 500 × 100</td><td class="num">D5</td></tr>
-      </table></div>
-      <p class="note">Target volume = grams × 100 ÷ target %. 25 g to D10: 2500 ÷ 10 = 250 mL total.</p>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">Dose first, volume second</span><span class="fs">Dosing</span></summary><div class="fbody">
-      <p class="lead">mg/kg × kg, then ÷ mg/mL, and never jump straight to mL.</p>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Drug, 80 kg</th><th>Order</th><th class="num">Dose</th><th class="num">Stock</th><th class="num">Draw</th></tr>
-        <tr><td>Ketamine, pain</td><td>0.3 mg/kg</td><td class="num">24 mg</td><td class="num">50 mg/mL</td><td class="num">0.5 mL</td></tr>
-        <tr><td>Ketamine, induction</td><td>1.5 mg/kg</td><td class="num">120 mg</td><td class="num">50 mg/mL</td><td class="num">2.4 mL</td></tr>
-        <tr><td>Propofol, trauma</td><td>1.2 mg/kg</td><td class="num">96 mg</td><td class="num">10 mg/mL</td><td class="num">9.6 mL</td></tr>
-        <tr><td>Propofol, healthy</td><td>2 mg/kg</td><td class="num">160 mg</td><td class="num">10 mg/mL</td><td class="num">16 mL</td></tr>
-        <tr><td>Rocuronium</td><td>1.2 mg/kg</td><td class="num">96 mg</td><td class="num">10 mg/mL</td><td class="num">9.6 mL</td></tr>
-        <tr><td>Fentanyl</td><td>1 mcg/kg</td><td class="num">80 mcg</td><td class="num">50 mcg/mL</td><td class="num">1.6 mL</td></tr>
-        <tr><td>TXA</td><td>1 g fixed</td><td class="num">1000 mg</td><td class="num">100 mg/mL</td><td class="num">10 mL</td></tr>
-      </table></div>
-      <p class="note warnnote">A bled patient gets 0.5 to 1 mg/kg of propofol or none at all, against 1.5 to 2.5 when healthy, so check your protocol.</p>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">Weight, then everything per kg</span><span class="fs">Paediatric</span></summary><div class="fbody">
-      <p class="lead">No scale: (age × 2) + 8. Infants 3.5 kg at birth, double by 5 months, triple by 1 year.</p>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Age</th><th class="num">kg</th><th>Age</th><th class="num">kg</th></tr>
-        <tr><td>1</td><td class="num">10</td><td>6</td><td class="num">20</td></tr>
-        <tr><td>2</td><td class="num">12</td><td>7</td><td class="num">22</td></tr>
-        <tr><td>3</td><td class="num">14</td><td>8</td><td class="num">24</td></tr>
-        <tr><td>4</td><td class="num">16</td><td>9</td><td class="num">26</td></tr>
-        <tr><td>5</td><td class="num">18</td><td>10</td><td class="num">28</td></tr>
-      </table></div>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Per kg</th><th class="num">Dose</th></tr>
-        <tr><td>Fluid bolus</td><td class="num">20 mL/kg</td></tr>
-        <tr><td>D10</td><td class="num">5 mL/kg (0.5 g/kg)</td></tr>
-        <tr><td>Epi arrest, 1:10,000</td><td class="num">0.01 mg/kg = 0.1 mL/kg</td></tr>
-        <tr><td>Epi IM, 1:1000</td><td class="num">0.01 mg/kg = 0.01 mL/kg</td></tr>
-        <tr><td>Midazolam IM, seizure</td><td class="num">0.2 mg/kg</td></tr>
-        <tr><td>Ketamine IV</td><td class="num">1 to 2 mg/kg</td></tr>
-        <tr><td>Fentanyl</td><td class="num">1 mcg/kg</td></tr>
-        <tr><td>Maintenance 4-2-1</td><td class="num">4/kg first 10, 2/kg next 10, 1/kg after</td></tr>
-      </table></div>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">Kill the units in order</span><span class="fs">Infusion</span></summary><div class="fbody">
-      <p class="lead">Work kg, then minutes, then mcg, one at a time.</p>
-      <div class="formula">mL/hr = mcg/kg/min × kg × 60 ÷ mcg/mL</div>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Bag</th><th class="num">mcg/mL</th><th>Usual order</th><th class="num">mL/hr, 80 kg</th></tr>
-        <tr><td>Propofol 1000 mg / 100</td><td class="num">10,000</td><td>25 to 100 mcg/kg/min</td><td class="num">12 to 48</td></tr>
-        <tr><td>Ketamine 500 mg / 250</td><td class="num">2000</td><td>5 to 20 mcg/kg/min</td><td class="num">12 to 48</td></tr>
-        <tr><td>Norepi 4 mg / 250</td><td class="num">16</td><td>0.05 to 0.5 mcg/kg/min</td><td class="num">15 to 150</td></tr>
-        <tr><td>Epi 4 mg / 250</td><td class="num">16</td><td>0.05 to 0.2 mcg/kg/min</td><td class="num">15 to 60</td></tr>
-        <tr><td>Dopamine 400 mg / 250</td><td class="num">1600</td><td>2 to 20 mcg/kg/min</td><td class="num">6 to 60</td></tr>
-        <tr><td>Nitro 50 mg / 250</td><td class="num">200</td><td>5 to 100 mcg/min, no kg</td><td class="num">1.5 to 30</td></tr>
-      </table></div>
-      <div class="kstrip"><div class="k"><b>× 0.06</b><span>mcg/kg/min to mg/kg/hr</span></div><div class="k"><b>4 mg/kg/hr</b><span>propofol PRIS ceiling</span></div><div class="k"><b>60 gtt</b><span>gtt/min = mL/hr</span></div><div class="k"><b>21</b><span>1 L/8 h on 10 gtt</span></div></div>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">mEq works like mg</span><span class="fs">Electrolytes</span></summary><div class="fbody">
-      <p class="lead">mEq counts charge, so calcium counts twice.</p>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Product</th><th class="num">mEq/mL</th><th class="num">10 mL</th></tr>
-        <tr><td>Calcium chloride 10%</td><td class="num">1.36</td><td class="num">13.6</td></tr>
-        <tr><td>Calcium gluconate 10%</td><td class="num">0.46</td><td class="num">4.6</td></tr>
-        <tr><td>Bicarb 8.4%</td><td class="num">1</td><td class="num">10</td></tr>
-        <tr><td>KCl concentrate</td><td class="num">2</td><td class="num">20</td></tr>
-        <tr><td>Saline 0.9%</td><td class="num">0.154</td><td class="num">1.5</td></tr>
-        <tr><td>Saline 3%</td><td class="num">0.513</td><td class="num">5.1</td></tr>
-        <tr><td>Saline 7.5%</td><td class="num">1.28</td><td class="num">12.8</td></tr>
-        <tr><td>Saline 23.4%</td><td class="num">4</td><td class="num">40</td></tr>
-      </table></div>
-      <p class="note">Gluconate carries a third of the calcium in chloride, so three amps of gluconate equal one amp of chloride. For saline, mEq/L = g/L ÷ 58.5 × 1000.</p>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">Volume formulas</span><span class="fs">Burns and fluids</span></summary><div class="fbody">
-      <p class="lead">Use Parkland for the first 24 h and the rule of 10s for a starting rate.</p>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>Formula</th><th>Math</th><th class="num">80 kg, 40%</th></tr>
-        <tr><td>Parkland 24 h</td><td>4 × kg × %TBSA</td><td class="num">12,800 mL</td></tr>
-        <tr><td>First 8 h</td><td>half of that ÷ 8</td><td class="num">800 mL/hr</td></tr>
-        <tr><td>Rule of 10s, 40 to 80 kg</td><td>%TBSA × 10</td><td class="num">400 mL/hr</td></tr>
-        <tr><td>Rule of 10s, over 80 kg</td><td>+100 per 10 kg</td><td class="num">600 at 100 kg</td></tr>
-        <tr><td>Sepsis bolus</td><td>30 mL/kg</td><td class="num">2400 mL</td></tr>
-        <tr><td>Peds bolus</td><td>20 mL/kg</td><td class="num"></td></tr>
-      </table></div>
-    </div></details>
-
-    <details class="fold refold"><summary><span class="ft">Multiply by</span><span class="fs">Conversions</span></summary><div class="fbody">
-      <p class="lead">Multiply by one factor at a time, and divide on the way back.</p>
-      <div class="tblwrap"><table class="zebra">
-        <tr><th>From</th><th>To</th><th class="num">×</th><th>Shortcut</th></tr>
-        <tr><td>lb</td><td>kg</td><td class="num">÷ 2.2</td><td>halve, minus 10%</td></tr>
-        <tr><td>in</td><td>cm</td><td class="num">2.54</td><td>× 10 ÷ 4</td></tr>
-        <tr><td>°F</td><td>°C</td><td class="num">(F − 32) × 5 ÷ 9</td><td>minus 30, halve</td></tr>
-        <tr><td>mmHg</td><td>kPa</td><td class="num">÷ 7.5</td><td></td></tr>
-        <tr><td>oz</td><td>mL</td><td class="num">30</td><td>tsp 5, tbsp 15</td></tr>
-        <tr><td>g / mg / mcg</td><td>next down</td><td class="num">1000</td><td></td></tr>
-        <tr><td>L / dL / mL</td><td></td><td class="num">10, then 100</td><td></td></tr>
-        <tr><td>mg/dL glucose</td><td>mmol/L</td><td class="num">÷ 18</td><td></td></tr>
-        <tr><td>g/dL Hb</td><td>g/L</td><td class="num">10</td><td></td></tr>
-      </table></div>
-    </div></details>
-
-  </div>
+  <p class="note shmsg" id="pdf-msg" aria-live="polite"></p>
 </section>
-
 <!-- ================= TRICKS ================= -->
 <section class="panel" id="panel-tricks" hidden>
-  <div class="introrow"><p class="intro">Tap any mnemonic or rule of thumb to open it.</p><button type="button" class="chip" id="tk-expand" aria-pressed="false">Expand all</button></div>
-  <div class="drugbar"><input type="search" id="tk-q" placeholder="Search tricks, letters, drugs, topics" aria-label="Search tricks"><select id="tk-sort" aria-label="Sort"><option value="cat">Grouped by category</option><option value="az">A to Z</option></select></div>
-  <div class="drugchips" id="tk-cats"></div>
-  <div class="tricks" id="tricks"></div>
+  <div class="drugtop">
+    <div class="drugbar"><input type="search" id="tk-q" placeholder="Search mnemonics, letters, drugs" aria-label="Search tricks"><select id="tk-cat" aria-label="Category"></select></div>
+    <div class="drugchips"><button type="button" class="chip" id="tk-expand" aria-pressed="false">Expand all</button><span class="note" id="tk-count"></span></div>
+  </div>
+  <div class="tricks grouped" id="tricks"></div>
 </section>
 <!-- ================= GAMES: every core skill, one round at a time ================= -->
 <section class="panel" id="panel-games" hidden>
@@ -2502,7 +2525,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   // Progress and the registry page open from their boxes on the dashboard
   const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today",scen:"prep",review:"prep"};
   // a dashboard box and the card at the top of the page it opens grow into each other
-  const ZOOM={progress:"lv-card",registry:"exam-card"}, ZTOP={progress:"#pg-tiles .pgt.wide",registry:"#reg-body .reghero"};
+  const ZOOM={registry:"exam-card"}, ZTOP={registry:"#reg-body .reghero"};
   const ztop=id=>document.querySelector(ZTOP[id]);
   const ALLP=Object.values(NAV).flat().concat(Object.keys(HIDDEN));
   function groupOf(id){ return HIDDEN[id]||Object.keys(NAV).find(g=>NAV[g].includes(id))||"today"; }
@@ -2520,7 +2543,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     // enter when the block crosses a line 12% above the bottom edge; leave only once it is fully off screen, so nothing flickers at the line
     const io=new IntersectionObserver(es=>{ let i=0; es.forEach(e=>{ if(e.isIntersecting){ e.target.style.animationDelay=(Math.min(i++,6)*70)+"ms"; e.target.classList.add("in"); } }); },{rootMargin:"0px 0px -12% 0px",threshold:[0,0.02]});
     const out=new IntersectionObserver(es=>{ es.forEach(e=>{ if(!e.isIntersecting&&e.boundingClientRect.height>0) e.target.classList.remove("in"); }); },{rootMargin:"60px 0px 60px 0px",threshold:0});
-    const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); out.observe(el); } }); };
+    const mark=root=>{ if(!root.querySelectorAll) return; (root.matches&&root.matches(SEL)?[root]:[]).concat([...root.querySelectorAll(SEL)]).forEach(el=>{ if(el.closest(".lvmore")) return; if(!el.classList.contains("reveal")){ el.classList.add("reveal"); io.observe(el); out.observe(el); } }); };
     mark(document);
     const sweep=()=>{ const h=window.innerHeight||800; document.querySelectorAll(".reveal:not(.in)").forEach(el=>{ const r=el.getBoundingClientRect(); if(r.bottom>-60&&r.top<h*1.12){ el.style.animationDelay="0ms"; el.classList.add("in"); } }); };
     window.revealSweep=sweep;
@@ -2579,23 +2602,41 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   const dirOf=(a,b,o)=>o&&o.back?"back":ORDER.indexOf(b)>=ORDER.indexOf(a)?"fwd":"back";
   // work that needs the new page laid out waits for the swap when a transition is running
   let swapDone=null; window.afterPanel=fn=>{ if(swapDone) swapDone.then(()=>fn()); else fn(); };
-  // ----- the page strip: built once per tab, then only its selection and thumb change -----
-  function strip(g,id,anim){ const sub=$("subnav"), items=NAV[g]; sub.hidden=items.length<2; if(sub.hidden){ sub.dataset.g=""; return; }
-    const fresh=sub.dataset.g!==g; { const t0=sub.querySelector(".ptrack"); if(t0&&t0.getAnimations) t0.getAnimations().forEach(a=>a.cancel()); }
-    if(fresh){ sub.dataset.g=g; sub.innerHTML=`<div class="ptrack" role="tablist" aria-label="${GNAME[g]||""} pages"><span class="pthumb" aria-hidden="true"></span>${items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join("")}</div>`; }
-    id=PARENT[id]||id; sub.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
-    const tr=sub.querySelector(".ptrack");
-    requestAnimationFrame(()=>{ if(sub.dataset.g!==g) return; if(fresh) fit(); thumb(anim&&!fresh,id); edges();
-      if(fresh&&anim&&tr&&tr.animate) tr.animate([{opacity:0,transform:"translateY(-4px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.8,.24,1)"});
-      // bring the open page into view along the strip
-      const on=sub.querySelector('.ptab[aria-selected="true"]'); if(on&&tr&&tr.scrollWidth>tr.clientWidth+2){ const l=on.offsetLeft-24, r=on.offsetLeft+on.offsetWidth+24; if(l<tr.scrollLeft||r>tr.scrollLeft+tr.clientWidth) tr.scrollTo({left:l<tr.scrollLeft?l:r-tr.clientWidth,behavior:reduceMotion()?"auto":"smooth"}); } }); }
+  // ----- the page strip: one glass frame under the header that never leaves while you move between tabs that have one.
+  // Changing tab swaps only what is inside it (the page names, or on Games the category picker) with a quick crossfade, so the bar itself
+  // never blinks or moves; changing page inside a tab only slides the thumb. -----
+  const hasStrip=g=>(g==="games"&&!!window.gameStrip)||NAV[g].length>1;
+  const FIT={};
+  function stripHTML(g){ if(g==="games"&&window.gameStrip) return gameStrip(); const items=NAV[g]; return items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join(""); }
+  function strip(g,id,anim){ const sub=$("subnav"); if(!sub) return;
+    // the category picker belongs to the games list itself, not to a lesson opened from it
+    if(!hasStrip(g)||(g==="games"&&id!=="games")){ sub.hidden=true; sub.dataset.g=""; return; }
+    const appear=sub.hidden; sub.hidden=false;
+    let tr=sub.querySelector(".ptrack"); if(!tr){ sub.innerHTML='<div class="ptrack"><span class="pthumb" aria-hidden="true"></span></div>'; tr=sub.querySelector(".ptrack"); }
+    const th=tr.querySelector(".pthumb"), fresh=sub.dataset.g!==g, special=g==="games";
+    if(tr.getAnimations) tr.getAnimations({subtree:true}).forEach(a=>a.cancel());
+    if(fresh){ sub.dataset.g=g; tr.classList.toggle("ptsel",special); tr.setAttribute("role",special?"group":"tablist"); tr.setAttribute("aria-label",special?"Game category":(GNAME[g]||"")+" pages");
+      [...tr.children].forEach(c=>{ if(c!==th) c.remove(); }); tr.scrollLeft=0; tr.insertAdjacentHTML("beforeend",stripHTML(g)); fit(g); }
+    id=PARENT[id]||id; tr.querySelectorAll(".ptab").forEach(b=>{ const on=b.dataset.p===id; b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex=on?0:-1; });
+    if(!special) thumb(anim&&!fresh,id);
+    edges();
+    if(fresh&&anim&&tr.animate&&!reduceMotion()){ const kids=[...tr.children].filter(c=>c!==th||!special);
+      // the thumb only fades: it keeps its own position, which a transform keyframe would override
+      kids.forEach((k,i)=>k.animate(k===th?[{opacity:0},{opacity:1}]:[{opacity:0,transform:"translateY(3px)"},{opacity:1,transform:"none"}],{duration:240,delay:Math.min(i,6)*16,easing:EASE,fill:"backwards"}));
+      if(appear) tr.animate([{opacity:0},{opacity:1}],{duration:200,easing:"ease-out"}); }
+    // bring the open page into view along the strip
+    const on=tr.querySelector('.ptab[aria-selected="true"]'); if(on&&tr.scrollWidth>tr.clientWidth+2){ const l=on.offsetLeft-24, r=on.offsetLeft+on.offsetWidth+24; if(l<tr.scrollLeft||r>tr.scrollLeft+tr.clientWidth) tr.scrollTo({left:l<tr.scrollLeft?l:r-tr.clientWidth,behavior:reduceMotion()||fresh?"auto":"smooth"}); } }
+  window.stripRefresh=()=>{ const sub=$("subnav"); if(sub&&sub.dataset.g){ const g=sub.dataset.g; sub.dataset.g=""; strip(g,curPanel,false); } };
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
     if(!anim){ th.style.transition="none"; }
     th.style.width=on.offsetWidth+"px"; th.style.transform=`translateX(${on.offsetLeft}px)`;
     if(!anim){ void th.offsetWidth; th.style.transition=""; } }
-  // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll
-  function fit(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["","s1","s2","s3"]; tr.classList.remove("s1","s2","s3");
-    for(const c of S){ if(c){ tr.classList.remove(...S.filter(Boolean)); tr.classList.add(c); } if(tr.scrollWidth<=tr.clientWidth+1) return; } }
+  // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll.
+  // It is worked out before the strip is first drawn and remembered per tab and width, so the names never visibly change size.
+  function fit(g){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["s1","s2","s3"]; g=g||$("subnav").dataset.g; const key=g+"@"+(window.innerWidth||0);
+    tr.classList.remove(...S); if(g==="games") return; if(FIT[key]!=null){ if(FIT[key]) tr.classList.add(FIT[key]); return; }
+    let pick=""; if(tr.scrollWidth>tr.clientWidth+1){ for(const c of S){ tr.classList.remove(...S); tr.classList.add(c); pick=c; if(tr.scrollWidth<=tr.clientWidth+1) break; } }
+    FIT[key]=pick; }
   function edges(){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const over=tr.scrollWidth>tr.clientWidth+2; tr.classList.toggle("scrolls",over); tr.classList.toggle("atstart",!over||tr.scrollLeft<=2); tr.classList.toggle("atend",!over||tr.scrollLeft+tr.clientWidth>=tr.scrollWidth-2); }
   // iOS only shows a pressed state on touch when something listens for touches; this empty listener is what lets every button press down under the finger
   document.addEventListener("touchstart",()=>{},{passive:true});
@@ -2612,7 +2653,8 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   window.addEventListener("resize",()=>navThumb(false)); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>navThumb(false));
   function markTap(id,from){ const g=groupOf(id), gf=from?groupOf(from):null;
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false")); (window.requestAnimationFrame||setTimeout)(()=>navThumb(!!from&&!reduceMotion()));
-    if(gf===g) strip(g,id,true); else { const tr=$("subnav").querySelector(".ptrack"); if(tr&&!$("subnav").hidden&&tr.animate) tr.animate([{opacity:1},{opacity:0}],{duration:OUT,easing:"ease-in",fill:"forwards"}); }
+    if(gf===g) strip(g,id,true); else { const tr=$("subnav").querySelector(".ptrack"); if(tr&&!$("subnav").hidden&&tr.animate){ const fade=[{opacity:1},{opacity:0}], o={duration:OUT,easing:"ease-in",fill:"forwards"};
+      if(hasStrip(g)&&(g!=="games"||id==="games")) [...tr.children].forEach(k=>k.animate(fade,o)); else tr.animate(fade,o); } }
     if(window.bokehGo&&gf&&gf!==g) bokehGo(Object.keys(NAV).indexOf(g)); }
   function showPanel(id,opts){
     if(!ALLP.includes(id)) id="today";
@@ -2644,6 +2686,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     // the bar opens back up at once on a new page, rather than easing open while the page arrives
     const de=document.documentElement; if(de&&de.classList&&de.classList.contains("hdrmin")){ de.classList.add("hdrnow"); de.classList.remove("hdrmin"); requestAnimationFrame(()=>requestAnimationFrame(()=>de.classList.remove("hdrnow"))); }
     window.scrollTo({top:0,behavior:"instant"}); if(window.bokehScrollReset) bokehScrollReset();
+    { const pe=$("panel-"+id), vh=window.innerHeight||800; if(pe&&pe.querySelectorAll) pe.querySelectorAll(".reveal.in").forEach(el=>{ if(el.getBoundingClientRect().top>vh*.88) el.classList.remove("in"); }); }
     document.dispatchEvent(new CustomEvent("panel",{detail:id}));
     document.body.classList.remove("focus"); const qf=$("q-focus"); if(qf) qf.setAttribute("aria-pressed","false");
     if(!P) return;
@@ -2661,7 +2704,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   $("subnav").addEventListener("keydown",e=>{ if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return; const L=[...$("subnav").querySelectorAll(".ptab")], i=L.findIndex(b=>b.getAttribute("aria-selected")==="true"), n=L[i+(e.key==="ArrowRight"?1:-1)]; if(n){ e.preventDefault(); showPanel(n.dataset.p); n.focus(); } });
   $("subnav").addEventListener("scroll",()=>edges(),{passive:true,capture:true});
   window.addEventListener("resize",()=>{ const t=$("subnav").querySelector(".ptrack"); if(t&&!$("subnav").hidden){ fit(); thumb(false); edges(); } });
-  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(!$("subnav").hidden){ fit(); thumb(false); edges(); } });
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ for(const k in FIT) delete FIT[k]; if(!$("subnav").hidden){ fit(); thumb(false); edges(); } });
   // swipe between top-level groups on touch screens
   (function swipe(){ let x0=null,y0=null; const groups=Object.keys(NAV); const main=document.querySelector("main");
     main.addEventListener("touchstart",e=>{ if(e.target.closest("input,select,textarea,.tblwrap,.drawer,.exbar,.lesson,.wb")) return; x0=e.touches[0].clientX; y0=e.touches[0].clientY; },{passive:true});
@@ -2805,20 +2848,9 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   // c = category, t = the hook, x = what it expands to (a string, or one line per letter), w = why it matters, g = graphic key
   const TRICKS=[
     // med math
-    {c:"Med math",t:"Percent is grams per 100 mL",x:"2% = 2 g in 100 mL. D50 = 50 g in 100 mL.",w:"Every dilution and label question starts here."},
-    {c:"Med math",t:"Percent × 10 = mg/mL",x:"2% lidocaine = 20 mg/mL. 10% calcium chloride = 100 mg/mL. 0.9% saline = 9 mg/mL.",w:"Skips the grams step entirely."},
-    {c:"Med math",t:"1:1,000 is 1 mg/mL. Every extra zero divides by 10.",x:["1:1,000: 1 mg/mL","1:10,000: 0.1 mg/mL","1:100,000: 0.01 mg/mL"],w:"IM epi comes from the 1 mg/mL vial; IV push from the 0.1 mg/mL syringe.",g:"epivials"},
-    {c:"Med math",t:"Desired over Have, times Volume",x:"mL to give = (dose you want ÷ dose in the container) × mL in the container.",w:"The one formula that covers every syringe draw."},
-    {c:"Med math",t:"Dose first, volume second",x:"Work out the mg before you ever think about mL.",w:"Most draw-up errors come from jumping straight to mL."},
-    {c:"Med math",t:"Kill the units one at a time",x:["× kg: kills the kg","× 60: kills the minutes","÷ mcg/mL: kills the mcg","What is left is mL/hr"],w:"Weight-based drips without memorising a formula."},
     {c:"Med math",t:"60-drop set: drops per minute equals mL per hour",x:"On a microdrip (60 gtt/mL), 30 mL/hr is 30 gtt/min.",w:"No calculation at all for the most common peds set."},
-    {c:"Med math",t:"Macro sets: 10, 15, 20",x:"gtt/min = mL × gtt/mL ÷ minutes. A 1,000 mL bag over 8 hours on a 15 set is 31 gtt/min.",w:"Memorise the set on your rig."},
     {c:"Med math",t:"Pounds to kilograms: halve it, take off 10%",x:"220 lb: half is 110, minus 11 is 99, and the real answer is 100 kg.",w:"Close enough for any field dose; exact is ÷ 2.2."},
     {c:"Med math",t:"Peds weight: age × 2 + 8",x:"A 6-year-old is about 20 kg, and over 10 years you use age × 3 + 7.",w:"When there is no tape and no scale."},
-    {c:"Med math",t:"Waste what you add",x:"To make D10 from one D50 amp: waste 50 mL from a 250 mL bag, add the 50 mL amp. 25 g in 250 mL = 10%.",w:"Skip the waste and you have D8.3, which is not what the order said."},
-    {c:"Med math",t:"Same bag, same numbers",x:["Norepi and epi: 4 mg in 250 mL = 16 mcg/mL","Dopamine: 400 mg in 250 mL = 1,600 mcg/mL","Lidocaine: 2 g in 500 mL = 4 mg/mL","Diltiazem: 125 mg in 125 mL = 1 mg/mL"],w:"Learn the standard bags once and most pump math becomes a lookup."},
-    {c:"Med math",t:"Estimate first, then calculate",x:"0.8 × 80: 0.8 is nearly 1, so expect something just under 80, and the answer is 64.",w:"Catches a decimal slip before it reaches the patient."},
-    {c:"Med math",t:"Check it backwards",x:"Take your mL, multiply by the concentration, and you should land on the ordered dose.",w:"Thirty seconds that catches almost every error."},
     // pharmacology
     {c:"Pharmacology",t:"The six rights",x:["Right patient","Right drug","Right dose","Right route","Right time","Right documentation"],w:"Say them out loud before every push."},
     {c:"Pharmacology",t:"LEAN",x:["L: Lidocaine","E: Epinephrine","A: Atropine","N: Naloxone"],w:"The drugs that can go down the ET tube at 2 to 2.5 times the IV dose in 10 mL saline. Last resort when there is no IV or IO."},
@@ -3198,7 +3230,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   function vialSVG(o){
     const name=(o.name||"").toUpperCase(), line1=o.total||"", line2=o.conc||"", warn=o.warn||"";
     const col=o.color||"var(--teal)";
-    return `<svg class="vial" viewBox="0 0 120 200" role="img" aria-label="${name} ${line1} ${line2}"><rect x="38" y="4" width="44" height="22" rx="4" fill="${col}"/><rect x="44" y="26" width="32" height="14" fill="var(--line)"/><path d="M30 44 h60 a8 8 0 0 1 8 8 v128 a12 12 0 0 1 -12 12 h-52 a12 12 0 0 1 -12 -12 v-128 a8 8 0 0 1 8 -8z" fill="var(--surface)" stroke="var(--line)" stroke-width="2"/><rect x="22" y="70" width="76" height="86" fill="var(--bg)" stroke="var(--line)"/><rect x="22" y="70" width="76" height="16" fill="${col}"/><text x="60" y="82" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="${name.length>14?8:10}" fill="#fff">${name}</text><text x="60" y="108" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="12" fill="var(--ink)">${line1}</text><text x="60" y="126" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--teal)">${line2}</text>${warn?`<text x="60" y="146" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="var(--bad)">${warn}</text>`:""}<path d="M30 160 q30 10 60 0" stroke="var(--line)" fill="none"/></svg>`;
+    return `<svg class="vial" viewBox="0 0 120 200" role="img" aria-label="${name} ${line1} ${line2}"><rect x="38" y="4" width="44" height="22" rx="4" fill="${col}"/><rect x="44" y="26" width="32" height="14" fill="var(--line)"/><path d="M30 44 h60 a8 8 0 0 1 8 8 v128 a12 12 0 0 1 -12 12 h-52 a12 12 0 0 1 -12 -12 v-128 a8 8 0 0 1 8 -8z" fill="var(--surface)" stroke="var(--line)" stroke-width="2"/><rect x="22" y="70" width="76" height="86" fill="var(--bg)" stroke="var(--line)"/><rect x="22" y="70" width="76" height="16" fill="${col}"/><text x="60" y="82" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="${name.length>14?8:10}" fill="#fff">${name}</text><text x="60" y="108" text-anchor="middle" font-family="Geist Mono,monospace" font-weight="600" font-size="12" fill="var(--ink)">${line1}</text><text x="60" y="126" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="var(--teal)">${line2}</text>${warn?`<text x="60" y="146" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" fill="var(--bad)">${warn}</text>`:""}<path d="M30 160 q30 10 60 0" stroke="var(--line)" fill="none"/></svg>`;
   }
   function stockToVial(d,s){ const m=/^([^\/(]+?)(?:\s*\/\s*([^(]+?))?(?:\s*\((.*)\))?$/.exec(s.l.trim()); const total=m?(m[1].trim()+(m[2]?" / "+m[2].trim():"")):s.l; const conc=s.tab?"":(fmt(s.c,s.c<1?3:2)+" "+s.u+"/mL"); return vialSVG({name:d.name.replace(/\s*\(.*\)/,""),total,conc:m&&m[3]?m[3]:conc,warn:s.u==="mcg"?"MICROGRAMS":""}); }
 
@@ -3274,7 +3306,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
           <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span>${(d.quick.lines||[]).length?`<div class="dlines">${d.quick.lines.map(l=>`<div class="dl"><span class="rt">${l.tag}</span><span class="dv"><b>${tight(l.text)}</b>${l.ctx?` <span class="dx">${l.ctx}</span>`:""}</span></div>`).join("")}</div>`:`<b>${tight(d.quick.dose.replace(/\.$/,""))}</b>`}</div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
-        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip listen" data-listen="${d.id}" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen</button><button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div></summary>
+        <div class="dg-tools">${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-lesson="${d.id}">Lesson</button><button type="button" class="chip listen" data-listen="${d.id}" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen</button></div></summary>
         <div class="dg-body" data-lazy="1"></div></details>`;
     }
     // the open card's full body, built the first time it opens so the closed list stays light
@@ -3285,7 +3317,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
           <div class="dg-grid">
             ${hasDose?`<section class="dosesec"><h4>Dosages</h4><div class="ptline info"><span>Using the patient weight you set, <span class="nw"><b class="ptkg num">${fmt(PT.kg,1)}</b>kg</span></span><button type="button" class="chip" data-ptopen>Change</button></div><div class="dosetable" data-dose="${d.id}"></div></section>`:""}
             <section><h4>Onset</h4>${timingBlock(d)}</section>
-            <section><h4>Key consideration</h4><p class="kc">${d.quick.key}</p></section>${d.localNote?`<section><h4>Local protocol</h4><p class="kc">${String(d.localNote).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}</p></section>`:""}
+            <section><h4>Key consideration</h4>${li([d.quick.key].filter(Boolean))}</section>${d.localNote?`<section><h4>Local protocol</h4>${li([String(d.localNote).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))])}</section>`:""}
             <section><h4>Standard supply</h4>${li(d.supply.map(tight))}</section>
             <section><h4>Mechanism of action</h4>${li(d.moa)}</section>
             <section><h4>Indications</h4>${li(d.ind)}</section>
@@ -3300,10 +3332,11 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     const bagNode=b=>`<li class="tnode bag info"><div class="l1"><span class="use">Standard bag${b.tag?tag(b.tag):""}</span><span class="lead"></span><span class="dose">${tight(b.mix)}</span></div><span class="sub"><b>${tight(b.conc)}</b>. ${b.use}${b.alt?" "+b.alt:""}</span><span class="sub why">${b.why}</span></li>`;
     function node(d,ds,kg){
       const extra=ds.tag?" info":"";
-      if(ds.kind==="text") return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span></div><span class="sub">${tight(ds.t||"")}</span></li>`;
+      const di=d.doses.indexOf(ds);
+      if(ds.kind==="text") return `<li class="tnode${extra}" data-i="${di}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span></div><span class="sub">${tight(ds.t||"")}</span></li>`;
       const r=doseLine(d,ds,kg);
       const after=[ds.t?shortT(ds.t):"",ds.max&&!/\bmax\b/i.test(ds.t||"")?`max ${fmt(ds.max,3)} ${ds.unit}`:""].filter(Boolean).join("; ");
-      return `<li class="tnode${extra}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span><span class="lead"></span><span class="dose">${dash(r.dose)}</span></div>${after?`<span class="aft">${dash(after)}</span>`:""}${r.calc?`<span class="wkg info">${dash(r.calc)}</span>`:""}${ds.note?`<span class="sub">${tight(ds.note)}</span>`:""}${mathBlock(r.steps)}</li>`;
+      return `<li class="tnode${extra}" data-i="${di}"><div class="l1"><span class="use">${shortL(ds.l)}${tag(ds.tag)}</span><span class="lead"></span><span class="dose">${dash(r.dose)}</span></div>${after?`<span class="aft">${dash(after)}</span>`:""}${r.calc?`<span class="wkg info">${dash(r.calc)}</span>`:""}${ds.note?`<span class="sub">${tight(ds.note)}</span>`:""}${mathBlock(r.steps)}</li>`;
     }
     function doseBlock(d,kg){
       return [["adult","Adult"],["peds","Pediatric"]].map(([p,pl])=>{
@@ -3318,7 +3351,43 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     function renderDoses(){ document.querySelectorAll(".dosetable").forEach(t=>{ const d=DRUGS.find(x=>x.id===t.dataset.dose); t.innerHTML=doseBlock(d,PT.kg); }); }
     function headerH(){ const h=document.querySelector("header.top"); return h?h.getBoundingClientRect().height:0; }
     function scrollToCard(el){ smoothScrollTo(()=>el.getBoundingClientRect().top+window.scrollY-headerH()-8); }
-    window.revealDrug=(id,scroll)=>{ const el=$("drug-"+id); if(!el) return false; fill(el); if(!el.open) el.open=true; else if(scroll!==false) scrollToCard(el); return true; };
+    window.revealDrug=(id,scroll)=>{ const el=$("drug-"+id); if(!el) return false; fill(el); if(!el.open) openCard(el); else if(scroll!==false) scrollToCard(el); return true; };
+    // ----- the splay: a card unfolds to its full height and its sections settle in one after another; closing folds it back the same way -----
+    const EQ="cubic-bezier(.83,0,.17,1)";
+    const still=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const parts=d=>[...d.querySelectorAll(".dg-body>.how,.dg-grid>section")];
+    function stop(d){ if(d._an){ const a=d._an; d._an=null; a.forEach(x=>{ try{ x.cancel(); }catch(e){} }); } d.classList.remove("closing"); }
+    function openCard(d){
+      const folding=d.open&&d.classList.contains("closing");
+      const from=d.getBoundingClientRect().height;
+      if(!d.open) d._ch=from;
+      stop(d);
+      // fold away any other open card without moving the one you tapped
+      root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o===d) return; stop(o); const t0=d.getBoundingClientRect().top; o.dataset.auto="1"; o.open=false; const t1=d.getBoundingClientRect().top; if(Math.abs(t1-t0)>1) window.scrollTo(0,window.scrollY+(t1-t0)); });
+      fill(d); if(!d.open) d.open=true; fitLines(d); fitTools(d);
+      if(still()) return;
+      const to=d.getBoundingClientRect().height; if(Math.abs(to-from)<2) return;
+      const an=[d.animate([{height:from+"px"},{height:to+"px"}],{duration:640,easing:EQ})];
+      if(!folding){
+        parts(d).forEach((k,i)=>an.push(k.animate([{opacity:0,transform:"translateY(18px) scale(.985)"},{opacity:1,transform:"none"}],{duration:560,delay:60+Math.min(i,8)*46,easing:EQ,fill:"backwards"})));
+        const tl=d.querySelector(".dg-tools"), cl=d.querySelector(".dg-cls");
+        [tl,cl].forEach((x,i)=>{ if(x) an.push(x.animate([{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],{duration:460,delay:40+i*40,easing:EQ,fill:"backwards"})); });
+      } else parts(d).forEach(k=>an.push(k.animate([{opacity:getComputedStyle(k).opacity},{opacity:1}],{duration:300,easing:"ease-out"})));
+      d._an=an; an[0].onfinish=()=>{ if(d._an===an) d._an=null; };
+    }
+    function closeCard(d){
+      stop(d);
+      const from=d.getBoundingClientRect().height, to=d._ch;
+      if(still()||!to||to>=from){ d.open=false; return; }
+      d.classList.add("closing"); scrollToCard(d);
+      const an=[d.animate([{height:from+"px"},{height:to+"px"}],{duration:560,easing:EQ,fill:"forwards"})];
+      const ps=parts(d).reverse(); ps.forEach((k,i)=>an.push(k.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(10px) scale(.99)"}],{duration:300,delay:Math.min(i,6)*18,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"})));
+      const tl=d.querySelector(".dg-tools"); if(tl) an.push(tl.animate([{opacity:1},{opacity:0}],{duration:260,delay:120,easing:"ease-in",fill:"forwards"}));
+      d._an=an;
+      an[0].onfinish=()=>{ if(d._an!==an) return; d._an=null; d.dataset.auto="1"; d.open=false; d.classList.remove("closing"); an.forEach(x=>x.cancel());
+        const f=d.querySelector(".dg-facts"); if(f) f.animate([{opacity:0,transform:"translateY(4px)"},{opacity:1,transform:"none"}],{duration:300,easing:"cubic-bezier(.2,.7,.2,1)"}); };
+    }
+    window.openDrugCard=openCard;
     window.toggleStudy=id=>{ if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); document.querySelectorAll(`[data-star="${id}"]`).forEach(b=>{ b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); }); const card=$("drug-"+id); if(card) card.classList.toggle("instudy",on); setStudyBtn(); try{ feedback(true); }catch(e){} };
     function setStudyBtn(){ studyBtn.innerHTML=`<svg class="chipstar" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>Study set · ${study.size}`; studyBtn.setAttribute("aria-pressed",studyOnly?"true":"false"); if(!study.size&&studyOnly){ studyOnly=false; studyBtn.setAttribute("aria-pressed","false"); } }
     function visible(){ const term=q.value.trim().toLowerCase(), c=fil.value; return DRUGS.filter(d=>(!studyOnly||study.has(d.id))&&(!c||d.cls.includes(c))&&(!term||[d.name,...d.brands,...d.cls,...d.ind].join(" ").toLowerCase().includes(term))); }
@@ -3355,14 +3424,14 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     root.addEventListener("scroll",e=>{ const t=e.target; if(t.classList&&t.classList.contains("dg-tools")) t.classList.toggle("atend",t.scrollLeft+t.clientWidth>=t.scrollWidth-2); },true);
     window.addEventListener("resize",()=>root.querySelectorAll("details.drug[open]").forEach(d=>{ fitTools(d); fitLines(d); }));
     root.addEventListener("click",e=>{ if(e.target.closest("[data-ptopen]")){ window.scrollTo({top:0,behavior:"smooth"}); $("pt-pop").hidden=false; setTimeout(()=>$("pt-kg").focus(),300); return; }
-      const sm=e.target.closest("details.drug>summary"); if(sm) fill(sm.parentNode); },true);
+      const sm=e.target.closest("details.drug>summary"); if(!sm||e.target.closest(".dg-tools,.star")) return; const d=sm.parentNode; e.preventDefault(); if(d.open&&!d.classList.contains("closing")) closeCard(d); else openCard(d); },true);
     q.addEventListener("input",render); fil.addEventListener("change",render);
     studyBtn.addEventListener("click",()=>{ if(!study.size){ studyBtn.innerHTML=`<svg class="chipstar" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>Tap a star to add a drug`; setTimeout(setStudyBtn,1800); return; } studyOnly=!studyOnly; render(); });
     $("drug-listen").addEventListener("click",()=>{ const ids=visible().map(d=>d.id); if(ids.length&&window.ttsToggle) ttsToggle(ids,true); });
     document.addEventListener("patient",renderDoses);
     document.addEventListener("study",setStudyBtn);
     render();
-    window.openDrug=id=>{ showPanel("drugs"); afterPanel(()=>{ if(!$("drug-"+id)){ q.value=""; fil.value=""; studyOnly=false; render(); } const el=$("drug-"+id); if(el){ fill(el); if(el.open) scrollToCard(el); else el.open=true; } }); };
+    window.openDrug=id=>{ showPanel("drugs"); afterPanel(()=>{ if(!$("drug-"+id)){ q.value=""; fil.value=""; studyOnly=false; render(); } const el=$("drug-"+id); if(el){ fill(el); if(el.open) scrollToCard(el); else openCard(el); } }); };
   })();
   // ---------- methods: formula first, fixed steps, many drugs per method; every number is computed from the drug's parameters ----------
   const f=(n,d)=>fmt(n,d==null?2:d);
@@ -4118,7 +4187,9 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
   const CARDS=(()=>{ const c=[]; const cold=RULES.find(g=>g.cold); cold.items.forEach((it,i)=>c.push({id:"cold"+i,f:it[1],b:it[0],src:"Cold number"}));
     DRUGS.forEach(d=>{ c.push({id:"dd-"+d.id,f:`Dose: ${d.name}`,b:tight(d.quick.dose),src:"Drug card",ref:d.id}); c.push({id:"dk-"+d.id,f:`Key consideration: ${d.name}`,b:d.quick.key,src:"Drug card",ref:d.id}); c.push({id:"dc-"+d.id,f:`Class: ${d.name}`,b:d.cls.join(", "),src:"Drug card",ref:d.id}); if(d.contra.length) c.push({id:"dx-"+d.id,f:`Contraindications: ${d.name}`,b:d.contra.join("; "),src:"Drug card",ref:d.id}); });
     RULES.filter(g=>!g.cold).forEach((g,gi)=>g.items.forEach((it,i)=>c.push({id:"rule"+gi+"-"+i,f:it[1],b:it[0],src:"Rule: "+g.g})));
-    TRICKS.forEach((t,i)=>c.push({id:"tk"+i,f:t.t,b:Array.isArray(t.x)?t.x.join("<br>"):t.x,src:"Trick: "+t.c}));
+    // eleven med math tricks left the list in v65; each card keeps the id it had before, so its spacing history stays with it
+    const tkId=i=>"tk"+(i===0?6:i===1?8:i===2?9:i+11);
+    TRICKS.forEach((t,i)=>c.push({id:tkId(i),f:t.t,b:Array.isArray(t.x)?t.x.join("<br>"):t.x,src:"Trick: "+t.c}));
     return c; })();
   let srs=store.get("mm-srs",{});
   const DAY=86400000;
@@ -4178,7 +4249,7 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     const titleOf=L=>{ let t=TITLES[0][1]; TITLES.forEach(([n,name])=>{ if(L>=n) t=name; }); return t; };
     window.xpState=()=>{ const L=levelOf(P.xp.total); return {total:P.xp.total,level:L,title:titleOf(L),today:P.xp.days[dayKey()]||0,next:xpFor(L+1),cur:xpFor(L)}; };
     // toasts for level ups and badges
-    let toastT=null; function toast(html){ let t=$("toast"); if(!t){ t=document.createElement("div"); t.id="toast"; t.className="toast"; document.body.appendChild(t); } t.innerHTML=html; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),3200); }
+    let toastT=null; function toast(html){ let t=$("toast"); if(!t){ t=document.createElement("div"); t.id="toast"; t.className="toast"; document.body.appendChild(t); } t.innerHTML=html; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),3200); } window.toastMsg=toast;
     window.addXP=(n,src)=>{ n=Math.round(n||0); if(n<=0) return; const before=levelOf(P.xp.total); const k=dayKey(); P.xp.total+=n; P.xp.days[k]=(P.xp.days[k]||0)+n; save(); const after=levelOf(P.xp.total);
       try{ document.dispatchEvent(new CustomEvent("xp",{detail:{n,src,total:P.xp.total,level:after,levelUp:after>before}})); }catch(e){}
       if(after>before) toast(`<b>Level ${after}</b><span>${titleOf(after)}</span>`); checkBadges({src}); render(); };
@@ -4220,9 +4291,10 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
     // the badges earned so far, newest first, as small icons beside the level; as many as fit, then a count of the rest
     function lvBadges(){ const el=$("lv-badges"); if(!el) return; const got=BADGES.filter(b=>P.badges[b.id]).sort((a,b)=>P.badges[b.id]-P.badges[a.id]);
       el.hidden=!got.length; el.innerHTML=""; if(!got.length) return; el.setAttribute("aria-label",`${got.length} badge${got.length===1?"":"s"} earned`); el.setAttribute("role","img");
-      const room=el.clientWidth, per=24, fit=room?Math.max(1,Math.floor((room+4)/per)):got.length;
+      const room=el.clientWidth, per=24, all=!!el.closest(".lvlcard.open"), fit=all?got.length:room?Math.max(1,Math.floor((room+4)/per)):got.length;
       const show=got.length>fit?got.slice(0,Math.max(1,fit-1)):got, rest=got.length-show.length;
       el.innerHTML=show.map(b=>`<i title="${b.n}">${svgIcon(b.i)}</i>`).join("")+(rest?`<i class="more">+${rest}</i>`:""); }
+    window.lvBadgesNow=lvBadges;
     window.addEventListener("resize",()=>{ clearTimeout(lvBadges.t); lvBadges.t=setTimeout(lvBadges,150); }); document.addEventListener("panel",e=>{ if(e.detail==="today") lvBadges(); });
     window.renderProgress=render;
     // every time the dashboard opens, the ring and bar fill from empty and the XP counts up: slow to start, a quick rush, then a long soft finish
@@ -5302,9 +5374,12 @@ html.splashing ::-webkit-scrollbar{display:none;width:0;height:0}
       const shown=secs.filter(x=>x[2].length); secs.length=0; secs.push(...shown);
       const hero=going?(()=>{ const I=info(going); return `<button type="button" class="ghero" style="--h:${CAT_HUE[going.cat]||200}" data-play="${going.id}"><span class="gic">${icon(going.cat)}</span><span class="ghtx"><span class="eyebrow">Last played</span><b>${esc(going.n)}</b><span class="note">Lesson ${Math.min((I.rec.lvl||0)+1,I.n)} of ${I.n}: ${esc(I.next)}</span><span class="gbar"><i style="width:${Math.round(I.frac*100)}%"></i></span></span><span class="ghgo">Continue</span></button>`; })():"";
       groot.innerHTML=`${hero}
-        <div class="gtools gsel"><label><span class="eyebrow">Category</span><select id="g-cat"><option value="all">All categories</option>${cats.map(([c,n])=>`<option value="${c}"${GV.cat===c?" selected":""}>${esc(n)}</option>`).join("")}</select></label><span class="note gcount">${list.length} game${list.length===1?"":"s"}</span></div>
         <div class="gsecs">${secs.map(([c,n,gs])=>`<section class="gsec" style="--h:${CAT_HUE[c]||200}"><h3 class="gsech"><span class="gic">${icon(c)}</span><span class="gsecn">${esc(n)}</span><span class="gsecc">${gs.length}</span></h3><div class="ggrid">${gs.map(tile).join("")}</div></section>`).join("")||`<p class="note">Nothing here with those filters.</p>`}</div>`;
-      const gc=$("g-cat"); if(gc) gc.value=GV.cat; }
+      const gc=$("g-cat"); if(gc) gc.value=GV.cat; const cn=$("g-count"); if(cn) cn.textContent=list.length+" game"+(list.length===1?"":"s"); }
+    // the category picker lives in the page strip under the header, in the same glass bar and the same place as every other tab's pages
+    window.gameStrip=()=>{ const all=GAMES.filter(g=>g.levels||g.page), cats=CATS.filter(([c])=>all.some(g=>g.cat===c)), n=all.filter(g=>GV.cat==="all"||g.cat===GV.cat).length;
+      return `<label class="ptsl"><span class="ptk">Category</span><span class="ptsw"><select id="g-cat" aria-label="Game category"><option value="all">All categories</option>${cats.map(([c,nm])=>`<option value="${c}"${GV.cat===c?" selected":""}>${esc(nm)}</option>`).join("")}</select></span></label><span class="ptn" id="g-count">${n} game${n===1?"":"s"}</span>`; };
+    { const sn=$("subnav"); if(sn) sn.addEventListener("change",e=>{ if(e.target.id==="g-cat"){ GV.cat=e.target.value; gsave2(); renderGames(); window.scrollTo({top:0,behavior:"instant"}); } }); }
     if(groot){ groot.addEventListener("click",e=>{ const pg=e.target.closest("[data-page]"); if(pg){ showPanel(pg.dataset.page); return; }
         const pl=e.target.closest("[data-play]"); if(pl){ playGame(pl.dataset.play); return; }
         const node=e.target.closest("[data-game]"); if(node) openPath("game",node.dataset.game); });
@@ -5793,10 +5868,10 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       keys.forEach(k=>{ const a=wrap(`${k.n}.  ${k.key}`,W-2*L,10,true), ex=k.expl?wrap(k.expl,W-2*L-22,8.5,false):[]; const h=a.length*13+ex.length*11+8; if(y+h>BOT()) { portrait(); }
         a.forEach((l,j)=>d.text(L,y+10+j*13,l,10,true)); y+=a.length*13; ex.forEach((l,j)=>d.text(L+22,y+9+j*11,l,8.5,false,"#555555")); y+=ex.length*11+8; });
       return d.bytes(title); }
-    async function make(kind){ const msg=$("pdf-msg"); if(msg) msg.textContent="Building…"; await new Promise(r=>setTimeout(r,30)); let bytes, name;
+    async function make(kind){ const msg=$("pdf-msg"); if(msg) msg.textContent="Building…"; const btn=document.querySelector(`.shcard[data-pdf="${kind}"]`); if(btn) btn.classList.add("busy"); await new Promise(r=>setTimeout(r,30)); let bytes, name;
       try{ if(kind==="cards"){ const pool=(window.studyPool?studyPool():DRUGS); bytes=drugCards(pool.length?pool:DRUGS); name="lazarus-drug-cards.pdf"; }
         else if(kind==="rhythms"){ bytes=rhythmSheets(); name="lazarus-rhythm-strips.pdf"; } else if(kind==="twelve"){ bytes=twelveAtlas(); name="lazarus-12-lead-atlas.pdf"; } else { bytes=quickRef(); name="lazarus-quick-reference.pdf"; }
-        const how=await SHARE.save(name,"application/pdf",bytes); if(msg) msg.textContent=how==="downloaded"||how==="saved"?`Saved ${name}.`:how==="shared"?"Sent to the share sheet.":""; }catch(e){ if(msg) msg.textContent="Could not build that PDF: "+(e.message||e); } }
+        const how=await SHARE.save(name,"application/pdf",bytes); if(msg) msg.textContent=how==="downloaded"||how==="saved"?`Saved ${name}.`:how==="shared"?"Sent to the share sheet.":""; }catch(e){ if(msg) msg.textContent="Could not build that PDF: "+(e.message||e); } if(btn) btn.classList.remove("busy"); }
     document.addEventListener("click",e=>{ const b=e.target.closest("[data-pdf]"); if(b) make(b.dataset.pdf); });
     window.__PDF={drugCards,rhythmSheets,twelveAtlas,quickRef,testPDF,width,wrap};
   })();
@@ -5887,10 +5962,10 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
   })();
   // ---------- tricks page: search, category filter, sort, expand, small graphics ----------
   (function tricksUI(){
-    const root=$("tricks"), q=$("tk-q"), sort=$("tk-sort"), cats=$("tk-cats"), ex=$("tk-expand");
+    const root=$("tricks"), q=$("tk-q"), csel=$("tk-cat"), ex=$("tk-expand");
     if(!root) return;
     const CATS=[...new Set(TRICKS.map(t=>t.c))];
-    let cat=store.get("mm-tkcat",""), open=false;
+    let cat=store.get("mm-tkcat",""), open=false; if(cat&&!CATS.includes(cat)) cat="";
     const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
     const hi=(s,term)=>{ s=esc(s); if(!term) return s; const re=new RegExp("("+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"); return s.replace(re,"<mark>$1</mark>"); };
     // ---- graphics: hand-drawn strips, all in currentColor so they follow the theme
@@ -5919,21 +5994,22 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     // unlabeled strips for Rhythm ID: a new random variant every time, nothing on it gives the answer away
     window.RHYTHM_STRIP=k=>window.ECG_ART?ECG_ART({type:"strip",key:k,seed:1+Math.floor(Math.random()*1e6)}):"";
     const lines=(x,term)=>Array.isArray(x)?`<ul class="tk-lines">${x.map(l=>{ const m=/^([A-Za-z0-9&\/\-]{1,6}|[^:]{1,34}):\s(.*)$/.exec(l); return m?`<li><b>${hi(m[1],term)}</b> ${hi(m[2],term)}</li>`:`<li>${hi(l,term)}</li>`; }).join("")}</ul>`:`<p class="tk-x">${hi(x,term)}</p>`;
-    function chips(){ cats.innerHTML=[["","All"],...CATS.map(c=>[c,c])].map(([v,l])=>`<button type="button" class="chip" data-cat="${v}" aria-pressed="${cat===v?"true":"false"}">${l}</button>`).join("")+`<span class="note" id="tk-count"></span>`; }
-    function card(t,term){ return `<details class="trick" data-cat="${t.c}"${open?" open":""}><summary><span class="tk-cat">${t.c}</span><h3>${hi(t.t,term)}</h3></summary><div class="tk-body">${lines(t.x,term)}${t.g&&GFX[t.g]?GFX[t.g]():""}${t.w?`<p class="tk-w">${hi(t.w,term)}</p>`:""}</div></details>`; }
+    function catSel(){ csel.innerHTML=[["","All categories"],...CATS.map(c=>[c,c])].map(([v,l])=>`<option value="${v}"${cat===v?" selected":""}>${l}</option>`).join(""); csel.value=cat; }
+    // the closed card reads like a formula card: the hook, then the first line of what it stands for
+    const plain=s=>String(s).replace(/^[^:]{1,34}:\s/,"");
+    const preview=t=>Array.isArray(t.x)?t.x.map(plain).join(", "):String(t.x);
+    function card(t,term){ return `<details class="trick" data-cat="${t.c}"${open?" open":""}><summary><div class="mhead"><h3>${hi(t.t,term)}</h3><p class="mwhen tk-prev">${hi(preview(t),term)}</p></div></summary><div class="tk-body">${lines(t.x,term)}${t.g&&GFX[t.g]?GFX[t.g]():""}${t.w?`<p class="tk-w">${hi(t.w,term)}</p>`:""}</div></details>`; }
     const flat=t=>t.t+" "+(Array.isArray(t.x)?t.x.join(" "):t.x)+" "+(t.w||"")+" "+t.c;
     function render(){
       const term=q.value.trim().toLowerCase();
-      let list=TRICKS.filter(t=>(!cat||t.c===cat)&&(!term||flat(t).toLowerCase().includes(term)));
-      root.classList.toggle("grouped",sort.value!=="az");
-      if(sort.value==="az"){ list=list.slice().sort((a,b)=>a.t.localeCompare(b.t)); root.innerHTML=list.map(t=>card(t,term)).join(""); }
-      else { root.innerHTML=CATS.filter(c=>list.some(t=>t.c===c)).map(c=>`<h2 class="mgroup">${c}</h2>`+list.filter(t=>t.c===c).map(t=>card(t,term)).join("")).join(""); }
+      const list=TRICKS.filter(t=>(!cat||t.c===cat)&&(!term||flat(t).toLowerCase().includes(term)));
+      root.innerHTML=CATS.filter(c=>list.some(t=>t.c===c)).map(c=>`<h2 class="mgroup">${c}</h2>`+list.filter(t=>t.c===c).map(t=>card(t,term)).join("")).join("");
       if(!list.length) root.innerHTML=`<p class="note">Nothing matches, so try a letter of the mnemonic or the drug name.</p>`;
       $("tk-count").textContent=list.length+" of "+TRICKS.length;
     }
-    chips(); render();
-    cats.addEventListener("click",e=>{ const b=e.target.closest("[data-cat]"); if(!b) return; cat=b.dataset.cat; store.set("mm-tkcat",cat); chips(); render(); });
-    q.addEventListener("input",render); sort.addEventListener("change",render);
+    catSel(); render();
+    csel.addEventListener("change",()=>{ cat=csel.value; store.set("mm-tkcat",cat); render(); });
+    q.addEventListener("input",render);
     ex.addEventListener("click",()=>{ open=!open; ex.setAttribute("aria-pressed",open?"true":"false"); ex.textContent=open?"Collapse all":"Expand all"; root.querySelectorAll("details.trick").forEach(d=>d.open=open); });
   })();
   // ---------- patient simulator ----------
@@ -6469,6 +6545,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     let quiz=!!store.get("mm-ttsquiz",false), rate=+store.get("mm-ttsrate",0.9)||0.9;
     const RT_SAY={"IV/IO":"I V or I O",IM:"I M",IN:"intranasal",ET:"down the E T tube",Infusion:"as an infusion",Neb:"nebulized",PO:"by mouth",SL:"under the tongue",Buccal:"between cheek and gum",Rectal:"rectally",Topical:"topically",Inhaled:"inhaled"};
     const SUB=[
+      [/(\d)\s*[\u2013\u2014]\s*(\d)/g,"$1 to $2"],[/(\d)-(\d)/g,"$1 to $2"],[/(\d)(mcg|mg|mEq|mL|mU|kg|g|L|hr|min|s|units?)\b/g,"$1 $2"],[/\bIV \/ IO\b/g,"I V or I O"],
       [/\bmcg\/kg\/min\b/g,"micrograms per kilogram per minute"],[/\bmg\/kg\/hr\b/g,"milligrams per kilogram per hour"],[/\bmg\/kg\/min\b/g,"milligrams per kilogram per minute"],[/\bmcg\/kg\/hr\b/g,"micrograms per kilogram per hour"],
       [/\bmg\/kg\b/g,"milligrams per kilogram"],[/\bmcg\/kg\b/g,"micrograms per kilogram"],[/\bmEq\/kg\b/g,"milliequivalents per kilogram"],[/\bg\/kg\b/g,"grams per kilogram"],[/\bmL\/kg\b/g,"milliliters per kilogram"],
       [/\bmU\/min\b/g,"milliunits per minute"],[/\bmcg\/min\b/g,"micrograms per minute"],[/\bmg\/min\b/g,"milligrams per minute"],[/\bmg\/hr\b/g,"milligrams per hour"],[/\bmL\/hr\b/g,"milliliters per hour"],[/\bL\/min\b/g,"liters per minute"],
@@ -6486,19 +6563,35 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     const r=(a,b)=>a===b?fmt(a,3):fmt(a,3)+" to "+fmt(b,3);
     function doseSay(ds){ if(ds.kind==="text") return `${ds.l}: ${ds.t}`; const u=ds.unit; const k=ds.kind==="perkg"?"/kg":ds.kind==="infkg"?"/kg/min":ds.kind==="infkghr"?"/kg/hr":ds.kind==="infmin"?"/min":ds.kind==="infhr"?"/hr":""; return `${ds.l}: ${r(ds.lo,ds.hi)} ${u}${k}${ds.max?`, max ${fmt(ds.max,3)} ${u}`:""}, ${RT_SAY[ds.route||"IV/IO"]}${ds.t?", "+ds.t:""}`; }
     const sentences=t=>t.replace(/([.!?])\s+(?=[A-Z0-9])/g,"$1\n").split("\n").filter(Boolean);
+    // the card is read top to bottom exactly as it is laid out, one line at a time, and each line is lit while it is read
+    const vis=el=>!!(el&&el.getClientRects().length);
+    const txt=el=>el?el.textContent.replace(/\s+/g," ").trim():"";
+    const ASK={"Indications":["What is it for?",5000],"Contraindications":["Contraindications?",5000],"Adverse reactions":["Adverse reactions?",4000],"Key consideration":["Key consideration?",4000]};
     function script(d){
-      const P=[]; const push=(sub,text,ask,wait)=>{ if(quiz&&ask){ P.push({sub,t:ask,ask:true}); P.push({sub,wait:wait||4000}); } sentences(text).forEach(s=>P.push({sub,t:s})); };
-      P.push({sub:"Drug",t:plainName(d)+".",head:true});
-      if(d.brands.length&&!quiz) P.push({sub:"Drug",t:`Also called ${d.brands.join(", or ")}.`});
-      push("Class",`Class: ${d.cls.join(", ")}.`,"What class is it?",3000);
-      push("Indications",`Indications: ${d.ind.join(". ")}.`,"What is it for?",5000);
-      const ad=d.doses.filter(x=>x.pop==="adult"&&!x.tag), pd=d.doses.filter(x=>x.pop==="peds"&&!x.tag);
-      if(ad.length) push("Adult dosing",`Adult dosing. ${ad.map(doseSay).join(". ")}.`,"Adult dose?",6000);
-      if(pd.length) push("Pediatric dosing",`Pediatric dosing. ${pd.map(doseSay).join(". ")}.`,"Pediatric dose?",5000);
-      if(d.contra.length) push("Contraindications",`Contraindications: ${d.contra.join(". ")}.`,"Contraindications?",5000);
-      if(d.adverse.length) push("Adverse reactions",`Adverse reactions: ${d.adverse.join(", ")}.`,"Adverse reactions?",4000);
-      push("Key consideration",`Key consideration: ${d.quick.key}`,"Key consideration?",4000);
-      if(!quiz&&d.how) push("How it works",d.how);
+      const c=$("drug-"+d.id), P=[]; if(!c) return P;
+      const add=(el,t,o)=>{ if(t) P.push(Object.assign({el,t},o||{})); };
+      const ask=(el,q,ms)=>{ if(quiz){ P.push({el,t:q,ask:true}); P.push({el,wait:ms}); } };
+      const nm=c.querySelector(".dg-name"), cl=c.querySelector(".dg-cls"), clEl=vis(cl)?cl:nm;
+      add(nm,plainName(d)+".",{head:true});
+      if(d.brands.length&&!quiz) add(nm,`Also called ${d.brands.join(", or ")}.`);
+      ask(clEl,"What class is it?",3000); add(clEl,`${d.cls.length>1?"Classes":"Class"}: ${d.cls.join(", ")}.`);
+      const how=c.querySelector(".how");
+      if(how&&!quiz){ const hl=how.querySelector(".hlead"); if(hl) add(hl,"How it works. "+txt(hl)); how.querySelectorAll("li").forEach(li=>sentences(txt(li)).forEach(x=>add(li,x))); }
+      c.querySelectorAll(".dg-grid>section").forEach(sec=>{
+        const h=txt(sec.querySelector("h4"));
+        if(sec.classList.contains("dosesec")){
+          sec.querySelectorAll(".popgrp").forEach(g=>{ if(!vis(g)) return; const peds=g.classList.contains("peds");
+            const nodes=[...g.querySelectorAll("li.tnode[data-i]")].filter(vis); if(!nodes.length) return;
+            ask(g,peds?"Pediatric dose?":"Adult dose?",peds?5000:6000);
+            nodes.forEach((n,k)=>add(n,(k?"":peds?"Pediatric dosing. ":"Adult dosing. ")+doseSay(d.doses[+n.dataset.i])+"."));
+          }); return; }
+        if(quiz&&!ASK[h]) return;
+        const items=[...sec.querySelectorAll("li")].filter(vis);
+        if(h==="Onset"){ items.filter(n=>n.classList.contains("tnode")).forEach((n,k)=>{ const rt=n.closest("li.rtitem"); add(n,`${k?"":"Onset. "}${txt(rt&&rt.querySelector(".rtname"))}, ${txt(n.querySelector(".use")).toLowerCase()} ${txt(n.querySelector(".dose"))}.`); }); return; }
+        if(!items.length) return;
+        if(ASK[h]) ask(sec,ASK[h][0],ASK[h][1]);
+        items.forEach((li,k)=>add(li,(k?"":h+". ")+txt(li).replace(/[.;:,]$/,"")+"."));
+      });
       return P;
     }
     let voices=[], pickURI=store.get("mm-ttsvoice",null), natVoices=[];
@@ -6513,40 +6606,55 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     const loadVoices=()=>{ if(NAT) return; voices=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); if(!voices.length) voices=speechSynthesis.getVoices()||[]; fillSel(voices,voice()); };
     function voice(){ if(!NAT&&!voices.length) voices=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); return voices.find(v=>v.voiceURI===pickURI)||defVoice(); }
     if(!NAT){ loadVoices(); if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=loadVoices; }
-    // one speak() for both engines; resolves when the line has been read
-    let token=0;
-    function speak(text,onEnd){ const my=++token; let done=false; const fin=()=>{ if(done||my!==token) return; done=true; onEnd(); };
-      if(NAT){ const v=voice(); const o={text,lang:"en-US",rate,pitch:1,volume:1,category:"ambient"}; if(v&&v.idx!=null) o.voice=v.idx; NAT.speak(o).then(fin,fin); setTimeout(()=>{ if(!done) fin(); },Math.max(2500,text.length*120/rate)); return; }
-      const u=new SpeechSynthesisUtterance(text); u.rate=rate; u.pitch=1; u.lang="en-US"; const v=voice(); if(v) u.voice=v; u.onend=fin; u.onerror=fin; try{ speechSynthesis.cancel(); }catch(e){} speechSynthesis.speak(u);
-      // some engines never fire onend for very short strings; guard with a timer scaled to length
-      setTimeout(()=>{ if(!done&&!speechSynthesis.speaking) fin(); },Math.max(1500,text.length*90/rate)); }
-    vsel.addEventListener("change",()=>{ pickURI=vsel.value; store.set("mm-ttsvoice",pickURI); if(playing){ halt(); playPart(); } });
+    // one speak() for both engines. A line counts as read only when the engine really started it: an end with no start,
+    // an error, or silence is a failure, and the caller retries or falls back instead of racing on to the next line.
+    let token=0, utt=null, lastCancel=0, plain=false, fails=0;
+    function speak(text,ok,bad){ const my=++token; let done=false, started=false, g=null; const t0=Date.now();
+      const fin=good=>{ if(done||my!==token) return; done=true; clearTimeout(g); (good?ok:bad)(); };
+      if(NAT){ const v=voice(); const o={text,lang:"en-US",rate,pitch:1,volume:1,category:"ambient"}; if(v&&v.idx!=null&&!plain) o.voice=v.idx; NAT.speak(o).then(()=>fin(true),()=>fin(false)); return; }
+      const u=new SpeechSynthesisUtterance(text); u.rate=rate; u.pitch=1; const v=plain?null:voice(); if(v){ u.voice=v; u.lang=v.lang||"en-US"; } else u.lang="en-US";
+      u.onstart=()=>{ started=true; };
+      // a dropped line ends at once; anything that lasted longer than a blink was heard, even on engines that never report the start
+      u.onend=()=>fin(started||Date.now()-t0>150);
+      u.onerror=()=>fin(false);
+      utt=u; window.__utt=u; speechSynthesis.speak(u);
+      // engines that never report the end: once the line has been heard and nothing is speaking, it is over
+      const poll=()=>{ if(done||my!==token) return; if(speechSynthesis.speaking) started=true; else if(started) return fin(true); else if(Date.now()-t0>6000) return fin(false); g=setTimeout(poll,300); };
+      g=setTimeout(poll,300); }
+    function halt(){ clearTimeout(timer); timer=null; token++; try{ if(NAT) NAT.stop(); else if(speechSynthesis.speaking||speechSynthesis.pending){ speechSynthesis.cancel(); lastCancel=Date.now(); } }catch(e){} }
+    // a new voice is tried straight away with a short line, so a voice the device cannot use shows itself here and not halfway through a card
+    vsel.addEventListener("change",()=>{ pickURI=vsel.value; store.set("mm-ttsvoice",pickURI); plain=false; fails=0; if(playing){ halt(); playPart(); return; }
+      halt(); const go=()=>speak("This is how drug cards will sound.",()=>{},()=>{}); const w=lastCancel+320-Date.now(); if(w>0) setTimeout(go,w); else go(); });
     // ----- reading happens on the drug card itself: the card opens and stays in view, the part being read is lit, and the card's own Listen chip is the switch -----
-    const SEC={"Class":".dg-cls","Indications":"Indications","Adult dosing":".popgrp.adult","Pediatric dosing":".popgrp.peds","Contraindications":"Contraindications","Adverse reactions":"Adverse reactions","Key consideration":"Key consideration","How it works":".how"};
     const card=()=>cur?$("drug-"+cur.id):null;
-    function secOf(c,sub){ if(!c) return null; if(sub==="Drug") return c.querySelector(".dg-name"); const k=SEC[sub]; if(!k) return null; if(k[0]===".") return c.querySelector(k);
-      const h=[...c.querySelectorAll(".dg-grid>section>h4")].find(x=>x.textContent.trim()===k); return h?h.parentNode:null; }
-    let lit=null;
+    let lit=null, litSec=null;
     function headerH(){ const h=document.querySelector("header.top"); return h?h.getBoundingClientRect().height:0; }
-    // keep the lit part on screen: when it starts below the fold or under the header, the page glides so it sits a third of the way down
-    function follow(el){ if(!el||!window.smoothScrollTo) return; const r=el.getBoundingClientRect(), top=headerH()+8, vh=window.innerHeight||800, nav=(document.querySelector(".nav")||{}).offsetHeight||0;
-      if(r.top<top||r.bottom>vh-nav-16) smoothScrollTo(()=>el.getBoundingClientRect().top+window.scrollY-Math.max(top,(vh-nav)*.3),620); }
+    // keep the lit line on screen: when it is under the pinned card header or below the fold, the page glides so it sits a third of the way down
+    function follow(el){ if(!el||!window.smoothScrollTo) return; const c=card(), sm=c&&c.querySelector("summary"); const r=el.getBoundingClientRect(), top=Math.max(headerH(),sm?sm.getBoundingClientRect().bottom:0)+8, vh=window.innerHeight||800, nav=(document.querySelector(".nav")||{}).offsetHeight||0;
+      if(r.top<top||r.bottom>vh-nav-16) smoothScrollTo(()=>el.getBoundingClientRect().top+window.scrollY-Math.max(top,(vh-nav)*.32),620); }
     function render(){ const c=card(), p=parts[pi];
       document.querySelectorAll("details.drug.reading").forEach(x=>{ if(x!==c||!playing) x.classList.remove("reading","yourturn"); });
-      const el=playing&&c&&p?secOf(c,p.sub):null; if(lit&&lit!==el){ lit.classList.remove("speaking"); } if(el&&el!==lit){ el.classList.add("speaking"); follow(el); } lit=el;
+      const el=playing&&c&&p?p.el:null, sec=el?el.closest(".dg-grid>section,.how,.dg-name"):null;
+      if(lit&&lit!==el) lit.classList.remove("speaking"); if(el&&el!==lit){ el.classList.add("speaking"); follow(el); } lit=el;
+      if(litSec&&litSec!==sec) litSec.classList.remove("insec"); if(sec&&sec!==el) sec.classList.add("insec"); litSec=sec&&sec!==el?sec:null;
       if(c&&playing){ c.classList.add("reading"); c.classList.toggle("yourturn",!!(p&&p.wait)); }
       document.querySelectorAll("[data-listen]").forEach(b=>b.setAttribute("aria-pressed",playing&&cur&&b.dataset.listen===cur.id?"true":"false"));
       const all=$("drug-listen"); if(all) all.setAttribute("aria-pressed",playing&&list.length>1?"true":"false");
       const qz=$("tts-quiz"); if(qz) qz.setAttribute("aria-pressed",quiz?"true":"false"); }
     function playPart(){
-      if(!playing) return; if(pi>=parts.length){ if(di<list.length-1){ di++; load(); timer=setTimeout(playPart,600); } else stop(); return; }
+      if(!playing) return; if(pi>=parts.length){ if(di<list.length-1){ di++; load(); timer=setTimeout(playPart,700); } else stop(); return; }
       const p=parts[pi]; render();
       if(p.wait){ timer=setTimeout(()=>{ pi++; playPart(); },p.wait/Math.max(.6,rate)); return; }
-      speak(say(p.t),()=>{ if(!playing) return; pi++; timer=setTimeout(playPart,p.head?500:180); });
+      // the engine needs a moment after a cancel, or it drops the next line
+      const gap=lastCancel+320-Date.now(); if(gap>0){ timer=setTimeout(playPart,gap); return; }
+      speak(say(p.t),()=>{ if(!playing) return; fails=0; pi++; timer=setTimeout(playPart,p.head?450:200); },
+        ()=>{ if(!playing) return; fails++;
+          if(fails===1) timer=setTimeout(playPart,450);
+          else if(fails===2&&!plain){ plain=true; timer=setTimeout(playPart,450); }
+          else { stop(); if(window.toastMsg) toastMsg("<b>Could not read aloud</b><span>Try another voice in Settings, Listening.</span>"); } });
     }
-    function load(){ cur=DRUGS.find(x=>x.id===list[di]); parts=script(cur); pi=0; if(window.revealDrug) revealDrug(cur.id); render(); }
-    function halt(){ clearTimeout(timer); timer=null; token++; try{ if(NAT) NAT.stop(); else speechSynthesis.cancel(); }catch(e){} }
-    function stop(){ playing=false; halt(); if(lit) lit.classList.remove("speaking"); lit=null; render(); }
+    function load(){ cur=DRUGS.find(x=>x.id===list[di]); if(window.revealDrug) revealDrug(cur.id); parts=script(cur); pi=0; fails=0; render(); }
+    function stop(){ playing=false; halt(); if(lit) lit.classList.remove("speaking"); if(litSec) litSec.classList.remove("insec"); lit=litSec=null; render(); }
     window.ttsStart=(ids,i)=>{ halt(); list=ids.slice(); di=i||0; playing=true; load(); playPart(); };
     window.ttsStop=()=>stop();
     window.ttsPlaying=()=>playing;
@@ -7009,9 +7117,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       let streak=0; try{ streak=dayStreak(); }catch(e){}
       const cat=store.get("mm-cat",[]), last=cat[cat.length-1]; let rq={due:0,cleared:0}; try{ rq=RQ.stats(); }catch(e){}
       const lv=Math.max(0,Math.min(1,(xs.total-xs.cur)/Math.max(1,xs.next-xs.cur)));
-      tiles.innerHTML=`<div class="pgt wide"><span class="eyebrow">Level ${xs.level}</span><b>${esc(xs.title)}</b><span class="pgbar"><i style="width:${(lv*100).toFixed(1)}%"></i></span><span class="note">${xs.total} XP, ${Math.max(0,xs.next-xs.total)} to the next level</span></div>
-        <div class="pgt"><span class="eyebrow">Streak</span><b class="num">${streak}</b><span class="note">day${streak===1?"":"s"} in a row</span></div>
-        <div class="pgt"><span class="eyebrow">Pass estimate</span><b class="num">${last?Math.round(last.p*100)+"%":"--"}</b><span class="note">${last?"last adaptive exam":"take an adaptive exam"}</span></div>
+      tiles.innerHTML=`<div class="pgt"><span class="eyebrow">Pass estimate</span><b class="num">${last?Math.round(last.p*100)+"%":"--"}</b><span class="note">${last?"last adaptive exam":"take an adaptive exam"}</span></div>
         <div class="pgt"><span class="eyebrow">Review</span><b class="num">${rq.cleared||0}</b><span class="note">cleared${rq.due?`, ${rq.due} due`:""}</span></div>`;
       // each registry area: how strong the topics you've started are, counted against everything in the area
       const D=window.REG_DOMAINS||[], S=window.topicStrength, N=window.topicName||(x=>x); let wsum=0, wtot=0;
@@ -7026,16 +7132,52 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       $("pg-drugs").textContent=`${done} of ${total} mastered`;
       $("pg-drugbar").innerHTML=`<i class="d1" style="flex:${done}"></i><i class="d2" style="flex:${Math.max(0,going)}"></i><i class="d3" style="flex:${fresh}"></i>`;
       $("pg-dkey").innerHTML=`<span><i class="d1"></i>${done} mastered</span><span><i class="d2"></i>${Math.max(0,going)} under way</span><span><i class="d3"></i>${fresh} not started</span>`; }
-    document.addEventListener("panel",e=>{ if(e.detail==="progress") render(); });
-    document.addEventListener("round",()=>{ const p=$("panel-progress"); if(p&&!p.hidden) render(); });
+    document.addEventListener("round",()=>{ const c=$("lv-card"); if(c&&c.classList.contains("open")) render(); });
     window.renderProgressPage=render; try{ render(); }catch(e){}
     // readiness weighted by the exam, and the last adaptive exam's pass estimate, for the registry page
     window.readinessNow=()=>{ const D=window.REG_DOMAINS||[], S=window.topicStrength; let ws=0, wt=0; D.forEach(d=>{ const ss=d.games.map(id=>{ try{ return S?S(id):null; }catch(e){ return null; } }); ws+=d.w*ss.reduce((a,v)=>a+(v||0),0)/Math.max(1,ss.length); wt+=d.w; });
       const cat=store.get("mm-cat",[]), last=cat[cat.length-1]; return {ready:wt?Math.round(100*ws/wt):null,pass:last&&last.p!=null?Math.round(last.p*100):null}; };
-    // the two dashboard boxes open their pages
-    const opens={"lv-card":"progress","exam-card":"registry"};
-    document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("#lv-card,#exam-card"); if(b) showPanel(opens[b.id]); });
-    document.addEventListener("keydown",e=>{ if(e.key!=="Enter"&&e.key!==" ") return; const b=e.target.closest&&e.target.closest("#lv-card,#exam-card"); if(b){ e.preventDefault(); showPanel(opens[b.id]); } });
+    // the registry box opens its page
+    document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("#exam-card"); if(b) showPanel("registry"); });
+    document.addEventListener("keydown",e=>{ if(e.key!=="Enter"&&e.key!==" ") return; const b=e.target.closest&&e.target.closest("#exam-card"); if(b){ e.preventDefault(); showPanel("registry"); } });
+    // ----- the XP box unfolds where it is: the level, bar, badges and the three counts spread out to their full size, and the rest of your
+    // progress (registry areas, drugs, the last 30 days, badges, quiz mastery and speed) opens beneath them. Tapping the top folds it back.
+    // Every element moves from where it was to where it goes, on the same slow start, quick rush and long soft finish as the rest of the app. -----
+    (function xpBox(){ const card=$("lv-card"); if(!card) return;
+      const EQ="cubic-bezier(.83,0,.17,1)", D=720;
+      const still=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+      let more=null, live=[];
+      function build(){ if(more) return more; more=document.createElement("div"); more.className="lvmore"; more.id="lv-more";
+        const pg=$("panel-progress"); if(pg) [...pg.children].forEach(c=>{ if(!c.classList.contains("backchip")) more.appendChild(c); }); card.appendChild(more); more.querySelectorAll(".reveal").forEach(el=>el.classList.remove("reveal","in")); return more; }
+      const movers=()=>[...card.querySelectorAll("#lv-ring,.lvtop,.lvlinfo>h2,.xpbar,#lv-next,.statline>span")];
+      const rects=els=>new Map(els.map(el=>[el,el.getBoundingClientRect()]));
+      function stop(){ live.forEach(a=>{ try{ a.cancel(); }catch(e){} }); live=[]; card.classList.remove("folding","moving"); }
+      function flip(before,after){ before.forEach((r0,el)=>{ const r1=after.get(el); if(!r1) return; const dx=r0.left-r1.left, dy=r0.top-r1.top; if(Math.abs(dx)<.5&&Math.abs(dy)<.5) return;
+        live.push(el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:D,easing:EQ})); }); }
+      function toggle(){ const open=!card.classList.contains("open"); stop(); build();
+        const els=movers(), b0=rects(els), h0=card.getBoundingClientRect().height;
+        if(open){ card.classList.add("open"); card.setAttribute("aria-expanded","true"); try{ render(); }catch(e){} try{ if(window.renderProgress) renderProgress(); }catch(e){} }
+        else { card.classList.remove("open"); card.classList.add("folding"); card.setAttribute("aria-expanded","false"); }
+        if(window.lvBadgesNow) lvBadgesNow();
+        // the folded height is the box with its lower half put away
+        let h1; if(open) h1=card.getBoundingClientRect().height; else { more.style.display="none"; h1=card.getBoundingClientRect().height; more.style.display=""; }
+        if(still()){ card.classList.remove("folding"); return; }
+        const b1=rects(els); card.classList.add("moving");
+        const box=card.animate([{height:h0+"px"},{height:h1+"px"}],{duration:D,easing:EQ,fill:open?"none":"forwards"}); live.push(box); flip(b0,b1);
+        const kids=[...more.children];
+        if(open) kids.forEach((k,i)=>live.push(k.animate([{opacity:0,transform:"translateY(22px) scale(.98)"},{opacity:1,transform:"none"}],{duration:D-80,delay:90+Math.min(i,7)*55,easing:EQ,fill:"backwards"})));
+        else kids.slice().reverse().forEach((k,i)=>live.push(k.animate([{opacity:1},{opacity:0,transform:"translateY(12px) scale(.99)"}],{duration:300,delay:Math.min(i,6)*25,easing:"cubic-bezier(.5,0,.75,0)",fill:"forwards"})));
+        const sb=open?card.querySelectorAll(".statline b"):[]; if(sb.length){ const k=14/24; sb.forEach(b=>live.push(b.animate([{transform:`scale(${k})`},{transform:"none"}],{duration:D,easing:EQ}))); }
+        if(!open&&window.smoothScrollTo&&card.getBoundingClientRect().top<0) smoothScrollTo(()=>card.getBoundingClientRect().top+window.scrollY-((document.querySelector("header.top")||{}).offsetHeight||0)-8,D);
+        box.finished.then(()=>{ if(!live.includes(box)) return; stop(); },()=>{}); }
+      // the top of the box is the switch; whatever opens beneath it works on its own
+      const isTop=t=>!t.closest(".lvmore");
+      card.addEventListener("click",e=>{ if(!isTop(e.target)) return; e.preventDefault(); toggle(); });
+      card.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target===card){ e.preventDefault(); toggle(); } });
+      card.setAttribute("aria-expanded","false"); card.setAttribute("aria-label","Your progress: tap to open or close");
+      // it is folded again whenever you come back to the dashboard
+      document.addEventListener("panel",e=>{ if(e.detail!=="today"&&card.classList.contains("open")){ stop(); card.classList.remove("open"); card.setAttribute("aria-expanded","false"); if(window.lvBadgesNow) lvBadgesNow(); } });
+      window.xpBoxToggle=toggle; })();
   })();
   // ---------- who you are: three quick questions once, a greeting every time you come back ----------
   (function me(){
