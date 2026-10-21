@@ -2323,6 +2323,10 @@ html.gliding .hveil{opacity:0}
 :root[data-theme="dark"]{--bk-red:color-mix(in srgb,var(--teal) 42%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 30%,transparent);--bk-pale:rgba(239,232,220,.14)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bk-red:color-mix(in srgb,var(--teal) 42%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 30%,transparent);--bk-pale:rgba(239,232,220,.14)}}
 .bokeh i{background:radial-gradient(circle closest-side,var(--c) 0,var(--c) 32%,color-mix(in srgb,var(--c) 80%,transparent) 54%,color-mix(in srgb,var(--c) 44%,transparent) 75%,color-mix(in srgb,var(--c) 16%,transparent) 90%,transparent 100%)}
+/* ================= v80 ================= */
+/* the lights read as further behind the glass: a wider, gaussian falloff with no hard core, a little larger to keep their glow */
+.bokeh i{width:calc(var(--s) * 1.22);height:calc(var(--s) * 1.22);margin:calc(var(--s) * -.61) 0 0 calc(var(--s) * -.61);
+  background:radial-gradient(circle closest-side,var(--c) 0,color-mix(in srgb,var(--c) 90%,transparent) 14%,color-mix(in srgb,var(--c) 70%,transparent) 30%,color-mix(in srgb,var(--c) 46%,transparent) 48%,color-mix(in srgb,var(--c) 24%,transparent) 66%,color-mix(in srgb,var(--c) 9%,transparent) 83%,transparent 100%)}
 /* ---------- Term Board, match style ---------- */
 /* the first tile you pick takes the same colour a picked chip does and holds it until you tap its partner; gold stays gold */
 .tbt.sel .tbin{border-color:var(--teal);background-color:color-mix(in srgb,color-mix(in srgb,var(--teal) 12%,var(--surface)) var(--glass-a),transparent);
@@ -2337,6 +2341,13 @@ html.gliding .hveil{opacity:0}
 .tbclue.mm.miss p{font-size:16px}
 /* the round's XP, line by line */
 .tbxpparts{width:100%;max-width:340px;display:grid;gap:3px;margin-top:-6px;font-size:13px;color:var(--muted)}
+/* the run's clock: thirty minutes for a whole clear run, shown quietly beside the topic, with a slim bar under the card draining over the
+   whole run. Rush keeps its own clock up top, and has no bar on the card */
+.tbclock{position:absolute;top:11px;right:14px;font:500 11.5px/1 var(--mono);letter-spacing:.02em;color:var(--muted);opacity:.85;pointer-events:none}
+.tbclock.low{color:var(--amber);opacity:1}
+.tb[data-run="clear"] .tbtime i{background:color-mix(in srgb,var(--amber) 62%,transparent)}
+.tb[data-run="rush"] .tbclock,.tb[data-run="rush"] .tbtime{display:none}
+.tbclue .eyebrow{padding-right:46px}
 
 /* ----- game previews: a small picture of each game along the foot of its tile. Quiet ink, the category colour for the one thing that
    matters, and motion only while the tile is on screen (.pvon), only by transform and opacity ----- */
@@ -2652,6 +2663,79 @@ html.gliding .mfx::before{animation-play-state:paused!important}
 .badge .mfx{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 38%,rgba(0,0,0,.5) 62%,rgba(0,0,0,.42) 100%);mask-image:linear-gradient(180deg,#000 0,#000 38%,rgba(0,0,0,.5) 62%,rgba(0,0,0,.42) 100%)}
 .btier .badge.r-m>b{color:color-mix(in srgb,var(--ink) 92%,#e4d6ff)}
 .btier .badges .badge.r-m>span.bd{color:color-mix(in srgb,var(--muted) 70%,#d8c8ff)}
+
+/* ---------- v80: a ladder of badges is one square showing its highest step, with a pip per step; the pane lists the whole ladder ---------- */
+.bpips{position:absolute;top:6px;left:7px;display:flex;gap:2px;z-index:2;pointer-events:none}
+.bpips i{width:4px;height:4px;border-radius:50%;background:color-mix(in srgb,var(--muted) 45%,transparent)}
+.bpips i.on{background:var(--rc,var(--amber));box-shadow:0 0 4px color-mix(in srgb,var(--rc,var(--amber)) 60%,transparent)}
+.badge:not(.on)>.bpips{opacity:.7;filter:none}
+.bladder{list-style:none;margin:6px 0 2px;padding:0;display:grid;gap:5px}
+.bladder li{display:grid;grid-template-columns:10px 1fr;column-gap:7px;align-items:baseline;font-size:12px;line-height:1.3;color:var(--muted)}
+.bladder li i{grid-row:1/3;align-self:center;width:8px;height:8px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--rc,var(--muted)) 60%,transparent)}
+.bladder li.on i{background:var(--rc);border-color:var(--rc)}
+.bladder li b{font:600 13px/1.15 var(--display);color:var(--ink)}
+.bladder li:not(.on) b{color:var(--muted)}
+.bladder li span{grid-column:2;font-size:11.5px}
+/* the gem's cut is drawn live on a canvas now; the square keeps only its prismatic tint and sweep behind it */
+.badge .mfx{background:conic-gradient(from 210deg at 50% 32%,rgba(154,92,246,.24),rgba(120,200,255,.12),rgba(240,186,255,.2),rgba(84,56,196,.16),rgba(170,230,255,.11),rgba(154,92,246,.24))}
+.badge .mfx>.gemc{position:absolute;inset:0;width:100%;height:100%;display:block;color:rgb(232,218,255)}
+:root[data-theme="light"] .badge .mfx>.gemc{color:rgb(122,78,214)}
+/* the shelf keeps Show badges on the first line of the badges when the box opens, so it never drops below them */
+.lvlcard.open .lvshelf{flex-wrap:nowrap;align-items:flex-start}
+.lvlcard.open .lvshelf>.lvbadges{flex:1 1 auto;flex-basis:auto;min-width:0;flex-wrap:wrap;margin-left:0}
+.lvlcard.open .lvshelf>.lvshow{flex:0 0 auto;margin-left:auto;align-self:flex-start;margin-top:-3px}
+/* ================= daily login rewards: the panel that opens on the first visit of the day, and the chip that keeps it waiting ================= */
+.dly{position:fixed;inset:0;z-index:84;display:grid;place-items:center;padding:16px;background:color-mix(in srgb,var(--bg) 42%,transparent)}
+.dlyc{width:min(360px,100%);display:grid;gap:12px;padding:16px 16px 14px;border-radius:var(--r-box);text-align:center;
+  border:1px solid color-mix(in srgb,var(--amber) 34%,color-mix(in srgb,var(--line) 72%,var(--glass-edge)));
+  background-color:color-mix(in srgb,var(--surface) 84%,transparent);background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%),radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--amber) 14%,transparent),transparent 70%);background-repeat:no-repeat;
+  -webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3);box-shadow:inset 0 1px 0 var(--glass-edge),0 22px 46px -20px rgba(0,0,0,.6)}
+.dlyc>.eyebrow{color:var(--amber);margin-bottom:-6px}
+.dlyt{font:700 24px/1.05 var(--display);letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+/* the week: past days ticked, today lit, the days ahead dimmed */
+.dlystrip{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.dlystrip li{display:grid;justify-items:center;gap:3px;padding:7px 2px 6px;border-radius:var(--r-ctl);border:1px solid color-mix(in srgb,var(--line) 80%,transparent);background:color-mix(in srgb,var(--surface-2) 40%,transparent);min-width:0}
+.dlystrip .dn{font:600 10px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.dlystrip .di{display:grid;place-items:center;width:22px;height:22px}
+.dlystrip svg,.dlygot svg,.dlymh svg,.dlychip svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dlystrip .di{color:var(--muted)}
+.dlystrip .dt{font:600 11px/1 var(--mono);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:clip;max-width:100%}
+.dlystrip li.past{opacity:.72}
+.dlystrip li.past .di{color:#4caf7d}
+.dlystrip li.next{opacity:.5}
+.dlystrip li.big .di{color:color-mix(in srgb,var(--amber) 80%,var(--ink))}
+.dlystrip li.now{opacity:1;border-color:var(--amber);background:color-mix(in srgb,var(--amber) 18%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--amber) 40%,transparent),0 0 16px -4px color-mix(in srgb,var(--amber) 70%,transparent)}
+.dlystrip li.now .dn,.dlystrip li.now .di{color:var(--amber)}
+.dlystrip li.now.got .di{color:#4caf7d}
+/* what today brings */
+.dlygot{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 12px;border-radius:var(--r-ctl);background:color-mix(in srgb,var(--amber) 9%,transparent);border:1px solid color-mix(in srgb,var(--amber) 26%,transparent)}
+.dlygot .dlyi{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;color:var(--amber);background:color-mix(in srgb,var(--amber) 16%,transparent);flex:0 0 auto}
+.dlygot .dlyi svg{width:22px;height:22px}
+.dlygot>div{display:grid;gap:2px;text-align:left}
+.dlygot>div span{font:700 18px/1.1 var(--display);letter-spacing:.02em;color:var(--ink)}
+.dlygot>div span+span{font:500 14px/1.2 var(--body);letter-spacing:0;color:var(--muted)}
+.dlynote{margin:-2px 0 0;font-size:12.5px;line-height:1.35;color:var(--muted)}
+/* the month: a bar toward thirty days in a row */
+.dlymonth{display:grid;gap:5px;text-align:left}
+.dlymh{display:flex;justify-content:space-between;align-items:center;gap:8px;font:600 12px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.dlymh>span:last-child{display:inline-flex;align-items:center;gap:4px;color:#b48cff}
+.dlymh svg{width:14px;height:14px}
+.dlybar{height:8px;border-radius:999px;background:color-mix(in srgb,var(--ink) 14%,var(--surface-2));overflow:hidden}
+.dlybar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--amber),#b48cff)}
+.dlymonth .note{font-size:11.5px;line-height:1.3}
+.dlybtns{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:2px}
+.dlybtns .btn{border-radius:var(--r-ctl)}
+.dlybtns .btn[disabled]{opacity:.75}
+/* the chip on the dashboard, under the greeting, while today's reward waits */
+.dlychip{position:relative;justify-self:start;display:inline-flex;align-items:center;gap:8px;margin:0;padding:7px 14px 7px 10px;min-height:36px;border-radius:999px;cursor:pointer;font:600 12.5px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--amber) 40%,var(--line));background-color:color-mix(in srgb,var(--amber) 12%,color-mix(in srgb,var(--surface) var(--glass-a),transparent));box-shadow:inset 0 1px 0 var(--glass-edge);-webkit-tap-highlight-color:transparent}
+.dlychip svg{color:var(--amber);width:17px;height:17px}
+.dlychip b{font-weight:700;color:var(--amber)}
+.dlychip:active{transform:scale(.97)}
+.dlychip:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.dlychip>.ndot{top:-2px;right:-2px}
+@media (min-width:700px){ .dlyc{width:min(400px,100%);padding:18px 20px 16px} .dlystrip{gap:7px} }
+@media (prefers-reduced-motion:reduce){ .dlychip:active{transform:none} }
 </style>
 </head>
 <body>
@@ -4295,8 +4379,8 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     window.drugHighlights=(d,o)=>{ o=o||{}; if(reducedM()){ if(o.hold) marksOf(d).forEach(m=>m.classList.add("hlon")); return; } const ms=marksOf(d); if(!ms.length) return;
       if(d._hl) d._hl(); const A=[]; let alive=true; d._hl=()=>{ alive=false; A.forEach(a=>{ try{ a.cancel(); }catch(e){} }); ms.forEach(m=>m.classList.remove("hlon")); d._hl=null; };
       // the next phrase starts drawing while the last highlight is still sliding away, so the two overlap for a moment; the weight stays on
-      // long after the highlight has gone, long enough to read the whole phrase, then eases back slowly
-      const DRAW=spd(640), HOLD=spd(820), SLIP=spd(660), RISE=spd(170), STAY=spd(3000), LINGER=spd(2600), tot=DRAW+HOLD+SLIP, NEXT=o.hold?DRAW*.7:DRAW+HOLD+SLIP*.45; let at=spd(100);
+      // for fifteen seconds after the highlight has gone, long enough to read all of it, then eases back slowly
+      const DRAW=spd(640), HOLD=spd(820), SLIP=spd(660), RISE=spd(170), STAY=15000, LINGER=spd(2600), tot=DRAW+HOLD+SLIP, NEXT=o.hold?DRAW*.7:DRAW+HOLD+SLIP*.45; let at=spd(100);
       ms.forEach(m=>{ m.classList.remove("hlon"); const W=weight(m), ch=letters(m), n=Math.max(1,ch.length-1);
         if(o.hold){ const a=m.animate([{backgroundSize:"0% 64%",backgroundPosition:"0% 92%"},{backgroundSize:"100% 64%",backgroundPosition:"0% 92%"}],{duration:DRAW,delay:at,easing:"cubic-bezier(.7,0,.2,1)",fill:"both"}); A.push(a);
           a.finished.then(()=>{ if(!alive) return; m.classList.add("hlon"); a.cancel(); },()=>{}); }
@@ -5388,6 +5472,10 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     function grant(L){ if(P.rew[L]) return null; const r=rewardOf(L); P.rew[L]=Date.now(); P.boost+=r.boost; P.cover+=r.cover; return r; }
     // anything reached before rewards existed is handed over quietly
     (()=>{ const L=levelOf(P.xp.total); let any=0; for(let k=10;k<=L;k++) if(isReward(k)&&!P.rew[k]){ grant(k); any=1; } if(any) save(); })();
+    // rewards handed out from outside this module (the daily login track): XP through the usual path, boosts and shift covers banked
+    window.grantReward=o=>{ o=o||{}; const b=Math.max(0,o.boost|0), c=Math.max(0,o.cover|0); if(b||c){ P.boost+=b; P.cover+=c; save(); } if(o.xp>0) addXP(o.xp,o.src||"login"); else render(); return {boost:P.boost,cover:P.cover}; };
+    // the login track spends a banked shift cover to bridge a missed day
+    window.spendCover=n=>{ n=Math.max(1,n|0); if(P.cover<n) return false; P.cover-=n; save(); render(); return true; };
     window.xpState=()=>{ const L=levelOf(P.xp.total); return {total:P.xp.total,level:L,title:titleOf(L),today:P.xp.days[dayKey()]||0,next:xpFor(L+1),cur:xpFor(L),tier:tierOf(L).n,boost:P.boost,cover:P.cover}; };
     window.levelForXP=levelOf; window.xpForLevel=xpFor; window.levelTitle=titleOf;
     // toasts for badges and the rest; they wait out the intro
@@ -5538,6 +5626,15 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       {id:"supporter",n:"Early supporter",d:"With Lazarus since before 2027",i:"sprout",r:"s"},{id:"regday",n:"Registry day",d:"Made it to your registry date",i:"flagx",r:"s"},{id:"passed",n:"Passed",d:"You passed your registry exam",i:"cert",r:"s",claim:1}
     ];
     window.BADGES=BADGES;
+    // badges that are steps of one ladder show as a single badge: the highest step reached, upgraded in place as you climb, with small pips
+    // for the steps; the full ladder opens on a tap
+    const SERIES=[["streak3","streak7","streak30"],["xp500","xp2000","xp10000"],["master1","master5","master15","masterall"],["plan1","plan7","plan30"],
+      ["level10","level30","level50","level100","level150","level200"],["think1","think2","think3","think4"],["sim1","sim90"]];
+    const SER=new Map(); SERIES.forEach(q=>q.forEach(id=>SER.set(id,q)));
+    const BID=id=>BADGES.find(b=>b.id===id);
+    const topOf=q=>{ let t=null; q.forEach(id=>{ if(P.badges[id]) t=id; }); return t; };
+    // what the badge list shows: every badge on its own, and each ladder once, as its highest step (or its first, not yet earned)
+    const shownBadges=()=>{ const out=[], done=new Set(); BADGES.forEach(b=>{ const q=SER.get(b.id); if(!q){ out.push({b,q:null}); return; } if(done.has(q)) return; done.add(q); out.push({b:BID(topOf(q)||q[0]),q}); }); return out; };
     const ORDER=["s","m","l","e","r","u","c"];
     const sum=o=>Object.values(o||{}).reduce((a,v)=>a+(v||0),0);
     function checkBadges(ctx){ ctx=ctx||{}; const got=[]; const streak=(()=>{ try{ return dayStreak(); }catch(e){ return 0; } })(); const mastered=(()=>{ try{ return masteredCount(); }catch(e){ return 0; } })(); const plans=Object.values(P.plans).filter(p=>p.d>=p.t).length; const h=new Date().getHours(); const L=levelOf(P.xp.total), X=P.xp.total;
@@ -5549,7 +5646,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         sim1:!!S,sim90:S&&S.score>=90,lazarus:S&&S.rosc>0&&S.alive&&!S.arrest,flawless:S&&S.score>=100&&!S.harm,constantiam:streak>=100,threeam:R&&R.perfect&&R.answered>=3&&h===3,polymath:!!(P.kinds&&P.kinds.d===dayKey()&&P.kinds.a.length>=5),
         supporter:(P.first||dayKey())<"2027-01-01",regday:!!(reg&&P.regAhead===reg&&dayKey()>=reg)};
       BADGES.forEach(b=>{ if(!P.badges[b.id]&&cond[b.id]){ P.badges[b.id]=Date.now(); got.push(b); } });
-      if(got.length){ save(); got.forEach((b,i)=>setTimeout(()=>toast(`<b>${b.h?"Mythic unlocked: ":"Badge: "}${esc(b.n)}</b><span>${RN[b.r]} · ${esc(b.d)}</span>`),i*1800+400)); render(); } }
+      if(got.length){ save(); got.forEach((b,i)=>setTimeout(()=>toast(`<b>${b.h?"Mythic unlocked: ":SER.has(b.id)&&SER.get(b.id).indexOf(b.id)>0?"Badge upgraded: ":"Badge: "}${esc(b.n)}</b><span>${RN[b.r]} · ${esc(b.d)}</span>`),i*1800+400)); render(); } }
     window.checkBadgesNow=()=>checkBadges({});
     document.addEventListener("round",e=>checkBadges({round:e.detail}));
     document.addEventListener("lesson",()=>checkBadges({}));
@@ -5576,38 +5673,70 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       const max=Math.max(10,...days.map(k=>P.xp.days[k]||0)); const W=360,H=96,bw=W/N; const bars=days.map((k,i)=>{ const st=dayState(k); const xp=P.xp.days[k]||0; const h=st?Math.max(6,Math.round((H-22)*Math.sqrt(xp/max))):0; const d=new Date(k+"T12:00:00"); const dow=d.getDay(); return `<rect x="${(i*bw+1.5).toFixed(1)}" y="${H-18-h}" width="${(bw-3).toFixed(1)}" height="${h}" rx="2" class="${st} ${i===N-1?"today":""}"><title>${k}: ${fmtN(xp)} XP${st==="green"?", session finished":st==="yellow"?", some practice":st==="red"?", opened only":""}</title></rect>${dow===1?`<text x="${(i*bw+bw/2).toFixed(1)}" y="${H-5}" text-anchor="middle" class="t">${d.getDate()}</text>`:""}`; }).join("");
       el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="actsvg" role="img" aria-label="Activity over the last 30 days"><line x1="0" y1="${H-18}" x2="${W}" y2="${H-18}" class="axis"/>${bars}</svg><div class="legend"><i class="green"></i>Session finished<i class="yellow"></i>Practiced<i class="red"></i>Opened only</div>`; }
     // a badge: earned in full colour; not yet, dimmed; hidden Mythic, a grey cutout of its shape behind ??? in the aura
-    function badgeHTML(b){ const on=!!P.badges[b.id], hid=b.h&&!on; let claim=""; if(b.claim&&!on&&P.badges.regday) claim=`<button type="button" class="chip bclaim" data-claim="${b.id}">I passed</button>`;
-      const nw=on&&P.seenB&&!P.seenB[b.id]?`<i class="ndot" aria-hidden="true"></i>`:"";
-      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" data-b="${b.id}" role="button" tabindex="0" aria-label="${hid?"Hidden badge":esc(b.n)+(nw?", new":"")}">${b.r==="m"?`<i class="mfx" aria-hidden="true"></i>${MYTH()}`:""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim||`<span class="bd">${hid?"Hidden":esc(b.d)}</span>`}${nw}</div>`; }
+    function badgeHTML(b,q){ const on=!!P.badges[b.id], hid=b.h&&!on; let claim=""; if(b.claim&&!on&&P.badges.regday) claim=`<button type="button" class="chip bclaim" data-claim="${b.id}">I passed</button>`;
+      const nw=P.seenB&&(q?q.some(id=>P.badges[id]&&!P.seenB[id]):on&&!P.seenB[b.id])?`<i class="ndot" aria-hidden="true"></i>`:"";
+      const pips=q?`<span class="bpips" aria-hidden="true">${q.map(id=>`<i${P.badges[id]?' class="on"':""}></i>`).join("")}</span>`:"";
+      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" data-b="${b.id}" role="button" tabindex="0" aria-label="${hid?"Hidden badge":esc(b.n)+(nw?", new":"")}">${b.r==="m"?`<i class="mfx" aria-hidden="true"><canvas class="gemc"></canvas></i>${MYTH()}`:""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim||`<span class="bd">${hid?"Hidden":esc(b.d)}</span>`}${pips}${nw}</div>`; }
     // ----- something new: a small red dot that breathes slowly marks each badge you have not looked at yet, and the ways in to it (the
     // Badges box and Show badges on the dashboard). A badge counts as seen once it has been on screen in the open box for a moment, or tapped.
     // Badges earned before the dots existed count as seen. -----
     if(!P.seenB){ P.seenB={}; Object.keys(P.badges).forEach(k=>P.seenB[k]=1); save(); }
     const unseen=()=>BADGES.filter(b=>P.badges[b.id]&&!P.seenB[b.id]).length;
+    const stepsOf=id=>SER.get(id)||[id];
     const dotIn=(el,on)=>{ if(!el) return; let d=el.querySelector(":scope>.ndot"); if(on&&!d){ d=document.createElement("i"); d.className="ndot"; d.setAttribute("aria-hidden","true"); el.appendChild(d); } else if(!on&&d) gone(d); };
     const gone=d=>{ const a=d.animate([{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.3)"}],{duration:spd(260),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); const rm=()=>d.remove(); a.finished.then(rm,rm); };
     function newDots(){ const n=unseen()>0; dotIn($("lv-show"),n); const sm=document.querySelector("#t-more>summary .ft"); dotIn(sm,n); }
     window.newDots=newDots;
-    function seeB(id){ if(!P.badges[id]||P.seenB[id]) return; P.seenB[id]=1; save(); const t=document.querySelector(`#badges .badge[data-b="${id}"]`), d=t&&t.querySelector(":scope>.ndot"); if(d) gone(d); if(t) t.setAttribute("aria-label",t.getAttribute("aria-label").replace(/, new$/,"")); newDots(); }
+    function seeB(id){ const ids=stepsOf(id).filter(x=>P.badges[x]&&!P.seenB[x]); if(!ids.length) return; ids.forEach(x=>P.seenB[x]=1); save(); const t=document.querySelector(`#badges .badge[data-b="${id}"]`), d=t&&t.querySelector(":scope>.ndot"); if(d) gone(d); if(t) t.setAttribute("aria-label",t.getAttribute("aria-label").replace(/, new$/,"")); newDots(); }
     let seenIO=null; const seenT=new Map();
     function watchNew(){ if(!("IntersectionObserver" in window)) return; if(!seenIO) seenIO=new IntersectionObserver(es=>es.forEach(e=>{ const t=e.target.closest(".badge"), id=t&&t.dataset.b; if(!id) return;
         if(e.isIntersecting&&e.intersectionRatio>.9){ if(!seenT.has(id)) seenT.set(id,setTimeout(()=>{ seenT.delete(id); if(!document.hidden) seeB(id); },1200)); } else { clearTimeout(seenT.get(id)); seenT.delete(id); } }),{threshold:[0,.95]});
       seenIO.disconnect(); document.querySelectorAll("#badges .badge>.ndot").forEach(d=>seenIO.observe(d)); }
+    // ----- the Mythic squares are cut like a gem whose facets never sit still: a mesh of points over the square, some facets split again
+    // into smaller ones, every point drifting on a slow orbit of its own, and each facet lit by how it tilts toward a light that wanders.
+    // Every square gets its own random cut. Drawn about 30 times a second, only while a square is on screen and nothing is gliding. -----
+    const GEMS=new Set(); let gemRaf=0, gemLast=0, gemIO=null;
+    function gemBuild(cv){ const R=Math.random, pts=[], tri=[], N=4;
+      const pt=(x,y,m)=>{ const p={x,y,ax:(1.6+R()*3.4)*m,ay:(1.6+R()*3.4)*m,w:.25+R()*.55,ph:R()*6.283,zw:.3+R()*.6,zp:R()*6.283}; pts.push(p); return pts.length-1; };
+      const G=[]; for(let j=0;j<=N;j++){ G[j]=[]; for(let i=0;i<=N;i++){ const edge=i===0||j===0||i===N||j===N; G[j][i]=pt((i+(edge?0:(R()-.5)*.7))/N,(j+(edge?0:(R()-.5)*.7))/N,edge?.5:1); } }
+      for(let j=0;j<N;j++) for(let i=0;i<N;i++){ const a=G[j][i], b=G[j][i+1], c=G[j+1][i+1], d=G[j+1][i]; if(R()<.5){ tri.push([a,b,c],[a,c,d]); } else { tri.push([a,b,d],[b,c,d]); } }
+      // a third of the facets split again into four, the start of the fractal: their new corners ride the midpoints of the old edges
+      const out=[]; tri.forEach(t=>{ if(R()<.34){ const m=(u,v)=>{ const p=pt(0,0,.45); pts[p].mid=[u,v]; return p; }; const [a,b,c]=t, ab=m(a,b), bc=m(b,c), ca=m(c,a); out.push([a,ab,ca],[ab,b,bc],[ca,bc,c],[ab,bc,ca]); } else out.push(t); });
+      const col=getComputedStyle(cv).color||"rgb(232,218,255)"; return {cv,pts,tri:out,col,lit:R()*6.283}; }
+    function gemDraw(g,t){ const cv=g.cv, W=cv.clientWidth, H=cv.clientHeight; if(!W||!H) return; const dpr=Math.min(2.5,window.devicePixelRatio||1);
+      if(cv.width!==Math.round(W*dpr)){ cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); } const c=cv.getContext("2d"); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
+      const P2=g.pts.map(p=>p.mid?null:{x:p.x*W+Math.sin(t*p.w+p.ph)*p.ax,y:p.y*H+Math.cos(t*p.w*.8+p.ph)*p.ay,z:Math.sin(t*p.zw+p.zp)});
+      g.pts.forEach((p,i)=>{ if(!p.mid) return; const u=P2[p.mid[0]]||P2[p.mid[0]], v=P2[p.mid[1]]; P2[i]={x:(u.x+v.x)/2+Math.sin(t*p.w+p.ph)*p.ax,y:(u.y+v.y)/2+Math.cos(t*p.w+p.ph)*p.ay,z:Math.sin(t*p.zw+p.zp)}; });
+      const lx=Math.cos(t*.23+g.lit), ly=Math.sin(t*.31+g.lit), rgb=g.col.match(/\d+(\.\d+)?/g)||[232,218,255];
+      g.tri.forEach(([a,b,d])=>{ const A=P2[a], B=P2[b], D=P2[d]; if(!A||!B||!D) return;
+        // the facet's tilt from its corners' heights, and how much of the wandering light it catches
+        const nx=(B.z-A.z)*(D.y-A.y)-(D.z-A.z)*(B.y-A.y), ny=(D.z-A.z)*(B.x-A.x)-(B.z-A.z)*(D.x-A.x), k=Math.max(0,Math.min(1,.5+(nx*lx+ny*ly)/(W*.5)));
+        c.beginPath(); c.moveTo(A.x,A.y); c.lineTo(B.x,B.y); c.lineTo(D.x,D.y); c.closePath();
+        c.fillStyle=`rgba(${Math.round(150+105*k)},${Math.round(110+120*k)},255,${(.02+.16*k*k).toFixed(3)})`; c.fill();
+        c.strokeStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${(.12+.22*k).toFixed(3)})`; c.lineWidth=.6; c.stroke(); }); }
+    function gemLoop(now){ gemRaf=0; const de=document.documentElement; if(!GEMS.size) return;
+      if(!document.hidden&&!de.classList.contains("gliding")&&now-gemLast>30){ gemLast=now; GEMS.forEach(g=>{ if(g.live&&g.cv.isConnected) gemDraw(g,now/1000); }); }
+      if([...GEMS].some(g=>g.live)) gemRaf=requestAnimationFrame(gemLoop); }
+    function gemInit(){ GEMS.forEach(g=>{ if(!g.cv.isConnected) GEMS.delete(g); }); const still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(!gemIO&&"IntersectionObserver" in window) gemIO=new IntersectionObserver(es=>{ es.forEach(e=>{ const g=e.target._gem; if(g){ g.live=e.isIntersecting; if(g.live&&!g.drawn){ gemDraw(g,performance.now()/1000); g.drawn=1; } } }); if(!still&&!gemRaf) gemRaf=requestAnimationFrame(gemLoop); },{rootMargin:"40px"});
+      document.querySelectorAll("#badges .gemc").forEach(cv=>{ if(cv._gem) return; const g=gemBuild(cv); cv._gem=g; GEMS.add(g); if(gemIO) gemIO.observe(cv); }); }
     // ----- a badge is a square of its icon and name; tapping it shows what it is for, and when it was earned, in a small pane beside it -----
     let pop=null;
     const closePop=()=>{ if(!pop) return; const p=pop; pop=null; const a=p.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(4px)"}],{duration:spd(160),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); const rm=()=>p.remove(); a.finished.then(rm,rm); };
     function openPop(t){ const id=t.dataset.b, b=BADGES.find(x=>x.id===id); if(!b) return; seeB(id); if(pop&&pop._id===id){ closePop(); return; } closePop();
       const on=P.badges[id], hid=b.h&&!on, d=on?new Date(on):null;
       const p=document.createElement("div"); p.className=`bpop r-${b.r}`; p._id=id; p.setAttribute("role","status");
-      p.innerHTML=`<span class="eyebrow">${RN[b.r]}</span><b>${hid?"???":esc(b.n)}</b><span>${hid?"Hidden until you earn it.":esc(b.d)}</span><span class="note">${on?`Earned ${d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}`:"Not earned yet"}</span>`;
+      const q=SER.get(id), k=q?q.indexOf(id):0, nx=q&&q[k+(on?1:0)]&&q[k+(on?1:0)]!==id?BID(q[k+(on?1:0)]):null;
+      const ladder=q?`<ol class="bladder">${q.map(x=>{ const s0=BID(x), g=!!P.badges[x]; return `<li class="${g?"on":""} r-${s0.r}"><i></i><b>${esc(s0.n)}</b><span>${esc(s0.d)}</span></li>`; }).join("")}</ol>`:"";
+      p.innerHTML=`<span class="eyebrow">${RN[b.r]}${q?` · step ${on?k+1:0} of ${q.length}`:""}</span><b>${hid?"???":esc(b.n)}</b><span>${hid?"Hidden until you earn it.":esc(b.d)}</span>${ladder}<span class="note">${on?`Earned ${d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}`:"Not earned yet"}${nx?`. Next: ${esc(nx.n)}`:""}</span>`;
       document.body.appendChild(p); pop=p; const r=t.getBoundingClientRect(), w=p.offsetWidth, h=p.offsetHeight, W=window.innerWidth, top=((document.querySelector("header.top")||{}).offsetHeight||0)+8;
       const x=Math.max(12,Math.min(W-12-w,r.left+r.width/2-w/2)), above=r.top-h-8>=top, y=above?r.top-h-8:r.bottom+8; p.style.left=x+"px"; p.style.top=y+"px";
       p.animate([{opacity:0,transform:`translateY(${above?6:-6}px) scale(.97)`},{opacity:1,transform:"none"}],{duration:spd(200),easing:"cubic-bezier(.2,.8,.2,1)"}); }
     document.addEventListener("click",e=>{ const t=e.target.closest&&e.target.closest("#badges .badge"); if(t&&!e.target.closest(".bclaim")){ openPop(t); return; } if(pop&&!(e.target.closest&&e.target.closest(".bpop"))) closePop(); },true);
     document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePop(); if(e.key!=="Enter"&&e.key!==" ") return; const t=e.target.closest&&e.target.closest("#badges .badge"); if(t){ e.preventDefault(); openPop(t); } });
     window.addEventListener("scroll",closePop,{passive:true}); document.addEventListener("panel",closePop);
-    function badgesHTML(){ return ORDER.map(r=>{ const list=BADGES.filter(b=>b.r===r); const got=list.filter(b=>P.badges[b.id]).length;
-      return `<section class="btier r-${r}"><header><span class="eyebrow">${RN[r]}</span><span class="note">${got} of ${list.length}</span></header><div class="badges">${list.map(badgeHTML).join("")}</div></section>`; }).join("")+rewardsHTML(); }
+    function badgesHTML(){ const SH=shownBadges(); return ORDER.map(r=>{ const ls=SH.filter(x=>x.b.r===r); if(!ls.length) return ""; const list=ls.map(x=>x.b); const got=list.filter(b=>P.badges[b.id]).length;
+      return `<section class="btier r-${r}"><header><span class="eyebrow">${RN[r]}</span><span class="note">${got} of ${list.length}</span></header><div class="badges">${ls.map(x=>badgeHTML(x.b,x.q)).join("")}</div></section>`; }).join("")+rewardsHTML(); }
     // the level rewards: what you have, and what the next milestone brings
     function rewardsHTML(){ const L=levelOf(P.xp.total); let nx=L+1; while(!isReward(nx)) nx++; const got=Object.keys(P.rew).map(Number).filter(Boolean).sort((a,b)=>a-b); const r=rewardOf(nx);
       return `<section class="btier rew"><header><span class="eyebrow">Level rewards</span><span class="note">${P.boost?`${P.boost} double XP round${P.boost>1?"s":""}`:"No boosts"}${P.cover?`, ${P.cover} shift cover${P.cover>1?"s":""}`:""}</span></header>
@@ -5619,12 +5748,12 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       lvBadges();
       const bl=$("badges"); if(bl){ const earned=BADGES.filter(b=>P.badges[b.id]).length; $("badge-count").textContent=`${earned} of ${BADGES.length}`;
         // the list is only rebuilt when something on it changed, so the auras keep their motion
-        const bs=BADGES.map(b=>P.badges[b.id]?1:0).join("")+"|"+st.level+"|"+P.boost+"|"+P.cover; if(bl._sig!==bs){ bl._sig=bs; bl.innerHTML=badgesHTML(); watchNew(); } } watch(); newDots(); }
+        const bs=BADGES.map(b=>P.badges[b.id]?1:0).join("")+"|"+st.level+"|"+P.boost+"|"+P.cover; if(bl._sig!==bs){ bl._sig=bs; bl.innerHTML=badgesHTML(); watchNew(); gemInit(); } } watch(); newDots(); }
     // the auras only move while they are on screen
     let io=null, seen=[]; function watch(){ if(!("IntersectionObserver" in window)) return; if(!io) io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle("live",e.isIntersecting)),{rootMargin:"60px"}); const now=[...document.querySelectorAll("#badges .myth,#lv-ring .myth")]; if(now.length===seen.length&&now.every((m,i)=>m===seen[i])) return; io.disconnect(); seen=now; now.forEach(m=>io.observe(m)); }
     document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-claim]"); if(!b) return; const id=b.dataset.claim; if(P.badges[id]) return; P.badges[id]=Date.now(); save(); const R=b.getBoundingClientRect(); confetti(R.left+R.width/2,R.top,{n:90}); const bd=BADGES.find(x=>x.id===id); toast(`<b>Badge: ${esc(bd.n)}</b><span>${RN[bd.r]} · Congratulations.</span>`); render(); });
     // the badges earned so far, newest first, as small icons beside the level; as many as fit, then a count of the rest
-    function lvBadges(){ const el=$("lv-badges"); if(!el) return; const got=BADGES.filter(b=>P.badges[b.id]).sort((a,b)=>P.badges[b.id]-P.badges[a.id]);
+    function lvBadges(){ const el=$("lv-badges"); if(!el) return; const got=BADGES.filter(b=>P.badges[b.id]&&(!SER.has(b.id)||topOf(SER.get(b.id))===b.id)).sort((a,b)=>P.badges[b.id]-P.badges[a.id]);
       el.hidden=!got.length; if(!got.length){ el.innerHTML=""; el._sig=""; return; } el.setAttribute("aria-label",`${got.length} badge${got.length===1?"":"s"} earned`); el.setAttribute("role","img");
       // every badge is always there; the ones that do not fit the folded box wait hidden behind a count, so opening the box only moves them
       const open=!!el.closest(".lvlcard.open"), room=open?(el._room||0):el.clientWidth, per=24; if(!open&&room) el._room=room;
@@ -5672,6 +5801,110 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     document.addEventListener("panel",e=>{ if(e.detail==="today"){ render(); fill(); } if(e.detail==="progress") render(); }); document.addEventListener("study",render); document.addEventListener("lesson",render);
     markOpen(); document.addEventListener("visibilitychange",()=>{ if(!document.hidden) markOpen(); });
     render();
+  })();
+  // ---------- daily login rewards: a seven-day track that cycles, a weekly chest, and a reward for thirty days in a row ----------
+  // Each day the app is opened moves the run on by one. The run's day picks the reward: days 1 to 7 of each week climb to a chest on day 7,
+  // and day 30 is the month's reward, after which the run starts again at day 1. Opening the app is what keeps the run going; claiming
+  // takes that day's reward, and a reward not claimed by the end of its day is gone while the run carries on. A day or two missed is bridged
+  // by shift covers when enough are banked (an EMS shift can swallow a day); otherwise the run starts again at day 1.
+  (function login(){
+    const KEY="mm-login";
+    const S=Object.assign({open:null,run:0,claimed:null,shown:null,total:0,months:0,note:""},store.get(KEY,{})); const save=()=>store.set(KEY,S);
+    const still=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const pad=n=>String(n).padStart(2,"0");
+    // the local day; a test can set window.__loginDay to a YYYY-MM-DD to stand in for today
+    const today=()=>{ if(window.__loginDay) return window.__loginDay; const d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); };
+    const dnum=k=>{ const [y,m,d]=k.split("-").map(Number); return Math.round(Date.UTC(y,m-1,d)/864e5); };
+    // the week climbs to its chest; the chests at the end of the second and fourth weeks also hold a shift cover
+    const WEEK=[{xp:300},{xp:500},{boost:1},{xp:800},{xp:1000,boost:1},{xp:1200},{xp:2500,boost:2,chest:1}];
+    const MONTH={xp:10000,boost:5,cover:1,month:1};
+    const rewardOf=run=>{ if(run===30) return MONTH; const w=WEEK[(run-1)%7]; return (run===14||run===28)?Object.assign({},w,{cover:1}):w; };
+    const kN=n=>n>=1000?(n/1000).toFixed(n%1000?1:0).replace(/\.0$/,"")+"k":String(n);
+    const fmtN=n=>Number(n).toLocaleString();
+    const lines=r=>[r.xp?`${fmtN(r.xp)} XP`:"",r.boost?`${r.boost} Double XP round${r.boost>1?"s":""}`:"",r.cover?`${r.cover} shift cover`:""].filter(Boolean);
+    const titleOf=run=>{ const r=rewardOf(run); return r.month?"Thirty days in a row":r.chest?"The weekly chest":`Day ${((run-1)%7)+1} of the week`; };
+
+    // ----- a new day: move the run on, bridge a short gap with shift covers, or start again -----
+    function newDay(){ const t=today(); if(S.open===t) return false; let note="";
+      if(!S.open||!S.run){ S.run=1; }
+      else { const gap=dnum(t)-dnum(S.open), missed=gap-1;
+        if(gap<=0){ S.open=t; save(); return false; }
+        if(missed===0) S.run=S.run>=30?1:S.run+1;
+        else if(missed<=2&&window.spendCover&&spendCover(missed)){ S.run=S.run>=30?1:S.run+1; note=missed===1?"A shift cover bridged the day you missed, so your run goes on.":"Two shift covers bridged the days you missed, so your run goes on."; }
+        else { S.run=1; note=missed===1?"You missed a day, so the run starts again at day 1.":`You missed ${missed} days, so the run starts again at day 1.`; } }
+      S.open=t; S.note=note; save(); return true; }
+    const pending=()=>S.open===today()&&S.claimed!==today()&&S.run>0;
+
+    // ----- the panel -----
+    const ICO={xp:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',boost:'<path d="m6 12 6-6 6 6M6 18l6-6 6 6"/>',cover:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+      chest:'<path d="M3 10h18v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M3 10a6 4 0 0 1 6-4h6a6 4 0 0 1 6 4M3 13h18"/><rect x="10.5" y="11.5" width="3" height="3.5" rx=".8"/>',
+      gem:'<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 18 3-18"/>',check:'<path d="m5 12 5 5L19 7"/>',gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8c-2-4-6-4-6-1.5S10 8 12 8c2 0 6 1 6-1.5S14 4 12 8"/>'};
+    const svg=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
+    const iconOf=r=>r.month?"gem":r.chest?"chest":r.xp?"xp":r.boost?"boost":"cover";
+    const tagOf=r=>r.month?"Month":r.chest?"Chest":r.xp?kN(r.xp):r.boost?"x2":"Cover";
+    let el=null, closing=false, navWrapped=false;
+    const isOpen=()=>!!el&&!closing;
+    function strip(){ const run=S.run, start=run-((run-1)%7); let h="";
+      for(let d=start;d<start+7;d++){ const rd=d>30?d-30:d, r=rewardOf(rd), st=d<run?"past":d===run?"now":"next";
+        h+=`<li class="${st}${r.chest||r.month?" big":""}"><span class="dn">Day ${((rd-1)%7)+1}</span><span class="di">${st==="past"?svg("check"):svg(iconOf(r))}</span><span class="dt">${tagOf(r)}</span></li>`; }
+      return h; }
+    function panelHTML(){ const r=rewardOf(S.run), pct=Math.round(100*S.run/30);
+      return `<div class="dlyc" role="dialog" aria-modal="true" aria-labelledby="dly-t">
+        <span class="eyebrow">Daily reward</span><b class="dlyt" id="dly-t">${titleOf(S.run)}</b>
+        <ol class="dlystrip" aria-label="This week">${strip()}</ol>
+        <div class="dlygot"><span class="dlyi">${svg(iconOf(r))}</span><div>${lines(r).map(l=>`<span>${l}</span>`).join("")}</div></div>
+        ${S.note?`<p class="dlynote">${S.note}</p>`:""}
+        <div class="dlymonth"><div class="dlymh"><span>Day ${S.run} of 30 in a row</span><span>${svg("gem")}${S.run>=30?"Today":`${30-S.run} to go`}</span></div><div class="dlybar"><i style="width:${pct}%"></i></div>
+          <span class="note">Thirty days in a row brings ${lines(MONTH).join(", ")}.</span></div>
+        <div class="dlybtns"><button type="button" class="btn alt" data-dlylater>Later</button><button type="button" class="btn amber" data-dlyclaim>Claim</button></div></div>`; }
+    function open(){ if(el||!pending()) return; closing=false; el=document.createElement("div"); el.className="dly"; el.innerHTML=panelHTML(); document.body.appendChild(el); S.shown=today(); save();
+      const card=el.querySelector(".dlyc"), claim=el.querySelector("[data-dlyclaim]");
+      if(!still()){ el.animate([{opacity:0},{opacity:1}],{duration:spd(260),easing:"cubic-bezier(.7,0,.2,1)"}); card.animate([{opacity:0,transform:"translateY(12px) scale(.97)"},{opacity:1,transform:"none"}],{duration:spd(380),easing:"cubic-bezier(.2,.8,.2,1)"});
+        const now=card.querySelector(".dlystrip li.now"); if(now) now.animate([{transform:"scale(.9)"},{transform:"scale(1.08)",offset:.6},{transform:"none"}],{duration:spd(520),delay:spd(260),easing:"cubic-bezier(.3,0,.2,1)",fill:"backwards"}); }
+      claim.addEventListener("click",doClaim); el.querySelector("[data-dlylater]").addEventListener("click",later);
+      el.addEventListener("click",e=>{ if(e.target===el) later(); });
+      el.addEventListener("keydown",e=>{ if(e.key==="Escape"){ e.preventDefault(); later(); } else if(e.key==="Tab"){ const f=[...el.querySelectorAll("button")]; const i=f.indexOf(document.activeElement); e.preventDefault(); f[(i+(e.shiftKey?f.length-1:1))%f.length].focus(); } });
+      try{ claim.focus({preventScroll:true}); }catch(x){ claim.focus(); }
+      // the system back button closes the panel: the app's back path asks navBack once nothing else is open, so the panel answers first there
+      if(!navWrapped&&window.navBack){ navWrapped=true; const nb=window.navBack; window.navBack=function(){ if(isOpen()){ later(); return true; } return nb.apply(this,arguments); }; }
+      chip(); }
+    function close(then){ if(!el||closing) return; closing=true; const e=el, card=e.querySelector(".dlyc"); const end=()=>{ e.remove(); if(el===e) el=null; closing=false; if(then) then(); chip(); };
+      if(still()){ end(); return; } card.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-8px) scale(.98)"}],{duration:spd(280),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); const a=e.animate([{opacity:1},{opacity:0}],{duration:spd(300),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); a.finished.then(end,end); }
+    function later(){ close(); }
+    function doClaim(){ if(!pending()||!el||closing) return; const r=rewardOf(S.run), run=S.run; S.claimed=today(); S.total=(S.total||0)+1; if(r.month) S.months=(S.months||0)+1; S.note=""; save();
+      const b=el.querySelector("[data-dlyclaim]"), now=el.querySelector(".dlystrip li.now"); b.disabled=true; b.textContent="Claimed";
+      if(now){ now.classList.add("got"); now.querySelector(".di").innerHTML=svg("check"); if(!still()) now.animate([{transform:"scale(1)"},{transform:"scale(1.18)",offset:.4},{transform:"scale(1)"}],{duration:spd(460),easing:"cubic-bezier(.3,0,.2,1)"}); }
+      try{ const R=(now||b).getBoundingClientRect(); if(window.confettiAt) confettiAt(R.left+R.width/2,R.top+R.height/2,{n:r.month?150:r.chest?110:70}); }catch(x){}
+      // the reward lands once the panel has gone, so a level it brings up never opens on top of this panel
+      setTimeout(()=>close(()=>{ if(window.grantReward) grantReward({xp:r.xp||0,boost:r.boost||0,cover:r.cover||0,src:"login"});
+        if(window.toastMsg) setTimeout(()=>toastMsg(`<b>${r.month?"Thirty days in a row":r.chest?"Weekly chest":"Daily reward"}</b><span>${lines(r).join(", ")}</span>`),spd(200));
+        try{ document.dispatchEvent(new CustomEvent("loginreward",{detail:{run,reward:r}})); }catch(x){} }),spd(still()?200:900)); }
+
+    // ----- the way back in: a reward left for later waits on the dashboard under the greeting, with the red dot -----
+    function chip(){ const host=$("hello"); let c=$("dly-chip"); const want=pending()&&!isOpen()&&S.shown===today();
+      if(!want){ if(c) c.remove(); return; } if(!host) return;
+      if(!c){ c=document.createElement("button"); c.type="button"; c.id="dly-chip"; c.className="dlychip"; host.insertAdjacentElement("afterend",c); c.addEventListener("click",()=>open());
+        if(!still()) c.animate([{opacity:0,transform:"translateY(-4px)"},{opacity:1,transform:"none"}],{duration:spd(300),easing:"cubic-bezier(.2,.8,.2,1)"}); }
+      const r=rewardOf(S.run); c.innerHTML=`${svg("gift")}<span>Daily reward</span><b>${r.month?"Thirty days":r.chest?"Weekly chest":"Day "+(((S.run-1)%7)+1)}</b><i class="ndot" aria-hidden="true"></i>`; c.setAttribute("aria-label",`Claim your daily reward: ${lines(r).join(", ")}`); }
+
+    // ----- when to show it: the first time the dashboard is on screen each day, once the intro has gone and nothing else is up -----
+    let onToday=false, poll=0, calm=0;
+    // automated test browsers do not get the panel or the chip unless a test asks for them (window.__loginAuto), so the app's other probes
+    // see the dashboard as before
+    const auto=()=>!!window.__loginAuto||!(typeof navigator!=="undefined"&&navigator.webdriver);
+    const busy=()=>{ const h=document.documentElement, bc=document.body&&document.body.classList; if((h&&h.classList&&h.classList.contains("splashing"))||$("splash")) return true; if(document.querySelector(".lvup")) return true;
+      if(bc&&bc.contains("lessonopen")) return true; const tb=$("tboard"); if(tb&&!tb.hidden) return true;
+      if([...document.querySelectorAll(".onboard")].some(o=>!o.hidden&&o.offsetParent!==null)) return true; return document.hidden; };
+    // a light poll waits for a quiet moment: once nothing has been in the way for about a second, so the dashboard's own fill plays first
+    const stopPoll=()=>{ if(poll){ clearInterval(poll); poll=0; } calm=0; };
+    function tryShow(){ try{ if(!onToday||!pending()||S.shown===today()||el){ stopPoll(); chip(); return; } if(!poll) poll=setInterval(check,400); }catch(e){} }
+    function check(){ try{ if(!onToday||!pending()||S.shown===today()||el){ stopPoll(); return; } if(busy()){ calm=0; return; } calm+=400; if(calm>=spd(1100)){ stopPoll(); open(); } }catch(e){ stopPoll(); } }
+    function tick(){ try{ if(!auto()) return; if(newDay()){ S.shown=null; save(); } chip(); tryShow(); }catch(e){} }
+    document.addEventListener("panel",e=>{ onToday=e.detail==="today"; if(!onToday){ stopPoll(); if(el) later(); } tick(); });
+    document.addEventListener("visibilitychange",()=>{ if(!document.hidden) tick(); });
+    { const p=$("panel-today"); onToday=!!(p&&!p.hidden); }
+    tick();
+    window.__LOGIN={state:()=>Object.assign({},S),rewardOf,tick,open,claim:doClaim,reset:()=>{ for(const k in S) delete S[k]; Object.assign(S,{open:null,run:0,claimed:null,shown:null,total:0,months:0,note:""}); save(); }};
   })();
   // ---------- data behind the games: protocols, vitals, scales, antidotes, rhythms ----------
   const GD={};
@@ -6950,6 +7183,8 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     const LENS=[["30","30 terms"],["60","60 terms"],["all","Every term"]];
     // two ways to play: clear a board of a set size, or rush, three minutes on the clock, two seconds back for every match
     const MODES=[["clear","Clear the board"],["rush","Rush, 3 min"]]; const RUSH=180000, RUSH_HIT=2000, RUSH_MISS=3000;
+    // a clear run has one clock for the whole run, thirty minutes, and none on any single term or pair (a test can shorten it)
+    const RUN=()=>window.__tbRunMs||1800000;
     const runKey=()=>TS.mode==="rush"?"rush":(TS.len||"60");
     const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
     // missed terms come first, then ones never matched, then the rest
@@ -7020,7 +7255,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         ${chips(STYLES,"tstyle",m?"match":"quiz","Style")}
         <p class="intro">${m?"Every tile has a partner on the board: a term and its meaning, a drug and its class, a sign and what it points to. Tap two that go together. Quick pairs score more and a streak multiplies everything.":"Read the explanation, tap its term. Quick taps score more and a streak multiplies everything. Matched terms drop off, the rest fall into place and new ones fall in, until the topic runs dry."}</p>
         ${chips(MODES,"rmode",TS.mode||"clear","How to play")}
-        ${rush?`<p class="note tbmnote">${m?"Clear as many pairs as you can":"Match as many as you can"} before the clock runs out. Every match puts two seconds back, every miss takes three.</p>`:chips(m?LENS_M:LENS,"len",len,m?"How many pairs":"How many terms")}
+        ${rush?`<p class="note tbmnote">${m?"Clear as many pairs as you can":"Match as many as you can"} before the clock runs out. Every match puts two seconds back, every miss takes three.</p>`:chips(m?LENS_M:LENS,"len",len,m?"How many pairs":"How many terms")+`<p class="note tbmnote">Thirty minutes for the whole run, and no clock on any one ${m?"pair":"term"}. Take the time you need.</p>`}
         <div class="tbtopics">${tile("all","Everything","Every topic mixed",38)}${TOPICS.map(t=>tile(t.id,t.n,t.d,t.h)).join("")}</div></div>`;
       leftEl.textContent=""; scoreEl.textContent=fmtN(0); combo(0,true); }
     function bind(){
@@ -7037,10 +7272,10 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     // ----- one run -----
     const MULT=[1,1,1,2,2,2,3,3,3,3,4,4,4,4,4,5];
     const multOf=s=>MULT[Math.min(s,MULT.length-1)];
-    // each explanation gives you a long, unhurried while: the speed bonus drains over WIN, a third of the wrong tiles clear at T1 and
-    // another third at T2, and the answer glows at T3
+    // nothing is timed per explanation: a quick answer still earns a speed bonus that drains over WIN, and left a long while the board
+    // helps, a third of the wrong tiles clearing at T1, another third at T2, and the answer glowing at T3
     const WIN=120000, T1=80000, T2=100000, T3=120000;
-    const playHTML=m=>`<div class="tbplay"><div class="tbclue${m?" mm":""}" id="tb-clue" aria-live="polite"><span class="eyebrow" id="tb-ctop"></span><p id="tb-ctext"></p><div class="tbnote" id="tb-note"></div><span class="tbtime"><i id="tb-time"></i></span></div><div class="tbboard" id="tb-board"><div class="tbgrid" id="tb-grid"></div><canvas class="tbfx" id="tb-fx" aria-hidden="true"></canvas></div></div>`;
+    const playHTML=m=>`<div class="tbplay"><div class="tbclue${m?" mm":""}" id="tb-clue" aria-live="polite"><span class="eyebrow" id="tb-ctop"></span><p id="tb-ctext"></p><div class="tbnote" id="tb-note"></div><span class="tbclock num" id="tb-clock" aria-label="Time left in the run"></span><span class="tbtime"><i id="tb-time"></i></span></div><div class="tbboard" id="tb-board"><div class="tbgrid" id="tb-grid"></div><canvas class="tbfx" id="tb-fx" aria-hidden="true"></canvas></div></div>`;
     // XP for a match: a full unit for a clean one, a little more for speed and for a running streak, half for a match after a miss
     const XPU=()=>window.XPU||100;
     const xpMatch=(clean,sp,streak)=>{ const U=XPU(); return clean?U+Math.round(U*.15*sp)+Math.round(U*.1*Math.min(Math.max(0,streak-1),5)):Math.round(U*.5); };
@@ -7051,7 +7286,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       layout(); for(let c=0;c<G.C;c++) G.cols.push([]);
       // the first board falls in, bottom row first, a column at a time
       for(let r=G.R-1;r>=0;r--) for(let c=0;c<G.C;c++){ const it=draw(); if(!it) break; const tl=mk(it,c); G.cols[c].push(tl); place(tl,true,(G.R-1-r)*spd(70)+c*spd(34)); }
-      fitAll(); left(); setScore(0,true); combo(0,true);
+      fitAll(); left(); setScore(0,true); combo(0,true); clock();
       setTimeout(()=>{ if(G&&!G.ended) nextClue(); },spd(520)); }
     function layout(){ const g=G, bw=g.board.clientWidth||340, bh=g.board.clientHeight||420; // three wide on a phone, so a long term sits on one line at a readable size; more columns on a wider screen
       g.C=bw>=700?5:bw>=500?4:3; g.gap=bw<360?5:6;
@@ -7086,8 +7321,15 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     const fitAll=()=>G.cols.flat().forEach(fit);
     const left=()=>{ if(G.rush){ clock(); return; } const n=G.pool.length+(G.style==="match"?onPairs().length:G.cols.flat().length); leftEl.textContent=n+" left"; };
     // the rush clock starts with the first explanation and stops while the app is in the background
-    function clock(){ const g=G; if(!g||!g.rush) return; if(!g.tEnd){ leftEl.textContent=fmtT(RUSH); return; } const ms=Math.max(0,g.tEnd-performance.now()); leftEl.textContent=fmtT(ms); leftEl.classList.toggle("low",ms<10000);
+    function clock(){ const g=G; if(!g) return;
+      if(!g.rush){ const ce=view.querySelector("#tb-clock"); if(!ce) return; const ms=g.tEnd?Math.max(0,g.tEnd-performance.now()):RUN(); ce.textContent=fmtT(ms); ce.classList.toggle("low",ms<60000); if(g.tEnd&&ms<=0&&!g.ended){ g.timeUp=true; finish(false); } return; }
+      if(!g.tEnd){ leftEl.textContent=fmtT(RUSH); return; } const ms=Math.max(0,g.tEnd-performance.now()); leftEl.textContent=fmtT(ms); leftEl.classList.toggle("low",ms<10000);
       if(ms<=0&&!g.ended) finish(true); }
+    // the run's bar drains from where it stands to empty over the time that is left, on the compositor, and is set going again after a pause
+    function runBar(){ const g=G; if(!g||g.rush||!g.tEnd) return; const bar=view.querySelector("#tb-time"); if(!bar) return; if(bar._a) bar._a.cancel(); const ms=Math.max(0,g.tEnd-performance.now()), f=Math.min(1,ms/RUN());
+      bar._a=bar.animate([{transform:`scaleX(${f.toFixed(4)})`},{transform:"scaleX(0)"}],{duration:Math.max(1,ms),easing:"linear",fill:"forwards"}); }
+    // the run's clock starts with the first explanation or pair, either way
+    function startClock(g){ if(g.tEnd) return; g.tEnd=g.t0+(g.rush?RUSH:RUN()); g.tick=setInterval(clock,g.rush?200:500); clock(); runBar(); }
     const fmtT=ms=>{ const s=Math.ceil(ms/1000); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); };
     const bump=(g,d)=>{ if(!g.rush||!g.tEnd) return; g.tEnd+=d; if(!RM()) leftEl.animate([{transform:"scale(1)"},{transform:"scale("+(d>0?1.14:.9)+")",offset:.35},{transform:"scale(1)"}],{duration:spd(320),easing:OUT}); clock(); };
     function setScore(v,now){ const g=G; if(!g) return; const from=g.shown; g.score=v; if(now||RM()){ g.shown=v; scoreEl.textContent=fmtN(v); return; }
@@ -7105,8 +7347,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       card.style.setProperty("--h",tp?tp.h:38); top.textContent=tp?tp.n:""; note.textContent=""; card.classList.remove("miss");
       ct.textContent=pick.it.c.charAt(0).toUpperCase()+pick.it.c.slice(1); ct.classList.toggle("long",pick.it.c.length>64);
       if(!RM()) ct.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:spd(260),easing:OUT});
-      const bar=view.querySelector("#tb-time"); if(bar._a) bar._a.cancel(); bar._a=bar.animate([{transform:"scaleX(1)"},{transform:"scaleX(0)"}],{duration:WIN,easing:"linear",fill:"forwards"});
-      g.t0=performance.now(); g.paused=0; if(g.rush&&!g.tEnd){ g.tEnd=g.t0+RUSH; g.tick=setInterval(clock,200); }
+      g.t0=performance.now(); g.paused=0; startClock(g);
       // left too long, the board helps: wrong tiles clear away in thirds, then the answer glows
       const wrong=shuffle(on.filter(t=>t!==pick)), third=Math.ceil(wrong.length/3);
       g.timers.push(setTimeout(()=>wrong.slice(0,third).forEach(t=>t.el.classList.add("out")),T1));
@@ -7145,7 +7386,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       shuffle(tiles).forEach((tl,j)=>{ tl.c=j%G.C; G.cols[tl.c].push(tl); });
       G.cols.forEach((col,c)=>col.forEach((tl,i)=>place(tl,true,i*spd(70)+c*spd(34))));
       fitAll(); left(); setScore(0,true); combo(0,true);
-      const top=view.querySelector("#tb-ctop"), ct=view.querySelector("#tb-ctext"); top.textContent="Match style"; ct.textContent="Tap two tiles that go together.";
+      const top=view.querySelector("#tb-ctop"), ct=view.querySelector("#tb-ctext"); top.textContent="Match style"; ct.textContent="Tap two tiles that go together."; clock();
       setTimeout(()=>{ if(G&&!G.ended) lull(true); },spd(520)); }
     const onPairs=()=>[...new Set(G.cols.flat().map(t=>t.pair))];
     // the next pair from the pool that sits well with everything on the board; none fits, none comes until the board moves on
@@ -7164,11 +7405,11 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     const setCard=(top,html,note,miss,h)=>{ const t=view.querySelector("#tb-ctop"), ct=view.querySelector("#tb-ctext"), n=view.querySelector("#tb-note"), card=view.querySelector("#tb-clue"); if(!card) return;
       card.style.setProperty("--h",h==null?38:h); t.textContent=top; ct.innerHTML=html; ct.classList.toggle("long",ct.textContent.length>64); n.textContent=note||""; card.classList.toggle("miss",!!miss);
       if(!RM()) ct.animate([{opacity:0,transform:"translateY(6px)"},{opacity:1,transform:"none"}],{duration:spd(240),easing:OUT}); };
-    // a lull is the wait for the next pair: the bar drains over WIN, one tile of a pair glows at T1 and its partner at T3
+    // a lull is the wait for the next pair: nothing counts down for it; the speed bonus drains over WIN, one tile of a pair glows at T1
+    // and its partner at T3
     function lull(first){ const g=G; if(!g||g.ended) return; clearTimers(); g.busy=false; g.tries=0; g.revealed=false; g.hintP=null; g.live=true; g.clues++;
       g.cols.flat().forEach(t=>t.el.classList.remove("hint"));
-      const bar=view.querySelector("#tb-time"); if(bar._a) bar._a.cancel(); bar._a=bar.animate([{transform:"scaleX(1)"},{transform:"scaleX(0)"}],{duration:WIN,easing:"linear",fill:"forwards"});
-      g.t0=performance.now(); g.paused=0; if(g.rush&&!g.tEnd){ g.tEnd=g.t0+RUSH; g.tick=setInterval(clock,200); } armM(0); }
+      g.t0=performance.now(); g.paused=0; startClock(g); armM(0); }
     function armM(el){ const g=G, on=onPairs(); if(!on.length) return; const p=g.hintP&&on.includes(g.hintP)?g.hintP:on[Math.floor(Math.random()*on.length)]; const T=g.cols.flat().filter(t=>t.pair===p);
       const one=()=>{ g.hintP=p; if(T[0]) T[0].el.classList.add("hint"); };
       if(el<T1) g.timers.push(setTimeout(one,T1-el)); else one();
@@ -7216,7 +7457,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
       try{ document.dispatchEvent(new CustomEvent("round",{detail:{game:"board",style:g.style,total:g.total,answered:g.matched,first:g.first,misses:g.misses.length,xp,secs,acc,best:g.maxStreak,perfect}})); }catch(e){}
       const tp=g.id==="all"?{n:"Everything",h:38}:topic(g.id), miss=[...new Map(g.misses.map(m=>[m.k,mm?{t:m.a,c:m.b}:m])).values()].slice(0,12);
       const fxw=g.fx, parts=xr.parts&&xr.parts.length&&typeof window.xpPartsHTML==="function"?window.xpPartsHTML(xr.parts):"";
-      view.innerHTML=`<div class="tbend" style="--h:${tp.h}"><span class="eyebrow">${g.rush?(cleared?"Time":"Run ended"):cleared?"Board cleared":"Run ended"} · ${mm?"Match · ":""}${esc(tp.n)}</span><b class="tbbig num" id="tb-final">0</b>${isBest?`<span class="tbnew">New best</span>`:prev?`<span class="tbprev">Best ${fmtN(prev)}</span>`:""}
+      view.innerHTML=`<div class="tbend" style="--h:${tp.h}"><span class="eyebrow">${g.rush?(cleared?"Time":"Run ended"):cleared?"Board cleared":g.timeUp?"Time":"Run ended"} · ${mm?"Match · ":""}${esc(tp.n)}</span><b class="tbbig num" id="tb-final">0</b>${isBest?`<span class="tbnew">New best</span>`:prev?`<span class="tbprev">Best ${fmtN(prev)}</span>`:""}
         <div class="lstats tbstats"><div class="k"><span class="eyebrow">${mm?"Pairs":"Matched"}</span><b class="num">${g.rush?g.matched:`${g.matched} / ${g.total}`}</b></div><div class="k"><span class="eyebrow">${mm?"Clean pairs":"First tap"}</span><b class="num">${Math.round(acc*100)}%</b></div><div class="k"><span class="eyebrow">Best streak</span><b class="num">${g.maxStreak}</b></div><div class="k"><span class="eyebrow">Average</span><b class="num">${avg?avg.toFixed(1)+" s":"none"}</b></div></div>
         <span class="tbxp num">+${fmtN(xp)} XP</span>${parts?`<div class="tbxpparts">${parts}</div>`:""}
         ${miss.length?`<div class="tbmiss"><span class="eyebrow">Worth another look</span>${miss.map(m=>`<div class="tbmr"><b>${esc(m.t)}</b><span>${esc(m.c)}</span></div>`).join("")}<p class="note">These come back first next time.</p></div>`:g.matched?`<p class="note tbclean">No misses. Clean board.</p>`:""}
@@ -7265,8 +7506,8 @@ html.gliding .mfx::before{animation-play-state:paused!important}
     // a run waits while the app is in the background
     document.addEventListener("visibilitychange",()=>{ const g=G; if(!g||g.ended||!(g.target||g.live)) return; const bar=view.querySelector("#tb-time");
       if(document.hidden){ g.hiddenAt=performance.now(); clearTimers(); clearInterval(g.tick); if(bar&&bar._a) bar._a.pause(); }
-      else if(g.hiddenAt&&g.style==="match"){ const away=performance.now()-g.hiddenAt; g.t0+=away; if(g.rush&&g.tEnd){ g.tEnd+=away; g.tick=setInterval(clock,200); } g.hiddenAt=0; if(bar&&bar._a) bar._a.play(); if(!g.busy) armM(performance.now()-g.t0); }
-      else if(g.hiddenAt){ const away=performance.now()-g.hiddenAt; g.t0+=away; if(g.rush&&g.tEnd){ g.tEnd+=away; g.tick=setInterval(clock,200); } g.hiddenAt=0; if(bar&&bar._a) bar._a.play(); const el=performance.now()-g.t0, on=g.cols.flat(), wrong=shuffle(on.filter(t=>t!==g.target&&!t.el.classList.contains("out"))), half=Math.ceil(wrong.length/2), tg=g.target;
+      else if(g.hiddenAt&&g.style==="match"){ const away=performance.now()-g.hiddenAt; g.t0+=away; if(g.tEnd){ g.tEnd+=away; g.tick=setInterval(clock,g.rush?200:500); runBar(); } g.hiddenAt=0; if(!g.busy) armM(performance.now()-g.t0); }
+      else if(g.hiddenAt){ const away=performance.now()-g.hiddenAt; g.t0+=away; if(g.tEnd){ g.tEnd+=away; g.tick=setInterval(clock,g.rush?200:500); runBar(); } g.hiddenAt=0; const el=performance.now()-g.t0, on=g.cols.flat(), wrong=shuffle(on.filter(t=>t!==g.target&&!t.el.classList.contains("out"))), half=Math.ceil(wrong.length/2), tg=g.target;
         if(el<T2) g.timers.push(setTimeout(()=>wrong.slice(0,half).forEach(t=>t.el.classList.add("out")),Math.max(0,(el<T1?T1:T2)-el)));
         g.timers.push(setTimeout(()=>{ tg.el.classList.add("hint"); g.revealed=true; },Math.max(0,T3-el))); } });
     window.addEventListener("resize",()=>{ if(!G||G.ended) return; const C=G.C; layout(); if(G.C!==C){ G.C=C; } G.cols.forEach(col=>col.forEach(t=>{ t.el.style.width=G.tw+"px"; t.el.style.height=G.th+"px"; t.i=-1; const i=col.indexOf(t); t.i=i; const [x,y]=xy(t.c,i); t.el.style.transform=`translate3d(${x}px,${y}px,0)`; })); fitAll(); });
