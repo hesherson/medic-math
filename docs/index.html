@@ -2841,7 +2841,10 @@ html.hdrnow .hvin{transition:none!important}
   // the page change is doing on the main thread, and its corners never stretch
   const pillAt=(x,w)=>[`translateX(${x.toFixed(1)}px)`,`translateX(${(x+9).toFixed(1)}px) scaleX(${(Math.max(0,w-18)/100).toFixed(4)})`,`translateX(${(x+w-20).toFixed(1)}px)`];
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
-    const to=pillAt(on.offsetLeft,on.offsetWidth), go=anim&&!reduceMotion();
+    const to=pillAt(on.offsetLeft,on.offsetWidth), go=anim&&!reduceMotion(), key=to.join("|");
+    // the tap starts the slide and the page swap asks for it again when it lands: a slide already on its way there is left alone, so it
+    // never restarts mid-flight (a restart picks the curve up again at full speed, which is the hitch)
+    if(go&&th._to===key) return; th._to=key;
     [...th.children].forEach((p,i)=>{ const from=go?getComputedStyle(p).transform:null; p.getAnimations().forEach(a=>a.cancel()); p.style.transform=to[i];
       if(go&&from&&from!=="none") p.animate([{transform:from},{transform:to[i]}],{duration:440,easing:"cubic-bezier(.3,.8,.25,1)"}); }); }
   // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll.
@@ -2883,6 +2886,8 @@ html.hdrnow .hvin{transition:none!important}
     const blur=!zoom&&(fromCard()||(near&&!!(HIDDEN[id]||HIDDEN[from]||PARENT[id]||PARENT[from])));
     const zsrc=zoom?(ZOOM[id]&&from==="today"?$(ZOOM[id]):ztop(from)):null, zr=zsrc?zsrc.getBoundingClientRect():null;
     markTap(id,from);
+    // a squashed bar eases back open alongside the pill's slide, rather than snapping open under it when the new page lands
+    { const de=document.documentElement; if(de.classList.contains("hdrmin")) de.classList.remove("hdrmin"); }
     const out=oldEl.animate(blur?[{opacity:1,filter:"blur(0px)"},{opacity:0,filter:"blur(9px)"}]:zoom?[{opacity:1},{opacity:0}]:[{opacity:1,transform:"none"},{opacity:0,transform:`translateX(${-dir*(near?14:22)}px)`}],{duration:blur?180:OUT,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"});
     let done; swapDone=new Promise(r=>done=r);
     pend={id,opts,from,oldEl,out,zr,dir,near,blur};
