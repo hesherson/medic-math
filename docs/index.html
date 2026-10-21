@@ -171,7 +171,7 @@ body.teach .extable{display:none}
 .mrow{display:grid;grid-template-columns:1fr 2fr auto auto auto;gap:10px;align-items:center;font-size:13px}
 .mname{font-weight:500}
 .mbar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
-.mbar i{display:block;height:100%;background:var(--teal);transition:width 0.255s}
+.mbar i{display:block;height:100%;background:var(--teal);transition:width 0.24s}
 .mrow.green .mbar i{background:var(--good)}
 .mrow.red .mbar i{background:var(--bad)}
 .mrow.green .mname{color:var(--good)}
@@ -198,14 +198,14 @@ body.teach .extable{display:none}
 .sb-task .btn{grid-column:1/-1;justify-self:start}
 /* calculator drawer */
 .calcfab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--amber);color:#1a1208;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;z-index:30;touch-action:none;user-select:none;-webkit-user-select:none}
-.calcfab svg{width:30px;height:30px;fill:currentColor;transition:transform 0.17s}
+.calcfab svg{width:30px;height:30px;fill:currentColor;transition:transform 0.16s}
 .calcfab[aria-expanded="true"] svg{transform:rotate(45deg)}
 .calcfab:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:31}
-.drawer{position:fixed;top:0;right:0;height:100%;width:min(340px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:32;transform:translateX(102%);transition:transform 0.187s ease;display:flex;flex-direction:column;gap:10px;padding-top:calc(12px + env(safe-area-inset-top,0px));padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-left:14px;padding-right:calc(14px + env(safe-area-inset-right,0px));overflow-y:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(340px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:32;transform:translateX(102%);transition:transform 0.176s ease;display:flex;flex-direction:column;gap:10px;padding-top:calc(12px + env(safe-area-inset-top,0px));padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-left:14px;padding-right:calc(14px + env(safe-area-inset-right,0px));overflow-y:auto}
 .drawer.open{transform:translateX(0)}
 /* closed, the drawer is not drawn at all, so it holds no GPU memory while it waits off screen */
-.drawer:not(.open){visibility:hidden;transition:transform 0.187s ease,visibility 0s linear 0.187s}
+.drawer:not(.open){visibility:hidden;transition:transform 0.176s ease,visibility 0s linear 0.176s}
 .dhead{display:flex;justify-content:space-between;align-items:center}
 .dexpr{width:100%;font:inherit;font-family:var(--mono);font-size:20px;min-height:48px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);text-align:right}
 .dexpr:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
@@ -238,7 +238,7 @@ body.teach .extable{display:none}
 .out .val{font-family:var(--display);font-size:30px;font-weight:700;line-height:1;color:var(--teal)}
 .out .work{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:normal;word-break:break-word}
 .bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;position:relative}
-.bar>i{display:block;height:100%;background:var(--teal);width:50%;transition:width 0.17s}
+.bar>i{display:block;height:100%;background:var(--teal);width:50%;transition:width 0.16s}
 .bar>b{position:absolute;top:-3px;width:2px;height:16px;background:var(--amber)}
 .bar.bad>i{background:var(--bad)}
 .legend{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
@@ -287,27 +287,27 @@ footer{color:var(--muted);font-size:12px;margin-top:28px}
 /* motion */
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.panel.enter{animation:rise 0.272s var(--eq)}
-details.sec[open]>.body,details.method[open]>.mbody,details.scen[open]>.sc-body{animation:rise 0.238s var(--eq)}
-details>summary{transition:background 0.153s}
+.panel.enter{animation:rise 0.256s var(--eq)}
+details.sec[open]>.body,details.method[open]>.mbody,details.scen[open]>.sc-body{animation:rise 0.224s var(--eq)}
+details>summary{transition:background 0.144s}
 details.method>summary:hover,details.sec>summary:hover,details.scen>summary:hover{background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
-.verdict:not([hidden]){animation:rise 0.238s var(--eq)}
-.steps li{animation:rise 0.289s var(--eq) backwards}
-.steps li:nth-child(1){animation-delay:0.017s}.steps li:nth-child(2){animation-delay:0.06s}.steps li:nth-child(3){animation-delay:0.102s}.steps li:nth-child(4){animation-delay:0.145s}.steps li:nth-child(5){animation-delay:0.187s}.steps li:nth-child(6){animation-delay:0.23s}.steps li:nth-child(7){animation-delay:0.272s}
-.qcard.swap{animation:rise 0.255s var(--eq)}
-.summary:not([hidden]){animation:rise 0.297s var(--eq)}
-.extable:not([hidden]){animation:fade 0.212s ease-out}
-.board{animation:fade 0.212s ease-out}
-.tab{transition:background 0.17s,color 0.17s,opacity 0.17s}
-.btn,.chip{transition:background 0.128s,color 0.128s,transform 0.068s,opacity 0.128s}
+.verdict:not([hidden]){animation:rise 0.224s var(--eq)}
+.steps li{animation:rise 0.272s var(--eq) backwards}
+.steps li:nth-child(1){animation-delay:0.016s}.steps li:nth-child(2){animation-delay:0.056s}.steps li:nth-child(3){animation-delay:0.096s}.steps li:nth-child(4){animation-delay:0.136s}.steps li:nth-child(5){animation-delay:0.176s}.steps li:nth-child(6){animation-delay:0.216s}.steps li:nth-child(7){animation-delay:0.256s}
+.qcard.swap{animation:rise 0.24s var(--eq)}
+.summary:not([hidden]){animation:rise 0.28s var(--eq)}
+.extable:not([hidden]){animation:fade 0.2s ease-out}
+.board{animation:fade 0.2s ease-out}
+.tab{transition:background 0.16s,color 0.16s,opacity 0.16s}
+.btn,.chip{transition:background 0.12s,color 0.12s,transform 0.064s,opacity 0.12s}
 .btn:hover,.chip:hover{filter:brightness(1.06)}
 .btn:active,.chip:active,.dkeys button:active,.dquick button:active{transform:scale(.96)}
-.dkeys button,.dquick button{transition:background 0.102s,transform 0.068s}
-.rule-card,.rcard,.cold,.k{transition:transform 0.128s,box-shadow 0.128s}
+.dkeys button,.dquick button{transition:background 0.096s,transform 0.064s}
+.rule-card,.rcard,.cold,.k{transition:transform 0.12s,box-shadow 0.12s}
 .rule-card:hover,.cold:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
-.mbar i{transition:width 0.425s var(--eq)}
-.clock{transition:color 0.17s}
-.calcfab{transition:transform 0.128s,box-shadow 0.128s}
+.mbar i{transition:width 0.4s var(--eq)}
+.clock{transition:color 0.16s}
+.calcfab{transition:transform 0.12s,box-shadow 0.12s}
 .calcfab:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
@@ -356,7 +356,7 @@ html{-webkit-text-size-adjust:100%}
 .ptchip:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .ptpop{background:var(--surface);color:var(--ink);border-radius:8px;padding:12px 14px;margin:8px 0 4px;display:grid;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .nav{display:flex;gap:4px;margin-top:10px}
-.nav button{appearance:none;border:0;background:transparent;color:var(--teal-ink);opacity:.75;font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:6px 6px 0 0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background 0.17s,color 0.17s,opacity 0.17s}
+.nav button{appearance:none;border:0;background:transparent;color:var(--teal-ink);opacity:.75;font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:8px 14px;border-radius:6px 6px 0 0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background 0.16s,color 0.16s,opacity 0.16s}
 .nav button svg{width:18px;height:18px;fill:currentColor}
 .nav button:hover{opacity:1}
 .nav button[aria-selected="true"]{opacity:1;background:var(--bg);color:var(--ink)}
@@ -367,7 +367,7 @@ html{-webkit-text-size-adjust:100%}
 /* when the pill row is wider than the screen, the right edge fades until you reach the end */
 .subnav.scrolls:not(.atend){-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent)}
 .subnav[hidden]{display:none}
-.pill{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:6px 11px;border-radius:999px;cursor:pointer;transition:background 0.128s,color 0.128s}
+.pill{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:6px 11px;border-radius:999px;cursor:pointer;transition:background 0.12s,color 0.12s}
 .pill[aria-selected="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 .pill:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 header.top{box-shadow:0 2px 10px rgba(0,0,0,.12)}
@@ -377,7 +377,7 @@ header.top{box-shadow:0 2px 10px rgba(0,0,0,.12)}
 /* onboarding */
 .onboard{position:fixed;inset:0;background:rgba(10,20,26,.6);z-index:40;display:grid;place-items:center;padding:16px}
 .onboard[hidden]{display:none}
-.ob{background:var(--surface);color:var(--ink);border-radius:12px;padding:22px;max-width:440px;width:100%;display:grid;gap:14px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:rise 0.255s ease-out}
+.ob{background:var(--surface);color:var(--ink);border-radius:12px;padding:22px;max-width:440px;width:100%;display:grid;gap:14px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:rise 0.24s ease-out}
 .ob h2{font-size:26px}
 .ob p{font-size:15px}
 
@@ -398,7 +398,7 @@ header.top{box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .planprog b{font-family:var(--display);font-size:26px;color:var(--teal)}
 .plan.alldone .planprog b{color:var(--good)}
 .plancards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-.pcard{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:4px;cursor:pointer;position:relative;transition:transform 0.128s,box-shadow 0.128s,border-color 0.128s}
+.pcard{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:4px;cursor:pointer;position:relative;transition:transform 0.12s,box-shadow 0.12s,border-color 0.12s}
 .pcard:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
 .pcard:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .pcard .pnum{font-family:var(--display);font-size:12px;letter-spacing:.12em;color:var(--amber);font-weight:700}
@@ -408,16 +408,16 @@ header.top{box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .pcard.done{border-color:var(--good);background:var(--good-soft)}
 .pcard.done::after{content:"\2713";position:absolute;top:10px;right:12px;width:24px;height:24px;border-radius:50%;background:var(--good);color:#fff;display:grid;place-items:center;font-weight:700}
 .flash{max-width:560px}
-.fcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:14px;animation:rise 0.255s ease-out}
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:14px;animation:rise 0.24s ease-out}
 .fmeta{display:flex;justify-content:space-between;gap:10px}
 .ff{font-family:var(--display);font-size:26px;font-weight:600;line-height:1.2;min-height:60px}
-.fb{font-size:18px;background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 6px 6px 0;animation:rise 0.212s ease-out}
+.fb{font-size:18px;background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 6px 6px 0;animation:rise 0.2s ease-out}
 
 /* exam */
 .examwrap{display:grid;gap:16px;max-width:760px}
 .exbarrow{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--display);font-size:18px;font-weight:600}
 .opts{display:grid;gap:8px}
-.opt{appearance:none;text-align:left;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background 0.128s,border-color 0.128s,transform 0.068s}
+.opt{appearance:none;text-align:left;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background 0.12s,border-color 0.12s,transform 0.064s}
 .opt .let{font-family:var(--display);font-weight:700;color:var(--teal);min-width:18px}
 .opt:hover{background:var(--surface-2)}
 .opt[aria-pressed="true"]{border-color:var(--pick);background:color-mix(in srgb,var(--pick) 7%,var(--bg));box-shadow:inset 0 0 0 1px var(--pick)}
@@ -467,7 +467,7 @@ header.top{box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .drugbar input{flex:1 1 220px;font:inherit;font-size:16px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
 .drugbar select{font:inherit;font-size:14px;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);max-width:100%}
 .druglist{display:grid;gap:10px}
-details.drug{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--fam,var(--teal));border-radius:10px;transition:box-shadow 0.128s}
+details.drug{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--fam,var(--teal));border-radius:10px;transition:box-shadow 0.12s}
 details.drug:hover{box-shadow:0 3px 12px rgba(0,0,0,.08)}
 details.drug>summary{list-style:none;cursor:pointer;padding:14px 44px 14px 16px;position:relative}
 details.drug>summary::-webkit-details-marker{display:none}
@@ -487,13 +487,13 @@ details.drug[open]>summary{border-bottom:1px solid var(--line)}
 .fact .fl{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .fact b{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink)}
 .fact>span:last-child{color:var(--ink)}
-.dg-body{padding:14px 16px 18px;display:grid;gap:16px;animation:rise 0.238s ease-out}
+.dg-body{padding:14px 16px 18px;display:grid;gap:16px;animation:rise 0.224s ease-out}
 .quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
 .quick>div{background:var(--surface-2);border-radius:6px;padding:10px 12px;display:grid;gap:6px;justify-items:start}
 .quick p{font-size:14px}
 .dg-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .dg-row h4{margin:0}
-.vials{display:flex;gap:14px;flex-wrap:wrap;animation:fade 0.212s ease-out}
+.vials{display:flex;gap:14px;flex-wrap:wrap;animation:fade 0.2s ease-out}
 .vials figure{margin:0;display:grid;gap:4px;justify-items:center;width:110px}
 .vials figcaption{font-size:11px;color:var(--muted);text-align:center}
 .vial{width:100px;height:auto;filter:drop-shadow(0 3px 6px rgba(0,0,0,.15))}
@@ -520,7 +520,7 @@ details.drug[open] .dg-head{grid-template-columns:1fr}
 details.drug:not(.showinfo) .info{display:none!important}
 details.drug:not(.showmath) .dm{display:none!important}
 @media (max-width:600px){ .dm>div{grid-template-columns:78px minmax(0,1fr)} }
-.info,.dm{animation:fade 0.255s ease-out}
+.info,.dm{animation:fade 0.24s ease-out}
 .ptline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:4px}
 .ptline b{font-family:var(--display);font-size:17px;color:var(--amber)}
 .ptline .chip{min-height:28px;padding:3px 10px;font-size:12px}
@@ -565,7 +565,7 @@ li.tnode .tag{margin:0 0 0 6px;vertical-align:1px}
 .chip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 
 /* spoken cards */
-.ttsbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:10px 12px;display:grid;gap:8px;z-index:29;animation:rise 0.212s ease-out}
+.ttsbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:10px 12px;display:grid;gap:8px;z-index:29;animation:rise 0.2s ease-out}
 .ttsbar[hidden]{display:none}
 .ttsrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .ttsopts{display:flex;gap:6px;flex:0 0 auto}
@@ -575,7 +575,7 @@ li.tnode .tag{margin:0 0 0 6px;vertical-align:1px}
 .tsec{display:grid;gap:2px}
 .tsl{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700}
 .tsec p{margin:0}
-.tw{color:var(--muted);transition:color 0.17s,background 0.17s;border-radius:3px}
+.tw{color:var(--muted);transition:color 0.16s,background 0.16s;border-radius:3px}
 .tw.cur{color:var(--ink);background:var(--amber-soft);box-shadow:0 0 0 2px var(--amber-soft)}
 .tw.ask{font-weight:600;color:var(--amber)}
 .tw.veil{color:transparent;background:var(--surface-2);box-shadow:none;border-radius:4px;user-select:none}
@@ -597,7 +597,7 @@ body.notts [data-listen],body.notts #drug-listen{display:none}
 .rgroup h2{margin:0 0 4px;font-size:13px}
 .rcard>header>.eyebrow{margin-bottom:2px}
 /* scenarios extras */
-.consequence{background:var(--bad-soft);border-left:4px solid var(--bad);padding:10px 14px;border-radius:0 6px 6px 0;font-size:14px;animation:rise 0.255s ease-out}
+.consequence{background:var(--bad-soft);border-left:4px solid var(--bad);padding:10px 14px;border-radius:0 6px 6px 0;font-size:14px;animation:rise 0.24s ease-out}
 .task.branch::before{background:var(--bad);color:#fff;content:"!"}
 .gate{background:var(--amber-soft);border-left:4px solid var(--amber);padding:10px 14px;border-radius:0 6px 6px 0;font-size:14px;margin-bottom:12px}
 .scens.locked .tform{opacity:.4;pointer-events:none}
@@ -667,9 +667,9 @@ body.focus .quizwrap{max-width:720px;margin:0 auto}
 }
 
 /* cascade: children rise in one after another whenever their container is shown or opened */
-.cascade>*{animation:rise 0.357s var(--eq) backwards}
-.cascade>*:nth-child(1){animation-delay:0.017s}.cascade>*:nth-child(2){animation-delay:0.06s}.cascade>*:nth-child(3){animation-delay:0.102s}.cascade>*:nth-child(4){animation-delay:0.145s}.cascade>*:nth-child(5){animation-delay:0.187s}.cascade>*:nth-child(6){animation-delay:0.23s}.cascade>*:nth-child(7){animation-delay:0.272s}.cascade>*:nth-child(8){animation-delay:0.315s}.cascade>*:nth-child(9){animation-delay:0.357s}.cascade>*:nth-child(10){animation-delay:0.399s}.cascade>*:nth-child(11){animation-delay:0.442s}.cascade>*:nth-child(12){animation-delay:0.484s}
-.cascade>*:nth-child(n+13){animation-delay:0.51s}
+.cascade>*{animation:rise 0.336s var(--eq) backwards}
+.cascade>*:nth-child(1){animation-delay:0.016s}.cascade>*:nth-child(2){animation-delay:0.056s}.cascade>*:nth-child(3){animation-delay:0.096s}.cascade>*:nth-child(4){animation-delay:0.136s}.cascade>*:nth-child(5){animation-delay:0.176s}.cascade>*:nth-child(6){animation-delay:0.216s}.cascade>*:nth-child(7){animation-delay:0.256s}.cascade>*:nth-child(8){animation-delay:0.296s}.cascade>*:nth-child(9){animation-delay:0.336s}.cascade>*:nth-child(10){animation-delay:0.376s}.cascade>*:nth-child(11){animation-delay:0.416s}.cascade>*:nth-child(12){animation-delay:0.456s}
+.cascade>*:nth-child(n+13){animation-delay:0.48s}
 details.method[open]>.mbody,details.scen[open]>.sc-body,.dg-body{animation:none}
 .how{background:var(--teal);color:var(--teal-ink);border-radius:8px;padding:14px 16px;display:grid;gap:6px}
 .how .eyebrow{color:inherit;opacity:.8}
@@ -714,7 +714,7 @@ details.trick[open]>summary::after{content:"\2212"}
 details.trick>summary:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;border-radius:8px}
 details.trick h3{font-size:17px;font-weight:700;line-height:1.2}
 .tk-cat{font-family:var(--display);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:700}
-.tk-body{padding:0 14px 14px;display:grid;gap:8px;animation:rise 0.212s ease-out}
+.tk-body{padding:0 14px 14px;display:grid;gap:8px;animation:rise 0.2s ease-out}
 .tk-x{font-size:14.5px;line-height:1.5}
 .tk-w{font-size:13px;color:var(--muted);border-left:3px solid var(--amber);padding-left:10px}
 .tricks mark{background:var(--amber-soft);color:inherit;border-radius:2px;padding:0 1px}
@@ -742,15 +742,15 @@ body.teach .board{display:grid}
 
 /* tool wheel */
 .wheel{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;z-index:30;pointer-events:none}
-.wtool{position:absolute;left:0;top:0;width:56px;height:56px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;cursor:pointer;transform:rotate(0deg) translateX(0px) rotate(0deg) scale(.2);opacity:0;transition:transform 0.306s cubic-bezier(.3,1.25,.5,1),opacity 0.187s;pointer-events:none}
+.wtool{position:absolute;left:0;top:0;width:56px;height:56px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;cursor:pointer;transform:rotate(0deg) translateX(0px) rotate(0deg) scale(.2);opacity:0;transition:transform 0.288s cubic-bezier(.3,1.25,.5,1),opacity 0.176s;pointer-events:none}
 .wtool svg{width:20px;height:20px;fill:var(--teal)}
 .wtool span{font-family:var(--display);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink);line-height:1;white-space:nowrap}
 .wheel.open .wtool{opacity:1;pointer-events:auto}
 /* the tools fan out along a quarter circle around the button, sweeping from the left up to the top */
 .wheel.open .wtool[data-tool="calc"]{transform:rotate(0deg) translateX(-124px) rotate(0deg) scale(1);transition-delay:0s}
-.wheel.open .wtool[data-tool="meds"]{transform:rotate(30deg) translateX(-124px) rotate(-30deg) scale(1);transition-delay:0.03s}
-.wheel.open .wtool[data-tool="board"]{transform:rotate(60deg) translateX(-124px) rotate(-60deg) scale(1);transition-delay:0.06s}
-.wheel.open .wtool[data-tool="code"]{transform:rotate(90deg) translateX(-124px) rotate(-90deg) scale(1);transition-delay:0.089s}
+.wheel.open .wtool[data-tool="meds"]{transform:rotate(30deg) translateX(-124px) rotate(-30deg) scale(1);transition-delay:0.028s}
+.wheel.open .wtool[data-tool="board"]{transform:rotate(60deg) translateX(-124px) rotate(-60deg) scale(1);transition-delay:0.056s}
+.wheel.open .wtool[data-tool="code"]{transform:rotate(90deg) translateX(-124px) rotate(-90deg) scale(1);transition-delay:0.084s}
 .wtool.hot,.wtool:hover{background:var(--amber)}
 .wtool.hot svg,.wtool:hover svg{fill:#1a1208}
 .wtool.hot span,.wtool:hover span{color:#1a1208}
@@ -841,13 +841,13 @@ body.lessonopen{overflow:hidden}
 .lesson[hidden]{display:none}
 .ltop{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 96px 8px 16px;position:relative;min-height:56px}
 .lbar{flex:1;height:14px;border-radius:999px;background:var(--surface-2);overflow:hidden}
-.lbar i{display:block;height:100%;width:0;background:var(--good);border-radius:999px;transition:width 0.34s var(--eq)}
+.lbar i{display:block;height:100%;width:0;background:var(--good);border-radius:999px;transition:width 0.32s var(--eq)}
 .lxp{font-family:var(--display);font-weight:700;color:var(--amber);min-width:56px;text-align:right;font-size:16px}
 .lbody{overflow:auto;padding:6px 16px 28px;-webkit-overflow-scrolling:touch}
 .lq .eyebrow{color:var(--teal)}
 .lprompt{font-family:var(--display);font-size:25px;line-height:1.12;margin:6px 0 18px;font-weight:600}
 .lopts{display:grid;gap:10px}
-.lopt{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.35;transition:background 0.102s,border-color 0.102s,transform 0.068s}
+.lopt{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:15px;line-height:1.35;transition:background 0.096s,border-color 0.096s,transform 0.064s}
 .lopt:active{transform:translateY(2px);border-bottom-width:2px;margin-bottom:2px}
 .lopt .ln{flex:0 0 26px;height:26px;border:1.5px solid var(--line);border-radius:6px;display:grid;place-items:center;font-family:var(--display);font-size:13px;color:var(--muted)}
 .lopt.on{border-color:var(--pick);background:var(--surface-2)} .lopt.on .ln{border-color:var(--pick);color:var(--pick)}
@@ -866,10 +866,10 @@ body.lessonopen{overflow:hidden}
 .lbank{display:flex;flex-wrap:wrap;gap:8px}
 .ltile{appearance:none;font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:10px;padding:8px 12px;cursor:pointer;line-height:1.3}
 .ltile.ghost{visibility:hidden}
-.lfoot{border-top:1px solid var(--line);padding:8px 16px calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;background:var(--surface);transition:background 0.17s;max-height:50vh;position:relative}
+.lfoot{border-top:1px solid var(--line);padding:8px 16px calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;background:var(--surface);transition:background 0.16s;max-height:50vh;position:relative}
 .lfoot.lifted,.lfoot.dragging{max-height:none}
 .lfoot.good{background:var(--good-soft);border-color:var(--good)} .lfoot.bad{background:var(--bad-soft);border-color:var(--bad)}
-.lmsg:empty{display:none} .lmsg{display:grid;gap:4px;font-size:14px;line-height:1.4;max-height:118px;overflow:hidden;position:relative;transition:max-height 0.272s var(--eq);overscroll-behavior:contain}
+.lmsg:empty{display:none} .lmsg{display:grid;gap:4px;font-size:14px;line-height:1.4;max-height:118px;overflow:hidden;position:relative;transition:max-height 0.256s var(--eq);overscroll-behavior:contain}
 .lfoot.lifted .lmsg{overflow:auto} .lfoot.dragging .lmsg{transition:none;overflow:hidden}
 /* when there is more to read, the cut edge fades so it is plain the sheet slides up */
 .lfoot:not(.lifted):not(.dragging) .lmsg.more{-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
@@ -924,19 +924,19 @@ body.lessonopen{overflow:hidden}
 .ringwrap.master::before{content:"";position:absolute;inset:6%;border-radius:50%;box-shadow:0 0 12px 3px rgba(224,179,65,.75);opacity:.3;pointer-events:none;animation:masterglow 2.4s ease-in-out infinite;will-change:opacity}
 @keyframes masterglow{0%,100%{opacity:.3}50%{opacity:1}}
 .ringwrap .spark{position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:#FFD86B;opacity:0;pointer-events:none;animation:spark 2.6s linear infinite}
-.ringwrap .spark:nth-child(2){animation-delay:0.34s;--a:60deg} .ringwrap .spark:nth-child(3){animation-delay:0.765s;--a:130deg} .ringwrap .spark:nth-child(4){animation-delay:1.105s;--a:200deg} .ringwrap .spark:nth-child(5){animation-delay:1.53s;--a:260deg} .ringwrap .spark:nth-child(6){animation-delay:1.87s;--a:320deg} .ringwrap .spark:nth-child(1){--a:10deg}
+.ringwrap .spark:nth-child(2){animation-delay:0.32s;--a:60deg} .ringwrap .spark:nth-child(3){animation-delay:0.72s;--a:130deg} .ringwrap .spark:nth-child(4){animation-delay:1.04s;--a:200deg} .ringwrap .spark:nth-child(5){animation-delay:1.44s;--a:260deg} .ringwrap .spark:nth-child(6){animation-delay:1.76s;--a:320deg} .ringwrap .spark:nth-child(1){--a:10deg}
 @keyframes spark{0%{transform:rotate(var(--a,0deg)) translateY(calc(var(--rs,48px) * -.42)) scale(.6);opacity:0}15%{opacity:1}100%{transform:rotate(calc(var(--a,0deg) + 30deg)) translateY(calc(var(--rs,48px) * -.85)) scale(0);opacity:0}}
 .lnode.master{border-color:#E0B341;box-shadow:0 0 0 1px rgba(224,179,65,.35),0 0 18px rgba(224,179,65,.18)} .lnode.gold{border-color:#E0B341} .lnode.silver{border-color:#B9C3CC} .lnode.bronze{border-color:#B0763E}
 /* games hub */
 .gcat{margin:0 0 18px} .gcath{display:flex;align-items:center;gap:10px;margin:0 0 8px} .gcath h3{margin:0;font-family:var(--display);font-size:20px;font-weight:700;line-height:1}
 .gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
-.gcard{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px;cursor:pointer;align-content:start;min-height:112px;transition:transform 0.068s,box-shadow 0.128s}
+.gcard{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px;cursor:pointer;align-content:start;min-height:112px;transition:transform 0.064s,box-shadow 0.12s}
 .gcard:active{transform:scale(.98)} .gcard b{font-family:var(--display);font-size:18px;font-weight:600;line-height:1.1} .gdesc{font-size:13px;color:var(--muted);line-height:1.35} .gmeta{font-size:12px;color:var(--teal);font-weight:600;margin-top:auto}
 /* dashboard */
 .lvlcard{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px}
 .lvring .off{stroke:var(--surface-2)} .lvring .on{stroke:var(--amber)} .lvring .rn{fill:var(--ink);font-family:var(--display);font-weight:700}
 .lvlinfo h2{margin:2px 0 8px;font-family:var(--display);font-size:26px;font-weight:700;line-height:1}
-.xpbar{height:10px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:0 0 4px} .xpbar i{display:block;height:100%;width:0;background:var(--amber);border-radius:999px;transition:width 0.425s ease}
+.xpbar{height:10px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:0 0 4px} .xpbar i{display:block;height:100%;width:0;background:var(--amber);border-radius:999px;transition:width 0.4s ease}
 .statcards.six{grid-template-columns:repeat(3,1fr);margin:0 0 12px}
 .actcard,.badgecard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px}
 .acthead{display:flex;align-items:flex-start;justify-content:space-between;margin:0 0 8px} .acthead h2{margin:2px 0 0;font-family:var(--display);font-size:20px;font-weight:700;line-height:1}
@@ -947,7 +947,7 @@ body.lessonopen{overflow:hidden}
 .badge{display:grid;justify-items:center;gap:3px;text-align:center;padding:10px 6px;border-radius:10px;background:var(--bg);border:1px solid var(--line);opacity:.42;filter:grayscale(1)}
 .badge.on{opacity:1;filter:none;border-color:var(--amber);background:var(--amber-soft)}
 .badge svg{width:28px;height:28px;fill:none;stroke:var(--amber);stroke-width:2;stroke-linejoin:round;stroke-linecap:round} .badge b{font-family:var(--display);font-size:14px;font-weight:600;line-height:1.1} .badge span{font-size:11px;color:var(--muted);line-height:1.2}
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;display:grid;gap:2px;text-align:center;opacity:0;pointer-events:none;transition:opacity 0.212s,transform 0.212s;z-index:70;min-width:200px}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;display:grid;gap:2px;text-align:center;opacity:0;pointer-events:none;transition:opacity 0.2s,transform 0.2s;z-index:70;min-width:200px}
 .toast.show{opacity:1;transform:translate(-50%,0)} .toast b{font-family:var(--display);font-size:17px} .toast span{font-size:13px;opacity:.85}
 /* theme picker */
 .themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
@@ -997,8 +997,8 @@ header.top h1 .mark{width:28px;height:28px;border-radius:50%;vertical-align:-6px
 li.tnode .l1.stack{flex-wrap:wrap;row-gap:2px}
 li.tnode .l1.stack .use{flex:0 0 100%}
 li.tnode .l1.stack .lead{margin-left:0}
-#drug-study .chipstar{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;vertical-align:-2px;margin-right:6px;transition:fill 0.17s,stroke 0.17s,transform 0.17s}
-#drug-study[aria-pressed="true"] .chipstar{fill:#E0B341;stroke:#E0B341;animation:starpop 0.297s cubic-bezier(.3,1.6,.5,1)}
+#drug-study .chipstar{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;vertical-align:-2px;margin-right:6px;transition:fill 0.16s,stroke 0.16s,transform 0.16s}
+#drug-study[aria-pressed="true"] .chipstar{fill:#E0B341;stroke:#E0B341;animation:starpop 0.28s cubic-bezier(.3,1.6,.5,1)}
 @keyframes starpop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
 
 /* lesson rows: one standard row for every lesson of every game and every drug */
@@ -1074,7 +1074,7 @@ li.tnode .l1.stack .lead{margin-left:0}
 /* ---------- patient sim ---------- */
 .simhome{display:grid;gap:12px}
 .simlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
-.simcase{appearance:none;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);padding:12px 14px;display:grid;gap:4px;font:inherit;cursor:pointer;transition:transform 0.128s,border-color 0.128s,box-shadow 0.128s}
+.simcase{appearance:none;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);padding:12px 14px;display:grid;gap:4px;font:inherit;cursor:pointer;transition:transform 0.12s,border-color 0.12s,box-shadow 0.12s}
 .simcase:hover{border-color:var(--teal);box-shadow:0 6px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
 .simcase b{font-family:var(--display);font-size:18px;line-height:1.1} .simcase .note{font-size:12.5px} .simbest{font-size:11.5px;color:var(--good);font-weight:600}
 .simrand{appearance:none;text-align:left;font:inherit;cursor:pointer;border:0;border-radius:14px;padding:16px 18px;display:grid;gap:4px;background:#070B0A;color:#CFE9E0;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px #16231f}
@@ -1082,26 +1082,26 @@ li.tnode .l1.stack .lead{margin-left:0}
 .simrand .eyebrow{color:#5E8F80} .simrand .note{color:#9FBFB5}
 .simrand::after,.dispatch::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(124,242,180,.045) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45))}
 /* dispatch: a dark terminal that types the call out */
-.dispatch{background:#070B0A;color:#7CF2B4;border-radius:14px;min-height:min(72vh,560px);display:flex;flex-direction:column;gap:16px;padding:16px 16px 18px;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px #16231f,0 12px 32px rgba(0,0,0,.35);cursor:text;animation:rise 0.297s ease-out}
+.dispatch{background:#070B0A;color:#7CF2B4;border-radius:14px;min-height:min(72vh,560px);display:flex;flex-direction:column;gap:16px;padding:16px 16px 18px;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px #16231f,0 12px 32px rgba(0,0,0,.35);cursor:text;animation:rise 0.28s ease-out}
 .cadtop{display:flex;align-items:center;gap:10px;font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#5E8F80} .cadtop .num{margin-left:auto}
 .cadlamp{width:9px;height:9px;border-radius:50%;background:#FF5A4E;box-shadow:0 0 10px #FF5A4E;animation:cadblink 1s steps(2) infinite}
 .cad{flex:1;margin:0;font:500 15.5px/1.6 var(--mono);white-space:pre-wrap;word-break:break-word;text-shadow:0 0 6px rgba(124,242,180,.35)}
 .cadcur{display:inline-block;width:.6em;height:1.1em;vertical-align:-.15em;background:#7CF2B4;margin-left:2px;animation:cadblink 1s steps(2) infinite}
 .cadfoot{display:flex;align-items:center;gap:12px;justify-content:space-between;position:relative;z-index:1} .cadfoot .note{color:#5E8F80;font-size:12.5px}
-.cadfoot .btn{opacity:0;transform:translateY(8px);transition:opacity 0.383s,transform 0.383s;min-width:140px} .cadfoot .btn.ready{opacity:1;transform:none}
+.cadfoot .btn{opacity:0;transform:translateY(8px);transition:opacity 0.36s,transform 0.36s;min-width:140px} .cadfoot .btn.ready{opacity:1;transform:none}
 @keyframes cadblink{50%{opacity:0}}
 /* the run */
 .simrun{display:grid;gap:12px}
 .simtop{position:relative;display:flex;align-items:flex-start;gap:10px;padding-right:86px} .simtop h2{margin:2px 0 0;font-family:var(--display);font-size:22px;line-height:1.05}
 .simtop .donebtn{position:absolute;top:0;right:0} .simclock{margin-left:auto;font-size:20px;font-weight:600;padding-top:2px;font-family:var(--mono)}
-.monitor{background:#0B1110;border-radius:12px;padding:8px;display:grid;gap:6px;border:1px solid #1d2a27;position:sticky;top:calc(var(--simtop,0px) + 6px);z-index:3;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:box-shadow 0.255s}
+.monitor{background:#0B1110;border-radius:12px;padding:8px;display:grid;gap:6px;border:1px solid #1d2a27;position:sticky;top:calc(var(--simtop,0px) + 6px);z-index:3;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:box-shadow 0.24s}
 .monitor.alarm{box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 1px color-mix(in srgb,#E25A4C 55%,transparent) inset}
 @keyframes monalarm{0%,100%{box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 1px #3a1915 inset}50%{box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 2px #E25A4C inset}}
 .mvit{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
 .mv{background:#111917;border-radius:7px;padding:5px 6px;display:grid;gap:2px;min-width:0;border:0;font:inherit;text-align:left;color:inherit}
 button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px solid #7CF2B4;outline-offset:1px}
 .mv span{font:600 9.5px/1 var(--body);letter-spacing:.06em;color:#7FA79B;text-transform:uppercase;display:flex;align-items:center;gap:4px}
-.mv b{font-size:19px;line-height:1.1;white-space:nowrap;font-family:var(--mono);transition:color 0.255s}
+.mv b{font-size:19px;line-height:1.1;white-space:nowrap;font-family:var(--mono);transition:color 0.24s}
 .mv small{font:500 9px/1 var(--mono);color:#5E8F80;min-height:9px}
 .mv.hr b{color:#7CF2B4} .mv.spo2 b{color:#6FD3F7} .mv.bp b{color:#EDF3F1} .mv.rr b{color:#F4E77A} .mv.etco2 b{color:#F2C14E} .mv.gcs b{color:#EDF3F1}
 .mv.off b{color:#33433F} .mv.warn b{color:#F2C14E} .mv.bad b{color:#FF6B5E}
@@ -1110,30 +1110,30 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 @keyframes beat{0%{transform:scale(1.35);opacity:1}35%{transform:scale(1);opacity:.85}100%{transform:scale(1);opacity:.35}}
 .mnrow{display:flex;align-items:center;gap:10px} .mfoot{font-size:12px;color:#9FBFB5;min-height:15px;flex:1;min-width:0} .mclock{font:600 13px/1 var(--mono);color:#EDF3F1;letter-spacing:.04em}
 .simscene{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px} .simscene p{margin:0;font-size:15px;line-height:1.45}
-.simfind{margin:0;padding-left:18px;display:grid;gap:3px;font-size:14px;color:var(--muted)} .simfind li{animation:rise 0.255s ease-out}
+.simfind{margin:0;padding-left:18px;display:grid;gap:3px;font-size:14px;color:var(--muted)} .simfind li{animation:rise 0.24s ease-out}
 .simfeed{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .simfeed li{border-left:3px solid var(--teal);background:var(--surface);padding:8px 12px;border-radius:0 8px 8px 0;font-size:14px;display:flex;gap:10px;line-height:1.4}
 .simfeed li .num{color:var(--muted);font-size:12px;min-width:32px;padding-top:2px;font-family:var(--mono)}
-.simfeed li.good{border-color:var(--good)} .simfeed li.bad{border-color:var(--bad)} .simfeed li+li{opacity:.7} .simfeed li.fresh{animation:feedin 0.34s ease-out}
+.simfeed li.good{border-color:var(--good)} .simfeed li.bad{border-color:var(--bad)} .simfeed li+li{opacity:.7} .simfeed li.fresh{animation:feedin 0.32s ease-out}
 @keyframes feedin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .simprints{display:grid;gap:8px}
 .sprint{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:6px;overflow:hidden}
 .sprint header{display:flex;gap:8px;align-items:baseline;font-size:13.5px} .sprint header .num{color:var(--muted);margin-left:auto;font-size:12px}
-.sprint .lart{margin:0} .sprint:not(.old) .lart{animation:printfeed 1.36s cubic-bezier(.25,.7,.3,1) backwards}
+.sprint .lart{margin:0} .sprint:not(.old) .lart{animation:printfeed 1.28s cubic-bezier(.25,.7,.3,1) backwards}
 @keyframes printfeed{from{clip-path:inset(0 0 100% 0);transform:translateY(-10px)}to{clip-path:inset(0 0 0 0);transform:none}}
 .sprint details summary,.sprints-old summary{cursor:pointer;font-size:13px;color:var(--teal);font-weight:600} .sprint details p{margin:6px 0 0;font-size:14px}
 .sprints-old{display:grid;gap:8px} .sprints-old[open]{gap:8px}
 .simacts{display:grid;gap:8px}
 .stabs2{display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;position:relative}
-.stabs2 button{flex:1 1 auto;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 6px;border-radius:9px;cursor:pointer;transition:background 0.17s,color 0.17s,box-shadow 0.17s;white-space:nowrap}
+.stabs2 button{flex:1 1 auto;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 6px;border-radius:9px;cursor:pointer;transition:background 0.16s,color 0.16s,box-shadow 0.16s;white-space:nowrap}
 .stabs2 button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.16)}
 .stabs2 button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 .simbar{display:flex;align-items:center;gap:10px;justify-content:space-between;font-size:12.5px;color:var(--muted);min-height:18px;flex-wrap:wrap}
-.crew{display:inline-flex;align-items:center;gap:4px} .crew i{display:inline-block;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted);transition:background 0.17s,border-color 0.17s} .crew i.on{background:var(--amber);border-color:var(--amber)}
-.simhint{color:var(--ink);font-weight:600;opacity:0;transition:opacity 0.212s} .simhint.show{opacity:1}
+.crew{display:inline-flex;align-items:center;gap:4px} .crew i{display:inline-block;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted);transition:background 0.16s,border-color 0.16s} .crew i.on{background:var(--amber);border-color:var(--amber)}
+.simhint{color:var(--ink);font-weight:600;opacity:0;transition:opacity 0.2s} .simhint.show{opacity:1}
 .sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}
 .sgrid h4{grid-column:1/-1;margin:8px 0 0;font:600 11px/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)} .sgrid h4:first-child{margin-top:2px}
-.stile{appearance:none;position:relative;overflow:hidden;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 11px;min-height:66px;display:flex;flex-direction:column;gap:2px;cursor:pointer;transition:border-color 0.17s,background 0.17s,transform 0.068s;animation:rise 0.212s ease-out backwards}
+.stile{appearance:none;position:relative;overflow:hidden;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 11px;min-height:66px;display:flex;flex-direction:column;gap:2px;cursor:pointer;transition:border-color 0.16s,background 0.16s,transform 0.064s;animation:rise 0.2s ease-out backwards}
 .stile:hover{border-color:color-mix(in srgb,var(--teal) 55%,var(--line))} .stile:active{transform:scale(.97)} .stile:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .stile b{font-size:14.5px;line-height:1.2} .stile small{font-size:12px;color:var(--muted);line-height:1.25}
 .stile em{margin-top:auto;padding-top:5px;font:700 10.5px/1 var(--body);font-style:normal;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
@@ -1202,8 +1202,8 @@ button.mv{appearance:none;cursor:pointer} button.mv:focus-visible{outline:2px so
 /* ---------- hubs: Tests and Practice share one segmented control above their pages ---------- */
 .hubseg{position:relative;display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;margin:0 0 16px;max-width:560px;--n:3;--i:0}
 .hubseg[hidden]{display:none}
-.hubthumb{position:absolute;top:4px;bottom:4px;left:calc(4px + var(--i) * ((100% - 8px - (var(--n) - 1) * 4px) / var(--n) + 4px));width:calc((100% - 8px - (var(--n) - 1) * 4px) / var(--n));border-radius:9px;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.16);transition:left 0.34s var(--eq);pointer-events:none}
-.hubseg button{position:relative;z-index:1;flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13.5px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 8px;border-radius:9px;cursor:pointer;transition:color 0.255s}
+.hubthumb{position:absolute;top:4px;bottom:4px;left:calc(4px + var(--i) * ((100% - 8px - (var(--n) - 1) * 4px) / var(--n) + 4px));width:calc((100% - 8px - (var(--n) - 1) * 4px) / var(--n));border-radius:9px;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.16);transition:left 0.32s var(--eq);pointer-events:none}
+.hubseg button{position:relative;z-index:1;flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:600 13.5px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;padding:11px 8px;border-radius:9px;cursor:pointer;transition:color 0.24s}
 .hubseg button[aria-selected="true"]{color:var(--ink)}
 .hubseg button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 /* ---------- moving between pages: the page slides the way you are going ---------- */
@@ -1222,7 +1222,7 @@ html[data-vt^="in-"]::view-transition-new(subnav),html[data-vt^="seg-"]::view-tr
 html[data-vt^="seg-"] #hubseg{view-transition-name:hubseg}
 ::view-transition-group(hubseg){animation:none}
 ::view-transition-old(hubseg){display:none} ::view-transition-new(hubseg){animation:none}
-::view-transition-old(root),::view-transition-new(root),::view-transition-old(subnav),::view-transition-new(subnav){animation-duration:0.323s;animation-timing-function:var(--eq);animation-fill-mode:both}
+::view-transition-old(root),::view-transition-new(root),::view-transition-old(subnav),::view-transition-new(subnav){animation-duration:0.304s;animation-timing-function:var(--eq);animation-fill-mode:both}
 html[data-vt="fwd"]::view-transition-old(root),html[data-vt="in-fwd"]::view-transition-old(root),html[data-vt="fwd"]::view-transition-old(subnav){animation-name:vtOutL}
 html[data-vt="fwd"]::view-transition-new(root),html[data-vt="in-fwd"]::view-transition-new(root),html[data-vt="fwd"]::view-transition-new(subnav){animation-name:vtInR}
 html[data-vt="back"]::view-transition-old(root),html[data-vt="in-back"]::view-transition-old(root),html[data-vt="back"]::view-transition-old(subnav){animation-name:vtOutR}
@@ -1243,7 +1243,7 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 .tbtop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap} .tbquick{display:flex;gap:6px}
 .tbtopics{display:grid;gap:12px}
 .tbcat{display:grid;gap:6px} .tbcat .chips{display:flex;flex-wrap:wrap;gap:6px}
-.tbchip{transition:background 0.17s,color 0.17s,border-color 0.17s,transform 0.085s} .tbchip:active{transform:scale(.96)}
+.tbchip{transition:background 0.16s,color 0.16s,border-color 0.16s,transform 0.08s} .tbchip:active{transform:scale(.96)}
 .tbchip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 .tbgo .btn:disabled{opacity:.5;cursor:not-allowed}
 .tbmiss{text-align:left;margin-top:12px} .tbmiss summary{cursor:pointer;font-weight:600} .tbmiss ol{margin:8px 0 0;padding-left:20px;display:grid;gap:8px;font-size:14px}
@@ -1255,6 +1255,15 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 .splash-m.melting .sm-en .ch{opacity:0;animation:lzRise2 .9s cubic-bezier(.2,.65,.25,1) both}
 @keyframes lzDrip2{0%{transform:none;opacity:1}35%{transform:translateY(1px) scaleY(1.1);opacity:.9}100%{transform:translateY(10px) scale(.9,1.7);opacity:0}}
 @keyframes lzRise2{0%{transform:translateY(7px) scale(1.06,1.4);opacity:0}55%{opacity:.8}100%{transform:none;opacity:1}}
+
+/* v75: the motto melts like warm wax: each Latin letter sags, stretches into a drip and falls away through a liquid filter that lets
+   neighbouring drips run together, while the English letter rises out of the same place and sharpens as it settles */
+.splash-goo{position:absolute;width:0;height:0;overflow:hidden}
+.splash-m.melting .sm-la{filter:url(#lzgoo)}
+.splash-m.melting .sm-la .ch{transform-origin:50% 0;animation:lzDrip3 1.45s cubic-bezier(.5,0,.75,.4) both}
+.splash-m.melting .sm-en .ch{opacity:0;animation:lzRise3 1.15s cubic-bezier(.2,.65,.25,1) both}
+@keyframes lzDrip3{0%{transform:none;opacity:1;filter:blur(0)}25%{transform:translateY(1px) scaleY(1.18);opacity:1;filter:blur(0)}62%{transform:translateY(5px) scale(.9,1.95);opacity:.85;filter:blur(.5px)}100%{transform:translateY(16px) scale(.66,2.7);opacity:0;filter:blur(1.4px)}}
+@keyframes lzRise3{0%{transform:translateY(8px) scale(1.06,1.5);opacity:0;filter:blur(2px)}60%{opacity:.85;filter:blur(.4px)}100%{transform:none;opacity:1;filter:blur(0)}}
 /* ================= calm: one thing in focus, the rest a tap away ================= */
 /* section labels are quiet text instead of red strips */
 .sect,.dg-grid h4,.quick .eyebrow,.mgroup,.rgroup h2,.rcard>header>.eyebrow{background:none;color:var(--muted);padding:0;border-radius:0;font-size:11.5px;letter-spacing:.12em;font-weight:600;margin:0 0 6px;line-height:1.3}
@@ -1274,10 +1283,10 @@ details.fold>summary::-webkit-details-marker{display:none}
 details.fold>summary:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;border-radius:14px}
 details.fold>summary .ft{font-weight:600;font-size:15.5px;flex:1 1 auto;min-width:0;color:var(--ink)}
 details.fold>summary .fs{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:48%}
-details.fold>summary::after,details.subfold>summary::after{content:"";flex:0 0 auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform 0.212s ease;margin:0 2px 0 4px}
+details.fold>summary::after,details.subfold>summary::after{content:"";flex:0 0 auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform 0.2s ease;margin:0 2px 0 4px}
 details.fold[open]>summary::after,details.subfold[open]>summary::after{transform:rotate(45deg)}
 details.fold>.fbody{padding:2px 16px 16px;display:grid;gap:14px}
-details.fold[open]>.fbody,details.subfold[open]>:not(summary){animation:foldin 0.272s ease-out}
+details.fold[open]>.fbody,details.subfold[open]>:not(summary){animation:foldin 0.256s ease-out}
 @keyframes foldin{from{opacity:0;transform:translateY(-6px)}}
 .fold .rcard{background:none;border:0;padding:0;border-radius:0}
 .fold .rcard>header>.eyebrow{display:none}
@@ -1319,7 +1328,7 @@ details.subfold>:not(summary){margin:0 14px 14px}
 .drugbar{grid-template-columns:minmax(0,1fr) auto;gap:8px} .drugbar select{max-width:42vw}
 details.drug{border-left-width:3px;border-radius:12px}
 details.drug>summary{padding:12px 40px 12px 14px}
-details.drug>summary::after{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);top:50%;right:18px;margin-top:-5px;transition:transform 0.212s}
+details.drug>summary::after{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);top:50%;right:18px;margin-top:-5px;transition:transform 0.2s}
 details.drug[open]>summary::after{content:"";transform:rotate(45deg)}
 details.drug:not([open]) .dg-head{grid-template-columns:1fr;gap:2px}
 details.drug:not([open]) .dg-name h3{font-size:18px}
@@ -1344,7 +1353,7 @@ details.drug:not([open]) .fact:nth-child(3)>span:last-child{-webkit-line-clamp:1
 /* ----- games: a continue card, chips and sorting, then a grid of tiles tinted by category ----- */
 :root{--gl:40%;--gs:36%} @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--gl:68%;--gs:34%}} :root[data-theme="dark"]{--gl:68%;--gs:34%}
 .ghero{appearance:none;font:inherit;color:var(--ink);text-align:left;width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:16px;margin:0 0 14px;border-radius:16px;cursor:pointer;
-  border:1px solid color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 22%,var(--surface)),var(--surface) 70%);transition:transform 0.128s,box-shadow 0.17s}
+  border:1px solid color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 22%,var(--surface)),var(--surface) 70%);transition:transform 0.12s,box-shadow 0.16s}
 .ghero:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
 .ghero .gic{width:48px;height:48px}
 .ghero .ghtx{display:grid;gap:2px;min-width:0} .ghero b{font-family:var(--display);font-size:22px;line-height:1.05} .ghero .note{font-size:12.5px} .ghero .eyebrow{margin:0}
@@ -1352,7 +1361,7 @@ details.drug:not([open]) .fact:nth-child(3)>span:last-child{-webkit-line-clamp:1
 .gtools{display:grid;gap:10px;margin:0 0 12px}
 .gchips{position:relative;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0;margin:0 -16px;padding:2px 16px;-webkit-mask-image:linear-gradient(to right,transparent,#000 16px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(to right,transparent,#000 16px,#000 calc(100% - 24px),transparent)}
 .gchips::-webkit-scrollbar{display:none}
-.gchips .chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;min-height:36px;transition:background 0.17s,color 0.17s,border-color 0.17s}
+.gchips .chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;min-height:36px;transition:background 0.16s,color 0.16s,border-color 0.16s}
 .gchips .chip .cdot{width:8px;height:8px;border-radius:50%;background:hsl(var(--h) var(--gs) var(--gl))}
 .gchips .chip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)} .gchips .chip[aria-pressed="true"] .cdot{background:currentColor}
 .gsel{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -1368,7 +1377,7 @@ details.drug:not([open]) .fact:nth-child(3)>span:last-child{-webkit-line-clamp:1
 .gt .gtop{min-height:34px}
 .ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
 .gt{appearance:none;font:inherit;color:var(--ink);text-align:left;display:grid;align-content:start;gap:4px;padding:14px;border-radius:16px;cursor:pointer;min-height:138px;position:relative;overflow:hidden;
-  border:1px solid color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 24%,var(--line));background:radial-gradient(130% 95% at 100% 0%,color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 24%,transparent),transparent 62%),linear-gradient(180deg,var(--surface),color-mix(in srgb,var(--surface) 82%,var(--bg)));transition:transform 0.128s,box-shadow 0.17s,border-color 0.17s;animation:rise 0.255s ease-out backwards}
+  border:1px solid color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 24%,var(--line));background:radial-gradient(130% 95% at 100% 0%,color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 24%,transparent),transparent 62%),linear-gradient(180deg,var(--surface),color-mix(in srgb,var(--surface) 82%,var(--bg)));transition:transform 0.12s,box-shadow 0.16s,border-color 0.16s;animation:rise 0.24s ease-out backwards}
 .gt>*{position:relative;z-index:1}
 /* the category icon again, large and faint in the corner */
 .gt>.gwm{position:absolute;z-index:0;right:-14px;bottom:-16px;width:84px;height:84px;color:hsl(var(--h) var(--gs) var(--gl));opacity:.09;pointer-events:none;transform:rotate(-12deg)}
@@ -1385,7 +1394,7 @@ details.drug:not([open]) .fact:nth-child(3)>span:last-child{-webkit-line-clamp:1
 .gline{font-size:12.5px;color:var(--muted)}
 .gbar{display:block;height:5px;border-radius:99px;background:color-mix(in srgb,var(--line) 70%,transparent);overflow:hidden;margin-top:auto}
 .gt .gbar{margin-top:10px}
-.gbar i{display:block;height:100%;border-radius:99px;background:hsl(var(--h) var(--gs) var(--gl));transition:width 0.51s var(--eq)}
+.gbar i{display:block;height:100%;border-radius:99px;background:hsl(var(--h) var(--gs) var(--gl));transition:width 0.48s var(--eq)}
 .gt.going{border-color:color-mix(in srgb,var(--amber) 45%,var(--line))} .gt.going .gline{color:var(--ink)}
 .gt.done .gbar i{background:var(--good)}
 #panel-games>.lhead{display:none}
@@ -1442,12 +1451,12 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 .pgt b{font-family:var(--display);font-size:26px;line-height:1.05;font-weight:700;color:var(--ink)} .pgt.wide b{font-size:22px}
 .pgt .eyebrow{margin:0} .pgt .note{font-size:12px}
 .pgbar,.abar{display:block;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:6px 0 2px}
-.pgbar i,.abar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),color-mix(in srgb,var(--teal) 60%,var(--amber)));transition:width 0.51s var(--eq)}
+.pgbar i,.abar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),color-mix(in srgb,var(--teal) 60%,var(--amber)));transition:width 0.48s var(--eq)}
 .pgcard{margin:0 0 12px}
 .rcard header.pghead{display:flex;align-items:center;justify-content:space-between;gap:14px} .pghead>div{display:grid;gap:2px;min-width:0} .pghead .note{font-size:12px}
 .pgring{position:relative;width:68px;height:68px;flex:0 0 auto}
 .pgring svg{width:100%;height:100%;display:block} .pgring circle{fill:none;stroke-width:6;stroke-linecap:round}
-.pgring .rt{stroke:var(--surface-2)} .pgring .rv{stroke:var(--teal);transition:stroke-dasharray 0.68s var(--eq)}
+.pgring .rt{stroke:var(--surface-2)} .pgring .rv{stroke:var(--teal);transition:stroke-dasharray 0.64s var(--eq)}
 .pgring .rv.low{stroke:var(--bad)} .pgring .rv.mid{stroke:var(--amber)} .pgring .rv.good{stroke:color-mix(in srgb,var(--good) 70%,var(--amber))} .pgring .rv.top{stroke:var(--good)} .pgring .rv.none{stroke:transparent}
 .pgring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:20px;font-weight:700} .pgring small{font-size:11px;margin-left:1px;color:var(--muted)}
 .pgring b{grid-auto-flow:column;align-content:center;justify-content:center}
@@ -1463,7 +1472,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 /* ----- greeting and the three questions ----- */
 .hello{margin:4px 0 16px} .hello h1{margin:0;font-family:var(--display);font-size:32px;line-height:1.05;font-weight:700;letter-spacing:.01em;color:var(--ink)}
 .hello p{margin:6px 0 0;color:var(--muted);font-size:14.5px;max-width:52ch}
-.hello.in h1{animation:hellin 0.595s var(--eq) backwards} .hello.in p{animation:hellin 0.595s 0.102s var(--eq) backwards}
+.hello.in h1{animation:hellin 0.56s var(--eq) backwards} .hello.in p{animation:hellin 0.56s 0.096s var(--eq) backwards}
 @keyframes hellin{from{opacity:0;transform:translateY(8px);filter:blur(3px)}}
 .obme{gap:16px;max-width:460px}
 .obme h2{margin:4px 0 0}
@@ -1473,7 +1482,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 .obq .chips{display:flex;flex-wrap:wrap;gap:6px}
 .obq .chip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 .obq .seg2 .chip{flex:1 1 0;justify-content:center;min-height:42px}
-.onboard.leaving{opacity:0;transition:opacity 0.212s ease}
+.onboard.leaving{opacity:0;transition:opacity 0.2s ease}
 
 /* ----- dashboard: one screen, no scrolling ----- */
 #panel-today:not([hidden]){display:flex;flex-direction:column;gap:10px}
@@ -1485,7 +1494,7 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 /* on short phones the dashboard needs the whole screen, so the tools button steps aside there */
 @media (max-height:760px){ body[data-panel="today"] .calcfab{display:none} }
 /* boxes that open a page: the whole box is the button, with a chevron to say so */
-.tapbox{position:relative;cursor:pointer;transition:transform 0.128s ease,border-color 0.17s ease,background-color 0.17s ease;-webkit-tap-highlight-color:transparent}
+.tapbox{position:relative;cursor:pointer;transition:transform 0.12s ease,border-color 0.16s ease,background-color 0.16s ease;-webkit-tap-highlight-color:transparent}
 @media (hover:hover){ .tapbox:hover{border-color:color-mix(in srgb,var(--teal) 40%,var(--line))} } .tapbox:active{transform:scale(.985)}
 .tapbox:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 .tapgo{position:absolute;right:12px;top:50%;width:18px;height:18px;margin-top:-9px;fill:none;stroke:var(--muted);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
@@ -1504,10 +1513,10 @@ details.method:not([open])>summary .mwhen{display:-webkit-box;-webkit-line-clamp
 .regstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .regstats>div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:2px} .regstats .eyebrow{margin:0} .regstats b{font-family:var(--display);font-size:26px;line-height:1.05} .regstats .note{font-size:12px}
 /* a dashboard box grows into its page, and shrinks back */
-html[data-vt="zoom"]::view-transition-old(root){animation:vtFadeOut 0.221s ease both}
-html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn 0.357s var(--eq) 0.051s both}
-::view-transition-group(vzoom){animation-duration:0.391s;animation-timing-function:var(--eq)}
-::view-transition-old(vzoom),::view-transition-new(vzoom){animation-duration:0.391s;animation-timing-function:var(--eq);height:100%;object-fit:cover;object-position:left top}
+html[data-vt="zoom"]::view-transition-old(root){animation:vtFadeOut 0.208s ease both}
+html[data-vt="zoom"]::view-transition-new(root){animation:vtZoomIn 0.336s var(--eq) 0.048s both}
+::view-transition-group(vzoom){animation-duration:0.368s;animation-timing-function:var(--eq)}
+::view-transition-old(vzoom),::view-transition-new(vzoom){animation-duration:0.368s;animation-timing-function:var(--eq);height:100%;object-fit:cover;object-position:left top}
 @keyframes vtZoomIn{from{opacity:0}}
 
 /* the day streak, today's XP and mastered drugs run along the bottom of the XP box in one line */
@@ -1574,23 +1583,23 @@ details.drug[open]>summary{background-color:var(--surface);background-image:line
   background-color:color-mix(in srgb,var(--surface) 82%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
 .ptrack::-webkit-scrollbar{display:none}
 .ptab{position:relative;z-index:1;flex:1 1 auto;appearance:none;border:0;background:transparent;color:var(--muted);font:600 14px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
-  padding:10px 13px;border-radius:10px;cursor:pointer;transition:color 0.255s ease,transform 0.102s ease;-webkit-tap-highlight-color:transparent}
+  padding:10px 13px;border-radius:10px;cursor:pointer;transition:color 0.24s ease,transform 0.096s ease;-webkit-tap-highlight-color:transparent}
 .ptab[aria-selected="true"]{color:var(--teal-ink)}
 .ptab:not([aria-selected="true"]):hover{color:var(--ink)}
 .ptab:active{transform:scale(.96)}
 .ptab:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 .pthumb{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:10px;pointer-events:none;background:var(--teal);
   box-shadow:0 6px 14px -8px color-mix(in srgb,var(--teal) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.16);
-  transition:transform 0.357s var(--eq),width 0.357s var(--eq)}
+  transition:transform 0.336s var(--eq),width 0.336s var(--eq)}
 .psep{flex:0 0 1px;margin:9px 5px;background:color-mix(in srgb,var(--line) 80%,var(--muted))}
 .ptrack.scrolls:not(.atend):not(.atstart){-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 36px),transparent)}
 .ptrack.scrolls.atstart:not(.atend){-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent)}
 .ptrack.scrolls.atend:not(.atstart){-webkit-mask-image:linear-gradient(to right,transparent,#000 28px);mask-image:linear-gradient(to right,transparent,#000 28px)}
 .ptrack.s1 .ptab{font-size:13px;padding:10px 9px} .ptrack.s2 .ptab{font-size:12.5px;letter-spacing:.03em;padding:10px 7px} .ptrack.s3 .ptab{font-size:12px;letter-spacing:.02em;padding:10px 5px} .ptrack.s2 .psep,.ptrack.s3 .psep{margin:9px 3px}
 /* the thumb glides and the names re-colour together with the page change */
-::view-transition-group(ptthumb){animation-duration:0.357s;animation-timing-function:var(--eq)}
+::view-transition-group(ptthumb){animation-duration:0.336s;animation-timing-function:var(--eq)}
 ::view-transition-old(ptthumb){display:none} ::view-transition-new(ptthumb){animation:none}
-::view-transition-group(*.ptab){animation-duration:0.357s} ::view-transition-old(*.ptab),::view-transition-new(*.ptab){animation-duration:0.306s}
+::view-transition-group(*.ptab){animation-duration:0.336s} ::view-transition-old(*.ptab),::view-transition-new(*.ptab){animation-duration:0.288s}
 
 /* ================= one set of corners: boxes round at 14px, the controls inside them at 10px (the 4px gap keeps the curves parallel), small tags at 6px ================= */
 :root{--r-box:14px;--r-ctl:10px;--r-tag:6px}
@@ -1613,7 +1622,7 @@ header.top{background:transparent;box-shadow:none}
 header.top::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--barh,58px);z-index:-1;pointer-events:none;
   background-color:color-mix(in srgb,var(--teal) 86%,transparent);background-image:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0) 64%);
   box-shadow:inset 0 -1px 0 rgba(255,255,255,.12),0 8px 20px -12px rgba(0,0,0,.55);
-  -webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);transition:transform 0.289s var(--eq)}
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);transition:transform 0.272s var(--eq)}
 /* the page strip floats on the page with no band behind it; its own glass blurs what scrolls beneath */
 .top .subnav{background:transparent}
 .ptrack{background-color:color-mix(in srgb,var(--surface) 74%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.25);backdrop-filter:blur(12px) saturate(1.25);box-shadow:inset 0 1px 0 var(--glass-edge),0 8px 18px -12px rgba(0,0,0,.5)}
@@ -1630,7 +1639,7 @@ html[data-vt] .ptrack{background-color:color-mix(in srgb,var(--surface) 74%,var(
 
 /* ================= scrolling down squashes the bar a little: the colour slides up, the name and the patient chip shrink, the strip follows ================= */
 @media (max-width:600px){
-  .top .row h1,.top .row .ptchip,.top .subnav{transition:transform 0.289s var(--eq)}
+  .top .row h1,.top .row .ptchip,.top .subnav{transition:transform 0.272s var(--eq)}
   .top .row h1{transform-origin:0 50%} .top .row .ptchip{transform-origin:100% 50%}
   html.hdrmin header.top::before{transform:translateY(-16px)}
   html.hdrmin .top .row h1,html.hdrmin .top .row .ptchip{transform:translateY(-8px) scale(.84)}
@@ -1658,7 +1667,7 @@ details.subfold.quizopts>summary .qsum{margin-left:auto;font-weight:500;font-siz
 @keyframes micpulse{50%{opacity:.45}}
 /* the card being read glows at its edge; the part being read is lit, and in quiz by ear it waits, dimmed, for your answer */
 details.drug.reading{border-color:color-mix(in srgb,var(--teal) 70%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--teal) 45%,transparent),0 10px 30px -14px color-mix(in srgb,var(--teal) 70%,transparent)}
-details.drug .speaking{position:relative;border-radius:var(--r-ctl);background-color:color-mix(in srgb,var(--teal) 14%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--teal) 14%,transparent);transition:background-color 0.297s ease,box-shadow 0.297s ease}
+details.drug .speaking{position:relative;border-radius:var(--r-ctl);background-color:color-mix(in srgb,var(--teal) 14%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--teal) 14%,transparent);transition:background-color 0.28s ease,box-shadow 0.28s ease}
 details.drug.yourturn .speaking{filter:blur(4px);opacity:.55;cursor:pointer}
 
 /* the page sliding away is only a picture of where you were: it takes no taps */
@@ -1682,7 +1691,7 @@ details.scen{content-visibility:auto;contain-intrinsic-size:auto 46px}
 
 /* ================= the press: everything you can tap gives under the finger straight away, the same way everywhere ================= */
 html{touch-action:manipulation}
-.ptab,.chip,.btn,.backchip,.ptchip,.tapbox,.simcase,.simscen,.simrand,.gt,.gcard,.pcard,.lopt,.ltile,.opt,.stile,details.fold>summary,details.drug>summary,details.method>summary,details.trick>summary,details.scen>summary,details.subfold>summary{transition:transform 0.119s cubic-bezier(.3,.7,.3,1),filter 0.119s ease,background-color 0.17s ease,color 0.17s ease,border-color 0.17s ease}
+.ptab,.chip,.btn,.backchip,.ptchip,.tapbox,.simcase,.simscen,.simrand,.gt,.gcard,.pcard,.lopt,.ltile,.opt,.stile,details.fold>summary,details.drug>summary,details.method>summary,details.trick>summary,details.scen>summary,details.subfold>summary{transition:transform 0.112s cubic-bezier(.3,.7,.3,1),filter 0.112s ease,background-color 0.16s ease,color 0.16s ease,border-color 0.16s ease}
 .ptab:active,.chip:active,.btn:active,.backchip:active,.ptchip:active{transform:scale(.95);filter:brightness(1.12)}
 .tapbox:active,.simcase:active,.simscen:active,.simrand:active,.gt:active,.gcard:active,.pcard:active,.opt:active,.stile:active{transform:scale(.98);filter:brightness(1.1)}
 details.fold>summary:active,details.drug>summary:active,details.method>summary:active,details.trick>summary:active,details.scen>summary:active,details.subfold>summary:active{filter:brightness(1.15)}
@@ -1700,12 +1709,11 @@ details.subfold.quizopts>summary .qsum{font-family:var(--body)}
 /* ================= the bottom bar: one sliding highlight, no per-tab background, nothing that scales or re-filters inside the glass ================= */
 .navthumb{display:none}
 @media (max-width:600px){
-  .navthumb{display:block;position:absolute;left:0;top:0;width:0;height:0;border-radius:var(--r-ctl);pointer-events:none;z-index:0;background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
-    transition:transform 0.357s var(--eq),width 0.357s var(--eq)}
-  .nav button{position:relative;z-index:1;opacity:1;color:color-mix(in srgb,var(--teal-ink) 70%,transparent);transition:color 0.255s ease}
+  .navthumb{display:block;position:absolute;left:0;top:0;width:0;height:0;border-radius:var(--r-ctl);pointer-events:none;z-index:0;background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+  .nav button{position:relative;z-index:1;opacity:1;color:color-mix(in srgb,var(--teal-ink) 70%,transparent);transition:color 0.24s ease}
   .nav button:hover{opacity:1}
   .nav button[aria-selected="true"]{background:transparent!important;box-shadow:none!important;color:var(--teal-ink)}
-  .nav button>*{transition:opacity 0.102s ease} .nav button:active>*{opacity:.6}
+  .nav button>*{transition:opacity 0.096s ease} .nav button:active>*{opacity:.6}
 }
 
 /* ================= nothing may poke out sideways: a page sliding in from the right used to widen the page for a moment,
@@ -1744,7 +1752,7 @@ li.tnode .l1.stack .dose{flex:1 1 100%;text-align:left;white-space:normal}
 .dg-name{flex-direction:column;align-items:flex-start;gap:3px}
 .dg-brand{display:block;font-size:12.5px;line-height:1.25;padding-left:26px}
 /* the title grows and shrinks with the card instead of jumping */
-.dg-name h3{transition:font-size 0.51s cubic-bezier(.7,0,.2,1)}
+.dg-name h3{transition:font-size 0.48s cubic-bezier(.7,0,.2,1)}
 details.drug.closing .dg-name h3{font-size:18px}
 /* every box inside a card is the same lighter pane of glass, "How it works" included, with the same type */
 .how,.dg-grid section{background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);background-repeat:no-repeat;
@@ -1758,10 +1766,10 @@ details.drug.closing .dg-name h3{font-size:18px}
 details.drug li.tnode.speaking{border-radius:var(--r-tag);background-color:color-mix(in srgb,var(--teal) 18%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 18%,transparent)}
 /* a bulleted line is lit from its bullet to the box edge */
 details.drug li:not(.tnode).speaking,details.drug .hlead.speaking{position:relative;isolation:isolate;background:none;box-shadow:none}
-details.drug li:not(.tnode).speaking::before,details.drug .hlead.speaking::before{content:"";position:absolute;z-index:-1;inset:-3px -6px -3px -20px;border-radius:var(--r-tag);background:color-mix(in srgb,var(--teal) 18%,transparent);animation:litin 0.255s ease-out}
+details.drug li:not(.tnode).speaking::before,details.drug .hlead.speaking::before{content:"";position:absolute;z-index:-1;inset:-3px -6px -3px -20px;border-radius:var(--r-tag);background:color-mix(in srgb,var(--teal) 18%,transparent);animation:litin 0.24s ease-out}
 details.drug .hlead.speaking::before{left:-6px}
 @keyframes litin{from{opacity:0}to{opacity:1}}
-details.drug .insec{border-color:color-mix(in srgb,var(--teal) 55%,var(--line))!important;transition:border-color 0.255s ease}
+details.drug .insec{border-color:color-mix(in srgb,var(--teal) 55%,var(--line))!important;transition:border-color 0.24s ease}
 
 /* ================= v65: the top of the screen ================= */
 /* Games keeps its category picker in the page strip: the same glass bar, in the same place, the same height as every other tab's pages.
@@ -1781,14 +1789,14 @@ details.drug .insec{border-color:color-mix(in srgb,var(--teal) 55%,var(--line))!
 header.top::after{content:"";position:absolute;left:0;right:0;top:var(--barh,58px);bottom:0;z-index:-2;pointer-events:none;
   background:color-mix(in srgb,var(--bg) 46%,transparent);-webkit-backdrop-filter:blur(9px) saturate(1.1);backdrop-filter:blur(9px) saturate(1.1);
   -webkit-mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 14px),transparent);
-  transition:transform 0.289s var(--eq)}
+  transition:transform 0.272s var(--eq)}
 @media (max-width:600px){ html.hdrmin header.top::after{transform:translateY(-16px)} }
 html.hdrnow header.top::after{transition:none!important}
 /* the strip no longer needs a blur of its own: the layer under it already softens the page */
 .ptrack{-webkit-backdrop-filter:none;backdrop-filter:none}
 /* the glass bars slide by their position, never by a transform: a moved backdrop layer stops blurring what is under it in Chromium */
-header.top::before{transition:top 0.289s var(--eq)}
-header.top::after{transition:top 0.289s var(--eq),bottom 0.289s var(--eq)}
+header.top::before{transition:top 0.272s var(--eq)}
+header.top::after{transition:top 0.272s var(--eq),bottom 0.272s var(--eq)}
 @media (max-width:600px){
   html.hdrmin header.top::before{transform:none;top:-16px}
   html.hdrmin header.top::after{transform:none;top:calc(var(--barh,58px) - 16px);bottom:16px}
@@ -1804,11 +1812,11 @@ html.hdrmin .stickybar{top:auto}
 .lvlcard.open,.lvlcard.folding{cursor:auto}
 .lvlcard.open:active,.lvlcard.folding:active{transform:none;filter:none}
 .lvlcard.open>:not(.lvmore){cursor:pointer}
-.lvlcard .tapgo{transition:transform 0.612s cubic-bezier(.7,0,.2,1),top 0.612s cubic-bezier(.7,0,.2,1)}
+.lvlcard .tapgo{transition:transform 0.576s cubic-bezier(.7,0,.2,1),top 0.576s cubic-bezier(.7,0,.2,1)}
 .lvlcard.open .tapgo{top:56px;transform:rotate(90deg)}
 /* the three counts spread out into tiles of their own */
 .lvlcard>.statline b{display:inline-block;transform-origin:0 60%}
-.lvlcard>.statline>span{border:1px solid transparent;border-radius:var(--r-ctl);transition:background-color 0.425s ease,border-color 0.425s ease,box-shadow 0.425s ease}
+.lvlcard>.statline>span{border:1px solid transparent;border-radius:var(--r-ctl);transition:background-color 0.4s ease,border-color 0.4s ease,box-shadow 0.4s ease}
 .lvlcard.open>.statline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;white-space:normal;border-top-color:transparent;padding-top:6px}
 .lvlcard.open>.statline>span{display:grid;gap:3px;padding:10px 12px;font-size:12px;line-height:1.2;color:var(--muted);
   background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);border-color:color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge)}
@@ -1828,7 +1836,7 @@ html.hdrmin .stickybar{top:auto}
 .shcard{-webkit-appearance:none;appearance:none;font:inherit;color:var(--ink);text-align:left;cursor:pointer;display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:14px;padding:12px 14px 12px 12px;margin:0;
   border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));border-radius:var(--r-box);
   background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge),var(--glass-shadow);
-  transition:transform 0.119s cubic-bezier(.3,.7,.3,1),filter 0.119s ease,border-color 0.17s ease}
+  transition:transform 0.112s cubic-bezier(.3,.7,.3,1),filter 0.112s ease,border-color 0.16s ease}
 .shcard:active{transform:scale(.98);filter:brightness(1.1)}
 @media (hover:hover){ .shcard:hover{border-color:color-mix(in srgb,var(--teal) 40%,var(--line))} }
 .shcard:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
@@ -1871,7 +1879,7 @@ details.trick{contain-intrinsic-size:auto 69px}
 
 /* ================= v65: one open/close mark everywhere: the chevron the folds and drug cards use ================= */
 details.method>summary::after,details.trick>summary::after,details.scen>summary::after{content:"";position:absolute;right:18px;top:50%;width:7px;height:7px;margin-top:-5px;padding:0;
-  border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform 0.212s ease;font-size:0}
+  border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform 0.2s ease;font-size:0}
 details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{content:"";transform:rotate(45deg)}
 details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{top:26px}
 /* scenarios: the area on top, the case under it and the score at the right, as on the Patient Sim list */
@@ -1885,10 +1893,10 @@ details.scen{contain-intrinsic-size:auto 62px}
 /* ================= v66 ================= */
 :root{--eq:cubic-bezier(.7,0,.2,1)}
 /* ----- an open/close arrow only ever turns: it never moves up, down or sideways ----- */
-details.drug>summary::after{top:18px;margin-top:0;transition:transform 0.323s var(--eq)}
-details.method>summary::after,details.trick>summary::after,details.scen>summary::after,details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{top:50%;margin-top:-5px;transition:transform 0.323s var(--eq)}
-details.fold>summary::after,details.subfold>summary::after{transition:transform 0.323s var(--eq)}
-.lvlcard .tapgo,.lvlcard.open .tapgo{top:47px;margin-top:0;transition:transform 0.51s var(--eq)}
+details.drug>summary::after{top:18px;margin-top:0;transition:transform 0.304s var(--eq)}
+details.method>summary::after,details.trick>summary::after,details.scen>summary::after,details.method[open]>summary::after,details.trick[open]>summary::after,details.scen[open]>summary::after{top:50%;margin-top:-5px;transition:transform 0.304s var(--eq)}
+details.fold>summary::after,details.subfold>summary::after{transition:transform 0.304s var(--eq)}
+.lvlcard .tapgo,.lvlcard.open .tapgo{top:47px;margin-top:0;transition:transform 0.48s var(--eq)}
 @media (max-height:760px){ #panel-today .lvlcard .tapgo{top:33px} }
 /* the trick's one-line summary stays put when it opens, so its header never changes height */
 details.trick[open] .tk-prev{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
@@ -1917,15 +1925,15 @@ details.drug.rulemove .dg-facts{border-top-color:transparent!important}
 .popgrp.adult li.rtitem::before{background:var(--adult)} .popgrp.peds li.rtitem::before{background:var(--peds)}
 /* ----- an open drug card pushes the page strip up under the bar and pins right below it; folding it lets the strip back down ----- */
 .top .subnav{clip-path:inset(0 -60px -60px -60px)}
-.top .subnav>.ptrack{transition:transform 0.425s var(--eq),opacity 0.34s var(--eq)}
+.top .subnav>.ptrack{transition:transform 0.4s var(--eq),opacity 0.32s var(--eq)}
 html.drugopen .top .subnav>.ptrack{transform:translateY(calc(-100% - 14px));opacity:0;pointer-events:none}
 html.drugopen details.drug[open]>summary{top:calc(var(--barh,58px) + env(safe-area-inset-top,0px))}
 @media (max-width:600px){ html.drugopen.hdrmin details.drug[open]>summary{top:calc(var(--barh,58px) - 16px + env(safe-area-inset-top,0px))} }
 /* ----- everything going under a bar goes soft first: a blur that fades in just before each bar's edge ----- */
-header.top::after{transition:top 0.289s var(--eq),bottom 0.289s var(--eq),opacity 0.297s ease;-webkit-mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 20px),transparent)}
+header.top::after{transition:top 0.272s var(--eq),bottom 0.272s var(--eq),opacity 0.28s ease;-webkit-mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 20px),transparent)}
 @media (max-width:600px){ html.hdrmin header.top::after{bottom:-2px} }
 html.drugopen header.top::after{opacity:0}
-details.drug[open]>summary::before{content:"";position:absolute;left:0;right:0;top:100%;height:22px;pointer-events:none;opacity:0;transition:opacity 0.297s ease;
+details.drug[open]>summary::before{content:"";position:absolute;left:0;right:0;top:100%;height:22px;pointer-events:none;opacity:0;transition:opacity 0.28s ease;
   -webkit-backdrop-filter:blur(13px);backdrop-filter:blur(13px);-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
 details.drug[open]>summary.stuck::before{opacity:1}
 .navveil{display:none}
@@ -1937,7 +1945,7 @@ html.splashing .navveil{display:none}
   box-shadow:inset 0 1px 0 var(--glass-edge);font:500 15px/1.2 var(--body);letter-spacing:0;text-transform:none;padding:7px 34px 7px 12px;min-height:34px}
 .ptsw::after{color:var(--muted);opacity:1}
 /* the XP box's counts change into tiles on the same easing */
-.lvlcard>.statline>span{transition:background-color 0.51s var(--eq),border-color 0.51s var(--eq),box-shadow 0.51s var(--eq)}
+.lvlcard>.statline>span{transition:background-color 0.48s var(--eq),border-color 0.48s var(--eq),box-shadow 0.48s var(--eq)}
 .lvlcard:not(.open) .lvbadges i.ov{display:none}
 .lvlcard.open .lvbadges i.more{display:none}
 /* the intro: the name sits on a black cut-out exactly its width */
@@ -1946,7 +1954,7 @@ html.splashing .navveil{display:none}
 .lvlinfo>#lv-next{display:block}
 .lvlcard.moving .lvbadges{overflow:visible}
 /* buttons change state on the house easing too: a press still answers at once, the colour change rides the slow-fast-slow curve */
-.ptab,.chip,.btn,.backchip,.ptchip,.tapbox,.simcase,.simscen,.simrand,.gt,.gcard,.pcard,.lopt,.ltile,.opt,.stile,.shcard,details.fold>summary,details.drug>summary,details.method>summary,details.trick>summary,details.scen>summary,details.subfold>summary{transition:transform 0.119s cubic-bezier(.3,.7,.3,1),filter 0.119s ease,background-color 0.306s var(--eq),color 0.306s var(--eq),border-color 0.306s var(--eq),box-shadow 0.306s var(--eq)}
+.ptab,.chip,.btn,.backchip,.ptchip,.tapbox,.simcase,.simscen,.simrand,.gt,.gcard,.pcard,.lopt,.ltile,.opt,.stile,.shcard,details.fold>summary,details.drug>summary,details.method>summary,details.trick>summary,details.scen>summary,details.subfold>summary{transition:transform 0.112s cubic-bezier(.3,.7,.3,1),filter 0.112s ease,background-color 0.288s var(--eq),color 0.288s var(--eq),border-color 0.288s var(--eq),box-shadow 0.288s var(--eq)}
 
 /* ================= v67 ================= */
 /* only what you can see in the header takes a tap: its empty space (the gaps around the strip, the room the squashed bar gives back,
@@ -1976,7 +1984,7 @@ details.drug[open]>summary.stuck .sband{visibility:visible}
 .sband::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,color-mix(in srgb,var(--surface) 62%,transparent),color-mix(in srgb,var(--surface) 22%,transparent) 45%,transparent)}
 /* the header: one even frosted layer behind the strip, then a progressive edge under it while the page is scrolled */
 header.top::after{content:none}
-.hveil{position:absolute;left:0;right:0;top:var(--barh,58px);bottom:0;z-index:-2;pointer-events:none;transition:top 0.289s var(--eq),bottom 0.289s var(--eq)}
+.hveil{position:absolute;left:0;right:0;top:var(--barh,58px);bottom:0;z-index:-2;pointer-events:none;transition:top 0.272s var(--eq),bottom 0.272s var(--eq)}
 .hveil b{top:0}
 .hveil b:nth-child(1){bottom:0;-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px)}
 .hveil b:nth-child(2){bottom:7px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
@@ -1994,20 +2002,20 @@ html.hdrnow .hveil{transition:none!important}
   .navveil::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,color-mix(in srgb,var(--bg) 40%,transparent),transparent)} }
 
 /* the drug card header's line is drawn by the wiper while the card changes, so the real one never fades in or out on its own */
-details.drug>summary{transition:transform 0.119s cubic-bezier(.3,.7,.3,1),filter 0.119s ease,background-color 0.306s var(--eq)}
+details.drug>summary{transition:transform 0.112s cubic-bezier(.3,.7,.3,1),filter 0.112s ease,background-color 0.288s var(--eq)}
 /* v68: a closing card keeps its header pinned under the bar while the strip comes back down, so the header never jumps */
 details.drug.shut[open]>summary{top:calc(var(--barh,58px) + env(safe-area-inset-top,0px))}
 @media (max-width:600px){ html.hdrmin details.drug.shut[open]>summary{top:calc(var(--barh,58px) - 16px + env(safe-area-inset-top,0px))} }
 /* v68: the soft band under the header rides with the page strip: it slides up out of sight with it when a drug card pins, and comes back down with it */
 .hveil{overflow:hidden}
-.hvin{position:absolute;inset:0;transition:transform 0.425s var(--eq)}
+.hvin{position:absolute;inset:0;transition:transform 0.4s var(--eq)}
 html.drugopen .hvin{transform:translateY(calc(-100% - 14px))}
 html.hdrnow .hvin{transition:none!important}
 .dg-ruleg>b{position:absolute;inset:0;display:block;background:color-mix(in srgb,var(--ink) 42%,transparent);opacity:0}
 /* v68: the stat tiles' glass is a plate behind them that fades in after they open out and fades off before they fold back, so their change of shape never shows */
 .lvlcard.open>.statline>span{background:none;border-color:transparent;box-shadow:none;position:relative;z-index:0}
-.lvlcard.open>.statline>span::before{content:"";position:absolute;inset:-1px;border-radius:inherit;z-index:-1;pointer-events:none;background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge);animation:lvchin 0.51s var(--eq) both}
-.lvlcard.open.chromeout>.statline>span::before{animation:lvchout var(--cho,0.306s) cubic-bezier(.8,0,.3,1) both}
+.lvlcard.open>.statline>span::before{content:"";position:absolute;inset:-1px;border-radius:inherit;z-index:-1;pointer-events:none;background-color:color-mix(in srgb,var(--surface-2) 46%,transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 58%);border:1px solid color-mix(in srgb,var(--line) 62%,var(--glass-edge));box-shadow:inset 0 1px 0 var(--glass-edge);animation:lvchin 0.48s var(--eq) both}
+.lvlcard.open.chromeout>.statline>span::before{animation:lvchout var(--cho,0.288s) cubic-bezier(.8,0,.3,1) both}
 @keyframes lvchin{from{opacity:0}to{opacity:1}}
 @keyframes lvchout{from{opacity:1}to{opacity:0}}
 @media (prefers-reduced-motion:reduce){ .lvlcard.open>.statline>span::before,.lvlcard.open.chromeout>.statline>span::before{animation:none} }
@@ -2068,7 +2076,7 @@ footer{margin-top:44px}
 /* v72: the feedback sheet. The bar shows the verdict and the answer; slid up it rises to about a third of the screen with the why */
 .lfoot{max-height:none}
 .lfoot .lhandle{position:relative}
-.lfoot .lhandle::after{content:"Slide up for why";display:block;margin-top:5px;font:600 10.5px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 52%,transparent);transition:opacity 0.17s ease}
+.lfoot .lhandle::after{content:"Slide up for why";display:block;margin-top:5px;font:600 10.5px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 52%,transparent);transition:opacity 0.16s ease}
 .lfoot.lifted .lhandle::after{content:"Slide down to close"}
 .lmsg{max-height:none}
 .lfoot:not(.lifted):not(.dragging) .lmsg.more{-webkit-mask-image:none;mask-image:none}
@@ -2090,7 +2098,7 @@ footer{margin-top:44px}
 @keyframes bkC{0%{transform:translate(0,0)}22%{transform:translate(calc(var(--ax,3vw) * -.4),calc(var(--ay,3vh) * .9))}53%{transform:translate(calc(var(--ax,3vw) * .85),calc(var(--ay,3vh) * .45))}79%{transform:translate(calc(var(--ax,3vw) * .35),calc(var(--ay,3vh) * -.85))}100%{transform:translate(calc(var(--ax,3vw) * -.8),calc(var(--ay,3vh) * -.3))}}
 
 /* v72: the card's colour bar juts out to the left a little while the card opens, on the same curve as the rest, and tucks back as it closes */
-details.drug{box-shadow:0 0 0 0 var(--fam,var(--teal));transition:box-shadow 0.459s var(--eq)}
+details.drug{box-shadow:0 0 0 0 var(--fam,var(--teal));transition:box-shadow 0.432s var(--eq)}
 details.drug.jut{box-shadow:-3px 0 0 0 var(--fam,var(--teal))}
 @media (hover:none){ details.drug:hover{box-shadow:0 0 0 0 var(--fam,var(--teal))} details.drug.jut:hover{box-shadow:-3px 0 0 0 var(--fam,var(--teal))} }
 
@@ -2125,10 +2133,10 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
 .tbscore .eyebrow{font-size:10px}
 .tbscore b{font-family:var(--display);font-weight:700;font-size:26px;color:var(--amber);font-variant-numeric:tabular-nums;min-width:4.2ch}
 .tbcombo{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));
-  background-color:color-mix(in srgb,var(--surface) 80%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);box-shadow:inset 0 1px 0 var(--glass-edge);transition:box-shadow 0.306s var(--eq),border-color 0.306s var(--eq)}
-.tbcombo b{font-family:var(--display);font-weight:700;font-size:17px;line-height:1;color:var(--muted);min-width:2.2ch;text-align:center;transition:color 0.306s var(--eq)}
+  background-color:color-mix(in srgb,var(--surface) 80%,transparent);background-image:linear-gradient(170deg,var(--sheen),transparent 70%);box-shadow:inset 0 1px 0 var(--glass-edge);transition:box-shadow 0.288s var(--eq),border-color 0.288s var(--eq)}
+.tbcombo b{font-family:var(--display);font-weight:700;font-size:17px;line-height:1;color:var(--muted);min-width:2.2ch;text-align:center;transition:color 0.288s var(--eq)}
 .tbpips{display:flex;gap:3px}
-.tbpips i{width:5px;height:5px;border-radius:50%;background:color-mix(in srgb,var(--ink) 18%,transparent);transition:background-color 0.255s var(--eq)}
+.tbpips i{width:5px;height:5px;border-radius:50%;background:color-mix(in srgb,var(--ink) 18%,transparent);transition:background-color 0.24s var(--eq)}
 .tbpips i.on{background:var(--amber)}
 .tbcombo:not([data-m="1"]) b{color:var(--amber)}
 .tbcombo[data-m="3"],.tbcombo[data-m="4"]{border-color:color-mix(in srgb,var(--amber) 55%,transparent);box-shadow:inset 0 1px 0 var(--glass-edge),0 0 14px -4px color-mix(in srgb,var(--amber) 60%,transparent)}
@@ -2146,7 +2154,7 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
 .tbtopics{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
 .tbtopic{appearance:none;font:inherit;color:var(--ink);text-align:left;display:grid;align-content:start;gap:4px;padding:14px;border-radius:var(--r-box);min-height:118px;cursor:pointer;position:relative;overflow:hidden;
   border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);
-  background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge),var(--glass-shadow);transition:transform 0.119s cubic-bezier(.3,.7,.3,1)}
+  background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge),var(--glass-shadow);transition:transform 0.112s cubic-bezier(.3,.7,.3,1)}
 .tbtopic::before{content:"";width:22px;height:4px;border-radius:2px;background:hsl(var(--h) var(--gs) var(--gl));margin-bottom:6px}
 .tbtopic:active{transform:scale(.98)}
 .tbtopic:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
@@ -2171,12 +2179,14 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
 .tbboard{position:relative;min-height:0}
 .tbgrid{position:relative;width:100%;clip-path:inset(0 -24px -40px -24px)}
 .tbt{position:absolute;left:0;top:0;appearance:none;border:0;padding:0;margin:0;background:none;font:inherit;color:var(--ink);cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-.tbin{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:6px 7px;border-radius:var(--r-ctl);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));
+.tbin{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:6px 5px;border-radius:var(--r-ctl);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));
   background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);background-image:linear-gradient(162deg,var(--sheen),transparent 62%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge);
-  transform-origin:50% 100%;transition:background-color 0.306s var(--eq),border-color 0.255s var(--eq),opacity 0.34s var(--eq),box-shadow 0.306s var(--eq)}
-.tbt.odd .tbin{background-color:color-mix(in srgb,color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 20%,var(--surface-2)) var(--glass-a),transparent)}
-.tbw{display:block;width:100%;min-width:0;text-align:center;font-size:14px;font-weight:600;line-height:1.16;overflow-wrap:normal;-webkit-hyphens:manual;hyphens:manual}
-.tbw.s1{font-size:12.5px} .tbw.s2{font-size:11.5px} .tbw.s3{font-size:10.5px} .tbw.brk{overflow-wrap:anywhere}
+  transform-origin:50% 100%;transition:background-color 0.288s var(--eq),border-color 0.24s var(--eq),opacity 0.32s var(--eq),box-shadow 0.288s var(--eq)}
+/* the checkerboard is a whisper: alternate squares are a shade deeper with the faintest trace of the topic colour, so the eye reads the words */
+.tbt.odd .tbin{background-color:color-mix(in srgb,color-mix(in srgb,hsl(var(--h) var(--gs) var(--gl)) 5%,color-mix(in srgb,var(--ink) 5%,var(--surface))) var(--glass-a),transparent)}
+/* terms are set in the condensed display face, so long medical words fit their tile whole */
+.tbw{display:block;width:100%;min-width:0;text-align:center;font-family:var(--display);font-size:17.5px;font-weight:600;letter-spacing:.01em;line-height:1.06;overflow-wrap:normal;-webkit-hyphens:manual;hyphens:manual}
+.tbw.s1{font-size:16px} .tbw.s2{font-size:14.5px} .tbw.s3{font-size:13px} .tbw.s4{font-size:11.5px} .tbw.brk{overflow-wrap:anywhere}
 .tbt.out{pointer-events:none} .tbt.out .tbin{opacity:.2}
 .tbt.hint .tbin{border-color:var(--amber);animation:tbhint 1.1s ease-in-out infinite}
 @keyframes tbhint{50%{box-shadow:inset 0 1px 0 var(--glass-edge),0 0 0 3px color-mix(in srgb,var(--amber) 45%,transparent)}}
@@ -2216,7 +2226,30 @@ details.fold>summary:active,details.drug>summary:active,details.method>summary:a
 .dg-body .how mark.hl .hc{text-shadow:none}
 /* v74: the bars sit out the first frames after the app comes back, then fade in where they belong */
 html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
-.nav{transition:opacity 0.153s ease} .calcfab{transition:transform 0.128s,box-shadow 0.128s,opacity 0.153s ease}
+.nav{transition:opacity 0.144s ease} .calcfab{transition:transform 0.12s,box-shadow 0.12s,opacity 0.144s ease}
+
+/* v75: the class bubbles show under the name in every state, small and quiet in the card's own family colour */
+details.drug .dg-cls,details.drug:not([open]) .dg-cls,details.drug[open] .dg-cls{display:flex}
+.dg-cls{gap:4px;margin-top:3px}
+.dg-cls span{font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1;padding:4px 7px 3px;border-radius:var(--r-tag);
+  color:color-mix(in srgb,var(--fam,var(--teal)) 55%,var(--ink));background:color-mix(in srgb,var(--fam,var(--teal)) 13%,transparent);border:1px solid color-mix(in srgb,var(--fam,var(--teal)) 26%,transparent)}
+/* v75: the titles of boxes read as clearly as what is in them */
+.sect,.dg-grid h4,.quick .eyebrow,.mgroup,.rgroup h2,.rcard>header>.eyebrow,.how .eyebrow{font-size:13px;font-weight:700;letter-spacing:.1em;color:color-mix(in srgb,var(--ink) 84%,var(--muted));opacity:1}
+
+/* v75: the edge under the header fades on a smooth eased curve. Nine blur layers stop at eased heights with eased strengths, reaching a
+   little past the header so the fade has room, and the tint follows the same curve, so nothing reads as a straight ramp or a step */
+.hveil{bottom:-30px}
+@media (max-width:600px){ html.hdrmin .hveil{bottom:-14px} }
+.hveil b:nth-child(1){top:0;bottom:0.0px;--r:0.50px}
+.hveil b:nth-child(2){top:0;bottom:2.8px;--r:0.80px}
+.hveil b:nth-child(3){top:0;bottom:7.1px;--r:1.78px}
+.hveil b:nth-child(4){top:0;bottom:12.2px;--r:3.50px}
+.hveil b:nth-child(5){top:0;bottom:18.0px;--r:5.98px}
+.hveil b:nth-child(6){top:0;bottom:24.4px;--r:9.26px}
+.hveil b:nth-child(7){top:0;bottom:31.2px;--r:13.34px}
+.hveil b:nth-child(8){top:0;bottom:38.4px;--r:18.25px}
+.hveil b:nth-child(9){top:0;bottom:46.0px;--r:24.00px;--s:1.35}
+.hvin::after{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 46%,transparent),color-mix(in srgb,var(--bg) 46.0%,transparent) calc(100% - 46.0px),color-mix(in srgb,var(--bg) 36.5%,transparent) calc(100% - 41.4px),color-mix(in srgb,var(--bg) 28.2%,transparent) calc(100% - 36.8px),color-mix(in srgb,var(--bg) 21.0%,transparent) calc(100% - 32.2px),color-mix(in srgb,var(--bg) 15.0%,transparent) calc(100% - 27.6px),color-mix(in srgb,var(--bg) 10.0%,transparent) calc(100% - 23.0px),color-mix(in srgb,var(--bg) 6.1%,transparent) calc(100% - 18.4px),color-mix(in srgb,var(--bg) 3.3%,transparent) calc(100% - 13.8px),color-mix(in srgb,var(--bg) 1.3%,transparent) calc(100% - 9.2px),color-mix(in srgb,var(--bg) 0.3%,transparent) calc(100% - 4.6px),color-mix(in srgb,var(--bg) 0.0%,transparent) calc(100% - 0.0px))}
 </style>
 </head>
 <body>
@@ -2225,7 +2258,7 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
   <canvas id="splash-cv" aria-label="Loading" role="img"></canvas>
   <canvas id="splash-ln" aria-hidden="true"></canvas>
   <div class="splash-t">Lazarus</div>
-  <div class="splash-m"><span class="sm-la" lang="la">Per Constantiam, Vincimus.</span><span class="sm-en" aria-hidden="true">Through steadfastness, we prevail</span></div>
+  <div class="splash-m"><span class="sm-la" lang="la">Per Constantiam, Vincimus.</span><span class="sm-en" aria-hidden="true">Through steadfastness, we prevail</span></div><svg class="splash-goo" width="0" height="0" aria-hidden="true" focusable="false"><filter id="lzgoo" x="-20%" y="-60%" width="140%" height="320%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.1" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter></svg>
   <svg class="splash-fx" width="0" height="0" aria-hidden="true" focusable="false"><filter id="lz-melt" x="-10%" y="-60%" width="120%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.11" numOctaves="2" seed="7" result="n"><animate id="lz-melt-f" attributeName="baseFrequency" begin="indefinite" dur="1.6s" values="0.015 0.11;0.028 0.18;0.015 0.11" fill="freeze"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"><animate id="lz-melt-s" attributeName="scale" begin="indefinite" dur="1.6s" values="0;5;2.5;0" keyTimes="0;.4;.75;1" fill="freeze"/></feDisplacementMap></filter></svg>
 </div>
 </div>
@@ -2244,7 +2277,7 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
     <div class="chips"><button type="button" class="chip" data-ptset="10">10</button><button type="button" class="chip" data-ptset="20">20</button><button type="button" class="chip" data-ptset="50">50</button><button type="button" class="chip" data-ptset="70">70</button><button type="button" class="chip" data-ptset="80">80</button><button type="button" class="chip" data-ptset="100">100</button><button type="button" class="chip" data-ptset="120">120</button><button type="button" class="btn alt" id="pt-close">Done</button></div>
     <p class="note">Every drug card and calculator uses this weight.</p>
   </div>
-  <i class="hveil" aria-hidden="true"><i class="hvin"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></i></i>
+  <i class="hveil" aria-hidden="true"><i class="hvin"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></i></i>
   
   <nav class="nav" aria-label="Sections">
     <span class="navthumb" aria-hidden="true"></span>
@@ -2637,7 +2670,7 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
   // ---------- helpers ----------
   const $=id=>document.getElementById(id);
   // every interface motion runs at this share of its written length (the stylesheet is scaled the same way when the app is built)
-  const SPD=.85, spd=x=>Math.round(x*SPD);
+  const SPD=.8, spd=x=>Math.round(x*SPD);
   const fmt=(n,d)=>{ if(!isFinite(n)) return "?"; const p=Math.pow(10,d==null?2:d); const r=Math.round(n*p)/p; return r.toLocaleString(undefined,{maximumFractionDigits:d==null?2:d}); };
   // doses print tight: 1mg/kg, 10mg/mL, 160\u2013325mg. Ranges take an en dash; time words keep their space (over 2 min).
   const UNIT_RE=new RegExp("(\\d)\\s+(?=(?:mcg|mg|g|mEq|mL|L|units?|kg|mmol|%)(?:\\/[A-Za-z]+)*(?![A-Za-z]))","g");
@@ -2938,7 +2971,8 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(0,r)},{clipPath:clip(dh,r)}],t)); });
       B.forEach(([el])=>A.push(el.animate([{transform:"none"},{transform:`translateY(${(-dh).toFixed(1)}px)`}],t)));
       P.K.forEach(x=>{ if(x.on) A.push(x.k.animate([{offset:1,opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:Math.max(0,P.T-x.s-P.dk)+dl,easing:EQR,fill:"both"})); });
-      hold(d,B.map(b=>b[0]).concat(P.K.map(x=>x.k)),P.T+dl); d._fa=A; d._fo=o; last(A).finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
+      // a fold can be asked to wait for something of its own (the drug card's separator) before it lands
+      hold(d,B.map(b=>b[0]).concat(P.K.map(x=>x.k)),P.T+dl); d._fa=A; d._fo=o; Promise.all([last(A).finished].concat(o.wait?[Promise.resolve(o.wait()).catch(()=>{})]:[])).then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
     // land whatever is running on its end state at once
     function finish(d){ const A=d._fa, o=d._fo||{}; d._fa=null; d._fo=null; if(d._mv){ d._mv.forEach(el=>el.classList.remove("fmv")); d._mv=null; }
       if(d._closing){ d._closing=false; if(o.end) o.end(); d.open=false; }
@@ -3102,6 +3136,17 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
   // the pill is three pieces, two round ends and a middle, moved only by transform, so the compositor slides it at full frame rate whatever
   // the page change is doing on the main thread, and its corners never stretch
   const pillAt=(x,w)=>[`translateX(${x.toFixed(1)}px)`,`translateX(${(x+9).toFixed(1)}px) scaleX(${(Math.max(0,w-18)/100).toFixed(4)})`,`translateX(${(x+w-20).toFixed(1)}px)`];
+  // ----- the sliders travel like a drop of something thick: the edge on the side it is heading runs out first and the far edge follows
+  // after, so the pill stretches toward where it is going and draws a little thinner as it stretches, then the tail catches up and it
+  // settles into its new place at its own size. Both edges run the house curve; only their timing differs. -----
+  const HQ=window.bez?bez(.7,0,.2,1):(x=>x);
+  // the left and right edges and the height factor at a moment of the move, t from 0 to 1
+  function stretchAt(L0,R0,L1,R1,t){ const right=(L1+R1)>(L0+R0), lead=HQ(Math.min(1,t/.88)), trail=HQ(Math.max(0,(t-.08)/.92));
+    let L=L0+(L1-L0)*(right?trail:lead), R=R0+(R1-R0)*(right?lead:trail); const base=(R0-L0)+((R1-L1)-(R0-L0))*HQ(t);
+    // a long trip never stretches it past four tenths over its own width: the tail is drawn along to keep it a pill, not a bar
+    const over=(R-L)-base*1.4; if(over>0){ if(right) L+=over; else R-=over; }
+    const k=Math.max(0,(R-L)/Math.max(1,base)-1); return [L,R,Math.max(.86,1-.14*Math.min(1,k/.4))]; }
+  const STEPS=18;
   // the page thumb leaves its place gently, crosses on a sharp curve and settles briefly: the house curve
   const EASE_T="cubic-bezier(.7,0,.2,1)";
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
@@ -3109,8 +3154,15 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
     // the tap starts the slide and the page swap asks for it again when it lands: a slide already on its way there is left alone, so it
     // never restarts mid-flight (a restart picks the curve up again at full speed, which is the hitch)
     if(go&&th._to===key) return; th._to=key;
-    [...th.children].forEach((p,i)=>{ const from=go?getComputedStyle(p).transform:null; p.getAnimations().forEach(a=>a.cancel()); p.style.transform=to[i];
-      if(go&&from&&from!=="none") p.animate([{transform:from},{transform:to[i]}],{duration:spd(420),easing:EASE_T}); }); }
+    const P=[...th.children], L1=on.offsetLeft, R1=on.offsetLeft+on.offsetWidth;
+    // where the pill is drawn right now, mid-move or at rest, read off its two caps
+    let L0=null, R0=null; if(go&&P.length===3){ try{ const a=new DOMMatrixReadOnly(getComputedStyle(P[0]).transform), b=new DOMMatrixReadOnly(getComputedStyle(P[2]).transform); L0=a.m41; R0=b.m41+20; }catch(e){} }
+    P.forEach(p=>p.getAnimations().forEach(a=>a.cancel())); P.forEach((p,i)=>{ p.style.transform=to[i]; });
+    if(!go||L0==null||(Math.abs(L0-L1)<1&&Math.abs(R0-R1)<1)) return;
+    const h=Math.max(1,P[1].offsetHeight), F=[[],[],[]];
+    for(let k=0;k<=STEPS;k++){ const [L,R,sy]=stretchAt(L0,R0,L1,R1,k/STEPS), w=R-L, dy=((1-sy)*h/2).toFixed(2), sc=sy.toFixed(4);
+      F[0].push({transform:`translate(${L.toFixed(1)}px,${dy}px) scaleY(${sc})`}); F[1].push({transform:`translate(${(L+9).toFixed(1)}px,${dy}px) scale(${(Math.max(0,w-18)/100).toFixed(4)},${sc})`}); F[2].push({transform:`translate(${(R-20).toFixed(1)}px,${dy}px) scaleY(${sc})`}); }
+    P.forEach((p,i)=>p.animate(F[i],{duration:spd(460),easing:"linear"})); }
   // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll.
   // It is worked out before the strip is first drawn and remembered per tab and width, so the names never visibly change size.
   function fit(g){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["s1","s2","s3"]; g=g||$("subnav").dataset.g; const key=g+"@"+(window.innerWidth||0);
@@ -3130,7 +3182,13 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
   // what changes on the tap itself, before the page does
   // the bottom bar has one highlight that slides from tab to tab, the same way the page strip's thumb does, so a tap never makes it pop
   function navThumb(anim){ const nav=document.querySelector(".nav"), th=nav&&nav.querySelector(".navthumb"), on=nav&&nav.querySelector('button[aria-selected="true"]'); if(!th||!on||!on.offsetWidth) return;
-    if(!anim) th.style.transition="none"; th.style.width=on.offsetWidth+"px"; th.style.height=on.offsetHeight+"px"; th.style.transform=`translate(${on.offsetLeft}px,${on.offsetTop}px)`; if(!anim){ void th.offsetWidth; th.style.transition=""; } }
+    const L1=on.offsetLeft, R1=L1+on.offsetWidth, T=on.offsetTop, H=on.offsetHeight; let L0=null, R0=null;
+    if(anim&&!reduceMotion()){ try{ const m=new DOMMatrixReadOnly(getComputedStyle(th).transform), w=th.getBoundingClientRect().width; L0=m.m41; R0=m.m41+w; }catch(e){} }
+    th.getAnimations().forEach(a=>a.cancel()); th.style.transition="none"; th.style.width=on.offsetWidth+"px"; th.style.height=H+"px"; th.style.transform=`translate(${L1}px,${T}px)`;
+    if(L0==null||!(R0>L0)||(Math.abs(L0-L1)<1&&Math.abs(R0-R1)<1)) return;
+    // the tray marker moves the same way the page thumb does: it stretches toward the tab, thins a touch, then settles
+    const K=[]; for(let k=0;k<=STEPS;k++){ const [L,R,sy]=stretchAt(L0,R0,L1,R1,k/STEPS); K.push({width:(R-L).toFixed(1)+"px",height:(H*sy).toFixed(1)+"px",transform:`translate(${L.toFixed(1)}px,${(T+H*(1-sy)/2).toFixed(1)}px)`}); }
+    th.animate(K,{duration:spd(460),easing:"linear"}); }
   window.addEventListener("resize",()=>navThumb(false)); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>navThumb(false));
   function markTap(id,from){ const g=groupOf(id), gf=from?groupOf(from):null;
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false")); (window.requestAnimationFrame||setTimeout)(()=>navThumb(!!from&&!reduceMotion()));
@@ -3812,24 +3870,28 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
     const marksOf=d=>[...d.querySelectorAll(".dg-body>.how mark.hl")].sort((a,b)=>a.dataset.k-b.dataset.k);
     window.drugHighlights=(d,o)=>{ o=o||{}; if(reducedM()){ if(o.hold) marksOf(d).forEach(m=>m.classList.add("hlon")); return; } const ms=marksOf(d); if(!ms.length) return;
       if(d._hl) d._hl(); const A=[]; let alive=true; d._hl=()=>{ alive=false; A.forEach(a=>{ try{ a.cancel(); }catch(e){} }); ms.forEach(m=>m.classList.remove("hlon")); d._hl=null; };
-      const DRAW=spd(600), HOLD=spd(520), SLIP=spd(600), GAP=spd(200), RISE=spd(160), LINGER=spd(900), tot=DRAW+HOLD+SLIP; let at=spd(120);
+      // the next phrase starts drawing while the last one is still letting go, so the eye moves straight on; the weight stays on after
+      // the highlight has gone, then eases back slowly
+      const DRAW=spd(560), HOLD=spd(420), SLIP=spd(600), RISE=spd(160), STAY=spd(700), LINGER=spd(1700), NEXT=DRAW+spd(260), tot=DRAW+HOLD+SLIP; let at=spd(100);
       ms.forEach(m=>{ m.classList.remove("hlon"); const W=weight(m), ch=letters(m), n=Math.max(1,ch.length-1);
         if(o.hold){ const a=m.animate([{backgroundSize:"0% 64%",backgroundPosition:"0% 92%"},{backgroundSize:"100% 64%",backgroundPosition:"0% 92%"}],{duration:DRAW,delay:at,easing:"cubic-bezier(.7,0,.2,1)",fill:"both"}); A.push(a);
           a.finished.then(()=>{ if(!alive) return; m.classList.add("hlon"); a.cancel(); },()=>{}); }
         else A.push(m.animate([{offset:0,backgroundSize:"0% 64%",backgroundPosition:"0% 92%",easing:"cubic-bezier(.7,0,.2,1)"},{offset:DRAW/tot,backgroundSize:"100% 64%",backgroundPosition:"0% 92%",easing:"linear"},{offset:(DRAW+HOLD)/tot,backgroundSize:"100% 64%",backgroundPosition:"100% 92%",easing:"cubic-bezier(.3,0,.15,1)"},{offset:1,backgroundSize:"0% 64%",backgroundPosition:"100% 92%"}],{duration:tot,delay:at,fill:"both"}));
         // each letter: heavier as the edge reaches it, held while the phrase is being read, then back to normal weight slowly, after the
         // highlight has left it (or, when the highlight stays, a moment after it was drawn)
-        ch.forEach((c,i)=>{ const f=i/n, on=DRAW*when(f,HQ), off=o.hold?on+HOLD+spd(260):DRAW+HOLD+SLIP*when(f,HS)+spd(80), end=off+LINGER;
-          A.push(c.animate([{offset:0,textShadow:W.off},{offset:on/end,textShadow:W.off},{offset:Math.min(1,(on+RISE)/end),textShadow:W.on},{offset:off/end,textShadow:W.on,easing:"cubic-bezier(.4,0,.2,1)"},{offset:1,textShadow:W.off}],{duration:end,delay:at,fill:"backwards"})); });
-        at+=(o.hold?DRAW+spd(160):tot-spd(180))+GAP; });
+        ch.forEach((c,i)=>{ const f=i/n, on=DRAW*when(f,HQ), off=o.hold?on+HOLD+STAY:DRAW+HOLD+SLIP*when(f,HS)+STAY, end=off+LINGER;
+          A.push(c.animate([{offset:0,textShadow:W.off},{offset:on/end,textShadow:W.off},{offset:Math.min(1,(on+RISE)/end),textShadow:W.on},{offset:off/end,textShadow:W.on,easing:"cubic-bezier(.3,0,.25,1)"},{offset:1,textShadow:W.off}],{duration:end,delay:at,fill:"backwards"})); });
+        at+=NEXT; });
       if(!o.hold) Promise.all(A.map(a=>a.finished)).then(()=>{ if(alive&&d._hl){ d._hl(); } },()=>{}); };
     // Show info turned off: highlights that were left drawn slide away the way a passing one does
     window.drugHighlightsOff=d=>{ if(d._hl) d._hl(); const ms=marksOf(d).filter(m=>m.classList.contains("hlon")); ms.forEach(m=>m.classList.remove("hlon")); if(reducedM()) return; let at=0;
       ms.forEach(m=>{ m.animate([{backgroundSize:"100% 64%",backgroundPosition:"100% 92%"},{backgroundSize:"0% 64%",backgroundPosition:"100% 92%"}],{duration:spd(520),delay:at,easing:"cubic-bezier(.3,0,.15,1)",fill:"backwards"}); at+=spd(90); }); };
+    // the class bubbles under each name: what kind of drug it is at a glance, by its pharmacology (the profile keeps its own class list)
+    const BUB={"asa":["Antiplatelet","NSAID"],"charcoal":["Adsorbent","Antidote"],"adenosine":["Antidysrhythmic","Endogenous nucleoside"],"albuterol":["Sympathomimetic","Beta-2 agonist","Bronchodilator"],"amiodarone":["Antidysrhythmic","Class III"],"atropine":["Anticholinergic","Parasympatholytic","Antidote"],"bumetanide":["Loop diuretic"],"cacl":["Electrolyte","Calcium salt"],"cagel":["Calcium salt","Topical antidote"],"cagluc":["Electrolyte","Calcium salt"],"dexamethasone":["Corticosteroid","Anti-inflammatory"],"d50":["Carbohydrate","Antihypoglycemic"],"diazepam":["Benzodiazepine","Anticonvulsant","Sedative"],"diltiazem":["Calcium channel blocker","Class IV"],"diphenhydramine":["Antihistamine","H1 blocker","Anticholinergic"],"dopamine":["Sympathomimetic","Catecholamine","Vasopressor"],"epinephrine":["Sympathomimetic","Catecholamine","Alpha and beta agonist"],"etomidate":["Induction agent","Sedative hypnotic"],"fentanyl":["Opioid analgesic","Mu agonist"],"furosemide":["Loop diuretic"],"glucagon":["Pancreatic hormone","Hyperglycemic"],"hydroxocobalamin":["Antidote","Cyanide binder"],"ipratropium":["Anticholinergic","Parasympatholytic","Bronchodilator"],"ketamine":["Dissociative anesthetic","NMDA antagonist","Analgesic"],"lidocaine":["Antidysrhythmic","Class IB","Local anesthetic"],"lorazepam":["Benzodiazepine","Anticonvulsant","Sedative"],"magnesium":["Electrolyte","Antidysrhythmic","Anticonvulsant"],"methylpred":["Corticosteroid","Anti-inflammatory"],"midazolam":["Benzodiazepine","Anticonvulsant","Sedative"],"morphine":["Opioid analgesic","Mu agonist"],"naloxone":["Opioid antagonist"],"nitroglycerin":["Nitrate","Vasodilator","Antianginal"],"nitrous":["Inhaled analgesic","Anesthetic gas"],"norepinephrine":["Sympathomimetic","Catecholamine","Vasopressor"],"ondansetron":["Antiemetic","5-HT3 antagonist"],"oralglucose":["Carbohydrate","Antihypoglycemic"],"oxygen":["Medical gas"],"oxytocin":["Pituitary hormone","Uterotonic"],"bicarb":["Alkalinizing agent","Buffer"]};
     function card(d){
       const hasDose=d.doses.length>0, inS=study.has(d.id);
       return `<details class="drug${inS?" instudy":""}" id="drug-${d.id}" style="--fam:${famColor(d)}"><summary><div class="dg-head">
-          <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${d.cls.map(c=>`<span>${c}</span>`).join("")}</div></div>
+          <div class="dg-main"><div class="dg-name"><h3><button type="button" class="star${inS?" on":""}" data-star="${d.id}" aria-pressed="${inS?"true":"false"}" aria-label="Study set" title="Study set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg></button>${d.name}${d.local?'<span class="localtag">Local</span>':""}</h3>${d.brands.length?`<span class="dg-brand">${d.brands.join(", ")}</span>`:""}</div><div class="dg-cls">${(BUB[d.id]||d.cls).map(c=>`<span>${c}</span>`).join("")}</div></div>
           <div class="dg-facts"><div class="fact"><span class="fl">Dose</span>${(d.quick.lines||[]).length?`<div class="dlines">${d.quick.lines.map(l=>`<div class="dl"><span class="rt">${l.tag}</span><span class="dv"><b>${tight(l.text)}</b>${l.ctx?` <span class="dx">${l.ctx}</span>`:""}</span></div>`).join("")}</div>`:`<b>${tight(d.quick.dose.replace(/\.$/,""))}</b>`}</div><div class="fact"><span class="fl">For</span><span>${d.quick.ind.replace(/\.$/,"")}</span></div><div class="fact"><span class="fl">How</span><span>${d.quick.moa.replace(/\.$/,"")}</span></div></div>
         </div>
         <div class="dg-tools"><button type="button" class="chip listen" data-listen="${d.id}" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen</button>${hasDose?`<button type="button" class="chip" data-math aria-pressed="false">Show math</button><button type="button" class="chip" data-info aria-pressed="false">Show info</button>`:""}<button type="button" class="chip" data-lesson="${d.id}">Lesson</button></div><i class="sband" aria-hidden="true"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></i></summary>
@@ -3909,38 +3971,44 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
       const lineKF=opening?[{offset:0,transform:at(top,fr.x,fr.w)},{offset:1,transform:at(rest,0,W)}]:[{offset:0,transform:at(rest,0,W)},{offset:1,transform:at(top,fr.x,fr.w)}];
       const when=y=>{ const k=Math.max(0,Math.min(1,(y-top)/span)); return opening?k:1-k; };
       // the preview's lines above the line's landing place are wiped by it; any that reach below it fade as it travels (and come back as it returns)
-      let factsKF; if(bot<=rest){ const k=when(bot); factsKF=opening?[{offset:0,clipPath:none},{offset:k,clipPath:all},{offset:1,clipPath:all}]:[{offset:0,clipPath:all},{offset:k,clipPath:all},{offset:1,clipPath:none}]; }
-      else factsKF=opening?[{offset:0,clipPath:none,opacity:1},{offset:.35,clipPath:ins(top+.35*span),opacity:1},{offset:1,clipPath:ins(rest),opacity:0}]:[{offset:0,clipPath:ins(rest),opacity:0},{offset:.65,clipPath:ins(top+.35*span),opacity:1},{offset:1,clipPath:none,opacity:1}];
+      // closing, the preview stays hidden all the way up: it comes back only once the card has fully landed (see closeCard)
+      let factsKF; if(!opening) factsKF=[{offset:0,clipPath:all,opacity:0},{offset:1,clipPath:all,opacity:0}];
+      else if(bot<=rest){ const k=when(bot); factsKF=[{offset:0,clipPath:none},{offset:k,clipPath:all},{offset:1,clipPath:all}]; }
+      else factsKF=[{offset:0,clipPath:none,opacity:1},{offset:.35,clipPath:ins(top+.35*span),opacity:1},{offset:1,clipPath:ins(rest),opacity:0}];
       const glow=line.firstChild.animate([{offset:0,opacity:0},{offset:.25,opacity:1},{offset:.7,opacity:1},{offset:1,opacity:0}],T);
       const A=[line.animate(lineKF,T),ghost.animate(factsKF,T),glow];
       // the buttons show above the line: uncovered as it passes down over them, wiped as it passes back up
-      [d.querySelector(".dg-tools"),d.querySelector(".dg-cls")].forEach(el=>{ if(!el||!el.offsetParent) return; const r=rel(el,sm), o1=when(r.y), o2=when(r.y+r.h), lo=Math.min(o1,o2), hi=Math.max(o1,o2)||.001;
+      [d.querySelector(".dg-tools")].forEach(el=>{ if(!el||!el.offsetParent) return; const r=rel(el,sm), o1=when(r.y), o2=when(r.y+r.h), lo=Math.min(o1,o2), hi=Math.max(o1,o2)||.001;
         const hid=`inset(0 0 ${px(r.h+2)} 0)`, shown="inset(0 0 0px 0)";
         A.push(el.animate(opening?[{offset:0,clipPath:hid},{offset:lo,clipPath:hid},{offset:hi,clipPath:shown},{offset:1,clipPath:shown}]:[{offset:0,clipPath:shown},{offset:lo,clipPath:shown},{offset:hi,clipPath:hid},{offset:1,clipPath:hid}],T)); });
       const end=()=>{ if(d._wipe!==W8) return; d._wipe=null; line.remove(); ghost.remove(); d.classList.remove("rulemove"); A.forEach(x=>{ try{ x.cancel(); }catch(e){} }); };
-      const W8={end}; d._wipe=W8; if(opening) A[0].finished.then(end,()=>{}); }
+      const W8={end,done:A[0].finished}; d._wipe=W8; if(opening) A[0].finished.then(end,()=>{}); }
     const reducedM=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
-    // ----- one procedure each way. Opening: the colour bar juts out and the separator sweeps down, wiping the preview away; as it lands the
-    // card opens out under it and the sections drop in one after another. Closing: the separator sweeps back up first and brings the preview
-    // back; then the card folds shut like an accordion, the last section first; the colour bar tucks back in once everything has landed. -----
+    // ----- one procedure each way. Opening: the colour bar juts out and the card lets down to its full length, the sections dropping in one
+    // after another; part way through, the separator sweeps down, wiping the preview away. Closing is the mirror: the card folds shut like an
+    // accordion, the last section first, and the separator sweeps back up as it lands; the preview fades back in only once everything has
+    // stopped, and the colour bar tucks in last. Show math and Show info belong to one card at a time, so both start off on every card. -----
+    const OPEN_SEP=spd(280);
+    function resetLayers(){ if(store.get("mm-showinfo",false)||store.get("mm-showmath",false)){ store.set("mm-showinfo",false); store.set("mm-showmath",false); applyLayers(); } }
     function openCard(d){
       if(d._fa) FOLD.finish(d); if(d.open) return;
       // fold away any other open card at once, without moving the one you tapped
       root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o===d) return; if(o._fa) FOLD.finish(o); if(!o.open) return; const t0=d.getBoundingClientRect().top; o.dataset.auto="1"; o.open=false; o.classList.remove("jut","shut"); const t1=d.getBoundingClientRect().top; if(Math.abs(t1-t0)>1) window.scrollTo(0,window.scrollY+(t1-t0)); });
       const f=d.querySelector(".dg-facts"), fr=f?rel(f,d.firstElementChild):null; d._fr=fr; clearTimeout(d._sdt); d.classList.remove("shut");
-      const lead=reducedM()?0:Math.round(WIPE*.7); d.classList.add("jut");
-      FOLD.open(d,{before:()=>fill(d), kids:parts, duration:spd(520), kidDelay:spd(110), delay:lead,
-        after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(!reducedM()) wipe(d,true); },
+      resetLayers(); d.classList.add("jut");
+      FOLD.open(d,{before:()=>fill(d), kids:parts, duration:spd(520), kidDelay:spd(110), delay:0,
+        after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(!reducedM()) wipe(d,true,OPEN_SEP); },
         done:()=>{ if(window.drugHighlights) drugHighlights(d,{hold:!!store.get("mm-showinfo",false)}); } });
       scrollToCard(d); }
     function closeCard(d){
-      if(d._fa) FOLD.finish(d); if(!d.open) return; const lead=reducedM()?0:Math.round(WIPE*.7);
-      if(d._hl) d._hl();
-      FOLD.close(d,{kids:parts, duration:spd(520), kidDelay:spd(110), delay:lead,
-        before:P=>{ d.classList.add("shut"); const back=d.getBoundingClientRect().top<headerH()-1; if(back) scrollToCard(d); const T=((P&&P.T)||WIPE)+lead; if(!reducedM()) wipe(d,false,0); clearTimeout(d._sdt);
+      if(d._fa) FOLD.finish(d); if(!d.open) return;
+      if(d._hl) d._hl(); resetLayers();
+      FOLD.close(d,{kids:parts, duration:spd(520), kidDelay:spd(110), delay:0, wait:()=>d._wipe&&d._wipe.done,
+        // the separator sets off once most of the card has folded and lands just after it; the fold waits for it before it finishes
+        before:P=>{ d.classList.add("shut"); const back=d.getBoundingClientRect().top<headerH()-1; if(back) scrollToCard(d); const T=(P&&P.T)||WIPE; if(!reducedM()) wipe(d,false,Math.max(0,T-WIPE*.45)); clearTimeout(d._sdt);
           d._sdt=setTimeout(()=>{ const other=[...root.querySelectorAll("details.drug[open]")].some(o=>o!==d); if(!other&&(!d.open||d._closing)) dropStrip(d); },Math.max(back?spd(540):0,T-spd(500))); },
         end:()=>{ d.dataset.auto="1"; if(d._wipe) d._wipe.end(); },
-        done:()=>{ if(d._wipe) d._wipe.end(); d.classList.remove("shut","jut"); } }); }
+        done:()=>{ if(d._wipe) d._wipe.end(); d.classList.remove("shut","jut"); const f=d.querySelector(".dg-facts"); if(f&&!reducedM()) f.animate([{opacity:0},{opacity:1}],{duration:spd(300),easing:"cubic-bezier(.4,0,.2,1)"}); } }); }
     // the page strip comes back down over the last half second, and the page glides down with it on the same curve, so the card's header
     // never slips under the strip and never jumps
     const STRIPE=window.bez?bez(.7,0,.2,1):null;
@@ -3989,7 +4057,7 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
         else if(b.dataset.study){ const id=b.dataset.study; if(study.has(id)) study.delete(id); else study.add(id); saveStudy(); const on=study.has(id); b.setAttribute("aria-pressed",on?"true":"false"); $("drug-"+id).classList.toggle("instudy",on); setStudyBtn(); feedback(true); } }));
       let seenD=store.get("mm-seenDrugs",{});
       root.querySelectorAll("details.drug").forEach(d=>d.addEventListener("toggle",()=>{
-        if(!d.open){ if(!d._fa) d.classList.remove("jut"); if(d._hl) d._hl(); if(window.revealSweep) setTimeout(revealSweep,160); if(!root.querySelector("details.drug[open]")) drugOpen(false); if(d.dataset.auto){ delete d.dataset.auto; return; } if(d.dataset.fold) return; requestAnimationFrame(()=>scrollToCard(d)); return; }
+        if(!d.open){ if(!d._fa) d.classList.remove("jut"); if(d._hl) d._hl(); if(!root.querySelector("details.drug[open]")) resetLayers(); if(window.revealSweep) setTimeout(revealSweep,160); if(!root.querySelector("details.drug[open]")) drugOpen(false); if(d.dataset.auto){ delete d.dataset.auto; return; } if(d.dataset.fold) return; requestAnimationFrame(()=>scrollToCard(d)); return; }
         const id=d.id.replace("drug-",""); if(!seenD[id]){ seenD[id]=Date.now(); store.set("mm-seenDrugs",seenD); document.dispatchEvent(new CustomEvent("drugseen")); }
         if(d.dataset.fold) return;
         // opened some other way than the fold
@@ -6152,7 +6220,7 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
     const multOf=s=>MULT[Math.min(s,MULT.length-1)];
     // each explanation gives you a long, unhurried while: the speed bonus drains over WIN, a third of the wrong tiles clear at T1 and
     // another third at T2, and the answer glows at T3
-    const WIN=30000, T1=20000, T2=27000, T3=35000;
+    const WIN=120000, T1=80000, T2=100000, T3=120000;
     function start(id,len){ stopGame(); const rush=len==="rush"; const pool=poolFor(id,rush?"all":len); if(!pool.length) return; setMode("play"); ov.dataset.run=rush?"rush":"clear";
       view.innerHTML=`<div class="tbplay"><div class="tbclue" id="tb-clue" aria-live="polite"><span class="eyebrow" id="tb-ctop"></span><p id="tb-ctext"></p><div class="tbnote" id="tb-note"></div><span class="tbtime"><i id="tb-time"></i></span></div><div class="tbboard" id="tb-board"><div class="tbgrid" id="tb-grid"></div><canvas class="tbfx" id="tb-fx" aria-hidden="true"></canvas></div></div>`;
       const board=view.querySelector("#tb-board"), grid=view.querySelector("#tb-grid");
@@ -6162,9 +6230,10 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
       for(let r=G.R-1;r>=0;r--) for(let c=0;c<G.C;c++){ const it=draw(); if(!it) break; const tl=mk(it,c); G.cols[c].push(tl); place(tl,true,(G.R-1-r)*spd(70)+c*spd(34)); }
       fitAll(); left(); setScore(0,true); combo(0,true);
       setTimeout(()=>{ if(G&&!G.ended) nextClue(); },spd(520)); }
-    function layout(){ const g=G, bw=g.board.clientWidth||340, bh=g.board.clientHeight||420; g.C=bw>=520?5:4; g.gap=bw<360?5:6;
-      // as many rows as the screen holds at a comfortable tile height, four to six
-      g.R=Math.max(4,Math.min(6,Math.floor((bh+g.gap)/(78+g.gap)))); g.tw=(bw-g.gap*(g.C-1))/g.C; g.th=Math.max(50,Math.min(92,(bh-g.gap*(g.R-1))/g.R)); g.gh=g.R*g.th+(g.R-1)*g.gap; g.grid.style.height=g.gh+"px"; g.fx.size(); }
+    function layout(){ const g=G, bw=g.board.clientWidth||340, bh=g.board.clientHeight||420; // three wide on a phone, so a long term sits on one line at a readable size; more columns on a wider screen
+      g.C=bw>=700?5:bw>=500?4:3; g.gap=bw<360?5:6;
+      // as many rows as the screen holds at a comfortable tile height, four to seven
+      g.R=Math.max(4,Math.min(7,Math.floor((bh+g.gap)/(74+g.gap)))); g.tw=(bw-g.gap*(g.C-1))/g.C; g.th=Math.max(50,Math.min(92,(bh-g.gap*(g.R-1))/g.R)); g.gh=g.R*g.th+(g.R-1)*g.gap; g.grid.style.height=g.gh+"px"; g.fx.size(); }
     const xy=(c,i)=>[c*(G.tw+G.gap),G.gh-(i+1)*G.th-i*G.gap];
     // the next term from the pool that sits well with the board, so no two tiles could both answer one explanation
     function draw(){ const on=G.cols.flat().map(t=>t.it); for(let j=0;j<Math.min(G.pool.length,30);j++){ const it=G.pool[j]; if(!on.some(o=>clash(o,it))){ G.pool.splice(j,1); return it; } } return G.pool.shift()||null; }
@@ -6185,10 +6254,12 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
     // only a word too wide for its tile gets its break points, so short words never split just to fill a line
     let mc=null; const meas=()=>mc||(mc=document.createElement("canvas").getContext("2d"));
     function fit(tl){ const w=tl.el.querySelector(".tbw"), words=tl.it.t.split(" ");
-      for(const s of ["","s1","s2","s3"]){ w.className="tbw"+(s?" "+s:""); const cs=getComputedStyle(w); const M=meas(); M.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; const room=w.clientWidth-1;
-        w.innerHTML=words.map(x=>M.measureText(x).width>room?soft(x):esc(x)).join(" ");
-        if(w.scrollWidth<=w.clientWidth+1&&w.scrollHeight<=tl.el.clientHeight-10) return; }
-      w.classList.add("brk"); }
+      // a word stays whole: the type steps down until every word fits on its line, and only a word too long even at the smallest size
+      // is broken at its word parts
+      w.innerHTML=words.map(esc).join(" ");
+      for(const s of ["","s1","s2","s3","s4"]){ w.className="tbw"+(s?" "+s:""); if(w.scrollWidth<=w.clientWidth+1&&w.scrollHeight<=tl.el.clientHeight-8) return; }
+      const cs=getComputedStyle(w), M=meas(); M.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; const room=w.clientWidth-1;
+      w.innerHTML=words.map(x=>M.measureText(x).width>room?soft(x):esc(x)).join(" "); w.classList.add("brk"); }
     const fitAll=()=>G.cols.flat().forEach(fit);
     const left=()=>{ if(G.rush){ clock(); return; } const n=G.pool.length+G.cols.flat().length; leftEl.textContent=n+" left"; };
     // the rush clock starts with the first explanation and stops while the app is in the background
@@ -6276,8 +6347,21 @@ html.resuming .nav,html.resuming .calcfab{opacity:0;transition:none!important}
         stop(soft){ if(soft&&P.length) return; P=[]; if(raf) cancelAnimationFrame(raf); raf=0; try{ c.clearRect(0,0,cv.width,cv.height); }catch(e){} } }; }
 
     // ----- open and close -----
-    function open(){ ensure(); ov.hidden=false; document.body.classList.add("lessonopen"); setup(); if(!RM()) ov.animate([{opacity:0},{opacity:1}],{duration:spd(260),easing:OUT}); }
-    function close(){ if(!ov) return; if(G&&!G.ended&&G.matched){ finish(false); return; } stopGame(); ov.hidden=true; document.body.classList.remove("lessonopen"); try{ window.renderGames&&renderGames(); }catch(e){} }
+    // the board comes and goes the way a page does: the page you are on blurs and fades away, then the board resolves in out of a soft
+    // blur; leaving runs it the other way
+    const page=()=>[document.querySelector("main"),document.querySelector("header.top")].filter(Boolean);
+    const outK=el=>el.tagName==="MAIN"?[{opacity:1,filter:"blur(0px)"},{opacity:0,filter:"blur(9px)"}]:[{opacity:1},{opacity:0}];
+    let moving=false;
+    function open(){ ensure(); if(!ov.hidden||moving) return; setup();
+      if(RM()){ ov.hidden=false; document.body.classList.add("lessonopen"); return; } moving=true;
+      const A=page().map(el=>el.animate(outK(el),{duration:spd(200),easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}));
+      Promise.all(A.map(a=>a.finished)).then(()=>{ ov.hidden=false; document.body.classList.add("lessonopen"); A.forEach(a=>a.cancel()); moving=false;
+        ov.animate([{opacity:0,filter:"blur(10px)",transform:"scale(.985)"},{opacity:1,filter:"blur(0px)",transform:"none"}],{duration:spd(480),easing:EQ}); },()=>{ moving=false; }); }
+    function close(){ if(!ov||ov.hidden||moving) return; if(G&&!G.ended&&G.matched){ finish(false); return; } stopGame();
+      const done=()=>{ ov.hidden=true; document.body.classList.remove("lessonopen"); try{ window.renderGames&&renderGames(); }catch(e){} };
+      if(RM()){ done(); return; } moving=true;
+      ov.animate([{opacity:1,filter:"blur(0px)"},{opacity:0,filter:"blur(9px)"}],{duration:spd(200),easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}).finished.then(a=>{ done(); moving=false; try{ ov.getAnimations().forEach(x=>x.cancel()); }catch(e){}
+        page().forEach(el=>el.animate(el.tagName==="MAIN"?[{opacity:0,filter:"blur(10px)",transform:"scale(.985)"},{opacity:1,filter:"blur(0px)",transform:"none"}]:[{opacity:0},{opacity:1}],{duration:spd(480),easing:EQ})); },()=>{ done(); moving=false; }); }
     document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&ov&&!ov.hidden) ov.querySelector("#tb-done").click(); });
     // the system back button does what Done does: a run goes to its results, the topics and the results close
     window.tbBack=()=>{ if(!ov||ov.hidden) return false; ov.querySelector("#tb-done").click(); return true; };
@@ -8148,10 +8232,10 @@ const DATA='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwAAAAMACAIAAAAc45fZAA
 const load=url=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=url});
 let cached=null; const assets=()=>cached||(cached=Promise.all([load(DATA),load(MASK)]));
 const vertex=`attribute vec2 position;varying vec2 uv;void main(){uv=(position+1.0)*.5;gl_Position=vec4(position,0.,1.);}`;
-const fragment=`precision highp float;varying vec2 uv;uniform sampler2D dataMap;uniform sampler2D maskMap;uniform float time;uniform vec2 sa;uniform vec2 av;
+const fragment=`precision highp float;varying vec2 uv;uniform sampler2D dataMap;uniform sampler2D maskMap;uniform float time;uniform float tArt;uniform float tCur;uniform vec4 drp;uniform vec2 sa;uniform vec2 av;
 float e(float x){x=clamp(x,0.,1.);return x*x*(3.-2.*x);}
-void main(){vec3 d=texture2D(dataMap,uv).rgb;vec3 m=texture2D(maskMap,uv).rgb;vec2 p=vec2(uv.x,1.-uv.y)*768.;float age=time-d.g*3.;float ca=time-m.r*3.;float art=d.r*e(age/.045);float current=d.b*e(ca/.035);if(time>=.43&&time<2.62&&d.b>.01)current+=exp(-pow(ca/.024,2.))*min(1.,d.b*2.+.45);float value=max(art,current);
-float drop=clamp(time/.43,0.,1.);float progress=e(drop);vec2 center=vec2(sa.x+8.*sin(drop*3.14159265)*(1.-drop),-24.+(sa.y+24.)*progress);float rx=2.9;float ry=3.+6.8*sin(drop*3.14159265);vec2 diff=p-center;float norm=length(diff/vec2(rx,ry));float core=clamp((1.-norm)*2.5,0.,1.);float glow=exp(-dot(diff,diff)/(2.*8.5*8.5))*.23;float node=max(core,glow);if(time>=.43)node*=m.g*(.8+.2*exp(-pow((time-.43)/.13,2.)));value=max(value,node);if(time>.92){vec2 diffav=p-av;float a=exp(-dot(diffav,diffav)/(2.*2.2*2.2))*.35*e((time-.92)/.12)*m.g;value=max(value,a);}gl_FragColor=vec4(vec3(clamp(value,0.,1.)),1.);}`;
+void main(){vec3 d=texture2D(dataMap,uv).rgb;vec3 m=texture2D(maskMap,uv).rgb;vec2 p=vec2(uv.x,1.-uv.y)*768.;float age=tArt-d.g*3.;float ca=tCur-m.r*3.;float art=d.r*e(age/.045);float current=d.b*e(ca/.035);if(tCur>=.43&&tCur<2.62&&d.b>.01)current+=exp(-pow(ca/.024,2.))*min(1.,d.b*2.+.45);float value=max(art,current);
+vec2 center=drp.xy;float rx=drp.z;float ry=drp.w;vec2 diff=p-center;if(diff.y<0.)diff.y*=1.+.55*clamp((ry-rx)/rx,0.,2.);float norm=length(diff/vec2(rx,ry));float core=clamp((1.-norm)*2.5,0.,1.);float glow=exp(-dot(diff,diff)/(2.*8.5*8.5))*.23;float node=max(core,glow);if(time>=.43)node*=m.g*(.8+.2*exp(-pow((time-.43)/.13,2.)));value=max(value,node);if(time>.92){vec2 diffav=p-av;float a=exp(-dot(diffav,diffav)/(2.*2.2*2.2))*.35*e((time-.92)/.12)*m.g;value=max(value,a);}gl_FragColor=vec4(vec3(clamp(value,0.,1.)),1.);}`;
 const tipVertex=`attribute vec2 point;uniform float scale;void main(){gl_Position=vec4(point.x/384.-1.,1.-point.y/384.,0.,1.);gl_PointSize=8.*scale;}`;
 const tipFragment=`precision mediump float;void main(){vec2 p=(gl_PointCoord-.5)*8.;float d=dot(p,p);float value=max(exp(-d/(2.*.7*.7)),.2*exp(-d/(2.*2.2*2.2)));gl_FragColor=vec4(vec3(value),1.);}`;
 function tips(t){const points=[];for(const path of TRACES){if(t<path[0][0]||t>path[path.length-1][0])continue;let lo=1,hi=path.length-1;while(lo<hi){const k=(lo+hi)>>1;if(path[k][0]<t)lo=k+1;else hi=k;}const a=path[lo-1],b=path[lo],u=(t-a[0])/Math.max(.000001,b[0]-a[0]);points.push(a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u);}return new Float32Array(points);}
@@ -8162,23 +8246,35 @@ function setupGL(canvas,images){
  const artProgram=program(vertex,fragment),pointProgram=program(tipVertex,tipFragment);const quad=gl.createBuffer(),points=gl.createBuffer();
  gl.bindBuffer(gl.ARRAY_BUFFER,quad);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
  const textures=images.map(image=>{const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image);return tex;});
- return {draw(t){gl.viewport(0,0,canvas.width,canvas.height);gl.disable(gl.BLEND);gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(artProgram);gl.bindBuffer(gl.ARRAY_BUFFER,quad);const position=gl.getAttribLocation(artProgram,'position');gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);textures.forEach((tex,i)=>{gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,tex)});gl.uniform1i(gl.getUniformLocation(artProgram,'dataMap'),0);gl.uniform1i(gl.getUniformLocation(artProgram,'maskMap'),1);gl.uniform1f(gl.getUniformLocation(artProgram,'time'),t);gl.uniform2f(gl.getUniformLocation(artProgram,'sa'),SA[0],SA[1]);gl.uniform2f(gl.getUniformLocation(artProgram,'av'),AV[0],AV[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
- const p=tips(t);if(p.length){gl.useProgram(pointProgram);gl.bindBuffer(gl.ARRAY_BUFFER,points);gl.bufferData(gl.ARRAY_BUFFER,p,gl.DYNAMIC_DRAW);const point=gl.getAttribLocation(pointProgram,'point');gl.enableVertexAttribArray(point);gl.vertexAttribPointer(point,2,gl.FLOAT,false,0,0);gl.uniform1f(gl.getUniformLocation(pointProgram,'scale'),canvas.width/SIZE);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.drawArrays(gl.POINTS,0,p.length/2);gl.disable(gl.BLEND);}},destroy(){textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(quad);gl.deleteBuffer(points);gl.deleteProgram(artProgram);gl.deleteProgram(pointProgram);shaders.forEach(s=>gl.deleteShader(s));}};
+ return {draw(t){gl.viewport(0,0,canvas.width,canvas.height);gl.disable(gl.BLEND);gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(artProgram);gl.bindBuffer(gl.ARRAY_BUFFER,quad);const position=gl.getAttribLocation(artProgram,'position');gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);textures.forEach((tex,i)=>{gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,tex)});gl.uniform1i(gl.getUniformLocation(artProgram,'dataMap'),0);gl.uniform1i(gl.getUniformLocation(artProgram,'maskMap'),1);const T=times(t),D=dropAt(t);gl.uniform1f(gl.getUniformLocation(artProgram,'time'),t);gl.uniform1f(gl.getUniformLocation(artProgram,'tArt'),T[0]);gl.uniform1f(gl.getUniformLocation(artProgram,'tCur'),T[1]);gl.uniform4f(gl.getUniformLocation(artProgram,'drp'),D[0],D[1],D[2],D[3]);gl.uniform2f(gl.getUniformLocation(artProgram,'sa'),SA[0],SA[1]);gl.uniform2f(gl.getUniformLocation(artProgram,'av'),AV[0],AV[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+ const p=tips(T[1]);if(p.length){gl.useProgram(pointProgram);gl.bindBuffer(gl.ARRAY_BUFFER,points);gl.bufferData(gl.ARRAY_BUFFER,p,gl.DYNAMIC_DRAW);const point=gl.getAttribLocation(pointProgram,'point');gl.enableVertexAttribArray(point);gl.vertexAttribPointer(point,2,gl.FLOAT,false,0,0);gl.uniform1f(gl.getUniformLocation(pointProgram,'scale'),canvas.width/SIZE);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.drawArrays(gl.POINTS,0,p.length/2);gl.disable(gl.BLEND);}},destroy(){textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(quad);gl.deleteBuffer(points);gl.deleteProgram(artProgram);gl.deleteProgram(pointProgram);shaders.forEach(s=>gl.deleteShader(s));}};
 }
 function setup2D(canvas,images){
  const ctx=canvas.getContext('2d',{alpha:false}),scratch=document.createElement('canvas');scratch.width=scratch.height=SIZE;const sc=scratch.getContext('2d',{willReadFrequently:true});const maps=images.map(image=>{sc.clearRect(0,0,SIZE,SIZE);sc.drawImage(image,0,0);return sc.getImageData(0,0,SIZE,SIZE).data});const out=sc.createImageData(SIZE,SIZE),a=maps[0],m=maps[1];
  const ease=v=>{v=Math.max(0,Math.min(1,v));return v*v*(3-2*v)};
- return {draw(t){const drop=Math.max(0,Math.min(1,t/.43)),progress=ease(drop),dx=SA[0]+8*Math.sin(drop*Math.PI)*(1-drop),dy=-24+(SA[1]+24)*progress,ry=3+6.8*Math.sin(drop*Math.PI);
- for(let i=0;i<SIZE*SIZE;i++){const k=i*4,x=i%SIZE,y=Math.floor(i/SIZE),age=t-a[k+1]/255*3,ca=t-m[k]/255*3,c=a[k+2]/255;let v=Math.max(a[k]/255*ease(age/.045),c*ease(ca/.035)+(t>=.43&&t<2.62&&c>.01?Math.exp(-Math.pow(ca/.024,2))*Math.min(1,c*2+.45):0));const px=x-dx,py=y-dy,core=Math.max(0,Math.min(1,(1-Math.hypot(px/2.9,py/ry))*2.5)),glow=Math.exp(-(px*px+py*py)/(2*8.5**2))*.23;let node=Math.max(core,glow);if(t>=.43)node*=m[k+1]/255*(.8+.2*Math.exp(-Math.pow((t-.43)/.13,2)));v=Math.max(v,node);if(t>.92)v=Math.max(v,Math.exp(-((x-AV[0])**2+(y-AV[1])**2)/(2*2.2**2))*.35*ease((t-.92)/.12)*m[k+1]/255);out.data[k]=out.data[k+1]=out.data[k+2]=Math.min(255,v*255);out.data[k+3]=255;}
- sc.putImageData(out,0,0);const p=tips(t);for(let i=0;i<p.length;i+=2){const x=p[i],y=p[i+1],g=sc.createRadialGradient(x,y,0,x,y,4);g.addColorStop(0,'#fff');g.addColorStop(.2,'rgba(255,255,255,.7)');g.addColorStop(1,'rgba(255,255,255,0)');sc.fillStyle=g;sc.fillRect(x-4,y-4,8,8);}ctx.drawImage(scratch,0,0,canvas.width,canvas.height);},destroy(){}};
+ return {draw(t){const T=times(t),D=dropAt(t),dx=D[0],dy=D[1],rx=D[2],ry=D[3];
+ for(let i=0;i<SIZE*SIZE;i++){const k=i*4,x=i%SIZE,y=Math.floor(i/SIZE),age=T[0]-a[k+1]/255*3,ca=T[1]-m[k]/255*3,c=a[k+2]/255;let v=Math.max(a[k]/255*ease(age/.045),c*ease(ca/.035)+(T[1]>=.43&&T[1]<2.62&&c>.01?Math.exp(-Math.pow(ca/.024,2))*Math.min(1,c*2+.45):0));const px=x-dx,py0=y-dy,py=py0<0?py0*(1+.55*Math.max(0,Math.min(2,(ry-rx)/rx))):py0,core=Math.max(0,Math.min(1,(1-Math.hypot(px/rx,py/ry))*2.5)),glow=Math.exp(-(px*px+py*py)/(2*8.5**2))*.23;let node=Math.max(core,glow);if(t>=.43)node*=m[k+1]/255*(.8+.2*Math.exp(-Math.pow((t-.43)/.13,2)));v=Math.max(v,node);if(t>.92)v=Math.max(v,Math.exp(-((x-AV[0])**2+(y-AV[1])**2)/(2*2.2**2))*.35*ease((t-.92)/.12)*m[k+1]/255);out.data[k]=out.data[k+1]=out.data[k+2]=Math.min(255,v*255);out.data[k+3]=255;}
+ sc.putImageData(out,0,0);const p=tips(T[1]);for(let i=0;i<p.length;i+=2){const x=p[i],y=p[i+1],g=sc.createRadialGradient(x,y,0,x,y,4);g.addColorStop(0,'#fff');g.addColorStop(.2,'rgba(255,255,255,.7)');g.addColorStop(1,'rgba(255,255,255,0)');sc.fillStyle=g;sc.fillRect(x-4,y-4,8,8);}ctx.drawImage(scratch,0,0,canvas.width,canvas.height);},destroy(){}};
 }
 // the spark lands on the SA node on its own clock; from there the wave of current runs on the house easing: it gathers slowly, rushes through
 // the heart like a discharge, and settles softly into the last of the drawing
 // the whole run takes DUR seconds of real time: the drop takes DROP of them, the rest carries the wave on a cubic in-out: still a slow
 // gather and a quick run, but its peak is gentler than the quintic it replaced, so the fuse can be followed as it burns through
-const DUR=4,DROP=.5;
+// v75: the drop gathers like a leak at a tap: it beads, swells and sags slowly, lets go, and then falls the way water does, gaining speed
+// all the way down and stretching as it goes. Where it lands, the drawing's own lines (the outline and the vessels) trace out first, and
+// the Purkinje fibres follow as a separate pass with their bright fronts, so the heart is drawn in two distinct waves.
+const DUR=4.7,DROP=1.2,FORM=.62;
 const eQ=x=>{x=Math.max(0,Math.min(1,x));return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;};
-const warp=t=>t<=DROP?.43*t/DROP:.43+(3-.43)*eQ((t-DROP)/(DUR-DROP));
+// after the landing the wave moves off at once (a share of straight-line speed under the in-out), instead of gathering from a standstill
+const warp=t=>{if(t<=DROP)return .43*t/DROP;const x=Math.max(0,Math.min(1,(t-DROP)/(DUR-DROP)));return .43+(3-.43)*(.35*x+.65*eQ(x));};
+// shader time to the two clocks: the drawing runs out ahead and is done early; the current waits, then runs to the end
+const ART=1.8,CUR_AT=.85;
+function times(w){if(w<=.43)return[w,w];const a=Math.min(3,.43+(w-.43)*ART),c=.43+Math.max(0,w-.43-CUR_AT)*((3-.43)/(3-.43-CUR_AT));return[a,Math.min(3,c)];}
+// the drop at shader time w (0 to .43): where it is and its two radii. It forms just inside the top edge above the node, sags, then falls
+// with constant acceleration from rest, so its speed keeps building until it lands
+function dropAt(w){const u=Math.max(0,Math.min(1,w/.43)),y0=14,sag=12,x=SA[0];
+ if(u<FORM){const f=u/FORM,s=f*f*(3-2*f),swell=Math.sin(Math.min(1,f*1.15)*Math.PI/2);return[x,y0+sag*s*s,.8+2.4*swell,.8+2.6*swell+2.2*s*s];}
+ const v=(u-FORM)/(1-FORM),yA=y0+sag,y=yA+(SA[1]-yA)*v*v,sp=v;return[x,u>=1?SA[1]:y,2.9-.5*sp,3.6+7.5*sp*(1-.35*v)];}
 function play(canvas,options={}){
  const start=performance.now(),media=window.matchMedia('(prefers-reduced-motion: reduce)');let renderer=null,dead=false,finished=false,frame=0,timer=0,time=0;
  function render(t){if(renderer)renderer.draw(media.matches?3:warp(t));}
@@ -8232,7 +8328,7 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
     const la=motto.querySelector(".sm-la"), en=motto.querySelector(".sm-en");
     const split=node=>{ if(!node) return []; const t=node.textContent; node.textContent=""; return [...t].map(ch=>{ const c=document.createElement("span"); c.className="ch"; c.textContent=ch; node.appendChild(c); return c; }); };
     const melt=()=>{ if(!la||!en) return;
-      const A=split(la), B=split(en), wave=.36, rnd=.09; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.28+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
+      const A=split(la), B=split(en), wave=.55, rnd=.12; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.55+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
       en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("melting"); };
 
     // ----- one layout for every version: the heart in a square near the middle, the name over its lower right third, the motto under the heart -----
@@ -8253,8 +8349,9 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
 
     // ----- the shared ending: the heart and the name clear, the motto melts into English in place, holds, then the app shows through -----
     // ----- the heart and the name dissolve like ink let go in water: the picture breaks up into very fine motes, patch by patch rather than
-    // in a line, and each mote drifts and swirls a little as it thins out and is gone. Every mote is one pixel of the finished picture,
-    // so the picture is whole the moment before it starts to come apart. -----
+    // in a line. Each mote is thrown loose, then carried by a slow turbulent current (eddies that turn and drift as they go), dragged back
+    // by the water round it, and thins out as it goes. Every mote is one pixel of the finished picture, so the picture is whole the
+    // moment before it starts to come apart. -----
     const mist=()=>{ if(!L) return false; const r0=sp.getBoundingClientRect(), X=[], Y=[], A=[];
       const src=imgs&&imgs[0]; if(hc&&src){ const n=Math.max(256,Math.min(512,Math.round(L.S))), c=document.createElement("canvas"); c.width=c.height=n; const g=c.getContext("2d",{willReadFrequently:true}); g.drawImage(src,0,0,n,n); const d=g.getImageData(0,0,n,n).data, k=L.S/n;
         for(let y=0;y<n;y++) for(let x=0;x<n;x++){ const i=(y*n+x)*4, v=Math.max(d[i],d[i+2])/255; if(v>.12){ X.push(L.left+(x+.5)*k); Y.push(L.top+(y+.5)*k); A.push(Math.min(1,v*1.2)); } } }
@@ -8268,18 +8365,27 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
       // a smooth patchy field decides when each spot lets go, so the picture comes apart in drifting blotches
       const hash=(i,j)=>{ const t=Math.sin(i*127.1+j*311.7)*43758.5453; return t-Math.floor(t); };
       const vn=(x,y)=>{ const i=Math.floor(x), j=Math.floor(y), fx=x-i, fy=y-j, u=fx*fx*(3-2*fx), v=fy*fy*(3-2*fy); return (hash(i,j)*(1-u)+hash(i+1,j)*u)*(1-v)+(hash(i,j+1)*(1-u)+hash(i+1,j+1)*u)*v; };
-      const keep=Math.min(1,20000/N0), Z0=Math.min(1.6,1/Math.sqrt(keep)), P=[];
+      const keep=Math.min(1,20000/N0), Z0=Math.min(1.6,1/Math.sqrt(keep)), P=[]; let cx=0, cy=0; for(let i=0;i<N0;i++){ cx+=X[i]; cy+=Y[i]; } cx/=N0; cy/=N0;
       for(let i=0;i<N0;i++){ if(keep<1&&Math.random()>keep) continue; const f=.6*vn(X[i]/70,Y[i]/70)+.4*vn(X[i]/23+9,Y[i]/23+4);
-        P.push({x:X[i],y:Y[i],a:A[i],t:.04+1.05*f+Math.random()*.1,life:.55+.6*Math.random(),vx:(Math.random()-.5)*26,vy:(Math.random()-.5)*26-6,ph:Math.random()*6.283,w:.6+Math.random()*.9}); }
+        const ang=Math.random()*6.283, sp0=18+Math.random()*58, ox=X[i]-cx, oy=Y[i]-cy, od=Math.hypot(ox,oy)||1;
+        P.push({x:X[i],y:Y[i],a:A[i],t:.04+1.3*f+Math.random()*.14,life:.95+.8*Math.random(),vx:Math.cos(ang)*sp0+ox/od*22,vy:Math.sin(ang)*sp0+oy/od*14-12,ph:Math.random()*6.283,w:.6+Math.random()*1.1,on:false}); }
       const els=[hc,title,cut].filter(Boolean); els.forEach(el=>{ el.style.transition="opacity .5s cubic-bezier(.4,0,.6,1)"; el.style.opacity="0"; });
-      const ink="#EFE8DC", B=12, bx=Array.from({length:B},()=>[]); const t0=performance.now(); let alive=true;
-      const frame=now=>{ if(!alive) return; const t=(now-t0)/1000; clearLn(); for(let b=0;b<B;b++) bx[b].length=0; let live=0;
-        for(const q of P){ const a=t-q.t; let x=q.x, y=q.y, al=q.a, z=Z0;
-          if(a>0){ if(a>=q.life) continue; const p=a/q.life, dr=1-Math.exp(-a*2.2);
-            // a slow drift that dies away, a gentle swirl, and the faint lift of something lighter than the water round it
-            x+=q.vx*dr/2.2+Math.sin(q.ph+a*2.4+q.y*.03)*7*p; y+=q.vy*dr/2.2+Math.cos(q.ph*1.7+a*2.1+q.x*.03)*6*p-5*a*a;
-            al=q.a*(1-p)*(1-p)*(.75+.25*Math.sin(q.ph+a*24)); z=(Z0+(q.w-Z0)*Math.min(1,a*5))*(1-.55*p); }
-          live++; if(al<.02) continue; const b=Math.min(B-1,Math.floor(al*B)); bx[b].push(x,y,z); }
+      const ink="#EFE8DC", B=12, bx=Array.from({length:B},()=>[]); const t0=performance.now(); let alive=true, last=t0;
+      // the current: a coarse grid of eddies worked out once a frame, each mote reading the flow where it is
+      const W=sp.clientWidth||400, H=sp.clientHeight||800, GX=18, GY=30, gw=W/(GX-1), gh=H/(GY-1), FX=new Float32Array(GX*GY), FY=new Float32Array(GX*GY);
+      const flow=T=>{ for(let j=0;j<GY;j++) for(let i=0;i<GX;i++){ const x=i*gw, y=j*gh, k=j*GX+i;
+          FX[k]=Math.sin(y*.021+T*1.3)+.6*Math.sin(y*.047-T*1.9+x*.013)+.35*Math.sin((x+y)*.031+T*2.6);
+          FY[k]=Math.cos(x*.019-T*1.1)+.6*Math.cos(x*.043+T*1.7-y*.011)+.35*Math.cos((x-y)*.029-T*2.3); } };
+      const at=(x,y,F)=>{ const fx=Math.max(0,Math.min(GX-1.001,x/gw)), fy=Math.max(0,Math.min(GY-1.001,y/gh)), i=fx|0, j=fy|0, u=fx-i, v=fy-j, k=j*GX+i;
+        return (F[k]*(1-u)+F[k+1]*u)*(1-v)+(F[k+GX]*(1-u)+F[k+GX+1]*u)*v; };
+      const frame=now=>{ if(!alive) return; const t=(now-t0)/1000, dt=Math.min(.05,Math.max(0,(now-last)/1000)); last=now; flow(t); clearLn(); for(let b=0;b<B;b++) bx[b].length=0; let live=0;
+        const drag=Math.exp(-dt*1.5);
+        for(const q of P){ const a=t-q.t; let al=q.a, z=Z0;
+          if(a>0){ if(a>=q.life) continue; const p=a/q.life;
+            // thrown loose, then taken by the eddies more and more as it slows, with the faint lift of something lighter than the water
+            const k=Math.min(1,a*1.6)*70; q.vx=q.vx*drag+at(q.x,q.y,FX)*k*dt; q.vy=q.vy*drag+(at(q.x,q.y,FY)*k-16)*dt; q.x+=q.vx*dt; q.y+=q.vy*dt;
+            al=q.a*Math.pow(1-p,1.6)*(.72+.28*Math.sin(q.ph+a*22)); z=(Z0+(q.w-Z0)*Math.min(1,a*5))*(1-.6*p); }
+          live++; if(al<.02) continue; const b=Math.min(B-1,Math.floor(al*B)); bx[b].push(q.x,q.y,z); }
         lg.fillStyle=ink; for(let b=0;b<B;b++){ const L2=bx[b]; if(!L2.length) continue; lg.globalAlpha=(b+.5)/B; for(let k=0;k<L2.length;k+=3){ const z=L2[k+2]; lg.fillRect(L2[k]-z/2,L2[k+1]-z/2,z,z); } } lg.globalAlpha=1;
         if(live) requestAnimationFrame(frame); else { alive=false; clearLn(); } };
       requestAnimationFrame(frame); return true; };
@@ -8287,11 +8393,11 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
       try{ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); }catch(e){}
       let gone2=false; try{ gone2=mist(); }catch(e){ gone2=false; }
       if(!gone2){ if(hc) fade(hc,700,0); if(cut) fade(cut,700,0); }
-      // the name only settles back a touch as it goes
-      Object.assign(title.style,{transition:(gone2?"opacity .5s cubic-bezier(.4,0,.6,1), ":"opacity .7s ease, ")+"transform 1.2s cubic-bezier(.3,.7,.2,1)",transform:"translateY(calc(-50% - 3px)) scale(.985)"}); if(!gone2) title.style.opacity="0";
+      // the name stays exactly where it is and only dissolves
+      Object.assign(title.style,{transition:gone2?"opacity .5s cubic-bezier(.4,0,.6,1)":"opacity .7s ease"}); if(!gone2) title.style.opacity="0";
       // the English line is longer than the Latin and lines up on the same right edge; if it would run off the left of the screen it gives up some letter spacing
       if(en){ const r=en.getBoundingClientRect(), room=r.right-sp.getBoundingClientRect().left-10, n=en.textContent.length, gap=parseFloat(getComputedStyle(en).letterSpacing)||0; if(r.width>room&&n) en.style.letterSpacing=Math.max(0,gap-(r.width-room)/n).toFixed(2)+"px"; }
-      motto.style.opacity="1"; later(melt,950); later(()=>fade(motto,600,0),3300); later(gone,3900); };
+      motto.style.opacity="1"; later(melt,1750); later(()=>fade(motto,700,0),4700); later(gone,5400); };
 
     // ----- the line layer: a full-screen canvas in page pixels -----
     const lg=ln.getContext("2d"); let LDPR=1;
