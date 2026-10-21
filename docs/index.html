@@ -1259,12 +1259,21 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 /* v76: the v72 melt again (each Latin letter stretches down and thins away, each English letter condenses up out of the same spot), made
    smoother: each letter follows one continuous path sampled finely and run at a constant rate, so no step restarts its own easing
    halfway down; the letters overlap a little more as the wave crosses the line */
-.splash-m.melting .sm-la .ch{transform-origin:50% 0;animation:lzDrip4 .95s linear both}
-.splash-m.melting .sm-en .ch{opacity:0;transform-origin:50% 100%;animation:lzRise4 .95s linear both}
+.splash-m.melting .sm-la .ch{transform-origin:50% 0;animation:lzDrip4 .95s linear both,lzBlurOut .95s linear both}
+.splash-m.melting .sm-en .ch{opacity:0;transform-origin:50% 100%;animation:lzRise4 .95s linear both,lzBlurIn .95s linear both}
 @keyframes lzDrip4{0%{transform:translateY(0px) scale(1,1);opacity:1}6.25%{transform:translateY(0.03px) scale(0.999,1.008);opacity:0.995}12.5%{transform:translateY(0.127px) scale(0.998,1.025);opacity:0.981}18.75%{transform:translateY(0.297px) scale(0.995,1.048);opacity:0.958}25%{transform:translateY(0.544px) scale(0.992,1.076);opacity:0.928}31.25%{transform:translateY(0.869px) scale(0.988,1.109);opacity:0.89}37.5%{transform:translateY(1.275px) scale(0.983,1.146);opacity:0.845}43.75%{transform:translateY(1.762px) scale(0.977,1.186);opacity:0.792}50%{transform:translateY(2.333px) scale(0.971,1.231);opacity:0.732}56.25%{transform:translateY(2.987px) scale(0.965,1.279);opacity:0.665}62.5%{transform:translateY(3.727px) scale(0.957,1.33);opacity:0.591}68.75%{transform:translateY(4.553px) scale(0.949,1.384);opacity:0.509}75%{transform:translateY(5.465px) scale(0.94,1.442);opacity:0.421}81.25%{transform:translateY(6.466px) scale(0.931,1.502);opacity:0.326}87.5%{transform:translateY(7.555px) scale(0.921,1.565);opacity:0.224}93.75%{transform:translateY(8.733px) scale(0.911,1.631);opacity:0.115}100%{transform:translateY(10px) scale(0.9,1.7);opacity:0}}
 @keyframes lzRise4{0%{transform:translateY(7px) scale(1.06,1.4);opacity:0}6.25%{transform:translateY(5.919px) scale(1.051,1.338);opacity:0.132}12.5%{transform:translateY(4.947px) scale(1.042,1.283);opacity:0.255}18.75%{transform:translateY(4.08px) scale(1.035,1.233);opacity:0.367}25%{transform:translateY(3.313px) scale(1.028,1.189);opacity:0.469}31.25%{transform:translateY(2.642px) scale(1.023,1.151);opacity:0.561}37.5%{transform:translateY(2.062px) scale(1.018,1.118);opacity:0.644}43.75%{transform:translateY(1.568px) scale(1.013,1.09);opacity:0.718}50%{transform:translateY(1.155px) scale(1.01,1.066);opacity:0.782}56.25%{transform:translateY(0.816px) scale(1.007,1.047);opacity:0.838}62.5%{transform:translateY(0.546px) scale(1.005,1.031);opacity:0.884}68.75%{transform:translateY(0.34px) scale(1.003,1.019);opacity:0.923}75%{transform:translateY(0.19px) scale(1.002,1.011);opacity:0.953}81.25%{transform:translateY(0.09px) scale(1.001,1.005);opacity:0.975}87.5%{transform:translateY(0.031px) scale(1,1.002);opacity:0.99}93.75%{transform:translateY(0.005px) scale(1,1);opacity:0.998}100%{transform:translateY(0px) scale(1,1);opacity:1}}
 /* the motto gets its own black cut-out with a soft edge, wider than the letters, so the heart's lines never run up to them */
 .splash-mcut{position:absolute;background:#000;pointer-events:none;margin:0}
+/* the morph from the Latin to the English: the line runs together like liquid under a blur held to a hard edge, only while it changes.
+   The black halo goes as it starts; the motto sits on its own black field by then, so nothing shows the difference */
+.splash-m.halo.melting{text-shadow:none}
+.splash-m.morph{filter:url(#lz-morph)}
+/* each letter softens as it lets go and sharpens as it lands; under the line's hard edge a soft letter reads as a drop, and where a
+   dripping letter and a rising one meet, their drops join */
+.splash-m.morph .ch{will-change:auto}
+@keyframes lzBlurOut{0%,10%{filter:none}100%{filter:blur(.24em)}}
+@keyframes lzBlurIn{0%{filter:blur(.24em)}90%,100%{filter:none}}
 
 /* ================= calm: one thing in focus, the rest a tap away ================= */
 /* section labels are quiet text instead of red strips */
@@ -2286,6 +2295,22 @@ details.drug[open]>summary .sband{display:none}
 .druglist{position:relative}
 /* the reveal value belongs to the block alone: kept out of inheritance, a change restyles one element instead of everything inside it */
 @property --rv{syntax:"<number>";inherits:false;initial-value:1}
+/* ================= v77 ================= */
+/* the progress that opens under the level sits evenly in the box: the box keeps extra room on the right for its arrow, the progress does not */
+.lvlcard.open .lvmore,.lvlcard.folding .lvmore{margin-right:-20px}
+@media (max-height:760px){ #panel-today .lvlcard.open .lvmore,#panel-today .lvlcard.folding .lvmore{margin-right:-24px} }
+/* the open card's pinned header uses the bars' own glass: the same tint strength, frost, sheen, edge and shadow, in the card's colour */
+details.drug[open]>summary.stuck{background-color:color-mix(in srgb,var(--surface) 86%,transparent);background-image:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0) 64%);
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);box-shadow:inset 0 -1px 0 rgba(255,255,255,.12),0 8px 20px -12px rgba(0,0,0,.55)}
+:root[data-theme="light"] details.drug[open]>summary.stuck{box-shadow:inset 0 -1px 0 rgba(0,0,0,.06),0 8px 20px -12px rgba(70,40,30,.35)}
+/* nothing shows through the top of the bar: it is solid down most of its height and frosts only near its lower edge, where the page slips under */
+header.top::before{background-color:transparent;background-image:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0) 64%),linear-gradient(180deg,var(--teal) 0,var(--teal) 62%,color-mix(in srgb,var(--teal) 86%,transparent) 100%)}
+html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 86%,var(--bg));background-image:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0) 64%)}
+/* the lights glow a little more, with a longer soft falloff, so they shine through the glass */
+:root{--bk-red:color-mix(in srgb,var(--teal) 20%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 28%,transparent)}
+:root[data-theme="dark"]{--bk-red:color-mix(in srgb,var(--teal) 30%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 22%,transparent);--bk-pale:rgba(239,232,220,.1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bk-red:color-mix(in srgb,var(--teal) 30%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 22%,transparent);--bk-pale:rgba(239,232,220,.1)}}
+.bokeh i{background:radial-gradient(circle closest-side,var(--c) 0,var(--c) 30%,color-mix(in srgb,var(--c) 72%,transparent) 54%,color-mix(in srgb,var(--c) 34%,transparent) 76%,color-mix(in srgb,var(--c) 10%,transparent) 91%,transparent 100%)}
 /* ---------- Term Board, match style ---------- */
 /* the first tile you pick takes the same colour a picked chip does and holds it until you tap its partner; gold stays gold */
 .tbt.sel .tbin{border-color:var(--teal);background-color:color-mix(in srgb,color-mix(in srgb,var(--teal) 12%,var(--surface)) var(--glass-a),transparent);
@@ -2528,6 +2553,31 @@ details.drug[open]>summary .sband{display:none}
 .lvuprw{display:grid;gap:2px;padding:8px 10px;border-radius:var(--r-ctl);border:1px solid color-mix(in srgb,var(--amber) 38%,var(--line));background-color:color-mix(in srgb,var(--amber) 8%,transparent);font-size:12.5px;line-height:1.3}
 .lvuprw .eyebrow{font-size:10.5px}
 .lvconf{position:fixed;inset:0;width:100%;height:100%;z-index:86;pointer-events:none}
+/* ---------- v77: every badge the same shape, ??? clear of its aura, and Show badges beside the small badges ---------- */
+.btier .badges{grid-template-columns:repeat(auto-fill,minmax(86px,1fr));grid-auto-rows:150px;gap:6px}
+.btier .badge{display:grid;grid-template-rows:44px auto auto;align-content:start;justify-items:center;gap:0;height:auto;min-height:0;padding:10px 6px 8px;box-sizing:border-box}
+.btier .badge .bi{width:44px;height:44px}
+.btier .badge>b{margin-top:12px;font-size:13.5px;line-height:1.1;max-width:100%;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.btier .badge>span:not(.bi):not(.myth){margin-top:3px;font-size:10.5px;line-height:1.25;max-width:100%;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.btier .badge .bclaim{margin-top:6px}
+/* the aura sits centred on the icon's place, and the name starts below its glow */
+.btier .badge .myth{top:4px;width:56px;height:56px;margin-left:-28px}
+.badge.mys b{letter-spacing:0}
+/* the level line: the level never breaks onto two lines, and Show badges keeps its place beside the small badges */
+.lvtop>.eyebrow{white-space:nowrap;flex:0 0 auto;order:1}
+.lvtop>.lvbadges{order:2}
+.lvshow{order:3;flex:0 0 auto;margin:-7px -4px -7px -2px;padding:7px 4px;border:0;border-radius:6px;background:none;color:var(--amber);font:600 11.5px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 0.112s ease}
+.lvshow:active{opacity:.6}
+.lvshow:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.lvlcard.open .lvtop>.lvbadges{order:4}
+.lvlcard.open .lvshow{margin-left:auto}
+
+/* the badge shelf along the foot of the level box: earned badges from the left, Show badges at the right end */
+.lvshelf{grid-column:1/-1;display:flex;align-items:center;gap:10px;min-width:0;margin:-2px 0 0;padding-top:10px;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+.lvshelf>.lvbadges{margin-left:0;justify-content:flex-start;order:1}
+.lvshelf>.lvshow{order:2;margin-left:auto}
+.lvlcard.open .lvshelf{flex-wrap:wrap;row-gap:6px}
+.lvlcard.open .lvshelf>.lvbadges{order:1}
 </style>
 </head>
 <body>
@@ -2537,7 +2587,7 @@ details.drug[open]>summary .sband{display:none}
   <canvas id="splash-ln" aria-hidden="true"></canvas>
   <div class="splash-t">Lazarus</div>
   <div class="splash-m"><span class="sm-la" lang="la">Per Constantiam, Vincimus.</span><span class="sm-en" aria-hidden="true">Through steadfastness, we prevail</span></div>
-  <svg class="splash-fx" width="0" height="0" aria-hidden="true" focusable="false"><filter id="lz-melt" x="-10%" y="-60%" width="120%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.11" numOctaves="2" seed="7" result="n"><animate id="lz-melt-f" attributeName="baseFrequency" begin="indefinite" dur="1.6s" values="0.015 0.11;0.028 0.18;0.015 0.11" fill="freeze"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"><animate id="lz-melt-s" attributeName="scale" begin="indefinite" dur="1.6s" values="0;5;2.5;0" keyTimes="0;.4;.75;1" fill="freeze"/></feDisplacementMap></filter></svg>
+  <svg class="splash-fx" width="0" height="0" aria-hidden="true" focusable="false"><filter id="lz-melt" x="-10%" y="-60%" width="120%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.11" numOctaves="2" seed="7" result="n"><animate id="lz-melt-f" attributeName="baseFrequency" begin="indefinite" dur="1.6s" values="0.015 0.11;0.028 0.18;0.015 0.11" fill="freeze"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"><animate id="lz-melt-s" attributeName="scale" begin="indefinite" dur="1.6s" values="0;5;2.5;0" keyTimes="0;.4;.75;1" fill="freeze"/></feDisplacementMap></filter><filter id="lz-morph" x="-12%" y="-90%" width="124%" height="280%" color-interpolation-filters="sRGB"><feColorMatrix id="lz-morph-m" in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter></svg>
 </div>
 </div>
 </div>
@@ -3281,10 +3331,11 @@ details.drug[open]>summary .sband{display:none}
     // every block in a batch is measured first and written after, so the page is laid out once however many blocks there are
     const apply=els=>{ if(!els.length||window.__resuming) return; const H=window.innerHeight||800; if(H<160) return; const B=band(); const v=els.map(el=>want(el,H,B)); els.forEach((el,i)=>put(el,v[i])); };
     const judge=el=>apply([el]);
-    // only blocks near the band are measured while scrolling; a block leaving it is judged once on the way out, so a fast fling never
-    // strands one half drawn
+    // only blocks on screen or just below it are measured while scrolling; a block leaving is judged once on the way out, so a fast fling
+    // never strands one half drawn. The watched zone is the whole screen, so a block that lands on screen any way at all (a fold closing
+    // above it, a jump of the page) is seen arriving, and it is followed for a moment in case it is still moving into place
     const near=new Set();
-    const io=new IntersectionObserver(es=>{ const L=[]; es.forEach(e=>{ const el=e.target; if(e.isIntersecting) near.add(el); else near.delete(el); L.push(el); }); apply(L); },{rootMargin:"-60% 0px 35% 0px",threshold:0});
+    const io=new IntersectionObserver(es=>{ const L=[]; es.forEach(e=>{ const el=e.target; if(e.isIntersecting) near.add(el); else near.delete(el); L.push(el); }); apply(L); if(window.revealTrack) revealTrack(spd(400)); },{rootMargin:"0px 0px 35% 0px",threshold:0});
     // a scroll that jumps (a script, a tap on the status bar, the app coming back) can land blocks on screen that never crossed the watched
     // zone, so a jump of more than a third of the screen judges the whole page instead
     let raf=0, until=0, lastY=null; const frame=()=>{ raf=0; const y=window.scrollY, H=window.innerHeight||800; if(lastY!=null&&Math.abs(y-lastY)>H/3&&!window.__resuming) window.revealSweep(); else apply([...near]); lastY=y; if(performance.now()<until) raf=requestAnimationFrame(frame); };
@@ -3425,17 +3476,25 @@ details.drug[open]>summary .sband{display:none}
   // the pill is three pieces, two round ends and a middle, moved only by transform, so the compositor slides it at full frame rate whatever
   // the page change is doing on the main thread, and its corners never stretch
   const pillAt=(x,w)=>[`translateX(${x.toFixed(1)}px)`,`translateX(${(x+9).toFixed(1)}px) scaleX(${(Math.max(0,w-18)/100).toFixed(4)})`,`translateX(${(x+w-20).toFixed(1)}px)`];
-  // ----- the sliders travel like a drop of something thick: the edge on the side it is heading runs out first and the far edge follows
-  // after, so the pill stretches toward where it is going and draws a little thinner as it stretches, then the tail catches up and it
-  // settles into its new place at its own size. Both edges run the house curve; only their timing differs. -----
+  // ----- the sliders move like a drop of something thick: the edge on the side it is heading pulls away first and the far edge is drawn
+  // after it, so the pill stretches toward where it is going and thins; then the tail catches up, runs a hair past, and the pill squashes
+  // and bulges a little before it settles. Each edge is a spring. The whole path is worked out ahead and played as transforms only, so the
+  // compositor draws every frame of it whatever the page is doing. -----
   const HQ=window.bez?bez(.7,0,.2,1):(x=>x);
-  // the left and right edges and the height factor at a moment of the move, t from 0 to 1
-  function stretchAt(L0,R0,L1,R1,t){ const right=(L1+R1)>(L0+R0), lead=HQ(Math.min(1,t/.88)), trail=HQ(Math.max(0,(t-.08)/.92));
-    let L=L0+(L1-L0)*(right?trail:lead), R=R0+(R1-R0)*(right?lead:trail); const base=(R0-L0)+((R1-L1)-(R0-L0))*HQ(t);
-    // a long trip never stretches it past four tenths over its own width: the tail is drawn along to keep it a pill, not a bar
-    const over=(R-L)-base*1.4; if(over>0){ if(right) L+=over; else R-=over; }
-    const k=Math.max(0,(R-L)/Math.max(1,base)-1); return [L,R,Math.max(.86,1-.14*Math.min(1,k/.4))]; }
-  const STEPS=18;
+  // edge springs, as fractions of the trip: the leading edge is the quicker one; the trailing edge starts a beat later and is softer
+  const EDGE={lead:{k:300,z:.7,d:0},trail:{k:165,z:.78,d:.03}};
+  function liquid(L0,R0,L1,R1){ const right=(L1+R1)>(L0+R0), dL=L1-L0, dR=R1-R0, W0=R0-L0, W1=R1-L1;
+    const pL=right?EDGE.trail:EDGE.lead, pR=right?EDGE.lead:EDGE.trail, dt=1/240;
+    const step=(st,p,t)=>{ if(t<p.d) return; const c=2*p.z*Math.sqrt(p.k), a=-p.k*(st.x-1)-c*st.v; st.v+=a*dt; st.x+=st.v*dt; };
+    // an edge never runs more than a few pixels past its mark, however long the trip
+    const soft=(x,d)=>{ const o=(x-1)*Math.abs(d); return o<=0?x:1+6*Math.tanh(o/6)/Math.max(1,Math.abs(d)); };
+    const A={x:0,v:0}, B={x:0,v:0}, out=[]; let t=0, n=0;
+    for(;t<1.2;t+=dt,n++){ step(A,pL,t); step(B,pR,t);
+      if(n%4===0){ const xl=soft(A.x,dL), xr=soft(B.x,dR); let L=L0+dL*xl, R=R0+dR*xr; const base=W0+(W1-W0)*HQ(Math.min(1,(xl+xr)/2));
+        const over=(R-L)-base*1.45; if(over>0){ if(right) L+=over; else R-=over; }
+        const sx=(R-L)/Math.max(1,base); out.push({t,L,R,sy:Math.max(.84,Math.min(1.1,1/Math.sqrt(Math.max(.5,sx))))}); }
+      if(t>.12&&Math.abs(A.x-1)<.004&&Math.abs(B.x-1)<.004&&Math.abs(A.v)<.05&&Math.abs(B.v)<.05) break; }
+    out.push({t,L:L1,R:R1,sy:1}); const T=Math.max(t,.001); out.forEach(f=>f.o=f.t/T); out[0].o=0; return {D:spd(Math.round(T*1000)),F:out}; }
   // the page thumb leaves its place gently, crosses on a sharp curve and settles briefly: the house curve
   const EASE_T="cubic-bezier(.7,0,.2,1)";
   function thumb(anim,id){ const sub=$("subnav"), th=sub.querySelector(".pthumb"); if(!th) return; const on=id?sub.querySelector(`.ptab[data-p="${id}"]`):sub.querySelector('.ptab[aria-selected="true"]'); if(!on) return;
@@ -3448,10 +3507,10 @@ details.drug[open]>summary .sband{display:none}
     let L0=null, R0=null; if(go&&P.length===3){ try{ const a=new DOMMatrixReadOnly(getComputedStyle(P[0]).transform), b=new DOMMatrixReadOnly(getComputedStyle(P[2]).transform); L0=a.m41; R0=b.m41+20; }catch(e){} }
     P.forEach(p=>p.getAnimations().forEach(a=>a.cancel())); P.forEach((p,i)=>{ p.style.transform=to[i]; });
     if(!go||L0==null||(Math.abs(L0-L1)<1&&Math.abs(R0-R1)<1)) return;
-    const h=Math.max(1,P[1].offsetHeight), F=[[],[],[]];
-    for(let k=0;k<=STEPS;k++){ const [L,R,sy]=stretchAt(L0,R0,L1,R1,k/STEPS), w=R-L, dy=((1-sy)*h/2).toFixed(2), sc=sy.toFixed(4);
-      F[0].push({transform:`translate(${L.toFixed(1)}px,${dy}px) scaleY(${sc})`}); F[1].push({transform:`translate(${(L+9).toFixed(1)}px,${dy}px) scale(${(Math.max(0,w-18)/100).toFixed(4)},${sc})`}); F[2].push({transform:`translate(${(R-20).toFixed(1)}px,${dy}px) scaleY(${sc})`}); }
-    P.forEach((p,i)=>p.animate(F[i],{duration:spd(460),easing:"linear"})); }
+    const h=Math.max(1,P[1].offsetHeight), F=[[],[],[]], Q=liquid(L0,R0,L1,R1);
+    Q.F.forEach(({o,L,R,sy})=>{ const w=R-L, dy=((1-sy)*h/2).toFixed(2), sc=sy.toFixed(4), off=+o.toFixed(4);
+      F[0].push({offset:off,transform:`translate(${L.toFixed(1)}px,${dy}px) scaleY(${sc})`}); F[1].push({offset:off,transform:`translate(${(L+9).toFixed(1)}px,${dy}px) scale(${(Math.max(0,w-18)/100).toFixed(4)},${sc})`}); F[2].push({offset:off,transform:`translate(${(R-20).toFixed(1)}px,${dy}px) scaleY(${sc})`}); });
+    P.forEach((p,i)=>p.animate(F[i],{duration:Q.D,easing:"linear"})); }
   // every page name shows at once: the type steps down a size or two until the row fits, and only past that does the strip scroll.
   // It is worked out before the strip is first drawn and remembered per tab and width, so the names never visibly change size.
   function fit(g){ const tr=$("subnav").querySelector(".ptrack"); if(!tr) return; const S=["s1","s2","s3"]; g=g||$("subnav").dataset.g; const key=g+"@"+(window.innerWidth||0);
@@ -3473,11 +3532,11 @@ details.drug[open]>summary .sband{display:none}
   function navThumb(anim){ const nav=document.querySelector(".nav"), th=nav&&nav.querySelector(".navthumb"), on=nav&&nav.querySelector('button[aria-selected="true"]'); if(!th||!on||!on.offsetWidth) return;
     const L1=on.offsetLeft, R1=L1+on.offsetWidth, T=on.offsetTop, H=on.offsetHeight; let L0=null, R0=null;
     if(anim&&!reduceMotion()){ try{ const m=new DOMMatrixReadOnly(getComputedStyle(th).transform), w=th.getBoundingClientRect().width; L0=m.m41; R0=m.m41+w; }catch(e){} }
-    th.getAnimations().forEach(a=>a.cancel()); th.style.transition="none"; th.style.width=on.offsetWidth+"px"; th.style.height=H+"px"; th.style.transform=`translate(${L1}px,${T}px)`;
+    th.getAnimations().forEach(a=>a.cancel()); th.style.transition="none"; th.style.transformOrigin="0 0"; const W=on.offsetWidth; if(th.style.width!==W+"px") th.style.width=W+"px"; if(th.style.height!==H+"px") th.style.height=H+"px"; th.style.transform=`translate(${L1}px,${T}px)`;
     if(L0==null||!(R0>L0)||(Math.abs(L0-L1)<1&&Math.abs(R0-R1)<1)) return;
-    // the tray marker moves the same way the page thumb does: it stretches toward the tab, thins a touch, then settles
-    const K=[]; for(let k=0;k<=STEPS;k++){ const [L,R,sy]=stretchAt(L0,R0,L1,R1,k/STEPS); K.push({width:(R-L).toFixed(1)+"px",height:(H*sy).toFixed(1)+"px",transform:`translate(${L.toFixed(1)}px,${(T+H*(1-sy)/2).toFixed(1)}px)`}); }
-    th.animate(K,{duration:spd(460),easing:"linear"}); }
+    // the tray marker moves the same way the page thumb does, on the same liquid path; it keeps its size and is stretched by transform
+    const Q=liquid(L0,R0,L1,R1), K=Q.F.map(({o,L,R,sy})=>({offset:+o.toFixed(4),transform:`translate(${L.toFixed(1)}px,${(T+H*(1-sy)/2).toFixed(1)}px) scale(${((R-L)/Math.max(1,W)).toFixed(4)},${sy.toFixed(4)})`}));
+    th.animate(K,{duration:Q.D,easing:"linear"}); }
   window.addEventListener("resize",()=>navThumb(false)); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>navThumb(false));
   function markTap(id,from){ const g=groupOf(id), gf=from?groupOf(from):null;
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false")); (window.requestAnimationFrame||setTimeout)(()=>navThumb(!!from&&!reduceMotion()));
@@ -5238,7 +5297,8 @@ details.drug[open]>summary .sband{display:none}
     const LA=900, LB=120;
     const xpFor=L=>L<=1?0:LA*(L-1)+LB*(L-1)*L/2;
     const levelOf=xp=>{ const b=LA+LB/2; let L=1+Math.max(0,Math.floor((-b+Math.sqrt(b*b+2*LB*Math.max(0,xp)))/LB)); while(xpFor(L+1)<=xp) L++; while(L>1&&xpFor(L)>xp) L--; return L; };
-    const TITLES=[[1,"Candidate"],[2,"Trainee"],[3,"EMT"],[5,"AEMT"],[7,"Medic Intern"],[9,"Paramedic"],[12,"Senior Medic"],[15,"Field Training Officer"],[18,"Flight Medic"],[21,"Critical Care Medic"],[30,"Tactical Medic"],[40,"Chief Medic"],[50,"EMS Supervisor"],[75,"EMS Educator"],[100,"EMS Chief"],[150,"Living Protocol"],[200,"Lazarus"]];
+    // the name that goes with your level: a nickname earned on the rig, from Newbie to PARAGOD
+    const TITLES=[[1,"Newbie"],[15,"Fresh Gloves"],[20,"Rig Rat"],[25,"Pulse Finder"],[30,"Line Slinger"],[40,"Monitor Lizard"],[50,"Tube Wizard"],[60,"Dose Whisperer"],[75,"Shock Jockey"],[90,"Code Crusher"],[100,"Golden Hour Hero"],[125,"Rhythm Sage"],[150,"Death Defier"],[175,"Living Legend"],[200,"PARAGOD"]];
     const titleOf=L=>{ let t=TITLES[0][1]; TITLES.forEach(([n,name])=>{ if(L>=n) t=name; }); return t; };
     // the emblem around the level: a new material at 10, 30, 50, 100, 150 and 200, then a star for every 50 past 200
     const TIER=[[1,"rookie","Recruit"],[10,"bronze","Bronze"],[30,"silver","Silver"],[50,"gold","Gold"],[100,"plat","Platinum"],[150,"diamond","Diamond"],[200,"mythic","Mythic"]];
@@ -5253,7 +5313,7 @@ details.drug[open]>summary .sband{display:none}
     // anything reached before rewards existed is handed over quietly
     (()=>{ const L=levelOf(P.xp.total); let any=0; for(let k=10;k<=L;k++) if(isReward(k)&&!P.rew[k]){ grant(k); any=1; } if(any) save(); })();
     window.xpState=()=>{ const L=levelOf(P.xp.total); return {total:P.xp.total,level:L,title:titleOf(L),today:P.xp.days[dayKey()]||0,next:xpFor(L+1),cur:xpFor(L),tier:tierOf(L).n,boost:P.boost,cover:P.cover}; };
-    window.levelForXP=levelOf; window.xpForLevel=xpFor;
+    window.levelForXP=levelOf; window.xpForLevel=xpFor; window.levelTitle=titleOf;
     // toasts for badges and the rest; they wait out the intro
     let toastT=null; function toast(html){ const h=document.documentElement; if(h.classList.contains("splashing")||document.getElementById("splash")){ setTimeout(()=>toast(html),400); return; }
       let t=$("toast"); if(!t){ t=document.createElement("div"); t.id="toast"; t.className="toast"; document.body.appendChild(t); } t.innerHTML=html; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),3200); } window.toastMsg=toast;
@@ -5389,17 +5449,17 @@ details.drug[open]>summary .sband{display:none}
       {id:"first",n:"First round",d:"Finish any round",i:"flag",r:"c"},{id:"streak3",n:"Three days",d:"A 3-day streak",i:"flame",r:"c"},{id:"xp500",n:"10,000 XP",d:"Earn 10,000 XP",i:"bolt",r:"c"},
       {id:"early",n:"Early shift",d:"Train before 6 am",i:"sun",r:"c"},{id:"late",n:"Night shift",d:"Train after 11 pm",i:"moon",r:"c"},{id:"think1",n:"Thought provoking...",d:"Ten minutes reading drug cards",i:"bulb",r:"c"},{id:"sim1",n:"First patient",d:"Finish a patient workup",i:"pulse",r:"c"},
       {id:"streak7",n:"One week",d:"A 7-day streak",i:"flame",r:"u"},{id:"level10",n:"Level 10",d:"Reach level 10",i:"shield",r:"u"},{id:"master1",n:"First master",d:"Master one drug",i:"star",r:"u"},{id:"perfect",n:"Clean sheet",d:"A perfect round",i:"check",r:"u"},
-      {id:"plan1",n:"Full session",d:"Finish a whole daily session",i:"calendar",r:"u"},{id:"stare",n:"Staring contest",d:"Three minutes on one drug card, start to finish",i:"eye",r:"u"},{id:"sprint",n:"Sprinter",d:"15 or more in Math Sprint",i:"clock",r:"u"},{id:"dash",n:"Dasher",d:"12 or more in Dose Dash",i:"clock",r:"u"},
+      {id:"plan1",n:"Full session",d:"Finish a whole daily session",i:"calendar",r:"u"},{id:"stare",n:"Staring contest",d:"Three straight minutes on one card",i:"eye",r:"u"},{id:"sprint",n:"Sprinter",d:"15 or more in Math Sprint",i:"clock",r:"u"},{id:"dash",n:"Dasher",d:"12 or more in Dose Dash",i:"clock",r:"u"},
       {id:"rhythm",n:"Strip reader",d:"A perfect Rhythm ID round",i:"heart",r:"r"},{id:"master5",n:"Five masters",d:"Master five drugs",i:"star",r:"r"},{id:"plan7",n:"Seven sessions",d:"Finish seven daily sessions",i:"calendar",r:"r"},{id:"level30",n:"Level 30",d:"Reach level 30",i:"shield",r:"r"},
-      {id:"xp2000",n:"100,000 XP",d:"Earn 100,000 XP",i:"bolt",r:"r"},{id:"think2",n:"Cogito, ergo dose",d:"An hour reading drug cards",i:"book",r:"r"},{id:"sim90",n:"Textbook workup",d:"Score 90 or better on a patient workup",i:"pulse",r:"r"},
+      {id:"xp2000",n:"100,000 XP",d:"Earn 100,000 XP",i:"bolt",r:"r"},{id:"think2",n:"Cogito, ergo dose",d:"An hour reading drug cards",i:"book",r:"r"},{id:"sim90",n:"Textbook workup",d:"Score 90+ on a patient workup",i:"pulse",r:"r"},
       {id:"streak30",n:"One month",d:"A 30-day streak",i:"flame",r:"e"},{id:"master15",n:"Fifteen masters",d:"Master fifteen drugs",i:"star",r:"e"},{id:"level50",n:"Level 50",d:"Reach level 50",i:"shield",r:"e"},{id:"think3",n:"Big brain energy",d:"Five hours reading drug cards",i:"book",r:"e"},
       {id:"wellread",n:"Well read",d:"A minute or more on every drug card",i:"pill",r:"e"},{id:"plan30",n:"Thirty sessions",d:"Finish thirty daily sessions",i:"calendar",r:"e"},
       {id:"level100",n:"Level 100",d:"Reach level 100",i:"shield",r:"l"},{id:"level150",n:"Level 150",d:"Reach level 150",i:"shield",r:"l"},{id:"xp10000",n:"1,000,000 XP",d:"Earn a million XP",i:"bolt",r:"l"},{id:"masterall",n:"Formulary",d:"Master every drug",i:"star",r:"l"},
       {id:"think4",n:"Walking formulary",d:"Twenty hours reading drug cards",i:"book",r:"l"},
       {id:"level200",n:"Level 200",d:"Reach level 200",i:"shield",r:"m"},
-      {id:"lazarus",n:"Lazarus",d:"Bring a patient back from cardiac arrest and deliver them alive",i:"rise",r:"m",h:1},{id:"flawless",n:"Flawless",d:"A patient workup scored 100 with no harm done",i:"gem",r:"m",h:1},
-      {id:"constantiam",n:"Per Constantiam",d:"A 100-day streak",i:"laurel",r:"m",h:1},{id:"threeam",n:"The 3 a.m. call",d:"A perfect round between 3 and 4 in the morning",i:"pager",r:"m",h:1},{id:"polymath",n:"Polymath",d:"Five kinds of study in one day",i:"brain",r:"m",h:1},
-      {id:"supporter",n:"Early supporter",d:"With Lazarus from the start, before 2027",i:"sprout",r:"s"},{id:"regday",n:"Registry day",d:"Made it all the way to your registry date",i:"flagx",r:"s"},{id:"passed",n:"Passed",d:"You passed your registry exam",i:"cert",r:"s",claim:1}
+      {id:"lazarus",n:"Lazarus",d:"Get ROSC and deliver them alive",i:"rise",r:"m",h:1},{id:"flawless",n:"Flawless",d:"A perfect workup with no harm done",i:"gem",r:"m",h:1},
+      {id:"constantiam",n:"Per Constantiam",d:"A 100-day streak",i:"laurel",r:"m",h:1},{id:"threeam",n:"The 3 a.m. call",d:"A perfect round at 3 a.m.",i:"pager",r:"m",h:1},{id:"polymath",n:"Polymath",d:"Five kinds of study in one day",i:"brain",r:"m",h:1},
+      {id:"supporter",n:"Early supporter",d:"With Lazarus since before 2027",i:"sprout",r:"s"},{id:"regday",n:"Registry day",d:"Made it to your registry date",i:"flagx",r:"s"},{id:"passed",n:"Passed",d:"You passed your registry exam",i:"cert",r:"s",claim:1}
     ];
     window.BADGES=BADGES;
     const ORDER=["s","m","l","e","r","u","c"];
@@ -5441,7 +5501,7 @@ details.drug[open]>summary .sband{display:none}
       el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="actsvg" role="img" aria-label="Activity over the last 30 days"><line x1="0" y1="${H-18}" x2="${W}" y2="${H-18}" class="axis"/>${bars}</svg><div class="legend"><i class="green"></i>Session finished<i class="yellow"></i>Practiced<i class="red"></i>Opened only</div>`; }
     // a badge: earned in full colour; not yet, dimmed; hidden Mythic, a grey cutout of its shape behind ??? in the aura
     function badgeHTML(b){ const on=!!P.badges[b.id], hid=b.h&&!on; let claim=""; if(b.claim&&!on&&P.badges.regday) claim=`<button type="button" class="chip bclaim" data-claim="${b.id}">I passed</button>`;
-      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" title="${hid?"Hidden":esc(b.d)}">${b.r==="m"?MYTH():""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b><span>${hid?"Hidden":esc(b.d)}</span>${claim}</div>`; }
+      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" title="${hid?"Hidden":esc(b.d)}">${b.r==="m"?MYTH():""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim||`<span>${hid?"Hidden":esc(b.d)}</span>`}</div>`; }
     function badgesHTML(){ return ORDER.map(r=>{ const list=BADGES.filter(b=>b.r===r); const got=list.filter(b=>P.badges[b.id]).length;
       return `<section class="btier r-${r}"><header><span class="eyebrow">${RN[r]}</span><span class="note">${got} of ${list.length}</span></header><div class="badges">${list.map(badgeHTML).join("")}</div></section>`; }).join("")+rewardsHTML(); }
     // the level rewards: what you have, and what the next milestone brings
@@ -5463,13 +5523,19 @@ details.drug[open]>summary .sband{display:none}
     function lvBadges(){ const el=$("lv-badges"); if(!el) return; const got=BADGES.filter(b=>P.badges[b.id]).sort((a,b)=>P.badges[b.id]-P.badges[a.id]);
       el.hidden=!got.length; if(!got.length){ el.innerHTML=""; el._sig=""; return; } el.setAttribute("aria-label",`${got.length} badge${got.length===1?"":"s"} earned`); el.setAttribute("role","img");
       // every badge is always there; the ones that do not fit the folded box wait hidden behind a count, so opening the box only moves them
-      const open=!!el.closest(".lvlcard.open"), room=open?(el._room||0):el.clientWidth, per=24, fit=room?Math.max(1,Math.floor((room+4)/per)):got.length; if(!open&&room) el._room=room;
-      const n=got.length>fit?Math.max(1,fit-1):got.length, rest=got.length-n;
+      const open=!!el.closest(".lvlcard.open"), room=open?(el._room||0):el.clientWidth, per=24; if(!open&&room) el._room=room;
+      // the count chip is wider than an icon, so its room is kept whenever not every badge fits
+      let n=got.length; if(room&&got.length*per-4>room) n=Math.max(0,Math.floor((room-(14+7*String(got.length).length))/per));
+      const draw=n=>{ const rest=got.length-n; el._sig=got.map(b=>b.id).join(",")+"|"+n;
+        el.innerHTML=got.map((b,i)=>`<i title="${esc(b.n)}" class="r-${b.r}${i>=n?" ov":""}">${svgIcon(b.i)}</i>`).join("")+(rest?`<i class="more">+${rest}</i>`:""); };
       // the same set as last time stays as it is, so a box that is moving its badges never has them swapped out from under it
-      const sig=got.map(b=>b.id).join(",")+"|"+n; if(el._sig===sig&&el.children.length) return; el._sig=sig;
-      el.innerHTML=got.map((b,i)=>`<i title="${esc(b.n)}" class="r-${b.r}${i>=n?" ov":""}">${svgIcon(b.i)}</i>`).join("")+(rest?`<i class="more">+${rest}</i>`:""); }
+      if(el._sig===got.map(b=>b.id).join(",")+"|"+n&&el.children.length) return; draw(n);
+      // and if the type still came out wider than reckoned, one fewer until nothing is cut off
+      if(!open) while(n>0&&el.scrollWidth>el.clientWidth+.5){ n--; draw(n); } }
     window.lvBadgesNow=lvBadges;
-    window.addEventListener("resize",()=>{ clearTimeout(lvBadges.t); lvBadges.t=setTimeout(lvBadges,150); }); document.addEventListener("panel",e=>{ if(e.detail==="today") lvBadges(); });
+    window.addEventListener("resize",()=>{ clearTimeout(lvBadges.t); lvBadges.t=setTimeout(lvBadges,150); });
+    // the row is judged again whenever its line changes width (a face arriving, the Show badges text going in)
+    { const lt=document.querySelector(".lvtop"); if(lt&&window.ResizeObserver){ let w0=0; new ResizeObserver(es=>{ const w=Math.round(es[0].contentRect.width); if(w===w0) return; w0=w; clearTimeout(lvBadges.t); lvBadges.t=setTimeout(lvBadges,60); }).observe(lt); } } document.addEventListener("panel",e=>{ if(e.detail==="today") lvBadges(); });
     window.renderProgress=render;
     // every time the dashboard opens, the ring and bar fill from empty and the XP counts up: slow to start, a quick rush, then a long soft finish
     const eQ=x=>x<.5?16*x*x*x*x*x:1-Math.pow(-2*x+2,5)/2;
@@ -8834,7 +8900,7 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       let more=null, live=[];
       function build(){ if(more) return more; more=document.createElement("div"); more.className="lvmore"; more.id="lv-more";
         const pg=$("panel-progress"); if(pg) [...pg.children].forEach(c=>{ if(!c.classList.contains("backchip")) more.appendChild(c); }); card.appendChild(more); more.querySelectorAll(".reveal").forEach(el=>{ if(el.parentElement!==more) el.classList.remove("reveal","in"); }); [...more.children].forEach(el=>el.classList.remove("in")); return more; }
-      const movers=()=>[...card.querySelectorAll("#lv-ring,.lvtop>.eyebrow,#lv-badges>i,.lvlinfo>h2,.xpbar,#lv-next,.statline>span")];
+      const movers=()=>[...card.querySelectorAll("#lv-ring,.lvtop>.eyebrow,#lv-badges>i,#lv-show,.lvlinfo>h2,.xpbar,#lv-next,.statline>span")];
       const rects=els=>new Map(els.map(el=>[el,el.getBoundingClientRect()]));
       function stop(){ live.forEach(a=>{ try{ a.cancel(); }catch(e){} }); live=[]; card._gl=0; card.classList.remove("folding","moving","chromeout"); }
       // each element moves from where it was to where it goes; one that was hidden before grows in where it lands, one about to hide fades where it was
@@ -8902,6 +8968,22 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       // it is folded again whenever you come back to the dashboard
       document.addEventListener("panel",e=>{ if(e.detail!=="today"&&card.classList.contains("open")){ if(card._ph){ clearTimeout(card._ph); card._ph=0; } stop(); card.classList.remove("open"); card.setAttribute("aria-expanded","false"); if(more) [...more.children].forEach(k=>k.classList.remove("in")); } });
       window.xpBoxToggle=toggle; })();
+    // ----- Show badges, beside the small badges on the level box: opens the progress beneath the box if it is folded, opens the Badges
+    // box, and glides the page to it on the house curve -----
+    (function showBadges(){ const card=$("lv-card"), top=card&&card.querySelector(".lvtop"); if(!top||$("lv-show")) return;
+      // the earned badges sit on a shelf of their own along the foot of the box, with Show badges at its end, so the row has the box's
+      // whole width for icons instead of sharing a line with the level
+      const b=document.createElement("button"); b.type="button"; b.id="lv-show"; b.className="lvshow"; b.textContent="Show badges"; b.setAttribute("aria-label","Show your badges");
+      const shelf=document.createElement("div"); shelf.className="lvshelf"; const st=card.querySelector(".statline"), row=$("lv-badges"); if(row) shelf.appendChild(row); shelf.appendChild(b);
+      if(st&&st.nextSibling) card.insertBefore(shelf,st.nextSibling); else card.appendChild(shelf); if(window.lvBadgesNow) requestAnimationFrame(()=>lvBadgesNow());
+      const EQF=window.bez?bez(.7,0,.2,1):null, hh=()=>((document.querySelector("header.top")||{}).offsetHeight||0);
+      const go=()=>{ const box=$("t-more"); if(!box) return; if(!box.open){ try{ FOLD.open(box); }catch(e){ box.open=true; } }
+        if(window.smoothScrollTo) smoothScrollTo(()=>box.getBoundingClientRect().top+window.scrollY-hh()-10,spd(720),EQF,spd(240)); else box.scrollIntoView();
+        if(window.revealTrack) revealTrack(spd(1200)); };
+      window.showBadges=()=>{ if(!card.classList.contains("open")||card._ph){ if(window.xpBoxToggle) xpBoxToggle(); setTimeout(go,spd(620)); } else go(); };
+      b.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); window.showBadges(); });
+      b.addEventListener("keydown",e=>e.stopPropagation());
+      if(window.lvBadgesNow) requestAnimationFrame(()=>lvBadgesNow()); })();
   })();
   // ---------- who you are: three quick questions once, a greeting every time you come back ----------
   (function me(){
@@ -8930,17 +9012,47 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     document.addEventListener("click",e=>{ const l=e.target.closest&&e.target.closest("#pf-level [data-lvl]"); if(l){ save({level:l.dataset.lvl}); pick($("pf-level"),"data-lvl",l.dataset.lvl); return; }
       const r=e.target.closest&&e.target.closest("#pf-role [data-role]"); if(r){ save({role:r.dataset.role}); pick($("pf-role"),"data-role",r.dataset.role); } });
     document.addEventListener("change",e=>{ if(e.target.id==="pf-name") save({name:e.target.value.trim().slice(0,24)}); });
-    // ----- the greeting: time of day, how long you've been away, and one useful line about today -----
+    // ----- the greeting: a fresh one every time the app opens, picked from the ones that fit right now (the hour, the day, your streak,
+    // the registry, what you have done today, your level, how long you were away), and never one of the last ten you saw. The line under
+    // it says what to do next. -----
     const last=+store.get("mm-lastopen",0)||0; store.set("mm-lastopen",Date.now());
-    const away=last?(Date.now()-last)/864e5:0, seed=Math.floor(Date.now()/36e5);
-    const one=a=>a[seed%a.length];
-    function headline(){ const n=ME&&ME.name?ME.name:""; const h=new Date().getHours(); const w=x=>n?x.replace("{n}",n):x.replace(/, \{n\}\??|\{n\}/,"");
-      if(ME&&ME.since&&Date.now()-ME.since<6e4) return w("Welcome, {n}");
-      if(away>3) return w(one(["Welcome back, {n}","Good to see you again, {n}","There you are, {n}"]));
-      if(h>=5&&h<12) return w(one(["Good morning, {n}","Morning, {n}","Rise and shine, {n}"]));
-      if(h>=12&&h<17) return w(one(["Good afternoon, {n}","Afternoon, {n}","Back at it, {n}"]));
-      if(h>=17&&h<22) return w(one(["Good evening, {n}","Evening, {n}","Evening reps, {n}"]));
-      return w(one(["Late one, {n}","Night owl hours, {n}","Still up, {n}"])); }
+    let away=last?(Date.now()-last)/864e5:0; const LS=Math.floor(Math.random()*1e6);
+    const one=a=>a[LS%a.length];
+    const dk=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    let opens=1; { const od=store.get("mm-opensday",null), k=dk(new Date()); opens=od&&od.d===k?(od.n||0)+1:1; store.set("mm-opensday",{d:k,n:opens}); }
+    const AM=c=>c.h>=5&&c.h<12, PM=c=>c.h>=12&&c.h<17, EV=c=>c.h>=17&&c.h<22, NT=c=>c.h>=22||c.h<5;
+    // [what it says, when it fits (always if left out), how often it comes up against the rest]
+    const G=[
+      ["Hey {n}"],["Hi {n}"],["Welcome in, {n}"],["Ready when you are, {n}"],["Let's get some reps, {n}"],["Let's learn something, {n}"],["Small reps add up, {n}"],["Five minutes counts, {n}"],
+      ["Study shift starts now, {n}"],["Brain warm-up time, {n}"],["Time to level up, {n}"],["Sharp mind, steady hands, {n}"],["Per constantiam, {n}"],["Back in service, {n}"],["Good to have you, {n}"],["Let's run it, {n}"],["Ready for a call, {n}?"],["Clock in, {n}"],
+      ["Scene safe, BSI, {n}",0,.7],["Don't say the Q word, {n}",0,.7],["Gloves on, {n}",0,.7],["Pupils equal and reactive, {n}?",0,.7],["A and O times four, {n}?",0,.7],["Coffee is a vital sign, {n}",0,.7],["Charting can wait, {n}",0,.7],
+      ["Another day, another drip rate, {n}",0,.7],["Dose math o'clock, {n}",0,.7],["The monitor's warmed up, {n}",0,.7],["Bag's stocked, {n}",0,.7],["Sinus rhythm vibes, {n}",0,.7],["Pulse check, {n}",0,.7],["Clear! Kidding, {n}",0,.6],
+      ["10-8 and ready, {n}",0,.7],["Load and go, {n}",0,.7],["Lights and sirens, {n}",0,.6],["Stay frosty, {n}",0,.6],["Hydrate, then study, {n}",0,.6],
+      ["Good morning, {n}",AM,1.3],["Morning, {n}",AM,1.3],["Rise and shine, {n}",AM,1.3],["Coffee first, {n}?",c=>c.h>=5&&c.h<11],["Early start, {n}",c=>c.h>=5&&c.h<8,1.3],["Beat the sunrise, {n}",c=>c.h>=4&&c.h<7,1.3],["Fresh day, fresh brain, {n}",c=>c.h>=6&&c.h<12],["Morning rounds, {n}",c=>c.h>=6&&c.h<11],["Up and at 'em, {n}",c=>c.h>=5&&c.h<10],
+      ["Good afternoon, {n}",PM,1.3],["Afternoon, {n}",PM,1.3],["Back at it, {n}",c=>c.h>=12&&c.h<18],["Midday reps, {n}",c=>c.h>=11&&c.h<14],["Lunch break study, {n}?",c=>c.h>=11&&c.h<14],["Afternoon push, {n}",c=>c.h>=13&&c.h<17],
+      ["Good evening, {n}",EV,1.3],["Evening, {n}",EV,1.3],["Evening reps, {n}",EV],["Winding down, {n}?",c=>c.h>=19&&c.h<23],["One more round, {n}",c=>c.h>=18&&c.h<23],["Golden hour, {n}",c=>c.h>=17&&c.h<20],
+      ["Late one, {n}",NT,1.3],["Night owl hours, {n}",NT,1.3],["Still up, {n}?",c=>c.h>=23||c.h<5],["Night shift brain, {n}",c=>c.h>=21||c.h<6],["Quiet hours, {n}",c=>c.h<5],["Welcome to the 3 a.m. club, {n}",c=>c.h>=2&&c.h<5,1.6],["Between calls, {n}?",c=>c.h>=21||c.h<6],
+      ["Happy Monday, {n}",c=>c.dow===1],["New week, {n}",c=>c.dow===1],["Tuesday, {n}. Let's work",c=>c.dow===2],["Halfway there, {n}",c=>c.dow===3],["Thursday push, {n}",c=>c.dow===4],["Friday, {n}. Finish strong",c=>c.dow===5],["Saturday study, {n}",c=>c.dow===6],["Weekend warrior, {n}",c=>c.dow===6||c.dow===0],["Sunday reset, {n}",c=>c.dow===0],
+      ["{s} days running, {n}",c=>c.streak>=3,1.6],["The streak lives, {n}",c=>c.streak>=2,1.3],["A week strong, {n}",c=>c.streak>=7&&c.streak<14,1.8],["Two weeks straight, {n}",c=>c.streak>=14&&c.streak<30,1.8],["{s} days. Unstoppable, {n}",c=>c.streak>=30,2],["Day {s} of the streak, {n}",c=>c.streak>=2,1.2],["Fresh streak starts today, {n}",c=>c.streak===0&&c.away>=1,1.4],
+      ["Registry day, {n}. You've got this",c=>c.dl===0,8],["Tomorrow's the day, {n}",c=>c.dl===1,8],["{d} days to go, {n}",c=>c.dl>1&&c.dl<=7,3],["Registry in {d} days, {n}",c=>c.dl>1&&c.dl<=30,2],["{d} days on the clock, {n}",c=>c.dl>7&&c.dl<=60,1.4],["Plenty of runway, {n}",c=>c.dl>100],["Every rep counts toward the registry, {n}",c=>c.dl>0],
+      ["Back for more, {n}?",c=>c.xpd>0,1.4],["Round two, {n}",c=>c.xpd>0&&c.opens>=2,1.3],["Can't stay away, {n}",c=>c.xpd>0,1.2],["Big day already, {n}",c=>c.xpd>=5000,1.8],["{x} XP today and counting, {n}",c=>c.xpd>=1000,1.4],["Yesterday counted, {n}",c=>c.yest,1.2],["Picking up from yesterday, {n}",c=>c.yest,1.2],
+      ["{t} on duty, {n}",c=>c.lvl>=15,1.2],["Hey {t}",c=>c.lvl>=15],["Welcome back, {t}",c=>c.lvl>=15&&c.away>=1],["Every legend starts somewhere, {n}",c=>c.lvl<10],["PARAGOD has entered the chat",c=>c.lvl>=200,3],
+      ["Welcome back, {n}",c=>c.away>3,2],["Good to see you again, {n}",c=>c.away>3,2],["There you are, {n}",c=>c.away>3,2],["Missed you, {n}",c=>c.away>5,2],["Long time, {n}",c=>c.away>14,3],["The rig missed you, {n}",c=>c.away>14,3]];
+    window.__GREET=G;
+    function ctx(){ const d=new Date(); let streak=0, dl=-1, st=null, yest=false; try{ streak=dayStreak(); }catch(e){} try{ const p=examPace(); if(p&&p.dl!=null&&p.dl>=0) dl=p.dl; }catch(e){} try{ st=xpState(); }catch(e){}
+      try{ const y=new Date(d); y.setDate(y.getDate()-1); const k=dayState(dk(y)); yest=k==="green"||k==="yellow"; }catch(e){}
+      return {h:d.getHours(),dow:d.getDay(),streak,dl,xpd:st?st.today:0,lvl:st?st.level:1,title:st?st.title:"",away,yest,opens}; }
+    // a weighted draw from the ones that fit, leaving out the last ten shown
+    function pickGreeting(){ const c=ctx(), seen=store.get("mm-greet",[])||[]; const fit=G.filter(g=>!g[1]||g[1](c)); let pool=fit.filter(g=>!seen.includes(g[0])); if(!pool.length) pool=fit;
+      let r=Math.random()*pool.reduce((a,g)=>a+(g[2]||1),0), pick=pool[0]; for(const g of pool){ r-=(g[2]||1); if(r<=0){ pick=g; break; } }
+      store.set("mm-greet",[pick[0]].concat(seen.filter(x=>x!==pick[0])).slice(0,10)); return {t:pick[0],c}; }
+    let G0=pickGreeting();
+    function headline(){ const n=ME&&ME.name?ME.name:"";
+      if(ME&&ME.since&&Date.now()-ME.since<6e4) return n?`Welcome, ${n}`:"Welcome";
+      const c=G0.c; const x=G0.t.replace("{s}",c.streak).replace("{d}",c.dl).replace("{t}",c.title).replace("{x}",(c.xpd||0).toLocaleString("en-US"));
+      return n?x.replace("{n}",n):x.replace(/,?\s*\{n\}/,"").trim(); }
+    // coming back after a while counts as opening the app again
+    { let hidAt=0; document.addEventListener("visibilitychange",()=>{ if(document.hidden){ hidAt=Date.now(); return; } if(hidAt&&Date.now()-hidAt>15*6e4){ away=(Date.now()-hidAt)/864e5; G0=pickGreeting(); greet(true); } }); }
     function subline(){ let due=0, streak=0, pace=null; try{ due=RQ.stats().due; }catch(e){} try{ streak=dayStreak(); }catch(e){} try{ pace=examPace(); }catch(e){}
       if(ME&&ME.since&&Date.now()-ME.since<6e4){ const who=[ME.level,ME.role].filter(Boolean).join(" "); const lead=who?`Set up for ${/^[AEIOU]/i.test(who)?"an":"a"} ${who}.`:"You're all set.";
         return `${lead} ${ME.role==="instructor"?"Your class tools are under More, in Proctor.":"Today's five, just below, is a good first stop."}`; }
@@ -9010,6 +9122,10 @@ function traceMaps(images,seed){const S=SIZE,N=S*S,sc=document.createElement('ca
  const tex=new Uint8Array(N*4);for(let y=0;y<S;y++){const row=(S-1-y)*S;for(let x=0;x<S;x++){const i=y*S+x,o=(row+x)*4,va=A.out[i],vc=C.out[i],ua=va>1?65535:Math.round(va*60000),uc=vc>1?65535:Math.round(vc*60000);tex[o]=ua>>8;tex[o+1]=ua&255;tex[o+2]=uc>>8;tex[o+3]=uc&255;}}
  return {seed,A:A.out,C:C.out,tex,tA:A.tips,tC:C.tips};}
 let MAPS=null,SEED=0;
+// what each heart canvas last showed, so the intro can copy the exact picture on screen. A WebGL canvas keeps its pixels only until it is
+// shown, so it is drawn once more and copied straight away in the same moment; the 2D one keeps its pixels and is just copied
+const SNAP=new WeakMap();
+function snap(canvas){const s=SNAP.get(canvas);if(!s||!s.r())return null;try{if(s.r().gl)s.f();}catch(e){return null;}const c=document.createElement('canvas');c.width=canvas.width;c.height=canvas.height;const g=c.getContext('2d');if(!g)return null;g.drawImage(canvas,0,0);return c;}
 const vertex=`attribute vec2 position;varying vec2 uv;void main(){uv=(position+1.0)*.5;gl_Position=vec4(position,0.,1.);}`;
 const fragment=`precision highp float;varying vec2 uv;uniform sampler2D dataMap;uniform sampler2D maskMap;uniform sampler2D arrMap;uniform sampler2D lvMap;uniform sampler2D nzMap;uniform float time;uniform float rt;uniform float uA;uniform float uC;uniform float fin;uniform vec4 drp;uniform vec2 sa;uniform vec2 av;
 float e(float x){x=clamp(x,0.,1.);return x*x*(3.-2.*x);}
@@ -9038,7 +9154,7 @@ function setupGL(canvas,images,maps){
  const small=(n,lin,fill)=>{const t=gl.createTexture(),px=new Uint8Array(n*n*4);for(let y=0;y<n;y++)for(let x=0;x<n;x++)fill(px,((n-1-y)*n+x)*4,x,y);gl.bindTexture(gl.TEXTURE_2D,t);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,lin?gl.LINEAR:gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,lin?gl.LINEAR:gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,n,n,0,gl.RGBA,gl.UNSIGNED_BYTE,px);return t;};
  const nz=noise(maps?maps.seed:1),rr=rng((maps?maps.seed:1)*13+5);textures.push(small(64,true,(px,o,x,y)=>{px[o]=Math.round(255*nz((x+.5)*12/27,(y+.5)*12/27));px[o+3]=255;}),small(128,false,(px,o)=>{px[o]=Math.round(255*rr());px[o+1]=Math.round(255*rr());px[o+3]=255;}));
  const U=n=>gl.getUniformLocation(artProgram,n),u={data:U('dataMap'),mask:U('maskMap'),arr:U('arrMap'),lv:U('lvMap'),nz:U('nzMap'),time:U('time'),rt:U('rt'),uA:U('uA'),uC:U('uC'),fin:U('fin'),drp:U('drp'),sa:U('sa'),av:U('av')},position=gl.getAttribLocation(artProgram,'position'),point=gl.getAttribLocation(pointProgram,'point'),scale=gl.getUniformLocation(pointProgram,'scale');
- return {draw(w,t,pts){gl.viewport(0,0,canvas.width,canvas.height);gl.disable(gl.BLEND);gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(artProgram);gl.bindBuffer(gl.ARRAY_BUFFER,quad);gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);textures.forEach((tex,i)=>{gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,tex)});gl.uniform1i(u.data,0);gl.uniform1i(u.mask,1);gl.uniform1i(u.arr,2);gl.uniform1i(u.lv,3);gl.uniform1i(u.nz,4);
+ return {gl:true,draw(w,t,pts){gl.viewport(0,0,canvas.width,canvas.height);gl.disable(gl.BLEND);gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(artProgram);gl.bindBuffer(gl.ARRAY_BUFFER,quad);gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);textures.forEach((tex,i)=>{gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,tex)});gl.uniform1i(u.data,0);gl.uniform1i(u.mask,1);gl.uniform1i(u.arr,2);gl.uniform1i(u.lv,3);gl.uniform1i(u.nz,4);
   const D=dropAt(w),K=clocks(t);gl.uniform1f(u.time,w);gl.uniform1f(u.rt,t);gl.uniform1f(u.uA,K[0]);gl.uniform1f(u.uC,K[1]);gl.uniform1f(u.fin,K[2]);gl.uniform4f(u.drp,D[0],D[1],D[2],D[3]);gl.uniform2f(u.sa,SA[0],SA[1]);gl.uniform2f(u.av,AV[0],AV[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   if(pts&&pts.length){gl.useProgram(pointProgram);gl.bindBuffer(gl.ARRAY_BUFFER,points);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(pts),gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(point);gl.vertexAttribPointer(point,3,gl.FLOAT,false,0,0);gl.uniform1f(scale,canvas.width/SIZE);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.drawArrays(gl.POINTS,0,pts.length/3);gl.disable(gl.BLEND);}},
   destroy(){textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(quad);gl.deleteBuffer(points);gl.deleteProgram(artProgram);gl.deleteProgram(pointProgram);shaders.forEach(s=>gl.deleteShader(s));}};
@@ -9080,13 +9196,13 @@ function play(canvas,options={}){
  function resize(){if(dead)return;canvas.width=canvas.height=SIZE;render(time);}
  function refresh(){if(dead||finished)return;cancelAnimationFrame(frame);if(performance.now()-start>=DUR*1000){finish();return;}if(media.matches)render(3);else if(renderer&&!document.hidden)frame=requestAnimationFrame(tick);}
  const observer=typeof ResizeObserver!=='undefined'?new ResizeObserver(resize):null;if(observer)observer.observe(canvas);else window.addEventListener('resize',resize);document.addEventListener('visibilitychange',refresh);media.addEventListener('change',refresh);resize();
- const ready=assets().then(images=>{if(dead)return;maps=MAPS&&MAPS.seed===seed?MAPS:media.matches?null:traceMaps(images,seed);renderer=setupGL(canvas,images,maps)||setup2D(canvas,images,maps);if(finished)render(DUR);else refresh();return true;});
+ const ready=assets().then(images=>{if(dead)return;maps=MAPS&&MAPS.seed===seed?MAPS:media.matches?null:traceMaps(images,seed);renderer=setupGL(canvas,images,maps)||setup2D(canvas,images,maps);SNAP.set(canvas,{r:()=>renderer,f:()=>render(finished?DUR:time)});if(finished)render(DUR);else refresh();return true;});
  timer=setTimeout(finish,Math.max(0,DUR*1000-(performance.now()-start)));
  return {ready,seed,destroy(){if(dead)return;dead=true;cancelAnimationFrame(frame);clearTimeout(timer);if(renderer)renderer.destroy();renderer=null;maps=null;if(MAPS&&MAPS.seed===seed)MAPS=null;if(observer)observer.disconnect();else window.removeEventListener('resize',resize);document.removeEventListener('visibilitychange',refresh);media.removeEventListener('change',refresh);}};
 }
 // the finished frame on its own, for intros that build the heart some other way and end on the same picture
-function still(canvas){return assets().then(images=>{canvas.width=canvas.height=SIZE;const r=setupGL(canvas,images,null)||setup2D(canvas,images,null);r.draw(3,99,null);return r;});}
-return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,preload:assets};
+function still(canvas){return assets().then(images=>{canvas.width=canvas.height=SIZE;const r=setupGL(canvas,images,null)||setup2D(canvas,images,null);r.draw(3,99,null);SNAP.set(canvas,{r:()=>r,f:()=>r.draw(3,99,null)});return r;});}
+return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,preload:assets};
 });
 
   // ---------- boot ----------
@@ -9125,7 +9241,17 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,preload
     const split=node=>{ if(!node) return []; const t=node.textContent; node.textContent=""; return [...t].map(ch=>{ const c=document.createElement("span"); c.className="ch"; c.textContent=ch; node.appendChild(c); return c; }); };
     const melt=()=>{ if(!la||!en) return;
       const A=split(la), B=split(en), wave=.4, rnd=.08; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(3)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.28+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(3)+"s"; });
-      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("melting"); try{ posMcut(); }catch(e){} };
+      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("melting"); try{ posMcut(); }catch(e){} morph((.28+wave+rnd+.95)*1000); };
+    // while the letters change, the line is held to a hard edge: each letter softens as it drips away and sharpens as the English one rises
+    // into its place, so under the edge they read as drops of one liquid that pull apart and run together. The edge firms up before the
+    // first letter moves and lets go once the last has landed, so the line it ends on is exactly the plain English
+    const fm=document.getElementById("lz-morph-m");
+    const morph=D=>{ if(!fm||!fm.setAttribute) return; const K=16, TH=.34, t0=performance.now();
+      const set=s=>{ const k=1+(K-1)*s; fm.setAttribute("values",`1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${k.toFixed(3)} ${(-(k-1)*TH).toFixed(3)}`); };
+      set(0); motto.classList.add("morph");
+      const step=now=>{ if(done){ motto.classList.remove("morph"); return; } const t=now-t0; if(t>=D+120){ set(0); motto.classList.remove("morph"); return; }
+        set(sm(t/360)*(1-sm((t-(D-240))/340))); requestAnimationFrame(step); };
+      requestAnimationFrame(step); };
 
     // ----- one layout for every version: the heart in a square near the middle, the name over its lower right third, the motto under the heart -----
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
@@ -9146,27 +9272,43 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,preload
     // ----- the shared ending: the heart and the name clear, the motto melts into English in place, holds, then the app shows through -----
     // ----- the heart and the name dissolve like ink let go in water: the picture breaks up into very fine motes, patch by patch rather than
     // in a line. Each mote is thrown loose, then carried by a slow turbulent current (eddies that turn and drift as they go), dragged back
-    // by the water round it, and thins out as it goes. Every mote is one pixel of the finished picture, so the picture is whole the
-    // moment before it starts to come apart. -----
-    const mist=()=>{ if(!L) return false; const r0=sp.getBoundingClientRect(), X=[], Y=[], A=[];
-      const src=imgs&&imgs[0]; if(hc&&src){ const n=Math.max(256,Math.min(512,Math.round(L.S))), c=document.createElement("canvas"); c.width=c.height=n; const g=c.getContext("2d",{willReadFrequently:true}); g.drawImage(src,0,0,n,n); const d=g.getImageData(0,0,n,n).data, k=L.S/n;
-        for(let y=0;y<n;y++) for(let x=0;x<n;x++){ const i=(y*n+x)*4, v=Math.max(d[i],d[i+2])/255; if(v>.12){ X.push(L.left+(x+.5)*k); Y.push(L.top+(y+.5)*k); A.push(Math.min(1,v*1.2)); } } }
-      const spans=[...title.querySelectorAll(".ch")].filter(ch=>ch.textContent.trim());
-      if(spans.length){ const cs=getComputedStyle(title), fsz=parseFloat(cs.fontSize)||40, mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; title.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
+    // by the water round it, and thins out as it goes. The dissolve starts from an exact copy of what is on screen (the heart's last
+    // frame, with the name's black cut-out already in it, and the name drawn crisp at the screen's own resolution), laid exactly where
+    // the originals were, so the hand-over frame is the same picture. From then on each patch is lifted out of the copy at the moment its
+    // mote sets off, and the mote leaves carrying the same light, so the picture only ever loses brightness. -----
+    const mist=()=>{ if(!L||!hc) return false; const r0=sp.getBoundingClientRect(), shot=SA&&SA.snap?SA.snap(hc):null; if(!shot) return false;
+      const cells=[], P=[];
+      // the heart: the copied frame on a canvas of the same size in the same box, with the name's cut-out painted in as the black it was
+      const hr=document.createElement("canvas"); hr.width=shot.width; hr.height=shot.height; hr.className=hc.className; hr.setAttribute("aria-hidden","true"); hr.style.cssText=hc.style.cssText; hr.style.transition="none"; hr.style.opacity="1";
+      const hg=hr.getContext("2d",{willReadFrequently:true}); hg.drawImage(shot,0,0); const HS=hr.width/L.S;
+      if(cut&&cut.style.opacity!=="0"){ const c=cut.getBoundingClientRect(); hg.fillStyle="#000"; hg.fillRect((c.left-r0.left-L.left)*HS,(c.top-r0.top-L.top)*HS,c.width*HS,c.height*HS); }
+      const n=L.S>420?384:256, cpx=hr.width/n, k=L.S/n, hd=hg.getImageData(0,0,hr.width,hr.height).data, HW=hr.width;
+      for(let cy=0;cy<n;cy++) for(let cx=0;cx<n;cx++){ let sum=0, cnt=0; const x0=Math.floor(cx*cpx), x1=Math.floor((cx+1)*cpx), y0=Math.floor(cy*cpx), y1=Math.floor((cy+1)*cpx);
+        for(let y=y0;y<y1;y++) for(let x=x0;x<x1;x++){ const i=(y*HW+x)*4; sum+=Math.max(hd[i],hd[i+1],hd[i+2]); cnt++; }
+        const v=cnt?sum/cnt/255:0; if(v>.003) cells.push({h:1,x0,y0,w:x1-x0,hh:y1-y0,X:L.left+(cx+.5)*k,Y:L.top+(cy+.5)*k,v,k}); }
+      // the name: drawn at the screen's resolution over the letters, which then step aside
+      const spans=[...title.querySelectorAll(".ch")].filter(ch=>ch.textContent.trim()); let tr=null, tg=null, TR=1;
+      if(spans.length&&title.style.opacity!=="0"){ const cs=getComputedStyle(title), fsz=parseFloat(cs.fontSize)||40, mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; title.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
         const rs=spans.map(ch=>ch.getBoundingClientRect()), x0=Math.floor(Math.min(...rs.map(r=>r.left))-r0.left-4), w=Math.ceil(Math.max(...rs.map(r=>r.right))-r0.left-x0+8), y0=Math.floor(base-fsz), h=Math.ceil(fsz*1.3);
-        const c=document.createElement("canvas"); c.width=w; c.height=h; const g=c.getContext("2d",{willReadFrequently:true}); g.fillStyle="#fff"; g.textBaseline="alphabetic"; g.font=`${cs.fontWeight} ${fsz}px ${cs.fontFamily}`;
-        spans.forEach((ch,j)=>g.fillText(ch.textContent.toUpperCase(),rs[j].left-r0.left-x0,base-y0)); const d=g.getImageData(0,0,w,h).data;
-        for(let y=0;y<h;y++) for(let x=0;x<w;x++){ const v=d[(y*w+x)*4+3]/255; if(v>.15){ X.push(x0+x+.5); Y.push(y0+y+.5); A.push(v); } } }
-      const N0=X.length; if(N0<50) return false;
+        TR=Math.max(1,Math.min(3,Math.round(window.devicePixelRatio||1))); tr=document.createElement("canvas"); tr.width=w*TR; tr.height=h*TR; tr.setAttribute("aria-hidden","true");
+        Object.assign(tr.style,{position:"absolute",left:x0+"px",top:y0+"px",width:w+"px",height:h+"px",margin:"0",pointerEvents:"none"});
+        tg=tr.getContext("2d",{willReadFrequently:true}); tg.setTransform(TR,0,0,TR,0,0); tg.fillStyle=cs.color||"#EFE8DC"; tg.textBaseline="alphabetic"; tg.font=`${cs.fontWeight} ${fsz}px ${cs.fontFamily}`;
+        spans.forEach((ch,j)=>tg.fillText(ch.textContent.toUpperCase(),rs[j].left-r0.left-x0,base-y0)); const td=tg.getImageData(0,0,tr.width,tr.height).data, TW=tr.width;
+        for(let cy=0;cy<h;cy++) for(let cx=0;cx<w;cx++){ let sum=0; for(let y=cy*TR;y<(cy+1)*TR;y++) for(let x=cx*TR;x<(cx+1)*TR;x++) sum+=td[(y*TW+x)*4+3]; const v=sum/(TR*TR)/255; if(v>.003) cells.push({h:0,x0:cx,y0:cy,w:1,hh:1,X:x0+cx+.5,Y:y0+cy+.5,v,k:1}); } }
+      if(cells.length<50) return false;
       // a smooth patchy field decides when each spot lets go, so the picture comes apart in drifting blotches
       const hash=(i,j)=>{ const t=Math.sin(i*127.1+j*311.7)*43758.5453; return t-Math.floor(t); };
       const vn=(x,y)=>{ const i=Math.floor(x), j=Math.floor(y), fx=x-i, fy=y-j, u=fx*fx*(3-2*fx), v=fy*fy*(3-2*fy); return (hash(i,j)*(1-u)+hash(i+1,j)*u)*(1-v)+(hash(i,j+1)*(1-u)+hash(i+1,j+1)*u)*v; };
-      const keep=Math.min(1,20000/N0), Z0=Math.min(1.6,1/Math.sqrt(keep)), P=[]; let cx=0, cy=0; for(let i=0;i<N0;i++){ cx+=X[i]; cy+=Y[i]; } cx/=N0; cy/=N0;
-      for(let i=0;i<N0;i++){ if(keep<1&&Math.random()>keep) continue; const f=.6*vn(X[i]/70,Y[i]/70)+.4*vn(X[i]/23+9,Y[i]/23+4);
-        const ang=Math.random()*6.283, sp0=18+Math.random()*58, ox=X[i]-cx, oy=Y[i]-cy, od=Math.hypot(ox,oy)||1;
-        P.push({x:X[i],y:Y[i],a:A[i],t:.04+1.3*f+Math.random()*.14,life:.95+.8*Math.random(),vx:Math.cos(ang)*sp0+ox/od*22,vy:Math.sin(ang)*sp0+oy/od*14-12,ph:Math.random()*6.283,w:.6+Math.random()*1.1,on:false}); }
-      const els=[hc,title,cut].filter(Boolean); els.forEach(el=>{ el.style.transition="opacity .5s cubic-bezier(.4,0,.6,1)"; el.style.opacity="0"; });
-      const ink="#EFE8DC", B=12, bx=Array.from({length:B},()=>[]); const t0=performance.now(); let alive=true, last=t0;
+      const lit=cells.filter(c=>c.v>=.03).length, keep=Math.min(1,20000/Math.max(1,lit)), Z0=Math.min(1.6,1/Math.sqrt(keep)); let cx0=0, cy0=0; cells.forEach(c=>{ cx0+=c.X; cy0+=c.Y; }); cx0/=cells.length; cy0/=cells.length;
+      cells.forEach(c=>{ const f=.6*vn(c.X/70,c.Y/70)+.4*vn(c.X/23+9,c.Y/23+4); c.t=.04+1.3*f+Math.random()*.14;
+        if(c.v<.03||(keep<1&&Math.random()>keep)) return;
+        const ang=Math.random()*6.283, sp0=18+Math.random()*58, ox=c.X-cx0, oy=c.Y-cy0, od=Math.hypot(ox,oy)||1;
+        P.push({x:c.X,y:c.Y,a:c.v,h:c.h,k:c.k,t:c.t,life:.95+.8*Math.random(),vx:Math.cos(ang)*sp0+ox/od*22,vy:Math.sin(ang)*sp0+oy/od*14-12,ph:Math.random()*6.283,w:.6+Math.random()*1.1}); });
+      cells.sort((a,b)=>a.t-b.t);
+      // the swap, all in one frame: the copies go in where the originals were, and the originals step aside at once
+      sp.insertBefore(hr,ln); if(tr) sp.insertBefore(tr,title);
+      [hc,title,cut].forEach(el=>{ if(el){ el.style.transition="none"; el.style.opacity="0"; } });
+      const ink=getComputedStyle(title).color||"#EFE8DC", B=12, bH=Array.from({length:B},()=>[]), bT=Array.from({length:B},()=>[]); const t0=performance.now(); let alive=true, last=t0, ci=0;
       // the current: a coarse grid of eddies worked out once a frame, each mote reading the flow where it is
       const W=sp.clientWidth||400, H=sp.clientHeight||800, GX=18, GY=30, gw=W/(GX-1), gh=H/(GY-1), FX=new Float32Array(GX*GY), FY=new Float32Array(GX*GY);
       const flow=T=>{ for(let j=0;j<GY;j++) for(let i=0;i<GX;i++){ const x=i*gw, y=j*gh, k=j*GX+i;
@@ -9174,23 +9316,26 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,preload
           FY[k]=Math.cos(x*.019-T*1.1)+.6*Math.cos(x*.043+T*1.7-y*.011)+.35*Math.cos((x-y)*.029-T*2.3); } };
       const at=(x,y,F)=>{ const fx=Math.max(0,Math.min(GX-1.001,x/gw)), fy=Math.max(0,Math.min(GY-1.001,y/gh)), i=fx|0, j=fy|0, u=fx-i, v=fy-j, k=j*GX+i;
         return (F[k]*(1-u)+F[k+1]*u)*(1-v)+(F[k+GX]*(1-u)+F[k+GX+1]*u)*v; };
-      const frame=now=>{ if(!alive) return; const t=(now-t0)/1000, dt=Math.min(.05,Math.max(0,(now-last)/1000)); last=now; flow(t); clearLn(); for(let b=0;b<B;b++) bx[b].length=0; let live=0;
+      const frame=now=>{ if(!alive) return; const t=(now-t0)/1000, dt=Math.min(.05,Math.max(0,(now-last)/1000)); last=now;
+        // each patch leaves the copy the moment its mote sets off
+        while(ci<cells.length&&cells[ci].t<=t){ const c=cells[ci++]; if(c.h) hg.clearRect(c.x0,c.y0,c.w,c.hh); else if(tg) tg.clearRect(c.x0,c.y0,1,1); }
+        flow(t); clearLn(); for(let b=0;b<B;b++){ bH[b].length=0; bT[b].length=0; } let live=0;
         const drag=Math.exp(-dt*1.5);
-        for(const q of P){ const a=t-q.t; let al=q.a, z=Z0;
-          if(a>0){ if(a>=q.life) continue; const p=a/q.life;
-            // thrown loose, then taken by the eddies more and more as it slows, with the faint lift of something lighter than the water
-            const k=Math.min(1,a*1.6)*70; q.vx=q.vx*drag+at(q.x,q.y,FX)*k*dt; q.vy=q.vy*drag+(at(q.x,q.y,FY)*k-16)*dt; q.x+=q.vx*dt; q.y+=q.vy*dt;
-            al=q.a*Math.pow(1-p,1.6)*(.72+.28*Math.sin(q.ph+a*22)); z=(Z0+(q.w-Z0)*Math.min(1,a*5))*(1-.6*p); }
-          live++; if(al<.02) continue; const b=Math.min(B-1,Math.floor(al*B)); bx[b].push(q.x,q.y,z); }
-        lg.fillStyle=ink; for(let b=0;b<B;b++){ const L2=bx[b]; if(!L2.length) continue; lg.globalAlpha=(b+.5)/B; for(let k=0;k<L2.length;k+=3){ const z=L2[k+2]; lg.fillRect(L2[k]-z/2,L2[k+1]-z/2,z,z); } } lg.globalAlpha=1;
-        if(live) requestAnimationFrame(frame); else { alive=false; clearLn(); } };
+        for(const q of P){ const a=t-q.t; if(a>=q.life) continue; live++; if(a<=0) continue; const p=a/q.life;
+          // thrown loose, then taken by the eddies more and more as it slows, with the faint lift of something lighter than the water
+          const kk=Math.min(1,a*1.6)*70; q.vx=q.vx*drag+at(q.x,q.y,FX)*kk*dt; q.vy=q.vy*drag+(at(q.x,q.y,FY)*kk-16)*dt; q.x+=q.vx*dt; q.y+=q.vy*dt;
+          // it sets off carrying exactly the light of the patch it left; the shimmer and the thinning come in after
+          const al=q.a*Math.pow(1-p,1.6)*(1-.28*Math.min(1,a*3)*(.5+.5*Math.sin(q.ph+a*22))), s0=Z0*q.k, z=(s0+(q.w-s0)*Math.min(1,a*5))*(1-.6*p);
+          if(al<.02) continue; const b=Math.min(B-1,Math.floor(al*B)); (q.h?bH:bT)[b].push(q.x,q.y,z); }
+        [[bH,"#fff"],[bT,ink]].forEach(([bx,col])=>{ lg.fillStyle=col; for(let b=0;b<B;b++){ const L2=bx[b]; if(!L2.length) continue; lg.globalAlpha=(b+.5)/B; for(let k=0;k<L2.length;k+=3){ const z=L2[k+2]; lg.fillRect(L2[k]-z/2,L2[k+1]-z/2,z,z); } } }); lg.globalAlpha=1;
+        if(live||ci<cells.length) requestAnimationFrame(frame); else { alive=false; clearLn(); hr.remove(); if(tr) tr.remove(); } };
       requestAnimationFrame(frame); return true; };
     const rise=()=>{ if(risen||done) return; risen=true; if(raf){ cancelAnimationFrame(raf); raf=0; } if(cv) cv.style.opacity="0"; fuseCvs.forEach(c=>c.remove());
       try{ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); }catch(e){}
       let gone2=false; try{ gone2=mist(); }catch(e){ gone2=false; }
       if(!gone2){ if(hc) fade(hc,700,0); if(cut) fade(cut,700,0); }
       // the name stays exactly where it is and only dissolves
-      Object.assign(title.style,{transition:gone2?"opacity .5s cubic-bezier(.4,0,.6,1)":"opacity .7s ease"}); if(!gone2) title.style.opacity="0";
+      if(!gone2) Object.assign(title.style,{transition:"opacity .7s ease",opacity:"0"});
       // the English line is longer than the Latin and lines up on the same right edge; if it would run off the left of the screen it gives up some letter spacing
       if(en){ const r=en.getBoundingClientRect(), room=r.right-sp.getBoundingClientRect().left-10, n=en.textContent.length, gap=parseFloat(getComputedStyle(en).letterSpacing)||0; if(r.width>room&&n) en.style.letterSpacing=Math.max(0,gap-(r.width-room)/n).toFixed(2)+"px"; }
       motto.style.opacity="1"; later(melt,1750); later(()=>{ fade(motto,700,0); fade(mcut,700,0); },4700); later(gone,5400); };
