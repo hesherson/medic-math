@@ -701,7 +701,8 @@ details.method[open]>summary::after{content:"\2212"}
 /* reveal on scroll */
 /* entrance animations fill backwards only, so each block lets go of its GPU layer the moment it lands */
 .reveal:not(.in){opacity:0}
-@keyframes revealUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* no end frame: each item rises to its own resting look, so a dimmed (locked) one stays dimmed instead of flashing bright first */
+@keyframes revealUp{from{opacity:0;transform:translateY(14px)}}
 .reveal.in{animation:revealUp 0.54s cubic-bezier(.2,.7,.2,1) backwards}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1}.reveal.in{animation:none}}
 
@@ -1248,6 +1249,14 @@ html[data-vt="seg-back"]::view-transition-old(root){animation-name:vtFadeOut} ht
 .tbchip[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
 .tbgo .btn:disabled{opacity:.5;cursor:not-allowed}
 .tbmiss{text-align:left;margin-top:12px} .tbmiss summary{cursor:pointer;font-weight:600} .tbmiss ol{margin:8px 0 0;padding-left:20px;display:grid;gap:8px;font-size:14px}
+
+/* v72: the motto's melt runs on transform and opacity only, so it holds full frame rate: each Latin letter stretches down and thins
+   away, each English letter condenses up out of the same spot */
+.splash-m.melting .ch{will-change:transform,opacity}
+.splash-m.melting .sm-la .ch{animation:lzDrip2 .9s cubic-bezier(.45,0,.7,.4) both}
+.splash-m.melting .sm-en .ch{opacity:0;animation:lzRise2 .9s cubic-bezier(.2,.65,.25,1) both}
+@keyframes lzDrip2{0%{transform:none;opacity:1}35%{transform:translateY(1px) scaleY(1.1);opacity:.9}100%{transform:translateY(10px) scale(.9,1.7);opacity:0}}
+@keyframes lzRise2{0%{transform:translateY(7px) scale(1.06,1.4);opacity:0}55%{opacity:.8}100%{transform:none;opacity:1}}
 /* ================= calm: one thing in focus, the rest a tap away ================= */
 /* section labels are quiet text instead of red strips */
 .sect,.dg-grid h4,.quick .eyebrow,.mgroup,.rgroup h2,.rcard>header>.eyebrow{background:none;color:var(--muted);padding:0;border-radius:0;font-size:11.5px;letter-spacing:.12em;font-weight:600;margin:0 0 6px;line-height:1.3}
@@ -2043,6 +2052,56 @@ html.hdrnow .hvin{transition:none!important}
 /* v70: numbers in the open dashboard keep the app's number face; they only grow, so opening and closing never swaps the font */
 #lv-card .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:0}
 #lv-card .num.nil{letter-spacing:-.3em;padding-right:.3em}
+
+/* v72: blur lives only under the floating bars. The band above the bottom bar is gone, and the edge under the header ends where the
+   header does, easing off over the gap under the strip */
+.navveil{display:none!important}
+.hveil{bottom:0}
+@media (max-width:600px){ html.hdrmin .hveil{bottom:16px} }
+.hveil b:nth-child(1){top:0;bottom:0;--r:.5px}
+.hveil b:nth-child(2){top:0;bottom:2px;--r:1px}
+.hveil b:nth-child(3){top:0;bottom:5px;--r:2px}
+.hveil b:nth-child(4){top:0;bottom:8px;--r:4px}
+.hveil b:nth-child(5){top:0;bottom:14px;--r:8px}
+.hveil b:nth-child(6){top:0;bottom:22px;--r:14px;--s:1.35}
+.hvin::after{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 46%,transparent),color-mix(in srgb,var(--bg) 40%,transparent) calc(100% - 10px),transparent)}
+/* v72: the page ends with room to spare: the last line of every page scrolls clear of the + button, with a clear gap above the notes */
+footer{margin-top:44px}
+@media (max-width:600px){ main,body[data-panel="today"] main{padding-bottom:calc(84px + 56px + 28px + env(safe-area-inset-bottom,0px))} }
+
+/* v72: the feedback sheet. The bar shows the verdict and the answer; slid up it rises to about a third of the screen with the why */
+.lfoot{max-height:none}
+.lfoot .lhandle{position:relative}
+.lfoot .lhandle::after{content:"Slide up for why";display:block;margin-top:5px;font:600 10.5px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 52%,transparent);transition:opacity 0.18s ease}
+.lfoot.lifted .lhandle::after{content:"Slide down to close"}
+.lmsg{max-height:none}
+.lfoot:not(.lifted):not(.dragging) .lmsg.more{-webkit-mask-image:none;mask-image:none}
+.lmsg .lhead{display:grid;gap:4px}
+.lmsg .lmore{display:grid;gap:12px;padding:12px 0 4px;margin-top:6px;border-top:1px solid color-mix(in srgb,var(--ink) 14%,transparent)}
+.lwhyb{display:grid;gap:4px} .lwhyb .eyebrow{margin:0;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.lwhyb p{margin:0} .lwhyb ul,.lwhyb ol{margin:0;padding-left:18px;display:grid;gap:4px}
+.lwork li b{display:block;font-weight:600} .lwork .lm{font-family:var(--mono);font-size:13px}
+.lmsg .lmore b:first-child{font-family:inherit;font-size:inherit;line-height:inherit;color:inherit;font-weight:600}
+/* v72: every light wanders on its own around the spot it lives in, and how far and how fast it wanders goes with its depth: the far
+   ones barely stir, the near ones drift a little wider and a little quicker, so the field reads in depth even while nothing scrolls.
+   The paths have four turns each and ease through every one, so a light never seems to be going anywhere in particular. */
+.bkl.far{--ax:1.4vw;--ay:1.2vh;--bkt:.95}
+.bkl.mid{--ax:2.8vw;--ay:2.3vh;--bkt:.7}
+.bkl.near{--ax:4.8vw;--ay:3.8vh;--bkt:.5}
+.bokeh i{animation-duration:calc(var(--d,90s) * var(--bkt,1))}
+@keyframes bkA{0%{transform:translate(0,0)}24%{transform:translate(calc(var(--ax,3vw) * .9),calc(var(--ay,3vh) * -.6))}51%{transform:translate(calc(var(--ax,3vw) * .25),calc(var(--ay,3vh) * .85))}77%{transform:translate(calc(var(--ax,3vw) * -.75),calc(var(--ay,3vh) * .2))}100%{transform:translate(calc(var(--ax,3vw) * -.2),calc(var(--ay,3vh) * -.95))}}
+@keyframes bkB{0%{transform:translate(0,0)}27%{transform:translate(calc(var(--ax,3vw) * -.85),calc(var(--ay,3vh) * -.5))}49%{transform:translate(calc(var(--ax,3vw) * -.3),calc(var(--ay,3vh) * .9))}74%{transform:translate(calc(var(--ax,3vw) * .7),calc(var(--ay,3vh) * .35))}100%{transform:translate(calc(var(--ax,3vw) * .45),calc(var(--ay,3vh) * -.8))}}
+@keyframes bkC{0%{transform:translate(0,0)}22%{transform:translate(calc(var(--ax,3vw) * -.4),calc(var(--ay,3vh) * .9))}53%{transform:translate(calc(var(--ax,3vw) * .85),calc(var(--ay,3vh) * .45))}79%{transform:translate(calc(var(--ax,3vw) * .35),calc(var(--ay,3vh) * -.85))}100%{transform:translate(calc(var(--ax,3vw) * -.8),calc(var(--ay,3vh) * -.3))}}
+
+/* v72: the card's colour bar juts out to the left a little while the card opens, on the same curve as the rest, and tucks back as it closes */
+details.drug{box-shadow:0 0 0 0 var(--fam,var(--teal));transition:box-shadow 0.486s var(--eq)}
+details.drug.jut{box-shadow:-3px 0 0 0 var(--fam,var(--teal))}
+@media (hover:none){ details.drug:hover{box-shadow:0 0 0 0 var(--fam,var(--teal))} details.drug.jut:hover{box-shadow:-3px 0 0 0 var(--fam,var(--teal))} }
+
+/* v72: dose lines that would otherwise break: no leader, then a step tighter, then another */
+li.tnode .l1.nolead .lead{display:none} li.tnode .l1.nolead{gap:8px} li.tnode .l1.nolead .dose{margin-left:auto}
+li.tnode .l1.fs1 .use{font-size:12.5px;letter-spacing:-.005em} li.tnode .l1.fs1 .dose{letter-spacing:-.035em}
+li.tnode .l1.fs2 .use{font-size:12px;letter-spacing:-.01em} li.tnode .l1.fs2 .dose{font-size:11.5px;letter-spacing:-.045em}
 </style>
 </head>
 <body>
@@ -2071,7 +2130,7 @@ html.hdrnow .hvin{transition:none!important}
     <p class="note">Every drug card and calculator uses this weight.</p>
   </div>
   <i class="hveil" aria-hidden="true"><i class="hvin"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></i></i>
-  <i class="navveil" aria-hidden="true"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></i>
+  
   <nav class="nav" aria-label="Sections">
     <span class="navthumb" aria-hidden="true"></span>
     <button type="button" data-g="today" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8V11h-8zm0-18v6h8V3z"/></svg><span>Dashboard</span></button>
@@ -2314,7 +2373,7 @@ html.hdrnow .hvin{transition:none!important}
   <div class="drugtop">
     <div class="introrow"><p class="intro">Search by name, brand, class or use, and tap the star to add a drug to your study set.</p></div>
     <div class="drugbar"><input type="search" id="drug-q" placeholder="Search drug, brand, class, indication" aria-label="Search drugs"><select id="drug-filter" aria-label="Filter by class"></select></div>
-    <div class="drugchips"><button type="button" class="chip" id="drug-study" aria-pressed="false">Study set · 0</button><button type="button" class="chip" id="drug-listen" aria-pressed="false"><svg class="mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>Listen to these</button><span class="note" id="drug-count"></span></div>
+    <div class="drugchips"><button type="button" class="chip" id="drug-study" aria-pressed="false">Study set · 0</button><span class="note" id="drug-count"></span></div>
   </div>
   <div class="druglist" id="druglist"></div>
   <p class="note">Source: WVFD Drug Profiles, based on AHA, ACLS and PALS common practice with AZDHS and JB Learning content. It's a training reference, so check it against your current protocol.</p>
@@ -2693,7 +2752,8 @@ html.hdrnow .hvin{transition:none!important}
   // pages opened from inside another page keep that page lit in the strip
   const PARENT={scen:"sim"};
   // each tab reopens the page you were last on in it
-  const lastOf=g=>{ const v=store.get("mm-last-"+g,NAV[g][0]); return NAV[g].includes(v)?v:NAV[g][0]; };
+  // a tab always opens on its first page, whatever page of it was open last
+  const lastOf=g=>NAV[g][0];
   // pages reached from inside a group without their own pill
   // Progress and the registry page open from their boxes on the dashboard
   const HIDDEN={lesson:"games",path:"games",progress:"today",registry:"today",scen:"prep",review:"prep"};
@@ -2727,7 +2787,7 @@ html.hdrnow .hvin{transition:none!important}
       return out; }
     function kidsOf(d){ const k=[]; [...d.children].forEach(c=>{ if(c.tagName==="SUMMARY") return; const ch=[...c.children]; if(ch.length&&ch.length<30) k.push(...ch); else k.push(c); }); return k; }
     const rad=el=>getComputedStyle(el).borderBottomLeftRadius||"0px";
-    const clip=(b,r)=>`inset(-60px 0 ${b}px 0 round 0 0 ${r} ${r})`;
+    const clip=(b,r,l)=>`inset(-60px 0 ${b}px ${-(l||0)}px round 0 0 ${r} ${r})`;
     // the closed height of a fold that was opened some other way: closed for one measurement, then opened again before anything is drawn
     function closedH(d){ d.dataset.fold="1"; d.open=false; const h=d.getBoundingClientRect().height; d.open=true; return h; }
     // the timing of one fold: the box and what is under it take DD; the pieces inside start one after another (only the ones on screen
@@ -2742,10 +2802,10 @@ html.hdrnow .hvin{transition:none!important}
       const h1=d.getBoundingClientRect().height, dh=h1-h0;
       if(still()||dh<2){ delete d.dataset.fold; if(o.done) o.done(); return; }
       const P=plan(o,o.kids?o.kids(d):kidsOf(d)), A=[], R=rad(d), t={duration:P.DD,easing:EQ};
-      A.push(d.animate([{clipPath:clip(dh,R)},{clipPath:clip(0,R)}],t));
+      const L=d.classList&&d.classList.contains("drug")?5:0; A.push(d.animate([{clipPath:clip(dh,R,L)},{clipPath:clip(0,R,L)}],t));
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(dh,r)},{clipPath:clip(0,r)}],t)); });
       B.forEach(([el,t0])=>{ const t1=el.getBoundingClientRect().top; if(Math.abs(t1-t0)>.5) A.push(el.animate([{transform:`translateY(${(t0-t1).toFixed(1)}px)`},{transform:"none"}],t)); });
-      P.K.forEach(x=>A.push(x.k.animate([{opacity:0,transform:"translateY(-14px)"},{opacity:1,transform:"none"}],{duration:P.dk,delay:x.s,easing:EQ,fill:"backwards"})));
+      P.K.forEach(x=>A.push(x.k.animate([{offset:0,opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:x.s,easing:EQ,fill:"backwards"})));
       d._fa=A; d._fo=o; A[0].finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
     // closing is the opening played backwards: the pieces inside lift away first, last one first, then the box folds up and what is under it
     // glides back, every move on the reversed curve, so everything leaves along the path it came in by
@@ -2754,10 +2814,10 @@ html.hdrnow .hvin{transition:none!important}
       if(still()||dh<2){ if(o.before) o.before({T:0}); if(o.end) o.end(); d.open=false; if(o.done) o.done(); return; }
       const S=shells(d), B=below(d,dh+60), P=plan(o,o.kids?o.kids(d):kidsOf(d)); d.dataset.fold="1"; d._closing=true; if(o.before) o.before(P);
       const A=[], R=rad(d), t={duration:P.DD,delay:P.T-P.DD,easing:EQR,fill:"both"};
-      A.push(d.animate([{clipPath:clip(0,R)},{clipPath:clip(dh,R)}],t));
+      const L=d.classList&&d.classList.contains("drug")?5:0; A.push(d.animate([{clipPath:clip(0,R,L)},{clipPath:clip(dh,R,L)}],t));
       S.forEach(s=>{ const r=rad(s); A.push(s.animate([{clipPath:clip(0,r)},{clipPath:clip(dh,r)}],t)); });
       B.forEach(([el])=>A.push(el.animate([{transform:"none"},{transform:`translateY(${(-dh).toFixed(1)}px)`}],t)));
-      P.K.forEach(x=>{ if(x.on) A.push(x.k.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:Math.max(0,P.T-x.s-P.dk),easing:EQR,fill:"both"})); });
+      P.K.forEach(x=>{ if(x.on) A.push(x.k.animate([{offset:1,opacity:0,transform:"translateY(-14px)"}],{duration:P.dk,delay:Math.max(0,P.T-x.s-P.dk),easing:EQR,fill:"both"})); });
       d._fa=A; d._fo=o; A[0].finished.then(()=>{ if(d._fa===A) finish(d); },()=>{}); }
     // land whatever is running on its end state at once
     function finish(d){ const A=d._fa, o=d._fo||{}; d._fa=null; d._fo=null;
@@ -2854,9 +2914,15 @@ html.hdrnow .hvin{transition:none!important}
   const hasStrip=g=>(g==="games"&&!!window.gameStrip)||NAV[g].length>1;
   const FIT={};
   function stripHTML(g){ if(g==="games"&&window.gameStrip) return gameStrip(); const items=NAV[g]; return items.map((p,i)=>`${SPLIT[g]===i?'<i class="psep" aria-hidden="true"></i>':""}<button type="button" class="ptab" role="tab" data-p="${p}">${TAB[p]||LABEL[p]}</button>`).join(""); }
-  function strip(g,id,anim){ const sub=$("subnav"); if(!sub) return;
+  function strip(g,id,anim,tap){ const sub=$("subnav"); if(!sub) return;
     // the category picker belongs to the games list itself, not to a lesson opened from it
-    if(!hasStrip(g)||(g==="games"&&id!=="games")){ sub.hidden=true; sub.dataset.g=""; return; }
+    if(!hasStrip(g)||(g==="games"&&id!=="games")){
+      // at the tap it eases out with the old page; when the new page lands it is put away for good
+      const tr0=sub.querySelector(".ptrack");
+      if(tap&&anim&&!sub.hidden&&!sub._out&&tr0&&tr0.animate&&!reduceMotion()&&!pend){ sub._out=tr0.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(-6px) scale(.985)"}],{duration:spd(160),easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}); return; }
+      if(sub._out){ try{ sub._out.cancel(); }catch(e){} sub._out=null; }
+      sub.hidden=true; sub.dataset.g=""; return; }
+    if(sub._out){ try{ sub._out.cancel(); }catch(e){} sub._out=null; }
     const appear=sub.hidden; sub.hidden=false;
     let tr=sub.querySelector(".ptrack"); if(!tr){ sub.innerHTML='<div class="ptrack"><span class="pthumb" aria-hidden="true"><i class="pt-l"></i><i class="pt-m"></i><i class="pt-r"></i></span></div>'; tr=sub.querySelector(".ptrack"); }
     const th=tr.querySelector(".pthumb"), fresh=sub.dataset.g!==g, special=g==="games";
@@ -2906,7 +2972,7 @@ html.hdrnow .hvin{transition:none!important}
   window.addEventListener("resize",()=>navThumb(false)); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>navThumb(false));
   function markTap(id,from){ const g=groupOf(id), gf=from?groupOf(from):null;
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false")); (window.requestAnimationFrame||setTimeout)(()=>navThumb(!!from&&!reduceMotion()));
-    if(gf===g) strip(g,id,true); else { const tr=$("subnav").querySelector(".ptrack"); if(tr&&!$("subnav").hidden&&tr.animate){ const fade=[{opacity:1},{opacity:0}], o={duration:OUT,easing:"ease-in",fill:"forwards"};
+    if(gf===g) strip(g,id,true,true); else { const tr=$("subnav").querySelector(".ptrack"); if(tr&&!$("subnav").hidden&&tr.animate){ const fade=[{opacity:1},{opacity:0}], o={duration:OUT,easing:"ease-in",fill:"forwards"};
       if(hasStrip(g)&&(g!=="games"||id==="games")) [...tr.children].forEach(k=>k.animate(fade,o)); else tr.animate(fade,o); } }
     if(window.bokehGo&&gf&&gf!==g) bokehGo(Object.keys(NAV).indexOf(g)); }
   function showPanel(id,opts){
@@ -2931,14 +2997,20 @@ html.hdrnow .hvin{transition:none!important}
     out.finished.then(()=>{ const P=pend; pend=null; commit(P.id,P.opts,P.from,P); swapDone=null; done(); },()=>{});
     return swapDone;
   }
+  function foldAway(el){ if(!el||!el.querySelectorAll) return;
+    el.querySelectorAll("details[open]").forEach(d=>{ try{ if(d._fa&&window.FOLD) FOLD.finish(d); }catch(e){} try{ if(d._wipe) d._wipe.end(); }catch(e){}
+      if(!d.open) return; d.dataset.auto="1"; d.open=false; d.classList.remove("shut","rulemove"); const s=d.firstElementChild; if(s&&s.classList) s.classList.remove("stuck"); });
+    el.dispatchEvent(new CustomEvent("foldaway")); }
+  window.foldAway=foldAway;
   function commit(id,opts,from,P){ const g=groupOf(id);
     if(!(opts&&opts.back)&&from&&from!==id){ navStack.push(from); if(navStack.length>60) navStack.shift(); }
     curPanel=id; store.set("mm-panel",id); try{ history.replaceState(null,"","#"+id); }catch(e){}
-    if(NAV[g].length>1&&NAV[g].includes(PARENT[id]||id)) store.set("mm-last-"+g,PARENT[id]||id);
     document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.g===g?"true":"false")); if(!P) (window.requestAnimationFrame||setTimeout)(()=>navThumb(!!from&&!reduceMotion()));
     if(!P&&window.bokehGo&&from&&groupOf(from)!==g) bokehGo(Object.keys(NAV).indexOf(g));
     strip(g,id,!!P);
     ALLP.forEach(p=>{ const el=$("panel-"+p); if(el) el.hidden=p!==id; });
+    // whatever was left open on the page you just left folds away out of sight, so every page is found folded when you come back
+    if(from&&from!==id) foldAway($("panel-"+from));
     if(P){ try{ P.out.cancel(); }catch(e){} }
     if(document.body&&document.body.setAttribute) document.body.setAttribute("data-panel",id);
     // the bar opens back up at once on a new page, rather than easing open while the page arrives
@@ -3096,9 +3168,9 @@ html.hdrnow .hvin{transition:none!important}
   ];
   (function renderRules(){
     const root=$("rules");
-    // each group is a row that opens; the first one starts open
+    // each group is a row that opens; every one starts folded
     RULES.forEach((gr,gi)=>{
-      const d=document.createElement("details"); d.className="rgroup fold"; if(!gi) d.open=true;
+      const d=document.createElement("details"); d.className="rgroup fold";
       d.innerHTML=`<summary><span class="ft">${gr.g}</span><span class="fs">${gr.items.length}</span></summary><div class="fbody">`+(gr.cold?`<div class="coldgrid">${gr.items.map(it=>`<div class="cold"><b class="num">${it[0]}</b><span>${it[1]}</span></div>`).join("")}</div>`:gr.items.map(it=>`<div class="rule-card"><div class="r">${it[0]}</div><div class="e">${it[1]}</div></div>`).join(""))+`</div>`;
       root.appendChild(d);
     });
@@ -3630,21 +3702,22 @@ html.hdrnow .hvin{transition:none!important}
     const WIPE=spd(600), WE="cubic-bezier(.6,0,.25,1)", WER="cubic-bezier(.75,0,.4,1)";
     const px=n=>n.toFixed(1)+"px";
     function wipe(d,opening,delay){ const fr=d._fr, f=d.querySelector(".dg-facts"), sm=d.firstElementChild; if(!fr||!f||!sm) return; const W=Math.max(1,sm.clientWidth);
-      if(d._wipe) d._wipe.end(); const top=fr.y, bot=fr.y+fr.h, rest=ruleOpen(sm).y, S=opening?.7:.3;
+      if(d._wipe) d._wipe.end(); const top=fr.y, bot=fr.y+fr.h, rest=ruleOpen(sm).y, span=Math.max(1,rest-top);
       const line=document.createElement("i"); line.className="dg-ruleg"; line.setAttribute("aria-hidden","true"); line.innerHTML="<b></b>";
       const ghost=document.createElement("div"); ghost.className="dg-factsg"; ghost.setAttribute("aria-hidden","true"); ghost.innerHTML=f.innerHTML; Object.assign(ghost.style,{left:px(fr.x),top:px(fr.y),width:px(fr.w)});
       sm.appendChild(ghost); sm.appendChild(line); d.classList.add("rulemove");
       const at=(y,x,w)=>`translate(${px(x)},${px(y)}) scaleX(${Math.min(1,w/W).toFixed(4)})`, T={duration:WIPE,delay:delay||0,easing:opening?WE:WER,fill:"both"};
-      const all=`inset(${px(fr.h)} 0 0 0)`, none="inset(0px 0 0 0)";
-      const lineKF=opening?[{offset:0,transform:at(top,fr.x,fr.w)},{offset:S,transform:at(bot,fr.x,fr.w)},{offset:1,transform:at(rest,0,W)}]
-                          :[{offset:0,transform:at(rest,0,W)},{offset:S,transform:at(bot,fr.x,fr.w)},{offset:1,transform:at(top,fr.x,fr.w)}];
-      // the lines show below the wiper: opening wipes them from the top down, closing uncovers them from the bottom up
-      const factsKF=opening?[{offset:0,clipPath:none},{offset:S,clipPath:all},{offset:1,clipPath:all}]:[{offset:0,clipPath:all},{offset:S,clipPath:all},{offset:1,clipPath:none}];
-      const when=y=>{ const k=Math.max(0,Math.min(1,(y-top)/Math.max(1,bot-top))); return opening?S*k:S+(1-S)*(1-k); };
-      // the wiper brightens a little while it travels, so the eye can follow it, and is back to the plain rule colour at both ends
-      const glow=line.firstChild.animate([{offset:0,opacity:0},{offset:S*.6,opacity:1},{offset:.5*(S+1),opacity:1},{offset:1,opacity:0}],T);
+      const ins=y=>`inset(${px(Math.max(0,Math.min(fr.h,y-top)))} 0 0 0)`, all=ins(bot), none=ins(top);
+      // one straight sweep each way: down from the preview's rule to the header's foot when it opens, back up when it closes. The line moves
+      // on one curve and everything it passes is keyed to the moment it passes, so nothing runs ahead of it or lags behind it.
+      const lineKF=opening?[{offset:0,transform:at(top,fr.x,fr.w)},{offset:1,transform:at(rest,0,W)}]:[{offset:0,transform:at(rest,0,W)},{offset:1,transform:at(top,fr.x,fr.w)}];
+      const when=y=>{ const k=Math.max(0,Math.min(1,(y-top)/span)); return opening?k:1-k; };
+      // the preview's lines above the line's landing place are wiped by it; any that reach below it fade as it travels (and come back as it returns)
+      let factsKF; if(bot<=rest){ const k=when(bot); factsKF=opening?[{offset:0,clipPath:none},{offset:k,clipPath:all},{offset:1,clipPath:all}]:[{offset:0,clipPath:all},{offset:k,clipPath:all},{offset:1,clipPath:none}]; }
+      else factsKF=opening?[{offset:0,clipPath:none,opacity:1},{offset:.35,clipPath:ins(top+.35*span),opacity:1},{offset:1,clipPath:ins(rest),opacity:0}]:[{offset:0,clipPath:ins(rest),opacity:0},{offset:.65,clipPath:ins(top+.35*span),opacity:1},{offset:1,clipPath:none,opacity:1}];
+      const glow=line.firstChild.animate([{offset:0,opacity:0},{offset:.25,opacity:1},{offset:.7,opacity:1},{offset:1,opacity:0}],T);
       const A=[line.animate(lineKF,T),ghost.animate(factsKF,T),glow];
-      // the buttons show above the wiper: uncovered as it passes down over them, wiped as it passes back up
+      // the buttons show above the line: uncovered as it passes down over them, wiped as it passes back up
       [d.querySelector(".dg-tools"),d.querySelector(".dg-cls")].forEach(el=>{ if(!el||!el.offsetParent) return; const r=rel(el,sm), o1=when(r.y), o2=when(r.y+r.h), lo=Math.min(o1,o2), hi=Math.max(o1,o2)||.001;
         const hid=`inset(0 0 ${px(r.h+2)} 0)`, shown="inset(0 0 0px 0)";
         A.push(el.animate(opening?[{offset:0,clipPath:hid},{offset:lo,clipPath:hid},{offset:hi,clipPath:shown},{offset:1,clipPath:shown}]:[{offset:0,clipPath:shown},{offset:lo,clipPath:shown},{offset:hi,clipPath:hid},{offset:1,clipPath:hid}],T)); });
@@ -3655,6 +3728,7 @@ html.hdrnow .hvin{transition:none!important}
       // fold away any other open card at once, without moving the one you tapped
       root.querySelectorAll("details.drug[open]").forEach(o=>{ if(o===d) return; if(o._fa) FOLD.finish(o); if(!o.open) return; const t0=d.getBoundingClientRect().top; o.dataset.auto="1"; o.open=false; const t1=d.getBoundingClientRect().top; if(Math.abs(t1-t0)>1) window.scrollTo(0,window.scrollY+(t1-t0)); });
       const f=d.querySelector(".dg-facts"), fr=f?rel(f,d.firstElementChild):null; d._fr=fr; clearTimeout(d._sdt); d.classList.remove("shut");
+      d.classList.add("jut");
       FOLD.open(d,{before:()=>fill(d), kids:parts, duration:WIPE, kidDelay:spd(260),
         after:()=>{ fitLines(d); fitTools(d); drugOpen(true); if(!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)) wipe(d,true); } });
       scrollToCard(d); }
@@ -3662,7 +3736,7 @@ html.hdrnow .hvin{transition:none!important}
       if(d._fa) FOLD.finish(d); if(!d.open) return;
       FOLD.close(d,{kids:parts, duration:WIPE, kidDelay:spd(260),
         // the wiper runs back in the last stretch, as it ran first on the way in; the strip comes back down at the very end, as it left first
-        before:P=>{ d.classList.add("shut"); const back=d.getBoundingClientRect().top<headerH()-1; if(back) scrollToCard(d); const T=(P&&P.T)||WIPE; wipe(d,false,Math.max(0,T-WIPE)); clearTimeout(d._sdt);
+        before:P=>{ d.classList.add("shut"); d.classList.remove("jut"); const back=d.getBoundingClientRect().top<headerH()-1; if(back) scrollToCard(d); const T=(P&&P.T)||WIPE; wipe(d,false,Math.max(0,T-WIPE)); clearTimeout(d._sdt);
           d._sdt=setTimeout(()=>{ const other=[...root.querySelectorAll("details.drug[open]")].some(o=>o!==d); if(!other&&(!d.open||d._closing)) dropStrip(d); },Math.max(back?spd(540):0,T-spd(500))); },
         end:()=>{ d.dataset.auto="1"; if(d._wipe) d._wipe.end(); },
         done:()=>{ if(d._wipe) d._wipe.end(); d.classList.remove("shut"); } }); }
@@ -3679,7 +3753,19 @@ html.hdrnow .hvin{transition:none!important}
     function setStudyBtn(){ studyBtn.innerHTML=`<svg class="chipstar" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>Study set · ${study.size}`; studyBtn.setAttribute("aria-pressed",studyOnly?"true":"false"); if(!study.size&&studyOnly){ studyOnly=false; studyBtn.setAttribute("aria-pressed","false"); } }
     function visible(){ const term=q.value.trim().toLowerCase(), c=fil.value; return DRUGS.filter(d=>(!studyOnly||study.has(d.id))&&(!c||d.cls.includes(c))&&(!term||[d.name,...d.brands,...d.cls,...d.ind].join(" ").toLowerCase().includes(term))); }
     window.visibleDrugIds=()=>visible().map(d=>d.id);
-    const fitLines=scope=>{ (scope||root).querySelectorAll("li.tnode>.l1").forEach(l=>{ if(!l.offsetParent) return; const u=l.querySelector(".use"), dz=l.querySelector(".dose"); if(!u||!dz) return; l.classList.remove("stack"); const ws=u.style.whiteSpace; u.style.whiteSpace="nowrap"; const need=u.scrollWidth+dz.offsetWidth+30; u.style.whiteSpace=ws; if(need>l.clientWidth) l.classList.add("stack"); }); };
+    // a dose line stays on one line if it possibly can: the leader between the use and the dose goes first, then the type tightens a step,
+    // then another; only a line that still cannot fit puts the dose under the use. Every line in the same dose box takes the same type
+    // size, so the rows never mismatch, and each keeps its leader if it still has room for it.
+    const FS=["","fs1","fs2"];
+    const fitLines=scope=>{ const groups=new Map();
+      (scope||root).querySelectorAll("li.tnode>.l1").forEach(l=>{ if(!l.offsetParent) return; const u=l.querySelector(".use"), dz=l.querySelector(".dose"); if(!u||!dz) return;
+        l.classList.remove("nolead","fs1","fs2","stack","tight","tight2","tight3"); l.classList.add("stack"); const w=l.clientWidth; l.classList.remove("stack");
+        const ws=u.style.whiteSpace; u.style.whiteSpace="nowrap"; const need=pad=>u.scrollWidth+dz.offsetWidth+pad; let lv=-1;
+        for(let k=0;k<FS.length;k++){ if(FS[k]) l.classList.add(FS[k]); if(need(8)<=w){ lv=k; break; } if(FS[k]) l.classList.remove(FS[k]); }
+        u.style.whiteSpace=ws; l.classList.remove("fs1","fs2"); const g=l.closest(".dosesec,section,details")||root; if(!groups.has(g)) groups.set(g,{lv:0,rows:[]}); const G=groups.get(g); G.rows.push({l,u,dz,w,lv}); if(lv>G.lv) G.lv=lv; });
+      groups.forEach(G=>G.rows.forEach(r=>{ const {l,u,dz,w}=r; if(r.lv<0){ l.classList.add("stack"); return; } if(FS[G.lv]) l.classList.add(FS[G.lv]);
+        const ws=u.style.whiteSpace; u.style.whiteSpace="nowrap"; const fitsLead=u.scrollWidth+dz.offsetWidth+30<=w, fits=u.scrollWidth+dz.offsetWidth+8<=w; u.style.whiteSpace=ws;
+        if(!fits){ l.classList.remove("fs1","fs2"); l.classList.add("stack"); } else if(!fitsLead) l.classList.add("nolead"); })); };
     window.fitDoseLines=fitLines;
     const markTrees=scope=>{ const info=!!store.get("mm-showinfo",false); (scope||root).querySelectorAll("ul.tree").forEach(t=>{ const vis=[...t.children].filter(n=>info||!n.classList.contains("info")); [...t.children].forEach(n=>n.classList.remove("first","last")); if(vis.length){ vis[0].classList.add("first"); vis[vis.length-1].classList.add("last"); } }); };
     const applyLayers=()=>{ markTrees(); (window.requestAnimationFrame||setTimeout)(()=>fitLines()); const m=!!store.get("mm-showmath",false), i=!!store.get("mm-showinfo",false); root.querySelectorAll("details.drug").forEach(x=>{ x.classList.toggle("showmath",m); x.classList.toggle("showinfo",i); }); root.querySelectorAll("[data-math]").forEach(x=>x.setAttribute("aria-pressed",m?"true":"false")); root.querySelectorAll("[data-info]").forEach(x=>x.setAttribute("aria-pressed",i?"true":"false")); };
@@ -3718,7 +3804,7 @@ html.hdrnow .hvin{transition:none!important}
       const sm=e.target.closest("details.drug>summary"); if(!sm||e.target.closest(".dg-tools,.star")) return; const d=sm.parentNode; e.preventDefault(); if(d.open&&!d._closing) closeCard(d); else openCard(d); },true);
     q.addEventListener("input",render); fil.addEventListener("change",render);
     studyBtn.addEventListener("click",()=>{ if(!study.size){ studyBtn.innerHTML=`<svg class="chipstar" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>Tap a star to add a drug`; setTimeout(setStudyBtn,1800); return; } studyOnly=!studyOnly; render(); });
-    $("drug-listen").addEventListener("click",()=>{ const ids=visible().map(d=>d.id); if(ids.length&&window.ttsToggle) ttsToggle(ids,true); });
+    if($("drug-listen")) $("drug-listen").addEventListener("click",()=>{ const ids=visible().map(d=>d.id); if(ids.length&&window.ttsToggle) ttsToggle(ids,true); });
     document.addEventListener("patient",renderDoses);
     document.addEventListener("study",setStudyBtn);
     render();
@@ -5046,15 +5132,15 @@ html.hdrnow .hvin{transition:none!important}
     const line=(d,ds)=>`${use(ds)}: ${dstr(ds)} ${rt(ds)}${ds.t?", "+when(ds):""}${ds.max&&!/\bmax\b/i.test(ds.t||"")?", max "+tight(fmt(ds.max,3)+" "+ds.unit):""}`;
     const scaleWrong=(ds,f)=>{ f=f||pick([10,.1,2,.5]); return {t:tight(rng(ds.lo*f,ds.hi*f)+" "+unitOf(ds)),src:f>1?`${f} times the real dose`:`${f===.5?"half":"a tenth of"} the real dose`}; };
     // n entries of field f from other drugs that do not restate anything this drug lists; each remembers where it came from
-    const foreign=(d,f,n,own)=>{ const mine=new Set((own||d[f]||[]).map(x=>String(x).toLowerCase())); const out=[], seen=new Set(); for(const o of shuffle(others(d))){ for(const x of (o[f]||[])){ const k=String(x).toLowerCase(); if(mine.has(k)||seen.has(k)||conflicts(d,x)) continue; if(f==="contra"&&/hypersensitiv|allerg|^none/i.test(x)) continue; seen.add(k); out.push({t:x,src:short(o)}); if(out.length>=n) return out; } } return out; };
-    const foreignQ=(d,k,n)=>{ const out=[], seen=new Set(); for(const o of shuffle(others(d))){ const x=o.quick&&o.quick[k]; if(!x||x===d.quick[k]||seen.has(x)||conflicts(d,x)) continue; seen.add(x); out.push({t:x,src:short(o)}); if(out.length>=n) break; } return out; };
+    const foreign=(d,f,n,own)=>{ const mine=new Set((own||d[f]||[]).map(x=>String(x).toLowerCase())); const out=[], seen=new Set(); for(const o of shuffle(others(d))){ for(const x of (o[f]||[])){ const k=String(x).toLowerCase(); if(mine.has(k)||seen.has(k)||conflicts(d,x)) continue; if(f==="contra"&&/hypersensitiv|allerg|^none/i.test(x)) continue; seen.add(k); out.push({t:x,src:short(o),lab:`${short(o)}'s ${({cls:"class",brands:"trade name",adverse:"adverse effect",contra:"contraindication",ind:"indication",moa:"mechanism"})[f]||f}`}); if(out.length>=n) return out; } } return out; };
+    const foreignQ=(d,k,n)=>{ const out=[], seen=new Set(); for(const o of shuffle(others(d))){ const x=o.quick&&o.quick[k]; if(!x||x===d.quick[k]||seen.has(x)||conflicts(d,x)) continue; seen.add(x); out.push({t:x,src:short(o),lab:`${short(o)}'s ${({moa:"mechanism",key:"key consideration",ind:"indication",dose:"dose"})[k]||k}`}); if(out.length>=n) break; } return out; };
     const foreignDose=(d,ds,n)=>{ const out=[], seen=new Set([dstr(ds)]); for(const o of shuffle(others(d))){ for(const x of numDoses(o)){ if(x.unit!==ds.unit||x.kind!==ds.kind) continue; const t=dstr(x); if(seen.has(t)) continue; seen.add(t); out.push({t,src:`${short(o)}'s ${lc(use(x))} dose`}); if(out.length>=n) return out; } } return out; };
     const sameDrugDose=(d,ds)=>numDoses(d).filter(x=>x!==ds&&x.unit===ds.unit&&x.kind===ds.kind&&dstr(x)!==dstr(ds)).map(x=>({t:dstr(x),src:`the ${popWord(x.pop)} ${rt(x)} ${lc(use(x))} dose`}));
 
     // ----- exercise factories; null when the data cannot support one -----
     const opt=x=>typeof x==="string"?{t:x}:x;
-    const mc=(prompt,ok,wrongs,expl,tag)=>{ ok=opt(ok); const seen=new Set([String(ok.t).toLowerCase()]); wrongs=wrongs.map(opt).filter(w=>{ const k=String(w.t).toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,nWrong()); if(!ok.t||wrongs.length<2) return null; return {type:"mc",tag:tag||"Pick one",prompt,options:shuffle([{t:ok.t,ok:true}].concat(wrongs.map(w=>({t:w.t,ok:false,src:w.src})))),answer:ok.t,expl}; };
-    const sel=(prompt,oks,wrongs,expl)=>{ oks=uniq(oks); const seen=new Set(oks.map(o=>String(o).toLowerCase())); wrongs=wrongs.map(opt).filter(w=>{ const k=String(w.t).toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,D()>=2?5:4); if(!oks.length||wrongs.length<2) return null; return {type:"select",tag:"Tap all that apply",prompt,options:shuffle(oks.map(t=>({t,ok:true})).concat(wrongs.map(w=>({t:w.t,ok:false,src:w.src})))),answer:oks.join("; "),expl}; };
+    const mc=(prompt,ok,wrongs,expl,tag)=>{ ok=opt(ok); const seen=new Set([String(ok.t).toLowerCase()]); wrongs=wrongs.map(opt).filter(w=>{ const k=String(w.t).toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,nWrong()); if(!ok.t||wrongs.length<2) return null; return {type:"mc",tag:tag||"Pick one",prompt,options:shuffle([{t:ok.t,ok:true}].concat(wrongs.map(w=>({t:w.t,ok:false,src:w.lab||w.src})))),answer:ok.t,expl}; };
+    const sel=(prompt,oks,wrongs,expl)=>{ oks=uniq(oks); const seen=new Set(oks.map(o=>String(o).toLowerCase())); wrongs=wrongs.map(opt).filter(w=>{ const k=String(w.t).toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,D()>=2?5:4); if(!oks.length||wrongs.length<2) return null; return {type:"select",tag:"Tap all that apply",prompt,options:shuffle(oks.map(t=>({t,ok:true})).concat(wrongs.map(w=>({t:w.t,ok:false,src:w.lab||w.src})))),answer:oks.join("; "),expl}; };
     const tf=(stmt,ok,expl,src)=>({type:"tf",tag:"True or false",prompt:stmt,ok,answer:ok?"True":"False",expl,src});
     const typ=(prompt,unit,lo,hi,expl,alts)=>({type:"type",tag:"Type the answer",prompt,unit,lo,hi,answer:tight(rng(lo,hi)+(unit?" "+unit:"")),expl,alts:alts||[],strict:D()>=2});
     const match=(prompt,pairs,expl)=>{ const seen=new Set(), out=[]; pairs.forEach(p=>{ if(!p||!p[0]||!p[1]) return; const k=String(p[1]).toLowerCase(), l=String(p[0]).toLowerCase(); if(seen.has("r"+k)||seen.has("l"+l)) return; seen.add("r"+k); seen.add("l"+l); out.push(p); }); if(out.length<3) return null; const use5=out.slice(0,5); return {type:"match",tag:"Match the pairs",prompt,pairs:use5,answer:use5.map(p=>p[0]+" = "+p[1]).join("; "),expl:expl||""}; };
@@ -5248,7 +5334,7 @@ html.hdrnow .hvin{transition:none!important}
     // cfg: {title, sub, ex[] or next(), count, timed:{total}|{perQ}, xpOk, xpRetry, retry:boolean, onDone(res)->{eyebrow, big, sum, extra, btn, onBtn}}
     function open(cfg){ const ex=cfg.ex?cfg.ex.slice():[]; if(!ex.length&&!cfg.next) return; L={cfg,queue:ex.map(e=>({e,retry:0})),done:0,total:cfg.count||ex.length,xp:0,first:0,misses:0,answered:0,cur:null,t0:Date.now(),ended:false,best:0,streak:0}; titleEl.textContent=cfg.title||""; ov.hidden=false; document.body.classList.add("lessonopen"); setBar(); if(cfg.timed&&cfg.timed.total) startClock(cfg.timed.total,()=>{ if(L&&!L.ended) finish(true); }); next(); }
     function close(){ stopClock(); ov.hidden=true; document.body.classList.remove("lessonopen"); const was=L; L=null; ui=null; leaving=false; if(was&&was.cfg.onClose) was.cfg.onClose(); renderLessons(); renderGames(); renderPath(); }
-    function next(){ if(L.cfg.next&&!L.queue.length&&L.answered<L.total){ const e=L.cfg.next(L); if(e) L.queue.push({e,retry:0}); } if(!L.queue.length||L.answered>=L.total){ finish(false); return; } L.cur=L.queue.shift(); foot.className="lfoot"; foot.dataset.graded="0"; leaving=false; msg.innerHTML=""; msgExpand(false); btn.textContent=L.cfg.silent?"Submit":"Check"; btn.disabled=true; handle.hidden=true; btn.hidden=false; skip.hidden=!!L.cfg.silent; skip.textContent="Skip"; if(L.cfg.silent) titleEl.textContent=(L.cfg.title||"")+" \u00b7 question "+(L.answered+1); show(L.cur.e); body.scrollTop=0; if(L.cfg.timed&&L.cfg.timed.perQ) startClock(L.cfg.timed.perQ,()=>{ if(L&&foot.dataset.graded!=="1") reveal(); }); }
+    function next(){ if(L.cfg.next&&!L.queue.length&&L.answered<L.total){ const e=L.cfg.next(L); if(e) L.queue.push({e,retry:0}); } if(!L.queue.length||L.answered>=L.total){ finish(false); return; } L.cur=L.queue.shift(); foot.className="lfoot"; foot.dataset.graded="0"; leaving=false; msg.innerHTML=""; foot.classList.remove("lifted"); msg.style.maxHeight=""; btn.textContent=L.cfg.silent?"Submit":"Check"; btn.disabled=true; handle.hidden=true; btn.hidden=false; skip.hidden=!!L.cfg.silent; skip.textContent="Skip"; if(L.cfg.silent) titleEl.textContent=(L.cfg.title||"")+" \u00b7 question "+(L.answered+1); show(L.cur.e); body.scrollTop=0; if(L.cfg.timed&&L.cfg.timed.perQ) startClock(L.cfg.timed.perQ,()=>{ if(L&&foot.dataset.graded!=="1") reveal(); }); }
     function stage(html){ const e=L.cur.e; body.innerHTML=`<div class="lq cascade"><span class="eyebrow">${e.tag}</span>${e.spec&&window.ECG_ART?`<div class="lart ecgzoom">${ECG_ART(e.spec)}</div>`:e.art?`<div class="lart">${e.art}</div>`:""}<h3 class="lprompt">${esc(e.prompt)}</h3>${e.hint?`<p class="note">${esc(e.hint)}</p>`:""}${html}</div>`; }
     const LASTPOS=new Map();
     function reshuffle(e){ if(e.options&&e.options.length>1){ const prev=LASTPOS.has(e.prompt)?LASTPOS.get(e.prompt):e._at; let o=e.options; for(let k=0;k<8;k++){ o=shuffle(e.options); const at=o.findIndex(x=>x.ok); if(prev==null||at!==prev) break; } e.options=o; e._at=o.findIndex(x=>x.ok); LASTPOS.set(e.prompt,e._at); } if(e.type==="tiles"&&e.bank) e.bank=shuffle(e.bank); }
@@ -5271,10 +5357,10 @@ html.hdrnow .hvin{transition:none!important}
     }
     // why a wrong pick is wrong, in terms of the question that was asked
     function reason(e){
-      if(e.type==="mc"){ const i=[...ui.sel][0], o=e.options[i]; if(!o) return ""; return o.src?`${cap(o.t)} is ${o.src}.`:""; }
+      if(e.type==="mc"){ const i=[...ui.sel][0], o=e.options[i]; if(!o) return ""; return o.src?`${cap(o.t)}: ${o.src}.`:`${cap(o.t)} is not the answer to this one.`; }
       if(e.type==="select"){ const extra=e.options.filter((o,i)=>!o.ok&&ui.sel.has(i)), missed=e.options.filter((o,i)=>o.ok&&!ui.sel.has(i)); return [extra.length?`Not on the list: ${extra.map(o=>o.t+(o.src?` (${o.src})`:"")).join("; ")}.`:"",missed.length?`Missed: ${missed.map(o=>o.t).join("; ")}.`:""].filter(Boolean).join(" "); }
       if(e.type==="tf") return e.src?`${e.src}.`:"";
-      if(e.type==="type"){ const v=parseNums($("l-in").value); if(!v.length) return "No number in the answer."; const x=v[0]; const alt=(e.alts||[]).find(a=>{ const n=parseNums(a.t); return n.some(m=>near(m,x)); }); if(alt) return `${tight(String(x))} is ${alt.src}; the question asked for the ${e.prompt.match(/,\s*(adult|pediatric),\s*([^:]+):/)?e.prompt.match(/,\s*(adult|pediatric),\s*([^:]+):/).slice(1).join(" ").trim():"listed"} dose.`; if(near(x,e.lo*10)||near(x,e.hi*10)) return "That is ten times the dose, a decimal slip."; if(near(x,e.lo/10)||near(x,e.hi/10)) return "That is a tenth of the dose, a decimal slip."; if(e.lo!==e.hi&&x>e.lo&&x<e.hi) return "Inside the range, but the question wants the range itself or one end of it."; return x>e.hi?"Too high.":"Too low."; }
+      if(e.type==="type"){ const v=parseNums($("l-in").value); if(!v.length) return "No number in the answer."; const x=v[0]; const alt=(e.alts||[]).find(a=>{ const n=parseNums(a.t); return n.some(m=>near(m,x)); }); if(alt) return `${tight(String(x))} is ${alt.src}; the question asked for the ${e.prompt.match(/,\s*(adult|pediatric),\s*([^:]+):/)?e.prompt.match(/,\s*(adult|pediatric),\s*([^:]+):/).slice(1).join(" ").trim():"listed"} dose.`; if(near(x,e.lo*10)||near(x,e.hi*10)) return "That is ten times the dose, a decimal slip."; if(near(x,e.lo/10)||near(x,e.hi/10)) return "That is a tenth of the dose, a decimal slip."; if(e.lo!==e.hi&&x>e.lo&&x<e.hi) return "Inside the range, but the question wants the range itself or one end of it."; const tgt=x>e.hi?e.hi:e.lo, r=tgt?x/tgt:0; if(r>=1.5) return `That is about ${r>=10?Math.round(r):r.toFixed(1)} times the answer: check each conversion, and that you divided where the steps divide.`; if(r>0&&r<=.67) return `That is about ${1/r>=10?Math.round(1/r):(1/r).toFixed(1)} times too small: check each conversion, and that you multiplied where the steps multiply.`; return x>e.hi?"A little high: the setup is right, so recheck the arithmetic.":"A little low: the setup is right, so recheck the arithmetic."; }
       if(e.type==="tiles"){ const got=ui.built.map(i=>e.bank[i]); if(got.length!==e.seq.length) return `${got.length} of ${e.seq.length} pieces placed.`; const k=got.findIndex((t,i)=>t!==e.seq[i]); return k<0?"":`Piece ${k+1} should be ${e.seq[k]}, not ${got[k]}.`; }
       return "";
     }
@@ -5286,7 +5372,7 @@ html.hdrnow .hvin{transition:none!important}
       else if(e.type==="tiles"){ const got=ui.built.map(i=>e.bank[i]); ok=got.length===e.seq.length&&got.every((t,i)=>t===e.seq[i]); $("l-built").classList.add(ok?"good":"bad"); }
       grade(ok,note||(ok?"":reason(e)));
     }
-    function reveal(){ const e=L.cur.e; body.querySelectorAll(".lopt").forEach(b=>{ b.disabled=true; const i=b.dataset.i; if(e.type==="mc"||e.type==="select"){ if(e.options[+i]&&e.options[+i].ok) b.classList.add("good"); } else if(e.type==="tf"&&(b.dataset.v==="1")===e.ok) b.classList.add("good"); }); if(e.type==="type"&&$("l-in")) $("l-in").disabled=true; grade(false,""); }
+    function reveal(){ const e=L.cur.e; body.querySelectorAll(".lopt").forEach(b=>{ b.disabled=true; const i=b.dataset.i; if(e.type==="mc"||e.type==="select"){ if(e.options[+i]&&e.options[+i].ok) b.classList.add("good"); } else if(e.type==="tf"&&(b.dataset.v==="1")===e.ok) b.classList.add("good"); }); if(e.type==="type"&&$("l-in")) $("l-in").disabled=true; grade(false,"Out of time."); }
     function grade(ok,note){ const c=L.cur, e=c.e, cfg=L.cfg;
       // exam mode: no feedback, no second tries, straight to the next question
       if(cfg.silent){ L.answered++; L.done++; if(ok){ L.first++; L.xp+=cfg.xpOk||0; } else L.misses++; try{ cfg.onAnswer&&cfg.onAnswer(e,ok,0); }catch(x){} setBar(); next(); return; }
@@ -5295,21 +5381,37 @@ html.hdrnow .hvin{transition:none!important}
       if(ok){ L.done++; L.streak++; L.best=Math.max(L.best,L.streak); const gain=c.retry?(cfg.xpRetry!=null?cfg.xpRetry:5):(cfg.xpOk!=null?cfg.xpOk:10); L.xp+=gain; if(!c.retry) L.first++; }
       else { L.misses++; L.streak=0; if(cfg.retry!==false&&c.retry<1) L.queue.push({e,retry:c.retry+1}); else L.done++; }
       foot.className="lfoot "+(ok?"good":"bad"); foot.dataset.graded="1"; foot.dataset.ok=ok?"good":"bad";
-      const why=e.expl&&e.expl!==e.answer&&e.type!=="match"?`<div class="lexpl">${esc(e.expl)}</div>`:"";
-      msg.innerHTML=ok?`<b>${c.retry?"Got it this time":pick(["Correct","Nice","Right","Good"])}</b>${note?`<div>${esc(note)}</div>`:""}${why}`
-                     :`<b>${c.retry?"Still not it":"Not quite"}</b>${note?`<div class="lwhy">${esc(note)}</div>`:""}<div>Answer: <b class="lans">${esc(e.answer)}</b></div>${why}${cfg.retry!==false&&c.retry<1?`<div class="note">It comes back before the round ends.</div>`:""}`;
-      msgExpand(false); msgHandle();
+      // the bar shows the verdict and the answer; sliding it up shows why: what your pick was, why the answer is right, and the others
+      const head=ok?`<b>${c.retry?"Got it this time":pick(["Correct","Nice","Right","Good"])}</b>${note?`<div>${esc(note)}</div>`:""}`
+                   :`<b>${c.retry?"Still not it":"Not quite"}</b><div>Answer: <b class="lans">${esc(e.answer)}</b></div>${cfg.retry!==false&&c.retry<1?`<div class="note">It comes back before the round ends.</div>`:""}`;
+      const more=explain(e,ok,ok?"":note);
+      msg.innerHTML=`<div class="lhead">${head}</div>${more?`<div class="lmore">${more}</div>`:""}`;
+      msgExpand(false,true); msgHandle();
       btn.textContent="Continue"; btn.disabled=false; btn.hidden=false; skip.hidden=true; setBar(); body.querySelectorAll(".lopt,.ltile").forEach(b=>{ if(e.type!=="match") b.disabled=true; });
       btn.focus();
     }
-    // the feedback sheet starts short; slide it up (or tap the handle) to read the whole explanation, slide it down to tuck it away
+    // why the pick missed, why the answer is right, and what each other option was; built for every question type
+    function explain(e,ok,note){ const S=(h,b)=>`<section class="lwhyb"><span class="eyebrow">${h}</span>${b}</section>`, out=[], sel=ui&&ui.sel instanceof Set?ui.sel:new Set();
+      if(!ok){ const r=note||reason(e); if(r) out.push(S("Why yours is not it",`<p>${esc(r)}</p>`)); }
+      const right=[]; if(e.expl&&e.expl!==e.answer&&e.type!=="match") right.push(`<p>${esc(e.expl)}</p>`);
+      if(e.work&&e.work.length) right.push(`<ol class="lwork">${e.work.map(w=>`<li><b>${esc(w.ask)}</b>${w.math?`<span class="lm">${esc(w.math)}</span>`:`<span>${esc(w.say||"")}</span>`}</li>`).join("")}</ol>`);
+      if(e.type==="match"&&e.pairs) right.push(`<ul>${e.pairs.map(p=>`<li>${esc(p[0])}: ${esc(p[1])}</li>`).join("")}</ul>`);
+      if(e.type==="tiles"&&e.seq) right.push(`<p>${esc(e.answer)}</p>`);
+      if(!right.length) right.push(`<p>${esc(cap(String(e.answer)))}.</p>`);
+      out.push(S(ok?"Why it is right":"Why the answer is right",right.join("")));
+      if(e.type==="mc"||e.type==="select"){ const rest=e.options.map((o,i)=>({o,i})).filter(x=>!x.o.ok&&x.o.src&&(ok||!sel.has(x.i))); if(rest.length) out.push(S(ok?"The other options":"The rest",`<ul>${rest.map(x=>`<li>${esc(cap(x.o.t))}: ${esc(x.o.src)}.</li>`).join("")}</ul>`)); }
+      return out.join(""); }
+    // the feedback bar shows the verdict; slide it up (or tap the handle) and it rises to about a third of the screen with the why,
+    // slide it down and it settles back to the bar
     const handle=$("l-handle");
-    const sheetCap=()=>Math.max(140,Math.round(window.innerHeight*.8-(foot.offsetHeight-msg.clientHeight)));
-    function msgExpand(v){ foot.classList.toggle("lifted",v); handle.setAttribute("aria-expanded",v?"true":"false"); msg.style.maxHeight=v?Math.min(msg.scrollHeight,sheetCap())+"px":""; if(!v) msg.scrollTop=0; }
-    function msgHandle(){ requestAnimationFrame(()=>{ const more=msg.scrollHeight>msg.clientHeight+4; handle.hidden=!more; msg.classList.toggle("more",more); }); }
+    const headH=()=>{ const h=msg.querySelector(".lhead"); return h?Math.ceil(h.getBoundingClientRect().height)+2:Math.min(118,msg.scrollHeight); };
+    const sheetCap=()=>Math.max(headH()+60,Math.round(window.innerHeight*.34-(foot.offsetHeight-msg.clientHeight)));
+    function msgExpand(v,now){ foot.classList.toggle("lifted",v); handle.setAttribute("aria-expanded",v?"true":"false"); if(now) msg.style.transition="none";
+      msg.style.maxHeight=(v?Math.min(msg.scrollHeight,sheetCap()):headH())+"px"; if(!v) msg.scrollTop=0; if(now){ void msg.offsetHeight; msg.style.transition=""; } }
+    function msgHandle(){ requestAnimationFrame(()=>{ const more=!!msg.querySelector(".lmore"); handle.hidden=!more; msg.classList.toggle("more",more); if(!foot.classList.contains("lifted")) msg.style.maxHeight=headH()+"px"; }); }
     handle.addEventListener("click",()=>msgExpand(!foot.classList.contains("lifted")));
     (function sheetDrag(){ let y0=null, h0=0, lo=0, hi=0, mode=null, inMsg=false, lastY=0, lastT=0, v=0;
-      const start=(y,t)=>{ if(handle.hidden||(t.closest("button")&&!t.closest(".lhandle"))) return; y0=lastY=y; lastT=performance.now(); v=0; mode=null; inMsg=!!t.closest(".lmsg"); h0=msg.clientHeight; lo=Math.min(118,msg.scrollHeight); hi=Math.min(msg.scrollHeight,sheetCap()); };
+      const start=(y,t)=>{ if(handle.hidden||(t.closest("button")&&!t.closest(".lhandle"))) return; y0=lastY=y; lastT=performance.now(); v=0; mode=null; inMsg=!!t.closest(".lmsg"); h0=msg.clientHeight; lo=headH(); hi=Math.min(msg.scrollHeight,sheetCap()); };
       const move=(y,e)=>{ if(y0==null) return; const dy=y-y0;
         if(mode==null){ if(Math.abs(dy)<6) return; const up=foot.classList.contains("lifted");
           // inside a lifted sheet the text scrolls first; the sheet only moves once the text is at its end
@@ -5331,7 +5433,7 @@ html.hdrnow .hvin{transition:none!important}
       body.innerHTML=`<div class="lend cascade">${end.ring||""}<span class="eyebrow">${esc(end.eyebrow||"Round complete")}</span><div class="big">${esc(end.big||cfg.title||"")}</div><p class="lsum">${end.sum||""}</p>
         <div class="lstats"><div class="k"><span class="eyebrow">XP</span><b class="num">+${L.xp}</b></div><div class="k"><span class="eyebrow">${end.accLabel||"First try"}</span><b class="num">${Math.round(acc*100)}%</b></div><div class="k"><span class="eyebrow">${end.statLabel||"Time"}</span><b class="num">${end.stat||(secs<60?secs+" s":Math.floor(secs/60)+"m "+(secs%60)+"s")}</b></div></div>
         ${res.perfect?`<p class="lperfect">Perfect round.</p>`:""}${end.extra||""}</div>`;
-      foot.className="lfoot"; foot.dataset.graded="0"; msg.innerHTML=""; msgExpand(false); handle.hidden=true; skip.hidden=true; btn.hidden=false; btn.textContent=end.btn||"Play again"; btn.disabled=false; L.onBtn=end.onBtn; body.scrollTop=0;
+      foot.className="lfoot"; foot.dataset.graded="0"; msg.innerHTML=""; foot.classList.remove("lifted"); msg.style.maxHeight=""; handle.hidden=true; skip.hidden=true; btn.hidden=false; btn.textContent=end.btn||"Play again"; btn.disabled=false; L.onBtn=end.onBtn; body.scrollTop=0;
       try{ document.dispatchEvent(new CustomEvent("round",{detail:Object.assign({game:cfg.id||"lesson"},res)})); }catch(e){}
     }
     const canCheck=()=>!!(ui&&((ui.sel&&ui.sel.size)||ui.v!=null||(ui.built&&ui.built.length)||($("l-in")&&$("l-in").value.trim())));
@@ -5394,9 +5496,11 @@ html.hdrnow .hvin{transition:none!important}
     const gen=k=>GEN[k]?GEN[k].make():null;
     const rep=(n,f)=>{ const out=[]; for(let i=0;i<n*4&&out.length<n;i++){ const e=f(i); if(e) out.push(e); } return out; };
     const r2=x=>Math.round(x*100)/100;
-    const numWrong=(a,unit)=>uniq([a*10,a/10,a*2,a/2,a+(a>=10?5:1),a-(a>=10?5:.5)].filter(x=>x>0).map(x=>fmt(x,3))).filter(x=>x!==fmt(a,3)).map(t=>({t:tight(t+(unit?" "+unit:"")),src:"off by a factor or a slip"}));
-    const mathMC=(keys,tag)=>{ for(let i=0;i<10;i++){ const qq=gen(pick(keys)); if(!qq||!isFinite(qq.ans)) continue; const e=mc(qq.q,tight(fmt(qq.ans,3)+(qq.unit?" "+qq.unit:"")),shuffle(numWrong(qq.ans,qq.unit)),qq.pattern?"Pattern: "+qq.pattern:"",tag||"Med math"); if(e) return e; } return null; };
-    const mathTyp=(keys,tag)=>{ for(let i=0;i<10;i++){ const qq=gen(pick(keys)); if(!qq||!isFinite(qq.ans)) continue; const e=typ(qq.q,qq.unit||"",r2(qq.ans),r2(qq.ans),qq.pattern?"Pattern: "+qq.pattern:""); e.tag=tag||"Med math"; return e; } return null; };
+    // each wrong number says what kind of slip lands on it
+    const numWrong=(a,unit)=>{ const C=[[a*10,"ten times the answer, a decimal slip"],[a/10,"a tenth of the answer, a decimal slip"],[a*2,"twice the answer"],[a/2,"half the answer"],[a+(a>=10?5:1),"near the answer, off by an arithmetic slip"],[a-(a>=10?5:.5),"near the answer, off by an arithmetic slip"]]; const seen=new Set([fmt(a,3)]);
+      return C.filter(c=>c[0]>0).map(c=>({t:fmt(c[0],3),s:c[1]})).filter(o=>{ if(seen.has(o.t)) return false; seen.add(o.t); return true; }).map(o=>({t:tight(o.t+(unit?" "+unit:"")),src:o.s})); };
+    const mathMC=(keys,tag)=>{ for(let i=0;i<10;i++){ const qq=gen(pick(keys)); if(!qq||!isFinite(qq.ans)) continue; const e=mc(qq.q,tight(fmt(qq.ans,3)+(qq.unit?" "+qq.unit:"")),shuffle(numWrong(qq.ans,qq.unit)),qq.pattern?"Pattern: "+qq.pattern:"",tag||"Med math"); if(e){ if(qq.work) e.work=qq.work; return e; } } return null; };
+    const mathTyp=(keys,tag)=>{ for(let i=0;i<10;i++){ const qq=gen(pick(keys)); if(!qq||!isFinite(qq.ans)) continue; const e=typ(qq.q,qq.unit||"",r2(qq.ans),r2(qq.ans),qq.pattern?"Pattern: "+qq.pattern:""); e.tag=tag||"Med math"; if(qq.work) e.work=qq.work; return e; } return null; };
     // two meanings overlap when they share a meaningful word; overlapping items are never offered as each other's wrong answer
     const GENERIC=new Set(["condition","abnormal","surgical","toward","normal","from","with","side","body","under","that"]);
     const words=t=>new Set(String(t).toLowerCase().replace(/[^a-z0-9 ]+/g," ").split(/\s+/).filter(w=>w.length>=4&&!GENERIC.has(w)));
@@ -6305,6 +6409,8 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
     csel.addEventListener("change",()=>{ cat=csel.value; store.set("mm-tkcat",cat); render(); });
     q.addEventListener("input",render);
     ex.addEventListener("click",()=>{ open=!open; ex.setAttribute("aria-pressed",open?"true":"false"); ex.textContent=open?"Collapse all":"Expand all"; root.querySelectorAll("details.trick").forEach(d=>d.open=open); });
+    // folded again when you leave the page, so the button goes back to Expand all with it
+    { const pn=root.closest(".panel"); if(pn) pn.addEventListener("foldaway",()=>{ open=false; ex.setAttribute("aria-pressed","false"); ex.textContent="Expand all"; }); }
   })();
   // ---------- patient simulator ----------
   // A call opens on the dispatch screen, and Continue starts a real clock that runs until the call ends.
@@ -7658,9 +7764,7 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
     const split=node=>{ if(!node) return []; const t=node.textContent; node.textContent=""; return [...t].map(ch=>{ const c=document.createElement("span"); c.className="ch"; c.textContent=ch; node.appendChild(c); return c; }); };
     const melt=()=>{ if(!la||!en) return;
       const A=split(la), B=split(en), wave=.36, rnd=.09; A.forEach((c,i)=>{ c.style.animationDelay=(wave*i/Math.max(1,A.length-1)+Math.random()*rnd).toFixed(2)+"s"; }); B.forEach((c,i)=>{ c.style.animationDelay=(.28+wave*i/Math.max(1,B.length-1)+Math.random()*rnd).toFixed(2)+"s"; });
-      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("wobble","melting");
-      try{ document.getElementById("lz-melt-s").beginElement(); document.getElementById("lz-melt-f").beginElement(); }catch(e){}
-      later(()=>motto.classList.remove("wobble"),1650); };
+      en.removeAttribute("aria-hidden"); la.setAttribute("aria-hidden","true"); motto.classList.add("melting"); };
 
     // ----- one layout for every version: the heart in a square near the middle, the name over its lower right third, the motto under the heart -----
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
@@ -7679,9 +7783,47 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
     const beat=()=>{};
 
     // ----- the shared ending: the heart and the name clear, the motto melts into English in place, holds, then the app shows through -----
-    const rise=()=>{ if(risen||done) return; risen=true; if(raf){ cancelAnimationFrame(raf); raf=0; } if(cv) cv.style.opacity="0"; if(hc) fade(hc,700,0); if(cut) fade(cut,700,0); fuseCvs.forEach(c=>c.remove());
+    // ----- the heart and the name go as mist: a soft gust crosses from the left, and wherever it reaches, the drawing and the letters come
+    // apart into fine motes that lift and drift off on it, spread, thin out and are gone. Each mote is one pixel of the finished picture,
+    // so the picture is still whole the moment before the gust touches it. -----
+    const mist=()=>{ if(!L) return false; const r0=sp.getBoundingClientRect(), X=[], Y=[], A=[], S=[], T=[], F=[];
+      // the heart, from the finished picture's lines
+      const src=imgs&&imgs[0]; if(hc&&src){ const n=384, c=document.createElement("canvas"); c.width=c.height=n; const g=c.getContext("2d",{willReadFrequently:true}); g.drawImage(src,0,0,n,n); const d=g.getImageData(0,0,n,n).data, k=L.S/n;
+        for(let y=0;y<n;y++) for(let x=0;x<n;x++){ const i=(y*n+x)*4, v=Math.max(d[i],d[i+2])/255; if(v>.13&&Math.random()<.62){ X.push(L.left+(x+Math.random())*k); Y.push(L.top+(y+Math.random())*k); A.push(Math.min(1,v*1.25)); } } }
+      // the name, drawn once in its own face where it stands
+      const spans=[...title.querySelectorAll(".ch")].filter(ch=>ch.textContent.trim());
+      if(spans.length){ const cs=getComputedStyle(title), fsz=parseFloat(cs.fontSize)||40, mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; title.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
+        const rs=spans.map(ch=>ch.getBoundingClientRect()), x0=Math.floor(Math.min(...rs.map(r=>r.left))-r0.left-4), w=Math.ceil(Math.max(...rs.map(r=>r.right))-r0.left-x0+8), y0=Math.floor(base-fsz), h=Math.ceil(fsz*1.3);
+        const c=document.createElement("canvas"); c.width=w; c.height=h; const g=c.getContext("2d",{willReadFrequently:true}); g.fillStyle="#fff"; g.textBaseline="alphabetic"; g.font=`${cs.fontWeight} ${fsz}px ${cs.fontFamily}`;
+        spans.forEach((ch,j)=>g.fillText(ch.textContent,rs[j].left-r0.left-x0,base-y0)); const d=g.getImageData(0,0,w,h).data;
+        for(let y=0;y<h;y++) for(let x=0;x<w;x++){ const v=d[(y*w+x)*4+3]/255; if(v>.2&&Math.random()<.8){ X.push(x0+x+Math.random()); Y.push(y0+y+Math.random()); A.push(v); } } }
+      const N=X.length; if(N<50) return false;
+      // keep it to a size a phone draws at full frame rate
+      const keep=Math.min(1,8500/N);
+      let xmin=1e9,xmax=-1e9; for(let i=0;i<N;i++){ if(X[i]<xmin) xmin=X[i]; if(X[i]>xmax) xmax=X[i]; }
+      const span=Math.max(1,xmax-xmin), GD=.95, ix=[];
+      for(let i=0;i<N;i++){ if(Math.random()>keep) continue; ix.push(i); T[i]=(X[i]-xmin)/span*GD+Math.random()*.09; S[i]=Math.random(); F[i]=Math.random()*6.283; }
+      const els=[hc,title,cut].filter(Boolean), boxes=els.map(el=>el.getBoundingClientRect());
+      const front=t=>xmin-30+(span+60)*Math.min(1,t/GD);
+      const ink="#EFE8DC", B=10, bx=Array.from({length:B},()=>[]); const t0=performance.now(); let alive=true;
+      clearLn();
+      const frame=now=>{ if(!alive) return; const t=(now-t0)/1000;
+        // everything the gust has crossed is gone from the picture itself; the motes carry it from there
+        const fx=front(t); els.forEach((el,j)=>{ const lx=fx-(boxes[j].left-r0.left); const m=`linear-gradient(90deg,transparent ${(lx-18).toFixed(1)}px,#000 ${(lx+22).toFixed(1)}px)`; el.style.webkitMaskImage=m; el.style.maskImage=m; });
+        clearLn(); for(let b=0;b<B;b++) bx[b].length=0;
+        let live=0; for(const i of ix){ const a=t-T[i]; if(a<0) continue; const life=.85+.55*S[i]; if(a>=life) continue; live++;
+          const p=a/life, e=a*a, dx=26*a+150*e+ (10+14*S[i])*Math.sin(F[i]+a*(2.2+S[i]*1.6))*a, dy=-(18*a+42*e*(.6+S[i]))+(8+10*S[i])*Math.cos(F[i]*1.3+a*(1.8+S[i]))*a;
+          const al=A[i]*(1-p)*(1-p); if(al<.02) continue; const b=Math.min(B-1,Math.floor(al*B)); bx[b].push(X[i]+dx,Y[i]+dy,.9+2.4*p*(.6+S[i])); }
+        lg.fillStyle=ink; for(let b=0;b<B;b++){ const L2=bx[b]; if(!L2.length) continue; lg.globalAlpha=(b+.5)/B; for(let k=0;k<L2.length;k+=3){ const z=L2[k+2]; lg.fillRect(L2[k]-z/2,L2[k+1]-z/2,z,z); } } lg.globalAlpha=1;
+        if(t>GD+.15) els.forEach(el=>{ el.style.opacity="0"; });
+        if(t<GD+.3||live) requestAnimationFrame(frame); else { alive=false; clearLn(); els.forEach(el=>{ el.style.webkitMaskImage=el.style.maskImage=""; }); } };
+      requestAnimationFrame(frame); return true; };
+    const rise=()=>{ if(risen||done) return; risen=true; if(raf){ cancelAnimationFrame(raf); raf=0; } if(cv) cv.style.opacity="0"; fuseCvs.forEach(c=>c.remove());
       try{ lg.setTransform(1,0,0,1,0,0); lg.clearRect(0,0,ln.width,ln.height); }catch(e){}
-      Object.assign(title.style,{transition:"opacity .7s ease, transform .9s cubic-bezier(.3,.7,.2,1), filter .7s ease",opacity:"0",transform:"translateY(calc(-50% - 22px)) scale(.94)",filter:"blur(3px)"});
+      let gone2=false; try{ gone2=mist(); }catch(e){ gone2=false; }
+      if(!gone2){ if(hc) fade(hc,700,0); if(cut) fade(cut,700,0); }
+      // the name only settles back a touch as it goes
+      Object.assign(title.style,{transition:(gone2?"":"opacity .7s ease, ")+"transform 1.2s cubic-bezier(.3,.7,.2,1)",transform:"translateY(calc(-50% - 3px)) scale(.985)"}); if(!gone2) title.style.opacity="0";
       // the English line is longer than the Latin and lines up on the same right edge; if it would run off the left of the screen it gives up some letter spacing
       if(en){ const r=en.getBoundingClientRect(), room=r.right-sp.getBoundingClientRect().left-10, n=en.textContent.length, gap=parseFloat(getComputedStyle(en).letterSpacing)||0; if(r.width>room&&n) en.style.letterSpacing=Math.max(0,gap-(r.width-room)/n).toFixed(2)+"px"; }
       motto.style.opacity="1"; later(melt,350); later(()=>fade(motto,600,0),2900); later(gone,3500); };
@@ -7819,7 +7961,7 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
       while(q.length){ const i=q.pop(), x=i%n, y=(i/n)|0; if(x>0) push(i-1); if(x<n-1) push(i+1); if(y>0) push(i-n); if(y<n-1) push(i+n); }
       const cols=[]; for(let X=5;X<768;X+=10){ const cx=Math.min(n-1,X>>2); let y=0; while(y<n){ if(!out[y*n+cx]){ const y0=y; while(y<n&&!out[y*n+cx]) y++; if(y-y0>=5) cols.push({x:X,y0:Math.floor(y0*4/8)*8,y1:Math.ceil(y*4/8)*8,r:Math.random()}); } else y++; } }
       return cols; }
-    function heartByFuse(ready){ makeHeart(); let hp=null; try{ hp=SA.play(hc,{}); }catch(e){ hp=null; } h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }}; later(ready,Math.round((SA.duration||3)*1000)-50); }
+    function heartByFuse(ready){ makeHeart(); let hp=null; try{ hp=SA.play(hc,{}); }catch(e){ hp=null; } h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }}; later(ready,Math.round((SA.duration||3)*1000*.82)); }
     function heartByGlyphs(imgs,ready){ makeHeart(); hc.style.opacity="0"; SA.still(hc).catch(()=>{}); const art=artCanvas(imgs);
       const glyphs=(()=>{ try{ const n=themeNow(); return (n.themes[n.name]||{}).glyphs||null; }catch(e){ return null; } })();
       try{ P.clearTargets(); }catch(e){}
@@ -7863,7 +8005,7 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,preload:assets}
     function run(imgs){ if(done) return; place(); sizeLn();
       // the words are measured and traced first, while the screen is still black, so nothing stalls once the heart is moving
       const [T,M]=words(); if(M&&mode!=="heart") motto.style.opacity="1"; makeCut();
-      const ready=()=>{ if(done||risen) return; beat(); const t0=performance.now(), mAt=T?T.end*.6:0; let tD=!T, mD=!M, riseAt=Infinity;
+      const ready=()=>{ if(done||risen) return; beat(); const t0=performance.now(), mAt=T?T.end*.5:0; let tD=!T, mD=!M, riseAt=Infinity;
         if(cut){ cut.style.opacity="1"; try{ cut.animate([{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0 0 0)"}],{duration:Math.max(520,(T?T.end:1)*760),easing:"cubic-bezier(.7,0,.2,1)",fill:"backwards"}); }catch(e){} }
         const frame=now=>{ raf=0; if(done||risen) return; const tt=(now-t0)/1000; if(mode==="line") clearLn();
           if(T&&!tD){ T.draw(tt); if(tt>=T.end){ tD=true; T.done(); } } else if(T&&mode==="line") T.draw(T.end);
