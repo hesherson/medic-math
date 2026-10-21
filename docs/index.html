@@ -2311,6 +2311,12 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
 :root[data-theme="dark"]{--bk-red:color-mix(in srgb,var(--teal) 30%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 22%,transparent);--bk-pale:rgba(239,232,220,.1)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bk-red:color-mix(in srgb,var(--teal) 30%,transparent);--bk-gold:color-mix(in srgb,var(--amber) 22%,transparent);--bk-pale:rgba(239,232,220,.1)}}
 .bokeh i{background:radial-gradient(circle closest-side,var(--c) 0,var(--c) 30%,color-mix(in srgb,var(--c) 72%,transparent) 54%,color-mix(in srgb,var(--c) 34%,transparent) 76%,color-mix(in srgb,var(--c) 10%,transparent) 91%,transparent 100%)}
+/* ================= v78 ================= */
+/* a scripted glide (to a card, to the badges) runs on its own: the auras, sparkles and previews hold still and the soft band under the
+   header steps aside until it lands */
+html.gliding .myth *,html.gliding .pvon *,html.gliding .pvon{animation-play-state:paused!important}
+.hveil{transition:top 0.272s var(--eq),bottom 0.272s var(--eq),opacity 0.144s ease}
+html.gliding .hveil{opacity:0}
 /* ---------- Term Board, match style ---------- */
 /* the first tile you pick takes the same colour a picked chip does and holds it until you tap its partner; gold stays gold */
 .tbt.sel .tbin{border-color:var(--teal);background-color:color-mix(in srgb,color-mix(in srgb,var(--teal) 12%,var(--surface)) var(--glass-a),transparent);
@@ -2578,6 +2584,25 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
 .lvshelf>.lvshow{order:2;margin-left:auto}
 .lvlcard.open .lvshelf{flex-wrap:wrap;row-gap:6px}
 .lvlcard.open .lvshelf>.lvbadges{order:1}
+
+/* ---------- v78: every badge is a square of its icon and name; what it is for opens on a tap ---------- */
+.btier .badges{grid-template-columns:repeat(auto-fill,minmax(86px,1fr));grid-auto-rows:auto;gap:6px}
+/* the icons sit at the same height in every square, so a row of badges lines up whatever the names do */
+.btier .badge{aspect-ratio:1/1;height:auto;grid-template-rows:auto auto;align-content:start;justify-items:center;padding:10px 6px 5px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btier .badge .bi{width:38px;height:38px}
+.btier .badge>b{margin-top:7px;font-size:13px;line-height:1.14;padding-bottom:1px}
+.btier .badge>span:not(.bi):not(.myth){display:none}
+.btier .badge .bclaim{margin-top:5px;padding:3px 9px;font-size:11.5px}
+.btier .badge .myth{top:2px;width:54px;height:54px;margin:0 0 0 -27px}
+.btier .badge.mys>b,.btier .badge.r-m>b{margin-top:11px}
+.btier .badge:focus-visible{outline:2px solid var(--rc,var(--amber));outline-offset:2px}
+.bpop{position:fixed;z-index:70;max-width:min(260px,calc(100vw - 24px));display:grid;gap:3px;padding:10px 12px 11px;border-radius:var(--r-box);pointer-events:auto;
+  background-color:color-mix(in srgb,var(--surface) 92%,transparent);background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;
+  border:1px solid color-mix(in srgb,var(--rc,var(--line)) 45%,var(--line));box-shadow:inset 0 1px 0 var(--glass-edge),0 14px 28px -14px rgba(0,0,0,.65);-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3)}
+.bpop .eyebrow{color:var(--rc,var(--muted));font-size:10.5px}
+.bpop b{font:600 16px/1.15 var(--display);color:var(--ink)}
+.bpop>span:not(.eyebrow){font-size:12.5px;line-height:1.35;color:var(--ink-2,var(--ink))}
+.bpop .note{font-size:11.5px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -3338,7 +3363,7 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
     const io=new IntersectionObserver(es=>{ const L=[]; es.forEach(e=>{ const el=e.target; if(e.isIntersecting) near.add(el); else near.delete(el); L.push(el); }); apply(L); if(window.revealTrack) revealTrack(spd(400)); },{rootMargin:"0px 0px 35% 0px",threshold:0});
     // a scroll that jumps (a script, a tap on the status bar, the app coming back) can land blocks on screen that never crossed the watched
     // zone, so a jump of more than a third of the screen judges the whole page instead
-    let raf=0, until=0, lastY=null; const frame=()=>{ raf=0; const y=window.scrollY, H=window.innerHeight||800; if(lastY!=null&&Math.abs(y-lastY)>H/3&&!window.__resuming) window.revealSweep(); else apply([...near]); lastY=y; if(performance.now()<until) raf=requestAnimationFrame(frame); };
+    let raf=0, until=0, lastY=null; const frame=()=>{ raf=0; const y=window.scrollY, H=window.innerHeight||800; if(lastY!=null&&Math.abs(y-lastY)>H/3&&!window.__resuming&&!window.__ss) window.revealSweep(); else apply([...near]); lastY=y; if(performance.now()<until) raf=requestAnimationFrame(frame); };
     const soon=()=>{ if(!raf) raf=requestAnimationFrame(frame); };
     // anything that moves the page under the blocks (a fold, a scripted scroll) keeps them in step for as long as it runs
     window.revealTrack=ms=>{ until=Math.max(until,performance.now()+(ms||600)); soon(); };
@@ -3376,7 +3401,9 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
   // scroll the page under script control; touches and wheel are ignored until it lands
   // a CSS cubic-bezier as a function, so a scroll can move in step with a transition on the same curve
   window.bez=(x1,y1,x2,y2)=>{ const f=(a,b,t)=>3*a*t*(1-t)*(1-t)+3*b*t*t*(1-t)+t*t*t; return x=>{ if(x<=0) return 0; if(x>=1) return 1; let lo=0, hi=1, t=x; for(let i=0;i<24;i++){ const v=f(x1,x2,t); if(Math.abs(v-x)<1e-5) break; if(v<x) lo=t; else hi=t; t=(lo+hi)/2; } return f(y1,y2,t); }; };
-  window.smoothScrollTo=(getTop,ms,curve,hold)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||spd(520); hold=hold==null?380:hold; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=curve||(x=>1-Math.pow(1-x,3)); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; }; window.__ss={cancel:done}; // a target that moves part way (the header tucking away, a card above taking its real height) is followed through a short smoothing,
+  window.smoothScrollTo=(getTop,ms,curve,hold)=>{ if(window.__ss) window.__ss.cancel(); const start=window.scrollY, t0=performance.now(); ms=ms||spd(520); hold=hold==null?380:hold; let alive=true; const block=e=>{ if(alive) e.preventDefault(); }; const opts={passive:false}; window.addEventListener("touchmove",block,opts); window.addEventListener("wheel",block,opts); const ease=curve||(x=>1-Math.pow(1-x,3)); const max=()=>Math.max(0,document.documentElement.scrollHeight-window.innerHeight); const de=document.documentElement; const done=()=>{ alive=false; window.removeEventListener("touchmove",block,opts); window.removeEventListener("wheel",block,opts); window.__ss=null; de.classList.remove("gliding"); }; window.__ss={cancel:done};
+    // while the page glides, whatever is only decoration stands still (see html.gliding), so every frame goes to the glide itself
+    de.classList.add("gliding"); // a target that moves part way (the header tucking away, a card above taking its real height) is followed through a short smoothing,
     // so the glide bends towards the new place instead of stepping
     let tf=null, last=t0; const step=now=>{ if(!alive) return; const el=now-t0; const p=Math.min(1,el/ms); const target=Math.min(max(),Math.max(0,typeof getTop==="function"?getTop():getTop));
       const dt=Math.max(0,now-last); last=now; tf=tf==null?target:tf+(target-tf)*(1-Math.exp(-dt/70)); if(Math.abs(target-tf)<.5) tf=target;
@@ -4220,7 +4247,7 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
       if(d._hl) d._hl(); const A=[]; let alive=true; d._hl=()=>{ alive=false; A.forEach(a=>{ try{ a.cancel(); }catch(e){} }); ms.forEach(m=>m.classList.remove("hlon")); d._hl=null; };
       // one highlight at a time: the next phrase waits until the last highlight has slid away; the weight stays on after the highlight
       // has gone, then eases back slowly while the next one draws
-      const DRAW=spd(640), HOLD=spd(500), SLIP=spd(660), RISE=spd(170), STAY=spd(700), LINGER=spd(1700), tot=DRAW+HOLD+SLIP, NEXT=o.hold?DRAW+spd(90):tot+spd(70); let at=spd(100);
+      const DRAW=spd(640), HOLD=spd(820), SLIP=spd(660), RISE=spd(170), STAY=spd(900), LINGER=spd(2800), tot=DRAW+HOLD+SLIP, NEXT=o.hold?DRAW+spd(90):tot+spd(70); let at=spd(100);
       ms.forEach(m=>{ m.classList.remove("hlon"); const W=weight(m), ch=letters(m), n=Math.max(1,ch.length-1);
         if(o.hold){ const a=m.animate([{backgroundSize:"0% 64%",backgroundPosition:"0% 92%"},{backgroundSize:"100% 64%",backgroundPosition:"0% 92%"}],{duration:DRAW,delay:at,easing:"cubic-bezier(.7,0,.2,1)",fill:"both"}); A.push(a);
           a.finished.then(()=>{ if(!alive) return; m.classList.add("hlon"); a.cancel(); },()=>{}); }
@@ -4228,7 +4255,7 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
         // each letter: heavier as the edge reaches it, held while the phrase is being read, then back to normal weight slowly, after the
         // highlight has left it (or, when the highlight stays, a moment after it was drawn)
         ch.forEach((c,i)=>{ const f=i/n, on=DRAW*when(f,HQ), off=o.hold?on+HOLD+STAY:DRAW+HOLD+SLIP*when(f,HS)+STAY, end=off+LINGER;
-          A.push(c.animate([{offset:0,textShadow:W.off},{offset:on/end,textShadow:W.off},{offset:Math.min(1,(on+RISE)/end),textShadow:W.on},{offset:off/end,textShadow:W.on,easing:"cubic-bezier(.3,0,.25,1)"},{offset:1,textShadow:W.off}],{duration:end,delay:at,fill:"backwards"})); });
+          A.push(c.animate([{offset:0,textShadow:W.off},{offset:on/end,textShadow:W.off},{offset:Math.min(1,(on+RISE)/end),textShadow:W.on},{offset:off/end,textShadow:W.on,easing:"cubic-bezier(.45,0,.55,1)"},{offset:1,textShadow:W.off}],{duration:end,delay:at,fill:"backwards"})); });
         at+=NEXT; });
       if(!o.hold) Promise.all(A.map(a=>a.finished)).then(()=>{ if(alive&&d._hl){ d._hl(); } },()=>{}); };
     // Show info turned off: highlights that were left drawn slide away the way a passing one does
@@ -5501,7 +5528,20 @@ html[data-vt] header.top::before{background-color:color-mix(in srgb,var(--teal) 
       el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="actsvg" role="img" aria-label="Activity over the last 30 days"><line x1="0" y1="${H-18}" x2="${W}" y2="${H-18}" class="axis"/>${bars}</svg><div class="legend"><i class="green"></i>Session finished<i class="yellow"></i>Practiced<i class="red"></i>Opened only</div>`; }
     // a badge: earned in full colour; not yet, dimmed; hidden Mythic, a grey cutout of its shape behind ??? in the aura
     function badgeHTML(b){ const on=!!P.badges[b.id], hid=b.h&&!on; let claim=""; if(b.claim&&!on&&P.badges.regday) claim=`<button type="button" class="chip bclaim" data-claim="${b.id}">I passed</button>`;
-      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" title="${hid?"Hidden":esc(b.d)}">${b.r==="m"?MYTH():""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim||`<span>${hid?"Hidden":esc(b.d)}</span>`}</div>`; }
+      return `<div class="badge r-${b.r}${on?" on":""}${hid?" mys":""}" data-b="${b.id}" role="button" tabindex="0" aria-label="${hid?"Hidden badge":esc(b.n)}">${b.r==="m"?MYTH():""}<span class="bi">${svgIcon(b.i)}</span><b>${hid?"???":esc(b.n)}</b>${claim}</div>`; }
+    // ----- a badge is a square of its icon and name; tapping it shows what it is for, and when it was earned, in a small pane beside it -----
+    let pop=null;
+    const closePop=()=>{ if(!pop) return; const p=pop; pop=null; const a=p.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateY(4px)"}],{duration:spd(160),easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"}); const rm=()=>p.remove(); a.finished.then(rm,rm); };
+    function openPop(t){ const id=t.dataset.b, b=BADGES.find(x=>x.id===id); if(!b) return; if(pop&&pop._id===id){ closePop(); return; } closePop();
+      const on=P.badges[id], hid=b.h&&!on, d=on?new Date(on):null;
+      const p=document.createElement("div"); p.className=`bpop r-${b.r}`; p._id=id; p.setAttribute("role","status");
+      p.innerHTML=`<span class="eyebrow">${RN[b.r]}</span><b>${hid?"???":esc(b.n)}</b><span>${hid?"Hidden until you earn it.":esc(b.d)}</span><span class="note">${on?`Earned ${d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}`:"Not earned yet"}</span>`;
+      document.body.appendChild(p); pop=p; const r=t.getBoundingClientRect(), w=p.offsetWidth, h=p.offsetHeight, W=window.innerWidth, top=((document.querySelector("header.top")||{}).offsetHeight||0)+8;
+      const x=Math.max(12,Math.min(W-12-w,r.left+r.width/2-w/2)), above=r.top-h-8>=top, y=above?r.top-h-8:r.bottom+8; p.style.left=x+"px"; p.style.top=y+"px";
+      p.animate([{opacity:0,transform:`translateY(${above?6:-6}px) scale(.97)`},{opacity:1,transform:"none"}],{duration:spd(200),easing:"cubic-bezier(.2,.8,.2,1)"}); }
+    document.addEventListener("click",e=>{ const t=e.target.closest&&e.target.closest("#badges .badge"); if(t&&!e.target.closest(".bclaim")){ openPop(t); return; } if(pop&&!(e.target.closest&&e.target.closest(".bpop"))) closePop(); },true);
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePop(); if(e.key!=="Enter"&&e.key!==" ") return; const t=e.target.closest&&e.target.closest("#badges .badge"); if(t){ e.preventDefault(); openPop(t); } });
+    window.addEventListener("scroll",closePop,{passive:true}); document.addEventListener("panel",closePop);
     function badgesHTML(){ return ORDER.map(r=>{ const list=BADGES.filter(b=>b.r===r); const got=list.filter(b=>P.badges[b.id]).length;
       return `<section class="btier r-${r}"><header><span class="eyebrow">${RN[r]}</span><span class="note">${got} of ${list.length}</span></header><div class="badges">${list.map(badgeHTML).join("")}</div></section>`; }).join("")+rewardsHTML(); }
     // the level rewards: what you have, and what the next milestone brings
@@ -8977,10 +9017,13 @@ window.__QR=function(){var t=function(){var t=function(t,r){var e=t,n=g[r],o=nul
       const shelf=document.createElement("div"); shelf.className="lvshelf"; const st=card.querySelector(".statline"), row=$("lv-badges"); if(row) shelf.appendChild(row); shelf.appendChild(b);
       if(st&&st.nextSibling) card.insertBefore(shelf,st.nextSibling); else card.appendChild(shelf); if(window.lvBadgesNow) requestAnimationFrame(()=>lvBadgesNow());
       const EQF=window.bez?bez(.7,0,.2,1):null, hh=()=>((document.querySelector("header.top")||{}).offsetHeight||0);
-      const go=()=>{ const box=$("t-more"); if(!box) return; if(!box.open){ try{ FOLD.open(box); }catch(e){ box.open=true; } }
+      // a Badges box still below the screen opens at once, unseen, so its unfolding never shares frames with the glide to it
+      const go=()=>{ const box=$("t-more"); if(!box) return; if(!box.open){ const off=box.getBoundingClientRect().top>(window.innerHeight||800)*.75; if(off) box.open=true; else { try{ FOLD.open(box); }catch(e){ box.open=true; } } }
         if(window.smoothScrollTo) smoothScrollTo(()=>box.getBoundingClientRect().top+window.scrollY-hh()-10,spd(720),EQF,spd(240)); else box.scrollIntoView();
         if(window.revealTrack) revealTrack(spd(1200)); };
-      window.showBadges=()=>{ if(!card.classList.contains("open")||card._ph){ if(window.xpBoxToggle) xpBoxToggle(); setTimeout(go,spd(620)); } else go(); };
+      // the Badges box is opened first, while it is still out of sight, so it is laid out before the glide begins rather than on its first frame
+      window.showBadges=()=>{ const box=$("t-more"); if(box&&!box.open){ const r=box.getBoundingClientRect(); if(!r.height||r.top>(window.innerHeight||800)*.75) box.open=true; }
+        if(!card.classList.contains("open")||card._ph){ if(window.xpBoxToggle) xpBoxToggle(); setTimeout(go,spd(620)); } else go(); };
       b.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); window.showBadges(); });
       b.addEventListener("keydown",e=>e.stopPropagation());
       if(window.lvBadgesNow) requestAnimationFrame(()=>lvBadgesNow()); })();
