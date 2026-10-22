@@ -1,4 +1,3 @@
-
 (function (global) {
   'use strict';
   const patterns=new Map();
@@ -1208,7 +1207,23 @@
     const palmAssembly=makeCanvas(width,height,reference),hc=palmAssembly.getContext('2d'),forearm=makeCanvas(width,height,reference),fc=forearm.getContext('2d');
     hc.save();path(hc,[[0,0],[width,0],...cleft.slice().reverse().map(p=>[p[0],p[1]+wristCut.overlap])]);hc.clip();hc.drawImage(palm,0,0);hc.restore();
     fc.save();path(fc,[...cleft.map(p=>[p[0],p[1]-wristCut.overlap]),[width,height],[0,height]]);fc.clip();fc.drawImage(palm,0,0);fc.restore();
-    return { image, palm:palmAssembly, forearm, wristCut, bones, indexById, width, height };
+    // Extend only the proximal radius/ulna shafts along their own axis.
+    // The distal collar is fixed; normal width and the transparent gap stay
+    // unchanged. This is a prepared draw asset, independent of the hand rig.
+    const forearmExtension={axis:[-.55,Math.sqrt(1-.55*.55)],start:70,factor:1.5,overlap:.5},wrist=hand.wrist||[450,980];
+    const u=forearmExtension.axis,n=[-u[1],u[0]],start=forearmExtension.start,k=forearmExtension.factor-1;
+    const at=(along,across)=>[wrist[0]+u[0]*along+n[0]*across,wrist[1]+u[1]*along+n[1]*across];
+    const map=p=>{const along=(p[0]-wrist[0])*u[0]+(p[1]-wrist[1])*u[1],extra=k*Math.max(0,along-start);return[p[0]+u[0]*extra,p[1]+u[1]*extra];};
+    const corners=[[0,0],[width,0],[0,height],[width,height]],bounds=corners.concat(corners.map(map));
+    const x0=Math.floor(Math.min(...bounds.map(p=>p[0])))-2,y0=Math.floor(Math.min(...bounds.map(p=>p[1])))-2;
+    const x1=Math.ceil(Math.max(...bounds.map(p=>p[0])))+2,y1=Math.ceil(Math.max(...bounds.map(p=>p[1])))+2;
+    const extendedForearm=makeCanvas(x1-x0,y1-y0,reference),ec=extendedForearm.getContext('2d'),extent=width+height;
+    ec.save();ec.setTransform(1,0,0,1,-x0,-y0);
+    path(ec,[at(-extent,-extent),at(start+forearmExtension.overlap,-extent),at(start+forearmExtension.overlap,extent),at(-extent,extent)]);ec.clip();ec.drawImage(forearm,0,0);ec.restore();
+    const pivot=at(start,0),a=1+k*u[0]*u[0],b=k*u[0]*u[1],d=1+k*u[1]*u[1];
+    ec.save();ec.setTransform(a,b,b,d,pivot[0]-a*pivot[0]-b*pivot[1]-x0,pivot[1]-b*pivot[0]-d*pivot[1]-y0);
+    path(ec,[at(start-forearmExtension.overlap,-extent),at(extent,-extent),at(extent,extent),at(start-forearmExtension.overlap,extent)]);ec.clip();ec.drawImage(forearm,0,0);ec.restore();
+    return { image, palm:palmAssembly, forearm:extendedForearm, forearmOrigin:[x0,y0],forearmExtension:{...forearmExtension,wrist:wrist.slice(),bounds:[x0,y0,x1,y1]},wristCut,bones,indexById,width,height };
   }
 
   function boneAngle(bone, seconds, side,response=0,opposition=0,waveScale=1) {
@@ -1516,7 +1531,7 @@
     }
     function paintHand(target,p,name,frame) {
       const prepared=hands[name],hand=p.hands[name];target.setTransform(...multiply(frame,hand.forearmBase||hand.base));
-      if(prepared.forearm)target.drawImage(prepared.forearm,0,0);
+      if(prepared.forearm){const origin=prepared.forearmOrigin||[0,0];target.drawImage(prepared.forearm,origin[0],origin[1]);}
       target.setTransform(...multiply(frame,hand.base));target.drawImage(prepared.palm,0,0);
       const layer=b=>b.finger===4?2:b.finger===0?1:0;
       const sorted=prepared.bones.slice().sort((a,b)=>layer(a)-layer(b)||(a.z||0)-(b.z||0)||a.index-b.index);
@@ -1658,4 +1673,3 @@
   }
   global.LazarusMarionette = { duration: DURATION,poseFps:12,leadWindows:{left:[.72,1.42],right:[1.78,2.45]},motionProfile:{passiveFingerGain:.32,fingerWave:FINGER_WAVE,leftWave:LEFT_WAVE,waveProfiles:{left:LEFT_WAVE,right:FINGER_WAVE},activeVerticalScale:1.9,activeFingerScale:1.12,waveBackgroundHold:true,indexMcpClearance:.10,indexMcpClearanceBySide:{left:.14,right:.16},boneForegroundOrder:['other-fingers','index','thumb'],thumbSplay:THUMB_SPLAY,clawBias:CLAW_BIAS,leftClawExtra:CLAW_LEFT_EXTRA,jointLimits:JOINT_LIMITS,closureStart:2.52,closureEnd:3.98,restGoalEnd:3.98,finalPosture:FINAL_POSTURE,leftSplay:LEFT_SPLAY,handPlacement:HAND_PLACEMENT,supportRotationMirror:'left=-right',settledSupportPlane:'shared authored wristY',mcpExtensionFingers:[0,1,2],wristArticulation:{pivot:[450,980],cut:{points:WRIST_CLEFT,overlap:2},physicalHinge:true},rightOpenBias:RIGHT_OPEN_BIAS,limpSide:'left',limpRestDroop:.03,thumbOppositionSide:'left',thumbOppositionRest:THUMB_OPPOSITION_REST,suspensionDepth:'behind-thumb-over-other-fingers'},createRenderer,play,getPose:poseAt,sampleHandTargets,rig:RIG };
 })(typeof window === 'undefined' ? globalThis : window);
-
