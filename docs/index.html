@@ -13212,9 +13212,21 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,pr
     // ----- one layout for every version: the heart in a square near the middle, the name over its lower right third, the motto under the heart -----
     const barlow='"Barlow Condensed","Arial Narrow",Arial,sans-serif', fallback='"Arial Narrow","Helvetica Neue",Arial,sans-serif';
     let font=fallback;
-    const lay=()=>{ const r=sp.getBoundingClientRect(), W=r.width, H=r.height, st=mode==="strings", S=Math.min(W*.94,H*(st?.6:.56),560), top=st?Math.max(4,(H-S)/2-H*.03-S*.2):Math.max(8,(H-S)/2-H*.03), left=(W-S)/2;
+    const lay=()=>{ const r=sp.getBoundingClientRect(), W=r.width, H=r.height, st=mode==="strings";
+      if(st) return layStrings(W,H);
+      const S=Math.min(W*.94,H*.56,560), top=Math.max(8,(H-S)/2-H*.03), left=(W-S)/2;
       const g=document.createElement("canvas").getContext("2d"); let w100=370; if(g){ g.font=`700 100px ${font}`; w100=g.measureText("LAZARUS").width||370; }
       const fs=Math.max(26,.6*S*100/w100), cy=top+S*(st?1.02:.82); return {W,H,S,left,top,fs,right:W-(left+S*.965),cy,mTop:cy+fs*.44+4}; };
+    // where the strings piece sits in its square at rest: wrist to wrist and fingertips to the cord's loop, as fractions of the square
+    const SA_X0=.036, SA_X1=.971, SA_Y0=.307, SA_Y1=.862;
+    function layStrings(W,H){ const g=document.createElement("canvas").getContext("2d"); let w100=370; if(g){ g.font=`700 100px ${font}`; w100=g.measureText("LAZARUS").width||370; }
+      // wide enough that the wrists run just off both sides, unless the screen is too short to hold it and the words under it
+      const fsOf=S=>Math.max(26,Math.min(.6*S,.56*W)*100/w100), need=S=>(SA_Y1-SA_Y0+.04)*S+fsOf(S)*1.45+34;
+      let S=W*1.06/(SA_X1-SA_X0); for(let i=0;i<30&&need(S)>H-24;i++) S*=.95;
+      const fs=fsOf(S), left=W/2-S*(SA_X0+SA_X1)/2;
+      // the drawing's middle on the screen's middle, moved up only as far as the words need to stay on screen
+      let top=H/2-S*(SA_Y0+SA_Y1)/2; const bottom=t=>t+S*(SA_Y1+.04)+fs*1.45+30; if(bottom(top)>H-12) top-=bottom(top)-(H-12); top=Math.max(6-S*SA_Y0,top);
+      const cy=top+S*(SA_Y1+.04)+fs*.5; return {W,H,S,left,top,fs,right:0,cy,mTop:cy+fs*.44+4}; }
     let L=null, hc=null; const fuseCvs=[];
     const place=()=>{ if(risen) return; L=lay();
       if(mode==="strings"){ Object.assign(title.style,{left:"0",right:"0",width:"auto",textAlign:"center",top:L.cy+"px",transform:"translateY(-50%)",fontSize:L.fs+"px",fontFamily:font});
