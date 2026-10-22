@@ -980,8 +980,6 @@ header.top h1 .mark{width:28px;height:28px;border-radius:50%;vertical-align:-6px
 
 /* the intro heart, its one beat, and the black border cut round the words so they never mesh with the drawing */
 .splash-heart{transform-origin:50% 56%;will-change:transform}
-/* the strings piece runs its forearms out to the edge of its square; the edges fade, so a forearm never stops on a hard line where the square is on screen */
-.splash-heart.strings{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
 .splash-heart.beat{animation:lzBeat 1.15s cubic-bezier(.3,0,.3,1) both}
 @keyframes lzBeat{0%{transform:scale(1)}16%{transform:scale(.95)}36%{transform:scale(1.006)}48%{transform:scale(.975)}70%,100%{transform:scale(1)}}
 .splash-t.halo,.splash-m.halo{text-shadow:.055em 0 0 #000,-.055em 0 0 #000,0 .055em 0 #000,0 -.055em 0 #000,.04em .04em 0 #000,-.04em .04em 0 #000,.04em -.04em 0 #000,-.04em -.04em 0 #000,0 0 .14em #000}
@@ -13309,7 +13307,7 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,pr
       const g=document.createElement("canvas").getContext("2d"); let w100=370; if(g){ g.font=`700 100px ${font}`; w100=g.measureText("LAZARUS").width||370; }
       const fs=Math.max(26,.6*S*100/w100), cy=top+S*(st?1.02:.82); return {W,H,S,left,top,fs,right:W-(left+S*.965),cy,mTop:cy+fs*.44+4}; };
     // where the strings piece sits in its square at rest: wrist to wrist and fingertips to the cord's loop, as fractions of the square
-    const SA_X0=.036, SA_X1=.971, SA_Y0=.307, SA_Y1=.862;
+    const SA_X0=.036, SA_X1=.971, SA_Y0=.307, SA_Y1=.82;
     function layStrings(W,H){ const g=document.createElement("canvas").getContext("2d"); let w100=370; if(g){ g.font=`700 100px ${font}`; w100=g.measureText("LAZARUS").width||370; }
       // wide enough that the wrists run just off both sides, unless the screen is too short to hold it and the words under it
       const fsOf=S=>Math.max(26,Math.min(.6*S,.56*W)*100/w100), need=S=>(SA_Y1-SA_Y0+.04)*S+fsOf(S)*1.45+34;
@@ -13317,11 +13315,11 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,pr
       const fs=fsOf(S), left=W/2-S*(SA_X0+SA_X1)/2;
       // the drawing's middle on the screen's middle, moved up only as far as the words need to stay on screen
       let top=H/2-S*(SA_Y0+SA_Y1)/2; const bottom=t=>t+S*(SA_Y1+.04)+fs*1.45+30; if(bottom(top)>H-12) top-=bottom(top)-(H-12); top=Math.max(6-S*SA_Y0,top);
-      const cy=top+S*(SA_Y1+.04)+fs*.5; return {W,H,S,left,top,fs,right:0,cy,mTop:cy+fs*.44+4}; }
+      const cy=top+S*(SA_Y1+.04)+fs*.5; return {W,H,S,left,top,fs,right:0,cy,mTop:cy+fs*.44+4,full:true}; }
     let L=null, hc=null; const fuseCvs=[];
     const place=()=>{ if(risen) return; L=lay();
       if(mode==="strings"){ Object.assign(title.style,{left:"0",right:"0",width:"auto",textAlign:"center",top:L.cy+"px",transform:"translateY(-50%)",fontSize:L.fs+"px",fontFamily:font});
-        Object.assign(motto.style,{top:L.mTop+"px",left:"0",right:"0",width:"auto",justifyItems:"center",textAlign:"center"}); if(hc) Object.assign(hc.style,{left:L.left+"px",top:L.top+"px",width:L.S+"px",height:L.S+"px"}); try{ posCut(); posMcut(); }catch(e){} return; }
+        Object.assign(motto.style,{top:L.mTop+"px",left:"0",right:"0",width:"auto",justifyItems:"center",textAlign:"center"}); if(hc) Object.assign(hc.style,{left:"0px",top:"0px",width:L.W+"px",height:L.H+"px"}); try{ posCut(); posMcut(); }catch(e){} return; }
       Object.assign(title.style,{left:"auto",right:L.right+"px",width:"auto",textAlign:"right",top:L.cy+"px",transform:"translateY(-50%)",fontSize:L.fs+"px",fontFamily:font});
       // the motto right under the name, ending where the name ends
       Object.assign(motto.style,{top:L.mTop+"px",left:"auto",right:Math.max(0,L.right-12)+"px",width:"auto",justifyItems:"end",textAlign:"right"}); if(hc) Object.assign(hc.style,{left:L.left+"px",top:L.top+"px",width:L.S+"px",height:L.S+"px"}); if(typeof posCut==="function"){ posCut(); posMcut(); } };
@@ -13341,12 +13339,12 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,pr
       const cells=[], P=[];
       // the heart: the copied frame on a canvas of the same size in the same box, with the name's cut-out painted in as the black it was
       const hr=document.createElement("canvas"); hr.width=shot.width; hr.height=shot.height; hr.className=hc.className; hr.setAttribute("aria-hidden","true"); hr.style.cssText=hc.style.cssText; hr.style.transition="none"; hr.style.opacity="1";
-      const hg=hr.getContext("2d",{willReadFrequently:true}); hg.drawImage(shot,0,0); const HS=hr.width/L.S;
-      if(cut&&cut.style.opacity!=="0"){ const c=cut.getBoundingClientRect(); hg.fillStyle="#000"; hg.fillRect((c.left-r0.left-L.left)*HS,(c.top-r0.top-L.top)*HS,c.width*HS,c.height*HS); }
-      const n=L.S>420?384:256, cpx=hr.width/n, k=L.S/n, hd=hg.getImageData(0,0,hr.width,hr.height).data, HW=hr.width;
-      for(let cy=0;cy<n;cy++) for(let cx=0;cx<n;cx++){ let sum=0, cnt=0; const x0=Math.floor(cx*cpx), x1=Math.floor((cx+1)*cpx), y0=Math.floor(cy*cpx), y1=Math.floor((cy+1)*cpx);
+      const hg=hr.getContext("2d",{willReadFrequently:true}); hg.drawImage(shot,0,0); const BX=L.full?0:L.left, BY=L.full?0:L.top, BW=L.full?L.W:L.S, HS=hr.width/BW;
+      if(cut&&cut.style.opacity!=="0"){ const c=cut.getBoundingClientRect(); hg.fillStyle="#000"; hg.fillRect((c.left-r0.left-BX)*HS,(c.top-r0.top-BY)*HS,c.width*HS,c.height*HS); }
+      const n=BW>420?384:256, cpx=hr.width/n, k=BW/n, ny=Math.ceil(hr.height/cpx), hd=hg.getImageData(0,0,hr.width,hr.height).data, HW=hr.width, HH=hr.height;
+      for(let cy=0;cy<ny;cy++) for(let cx=0;cx<n;cx++){ let sum=0, cnt=0; const x0=Math.floor(cx*cpx), x1=Math.floor((cx+1)*cpx), y0=Math.floor(cy*cpx), y1=Math.min(HH,Math.floor((cy+1)*cpx));
         for(let y=y0;y<y1;y++) for(let x=x0;x<x1;x++){ const i=(y*HW+x)*4; sum+=Math.max(hd[i],hd[i+1],hd[i+2]); cnt++; }
-        const v=cnt?sum/cnt/255:0; if(v>.003) cells.push({h:1,x0,y0,w:x1-x0,hh:y1-y0,X:L.left+(cx+.5)*k,Y:L.top+(cy+.5)*k,v,k}); }
+        const v=cnt?sum/cnt/255:0; if(v>.003) cells.push({h:1,x0,y0,w:x1-x0,hh:y1-y0,X:BX+(cx+.5)*k,Y:BY+(cy+.5)*k,v,k}); }
       // the name: drawn at the screen's resolution over the letters, which then step aside
       const spans=[...title.querySelectorAll(".ch")].filter(ch=>ch.textContent.trim()); let tr=null, tg=null, TR=1;
       if(spans.length&&title.style.opacity!=="0"){ const cs=getComputedStyle(title), fsz=parseFloat(cs.fontSize)||40, mk=document.createElement("i"); mk.style.cssText="display:inline-block;width:0;height:0;vertical-align:baseline"; title.appendChild(mk); const base=mk.getBoundingClientRect().top-r0.top; mk.remove();
@@ -13537,8 +13535,9 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,pr
     // the strings piece plays in the heart's box; the words start as the fingers close round the heart, and the ending waits for it to settle
     let strT0=0; const STR_MS=6100;
     function heartByStrings(ready){ makeHeart(); hc.classList.add("strings"); let hp=null; strT0=performance.now();
+      hc.__lzPlace=(c,size)=>{ const k=c.width/(L.W||1); return {s:L.S/size*k,x:L.left*k,y:L.top*k}; };
       try{ hp=window.LazarusMarionette.play(hc,{onError:()=>{}}); }catch(e){ hp=null; }
-      h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }}; later(ready,3700); }
+      h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }}; later(ready,3200); }
     function heartByFuse(ready){ makeHeart(); let hp=null; try{ hp=SA.play(hc,{seed}); }catch(e){ hp=null; } h={destroy(){ try{ hp&&hp.destroy(); }catch(e){} }}; later(ready,Math.round((SA.duration||3)*1000*.82)); }
     function heartByGlyphs(imgs,ready){ makeHeart(); hc.style.opacity="0"; SA.still(hc).catch(()=>{}); const art=artCanvas(imgs);
       const glyphs=(()=>{ try{ const n=themeNow(); return (n.themes[n.name]||{}).glyphs||null; }catch(e){ return null; } })();
@@ -13613,7 +13612,7 @@ return {name:'LAZARUS SA Node',duration:DUR,size:SIZE,play,still,prepare,snap,pr
       Promise.all([art,strP]).then(([i,ok])=>{ imgs=i; if(mode==="strings"&&!ok){ const alt=avail.filter(m=>m!=="strings"); mode=alt.includes("heart")?"heart":alt[0]||"line"; sp.dataset.intro=mode; ls("mm-intro-last",mode); } run(imgs); }); };
     const fontIn=f=>{ if(fontOk) return; font=f; fontOk=true; go(); };
     if(document.fonts&&document.fonts.load){ document.fonts.load('700 100px "Barlow Condensed"').then(fs=>fontIn(fs&&fs.length?barlow:fallback),()=>fontIn(fallback)); setTimeout(()=>fontIn(document.fonts.check('700 100px "Barlow Condensed"')?barlow:fallback),1200); } else fontIn(fallback);
-    later(()=>{ beatDone=true; go(); },650);
+    later(()=>{ beatDone=true; go(); },mode==="strings"?200:650);
     window.addEventListener("resize",place); })();
   if("serviceWorker" in navigator&&location.protocol.startsWith("http")){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }); }
 })();
