@@ -3475,36 +3475,39 @@ html.gliding .mfx::before{animation-play-state:paused!important}
 .du-lbar rect{fill:#1e1b1b;opacity:.8}
 .du-aprint text{text-anchor:middle;font-family:var(--display);fill:color-mix(in srgb,var(--ink) 88%,transparent)}
 .du-aprint .du-amono{font-family:var(--mono)} .du-aprint .du-aconc{fill:var(--teal);font-weight:600;font-family:var(--mono)} .du-aprint .du-awarn{fill:var(--bad);font-weight:700;letter-spacing:.06em} .du-aprint .du-amicro{fill:var(--muted);font-family:var(--mono)}
-/* the syringe: fluid under the plunger, the plunger under the glass, and the glass with its print on top; a soft shadow beneath */
+/* the syringe: the backlit bore, the fluid, the plunger, then the glass with its print on top */
 .du-mid{display:grid;justify-items:center;align-content:center;gap:16px;width:100%;min-height:0}
 .du-syr{position:relative;width:var(--du-w,320px);height:var(--du-ht,104px);touch-action:none;cursor:ew-resize}
-.du-shadow{position:absolute;left:8%;right:4%;top:calc(var(--du-top,25px) + var(--du-h,46px) + 2px);height:22px;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,rgba(0,0,0,.42),rgba(0,0,0,.18) 45%,transparent 72%);pointer-events:none}
-.du-svg{position:absolute;inset:0;pointer-events:none}
-.du-svg svg,.du-plg{display:block;overflow:visible}
-.du-ndl{stroke:#2a2c30;stroke-width:3.4;stroke-linecap:round;fill:none;opacity:.55}
-.du-hubline{fill:none;stroke:#5a1f3a;stroke-width:.8;stroke-opacity:.7}
-.du-collar{fill:#dfe2e6;fill-opacity:.55;stroke:#8e9196;stroke-width:.8}
-.du-thread{stroke:#6a6d72;stroke-width:.8;stroke-opacity:.8}
-.du-shoulder{fill:#fff;fill-opacity:.18;stroke:color-mix(in srgb,var(--ink) 40%,transparent);stroke-width:1}
-.du-barrel{fill:color-mix(in srgb,var(--surface) 28%,transparent)}
-.du-outline,.du-outline2{fill:none;stroke:color-mix(in srgb,var(--ink) 46%,transparent);stroke-width:1.1}
-.du-outline2{stroke:#7d8085}
-.du-flange{fill:#fff;fill-opacity:.2;stroke:color-mix(in srgb,var(--ink) 46%,transparent);stroke-width:1}
-.du-ticks path{stroke:color-mix(in srgb,var(--ink) 72%,transparent);stroke-width:.9;fill:none}
-.du-ticks path.maj{stroke-width:1.1;stroke:color-mix(in srgb,var(--ink) 84%,transparent)}
-.du-ticks path.lab{stroke-width:1.4;stroke:var(--ink)}
-.du-nums text,.du-capl{font:500 10.5px/1 var(--mono);fill:color-mix(in srgb,var(--ink) 80%,transparent);text-anchor:middle}
-.du-nums.in text{font-size:11px;fill:var(--ink)}
-.du-capl{font-size:9.5px;fill:var(--muted)}
-.du-fluid{position:absolute;left:var(--du-x0,40px);top:calc(var(--du-top,25px) + 2px);width:var(--du-len,240px);height:calc(var(--du-h,46px) - 4px);transform-origin:0 50%;transform:scaleX(0);border-radius:2px 0 0 2px;pointer-events:none;will-change:transform;
-  background:linear-gradient(180deg,rgba(255,248,226,.55),rgba(240,214,150,.34) 22%,rgba(226,196,128,.26) 60%,rgba(150,118,60,.42));box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
-.du-wet{fill:#f5e2b0;fill-opacity:.75}
-/* the plunger runs inside a window that ends a little past the barrel, so its rod fades out instead of running off the screen */
-.du-clip{position:absolute;left:var(--du-x0,40px);top:0;width:calc(var(--du-len,240px) + 52px);height:var(--du-ht,104px);overflow:hidden;pointer-events:none;
-  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent)}
-.du-plunger{position:absolute;left:-5px;top:0;height:100%;will-change:transform}
+.du-back,.du-svg{position:absolute;inset:0;pointer-events:none}
+.du-back svg,.du-svg svg,.du-plg{display:block;overflow:visible}
+.du-bev{stroke:#fff;stroke-opacity:.85;stroke-width:.6}
+.du-hubline{stroke:#5a1f3a;stroke-width:.7;stroke-opacity:.8}
+.du-edge{stroke:color-mix(in srgb,var(--ink) 42%,transparent);stroke-width:.9}
+.du-wall{stroke:color-mix(in srgb,var(--ink) 52%,transparent);stroke-width:1.1;fill:none}
+.du-inwall{stroke:color-mix(in srgb,var(--ink) 20%,transparent);stroke-width:.8;fill:none}
+.du-thread path{stroke:#6c7076;stroke-opacity:.75;stroke-width:.8;fill:none}
+/* the print: black ink on the outside of the barrel */
+.du-ticks path{stroke:#121315;stroke-width:.8;fill:none;stroke-linecap:butt}
+.du-ticks path.maj{stroke-width:1}
+.du-ticks path.lab{stroke-width:1.3}
+.du-nums text{font-family:var(--body);font-weight:700;fill:#121315;text-anchor:middle;letter-spacing:-.01em}
+.du-nums text.ml{font-weight:600;font-size:.82em}
+.du-nums.out text{fill:color-mix(in srgb,var(--ink) 86%,transparent)}
+/* the fluid: tinted like the vial, darker at the walls where the bore bends the light */
+.du-fluid{position:absolute;left:var(--du-x0,40px);top:calc(var(--du-cy,50px) - var(--du-ri,20px));width:var(--du-len,240px);height:calc(var(--du-ri,20px) * 2);transform-origin:0 50%;transform:scaleX(0);pointer-events:none;will-change:transform;
+  background:linear-gradient(180deg,rgba(178,128,48,.62),rgba(236,204,132,.42) 16%,rgba(250,232,184,.26) 46%,rgba(240,212,148,.34) 76%,rgba(150,104,36,.66));box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.du-wetin{fill:rgba(232,196,120,.62);opacity:0;transition:opacity 0.2s var(--eq)}
+.du-syr.wet .du-wetin{opacity:1}
+/* drawing up: the stream through the tip while the volume moves, back the other way on a push */
+.du-jet path{fill:none;stroke:rgba(255,246,220,.85);stroke-width:1.1;stroke-linecap:round;stroke-dasharray:3 7;opacity:0;transition:opacity 0.144s var(--eq)}
+.du-syr.pull .du-jet path,.du-syr.push .du-jet path{opacity:.9;animation:duJet .42s linear infinite}
+.du-syr.push .du-jet path{animation-direction:reverse}
+@keyframes duJet{to{stroke-dashoffset:-10}}
+.du-plunger{position:absolute;left:calc(var(--du-x0,40px) - var(--du-px,8px));top:0;height:100%;will-change:transform;pointer-events:none}
+.du-more.used{opacity:.42}
 .du-target{position:absolute;left:var(--du-x0,40px);top:calc(var(--du-top,25px) - 7px);width:2px;height:calc(var(--du-h,46px) + 14px);margin-left:-1px;background:var(--good);box-shadow:0 0 8px color-mix(in srgb,var(--good) 70%,transparent);opacity:0;transition:opacity 0.24s var(--eq);pointer-events:none}
 .du-target.show{opacity:1}
+@media (prefers-reduced-motion:reduce){ .du-syr.pull .du-jet path,.du-syr.push .du-jet path{animation:none} }
 /* the review: a verdict, then the working as rows whose numbers line up */
 .du-review{width:min(540px,100%);display:grid;gap:8px;padding:12px 16px 13px;border-radius:var(--r-box);border:1px solid color-mix(in srgb,var(--line) 72%,var(--glass-edge));
   background-color:color-mix(in srgb,var(--surface) var(--glass-a),transparent);background-image:linear-gradient(162deg,var(--sheen),var(--sheen2) 38%,transparent 62%);background-repeat:no-repeat;box-shadow:inset 0 1px 0 var(--glass-edge),var(--glass-shadow)}
@@ -3534,15 +3537,19 @@ html.gliding .mfx::before{animation-play-state:paused!important}
 .du-nb{font:600 11px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:var(--r-tag);color:#1e1b1b;background:var(--amber);box-shadow:0 3px 8px -4px rgba(0,0,0,.6)}
 .du-vial{position:relative} .du-vial .du-nb{position:absolute;right:-6px;top:4px}
 .du.vert .du-syr{position:absolute;transform:translateX(var(--du-ht,104px)) rotate(90deg);transform-origin:0 0;cursor:ns-resize}
-.du.vert .du-shadow{display:none}
 .du.vert .du-card>.du-review{grid-area:1/1;width:auto;padding:0;border:0;background:none;box-shadow:none;align-self:center}
 .du.vert .du-card:has(>.du-review:not([hidden])) .du-ct{visibility:hidden}
 .du.vert .du-ct{grid-area:1/1}
+.du.vert{gap:10px}
+.du.vert .du-card{padding:11px 14px 12px 16px}
+.du.vert .du-drug{font-size:24px}
+.du.vert .du-order{font-size:17.5px}
+.du.vert .du-stock{margin-top:2px}
 .du-snap{fill:none;stroke:#fff;stroke-opacity:.7;stroke-width:1.2;stroke-dasharray:1.4 1}
 .du-rubber{fill:#3b3b3e} .du-rubber2{fill:#1d1d1f;stroke:#555;stroke-width:.6}
 /* sideways: the card on the left, the syringe and the controls on the right */
 @media (orientation:landscape) and (max-height:560px){
-  .du{grid-template-columns:minmax(230px,40%) 1fr;grid-template-rows:1fr auto;gap:8px 14px;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px))}
+  .du{grid-template-columns:minmax(230px,36%) 1fr;grid-template-rows:1fr auto;gap:8px 14px;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px))}
   .du-card{grid-row:1/3;align-self:center;padding:10px 10px 10px 14px;gap:4px 10px} .du-drug{font-size:22px} .du-order{font-size:16px} .du-vial{height:96px;width:62px;--du-vh:96px}
   .du-mid{align-self:center;gap:8px} .du-review{padding:8px 12px;gap:4px} .du-rv{font-size:17px} .du-rows{font-size:12.5px;row-gap:2px}
   .du-ctl{align-self:start;width:100%} .du-ctl .btn{min-height:46px}
@@ -9918,7 +9925,7 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         const print=`<g class="du-aprint"${inv?' transform="translate(0 -48)"':""}><text x="35" y="78" font-size="${fs>8?7:6.2}" font-weight="700"${nm.length*(fs>8?7:6.2)*.5>27?' textLength="27" lengthAdjust="spacingAndGlyphs"':""}>${esc(nm)}</text><text x="35" y="112" class="du-amono" font-size="7"${fitL(S.amt,7,25)}>${esc(S.amt)}</text><text x="35" y="123" class="du-amono" font-size="5.6"${fitL(S.vol,5.6,25)}>${esc(S.vol)}</text><text x="35" y="140" class="du-aconc" font-size="5.8"${fitL(conc,5.8,26)}>${esc(conc)}</text>${mcg?`<text x="35" y="154" class="du-awarn" font-size="4.6" textLength="26" lengthAdjust="spacingAndGlyphs">MICROGRAMS</text>`:""}<text x="35" y="174" class="du-amicro" font-size="3.6">${lot}</text><text x="35" y="179" class="du-amicro" font-size="3.6">EXP 11/28</text></g>`;
         return `<svg class="du-amp" viewBox="0 0 70 200" aria-hidden="true"><defs><linearGradient id="du-ag${k}" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".05"/><stop offset=".18" stop-color="#fff" stop-opacity=".32"/><stop offset=".32" stop-color="#fff" stop-opacity=".06"/><stop offset=".78" stop-color="#000" stop-opacity=".06"/><stop offset=".9" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient><linearGradient id="du-af${k}" x1="0" x2="1"><stop offset="0" stop-color="#f3d58a" stop-opacity=".55"/><stop offset=".4" stop-color="#e8c06a" stop-opacity=".7"/><stop offset="1" stop-color="#b58a36" stop-opacity=".8"/></linearGradient><clipPath id="du-ac${k}"><path d="${P}"/></clipPath></defs>
           <g${inv?' transform="rotate(180 35 100)"':""}><path class="du-vglass" d="${P}"/>
-          <g clip-path="url(#du-ac${k})">${inv?`<rect x="20" y="28" width="30" height="76" fill="url(#du-af${k})"/><ellipse cx="35" cy="104" rx="15" ry="3" fill="#fff" fill-opacity=".28"/>`:`<rect x="20" y="96" width="30" height="100" fill="url(#du-af${k})"/><ellipse cx="35" cy="96" rx="15" ry="3" fill="#fff" fill-opacity=".28"/>`}</g>
+          <g clip-path="url(#du-ac${k})">${inv?`<rect class="du-lv" data-a="28" data-h="76" data-d="1" x="20" y="28" width="30" height="76" fill="url(#du-af${k})"/><ellipse class="du-ls" cx="35" cy="104" rx="15" ry="3" fill="#fff" fill-opacity=".28"/>`:`<rect class="du-lv" data-a="196" data-h="100" data-d="-1" x="20" y="96" width="30" height="100" fill="url(#du-af${k})"/><ellipse class="du-ls" cx="35" cy="96" rx="15" ry="3" fill="#fff" fill-opacity=".28"/>`}</g>
           <path d="${P}" fill="url(#du-ag${k})"/><path class="du-vline" d="${P}"/>
           ${inv?`<path d="M27.7 31 H42.3" class="du-snap"/>`:`<rect x="29.5" y="26" width="13" height="3" rx="1" fill="var(--teal)" opacity=".92"/>`}<rect x="${inv?28.6:30}" y="${inv?33:31}" width="${inv?12.8:12}" height="1.4" fill="var(--teal)" opacity=".5"/>
           <path d="M24 70 V186" stroke="#fff" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/></g>${print}</svg>`; }
@@ -9931,43 +9938,82 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         ${inv?`<rect x="47" y="14" width="26" height="9" rx="3" class="du-rubber"/><circle cx="60" cy="18" r="3.2" class="du-rubber2"/>`:`<rect x="42" y="6" width="36" height="16" rx="4" fill="var(--teal)"/><rect x="42" y="6" width="36" height="16" rx="4" fill="url(#du-cap${k})"/><rect x="46" y="8" width="28" height="2" rx="1" fill="#fff" fill-opacity=".35"/>`}
         <rect x="38" y="${inv?19:22}" width="44" height="${inv?25:22}" rx="2" fill="url(#du-al${k})"/><rect x="38" y="${inv?19:22}" width="44" height="3" fill="#fff" fill-opacity=".25"/><rect x="38" y="41" width="44" height="3" fill="#000" fill-opacity=".3"/>${inv?`<rect x="46" y="17" width="28" height="5" rx="2" class="du-rubber"/>`:""}
         <path class="du-vglass" d="${VP}"/>
-        <g clip-path="url(#du-vc${k})">${inv?`<rect x="25" y="46" width="70" height="98" fill="url(#du-vf${k})"/><ellipse cx="60" cy="144" rx="35" ry="4" fill="#fff" fill-opacity=".26"/>`:`<rect x="25" y="86" width="70" height="110" fill="url(#du-vf${k})"/><ellipse cx="60" cy="86" rx="35" ry="4" fill="#fff" fill-opacity=".26"/>`}<rect x="25" y="176" width="70" height="20" fill="#000" fill-opacity=".14"/></g>
+        <g clip-path="url(#du-vc${k})">${inv?`<rect class="du-lv" data-a="46" data-h="98" data-d="1" x="25" y="46" width="70" height="98" fill="url(#du-vf${k})"/><ellipse class="du-ls" cx="60" cy="144" rx="35" ry="4" fill="#fff" fill-opacity=".26"/>`:`<rect class="du-lv" data-a="196" data-h="110" data-d="-1" x="25" y="86" width="70" height="110" fill="url(#du-vf${k})"/><ellipse class="du-ls" cx="60" cy="86" rx="35" ry="4" fill="#fff" fill-opacity=".26"/>`}<rect x="25" y="176" width="70" height="20" fill="#000" fill-opacity=".14"/></g>
         ${inv?"":label}
         <path d="${VP}" fill="url(#du-vg${k})"/><path class="du-vline" d="${VP}"/>
         <path d="M32 58 V178" stroke="#fff" stroke-opacity=".4" stroke-width="2" stroke-linecap="round"/><path d="M29 184 q31 12 62 0" stroke="#000" stroke-opacity=".25" stroke-width="1.5" fill="none"/></g>${inv?label:""}</svg>`; }
 
     // ----- the syringe, drawn once per order at the size of the stage -----
-    // returns the glass layer (everything that never moves), the plunger layer and the geometry the moving parts follow
-    function syringeArt(s,W,land,vert){ const h=vert?Math.round(s.h*1.5):land?Math.round(s.h*.84):Math.round(s.h*Math.min(1.4,Math.max(1,W/300))), HT=h+58, cy=HT/2, nx=Math.round(W*.11), hubW=15, tipW=14, x0=nx+hubW+tipW, fl=8, len=W-x0-fl-8;
-      const top=cy-h/2, bot=cy+h/2, n=Math.round(s.c/s.g); let ticks="", nums="";
-      const inside=false; // sideways the numbers print under the barrel; upright they sit beside the marks, turned to read level
-      for(let k=0;k<=n;k++){ const v=k*s.g, x=x0+len*v/s.c, lab=near(v/s.lab,Math.round(v/s.lab)), maj=near(v/s.maj,Math.round(v/s.maj)); const hh=lab?h*.46:maj?h*.3:h*.18;
-        ticks+=`<path d="M${f2(x)} ${f2(top+1.5)}v${f2(hh)}" class="${lab?"lab":maj?"maj":""}"/>`;
-        if(lab) nums+=vert?`<text x="${f2(x-(k===n?7:0))}" y="${f2(top-5)}" transform="rotate(-90 ${f2(x-(k===n?7:0))} ${f2(top-5)})" dy=".34em" style="text-anchor:start">${fmt(v,2)}</text>`:`<text x="${f2(x)}" y="${f2(bot+13)}"${k===n?' style="text-anchor:end" dx="-3"':k===0?' style="text-anchor:start" dx="-1"':""}>${fmt(v,2)}</text>`; }
+    // A luer lock syringe to its real proportions: the needle with its bevel and hub, the luer collar with its thread, the clear barrel
+    // with its scale printed in black ink, the finger flange, and the plunger whole: a ribbed rubber stopper with its cone, the cross-vaned
+    // rod and the thumb press. The space is shared so the plunger can come all the way out to the last mark and stay in view.
+    // Four layers: the backlit inside of the barrel, the fluid, the plunger, and the glass with its print on top. The scale is read at the
+    // stopper's leading ring, as on the real thing.
+    const RAT={1:7.4,3:4.6,5:3.9,10:3.4};
+    function syrParts(h,nl){ const hubW=Math.max(13,Math.round(h*.44)), colW=Math.max(9,Math.round(h*.3)), shL=Math.max(6,Math.round(h*.24)), fl=Math.max(5,Math.round(h*.13)), tw=5;
+      return {hubW,colW,shL,fl,tw,fixed:nl+hubW-3+colW+shL+2+fl+10+tw+3}; }
+    function syringeArt(s,A,hmax,vert,nl){ const HMIN=s.c===1?24:30; let h=36, P, L;
+      for(let it=0;it<4;it++){ P=syrParts(h,nl); L=(A-P.fixed)/2.06; h=Math.max(HMIN,Math.min(hmax,L/(RAT[s.c]||4.5))); }
+      h=Math.round(h); P=syrParts(h,nl); L=Math.max(80,Math.floor((A-P.fixed)/2.06));
+      const {hubW,colW,shL,fl,tw}=P, wt=Math.max(1.4,h*.05), ri=h/2-wt, fs=Math.max(9,Math.min(12.5,h*.25)), n=Math.round(s.c/s.g);
+      const labL=h*.46, majL=h*.32, minL=h*.2, labs=[]; for(let k=1;k<=n;k++){ const v=k*s.g; if(near(v/s.lab,Math.round(v/s.lab))) labs.push(fmt(v,2)); }
+      const numW=Math.max(...labs.map(t=>t.length))*fs*.6, inside=vert?(labL+3+numW<=h-wt-2):(labL+3+fs<=h-wt-1);
+      const half=Math.max(h*1.04,h*.64,inside?0:h/2+(vert?numW:fs)+6), HT=Math.ceil(half*2+4), cy=HT/2, top=cy-h/2, bot=cy+h/2, y0=top+wt+.6;
+      const xc=nl+hubW-3, xs0=xc+colW, x0=xs0+shL, xb=Math.round(x0+L*1.06+2), th0=xb+fl+8, W=Math.ceil(th0+tw+L+3);
+      const rn=Math.max(2.4,h*.1), rc=Math.max(7,h*.3), rh=Math.max(5,h*.21), nd=Math.max(1.8,Math.min(2.6,h*.055));
+      let ink="", nums=""; for(let k=0;k<=n;k++){ const v=k*s.g, x=x0+L*k/n, lab=near(v/s.lab,Math.round(v/s.lab)), maj=near(v/s.maj,Math.round(v/s.maj)), ll=k===0?labL:lab?labL:maj?majL:minL;
+        ink+=`<path d="M${f2(x)} ${f2(y0)}v${f2(ll)}" class="${k===0||lab?"lab":maj?"maj":""}"/>`;
+        if(k===0||!lab) continue; const t=fmt(v,2);
+        if(vert){ const yy=inside?y0+labL+3:top-4; nums+=`<text x="${f2(x)}" y="${f2(yy)}" transform="rotate(-90 ${f2(x)} ${f2(yy)})" dy=".35em" style="text-anchor:${inside?"end":"start"}">${t}</text>`; }
+        else { const yy=inside?y0+labL+3+fs*.8:bot+fs+2; nums+=`<text x="${f2(x)}" y="${f2(yy)}"${k===n&&!inside?' style="text-anchor:end" dx="2"':""}>${t}</text>`; } }
+      // "mL" sits at the head of the scale where a 0 would be
+      const mlx=x0+Math.max(fs*.75,Math.min(L*s.lab/s.c*.5,fs*1.1)); nums+=vert?`<text x="${f2(mlx)}" y="${f2(inside?y0+labL+3:top-4)}" transform="rotate(-90 ${f2(mlx)} ${f2(inside?y0+labL+3:top-4)})" dy=".35em" class="ml" style="text-anchor:${inside?"end":"start"}">mL</text>`
+        :`<text x="${f2(mlx)}" y="${f2(inside?y0+labL+3+fs*.8:bot+fs+2)}" class="ml">mL</text>`;
+      const sh=`M${f2(xs0)} ${f2(cy-rn)} L${f2(x0)} ${f2(top+wt)} V${f2(bot-wt)} L${f2(xs0)} ${f2(cy+rn)}z`;
+      const back=`<svg viewBox="0 0 ${W} ${HT}" width="${W}" height="${HT}" aria-hidden="true" class="du-bk"><defs>
+          <linearGradient id="du-bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9edf2" stop-opacity=".2"/><stop offset=".22" stop-color="#eef1f5" stop-opacity=".55"/><stop offset=".55" stop-color="#f3f5f8" stop-opacity=".66"/><stop offset=".86" stop-color="#e4e8ee" stop-opacity=".46"/><stop offset="1" stop-color="#d9dee6" stop-opacity=".18"/></linearGradient>
+          <radialGradient id="du-sd" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset=".6" stop-color="#000" stop-opacity=".14"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
+        ${vert?"":`<ellipse cx="${f2(xb*.52)}" cy="${f2(bot+h*.42)}" rx="${f2(xb*.5)}" ry="${f2(Math.max(5,h*.2))}" fill="url(#du-sd)"/>`}
+        <path d="${sh}" fill="url(#du-bl)"/><rect x="${f2(x0)}" y="${f2(top+wt)}" width="${f2(xb-x0)}" height="${f2(h-2*wt)}" fill="url(#du-bl)"/>
+        <path class="du-wetin" d="${sh} M${f2(xc+1)} ${f2(cy-rn*.62)} H${f2(xs0+.5)} V${f2(cy+rn*.62)} H${f2(xc+1)}z M${f2(nl+3)} ${f2(cy-1.1)} L${f2(nl+hubW*.42)} ${f2(cy-rh*.5)} H${f2(xc+2)} V${f2(cy+rh*.5)} H${f2(nl+hubW*.42)} L${f2(nl+3)} ${f2(cy+1.1)}z"/>
+        <g class="du-jet">${[-.5,0,.5].map(q=>`<path d="M${f2(xs0)} ${f2(cy+q*rn)} C${f2(x0+h*.3)} ${f2(cy+q*ri*.4)} ${f2(x0+h*.7)} ${f2(cy+q*ri*1.1)} ${f2(x0+h*1.3)} ${f2(cy+q*ri*.9)}"/>`).join("")}</g></svg>`;
       const glass=`<svg viewBox="0 0 ${W} ${HT}" width="${W}" height="${HT}" aria-hidden="true" class="du-glass"><defs>
-          <linearGradient id="du-gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".14" stop-color="#fff" stop-opacity=".12"/><stop offset=".4" stop-color="#fff" stop-opacity=".03"/><stop offset=".78" stop-color="#000" stop-opacity=".05"/><stop offset=".92" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>
-          <linearGradient id="du-steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5d62"/><stop offset=".35" stop-color="#e9ebee"/><stop offset=".6" stop-color="#9ea2a8"/><stop offset="1" stop-color="#4a4d52"/></linearGradient>
-          <linearGradient id="du-hub" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5a7c6"/><stop offset=".3" stop-color="#e27aa3"/><stop offset=".7" stop-color="#c2527e"/><stop offset="1" stop-color="#8e3658"/></linearGradient>
-          <linearGradient id="du-pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient></defs>
-        <path d="M2 ${f2(cy)} H${nx}" class="du-ndl"/><path d="M2 ${f2(cy)} H${nx}" stroke="url(#du-steel)" stroke-width="2.4" fill="none"/><path d="M2 ${f2(cy-1.2)} L9 ${f2(cy-1.2)} L2 ${f2(cy+1.2)}z" fill="#eef0f3"/>
-        <rect x="${nx-1}" y="${f2(cy-7.5)}" width="${hubW+1}" height="15" rx="2.5" fill="url(#du-hub)"/><rect x="${nx-1}" y="${f2(cy-7.5)}" width="${hubW+1}" height="15" rx="2.5" class="du-hubline"/><rect x="${nx+2}" y="${f2(cy-5.5)}" width="${hubW-6}" height="2.2" rx="1" fill="#fff" fill-opacity=".45"/>
-        <rect x="${nx+hubW-2}" y="${f2(cy-h*.3)}" width="9" height="${f2(h*.6)}" rx="2" class="du-collar"/><path d="M${nx+hubW+1} ${f2(cy-h*.3+3)} v${f2(h*.6-6)} M${nx+hubW+4} ${f2(cy-h*.3+3)} v${f2(h*.6-6)}" class="du-thread"/>
-        <path d="M${nx+hubW+6} ${f2(cy-5)} L${x0} ${f2(top+2)} V${f2(bot-2)} L${nx+hubW+6} ${f2(cy+5)}z" class="du-shoulder"/>
-        <rect x="${x0}" y="${f2(top)}" width="${len+2}" height="${h}" rx="3" class="du-barrel"/><rect x="${x0}" y="${f2(top)}" width="${len+2}" height="${h}" rx="3" fill="url(#du-gl)"/>
-        <rect x="${x0+6}" y="${f2(top+h*.1)}" width="${len-10}" height="${f2(Math.max(2,h*.13))}" rx="2" fill="#fff" fill-opacity=".2"/>
-        <g class="du-ticks">${ticks}</g><g class="du-nums${inside?" in":""}">${nums}</g>
-        <text class="du-capl" x="${f2(x0+len-6)}" y="${f2(vert?bot-h*.16:top-5)}" style="text-anchor:end">${s.c} mL</text>
-        <rect x="${x0+len}" y="${f2(top-9)}" width="${fl}" height="${h+18}" rx="3" class="du-flange"/><rect x="${x0+len}" y="${f2(top-9)}" width="${fl}" height="${h+18}" rx="3" fill="url(#du-pp)"/>
-        <rect x="${x0}" y="${f2(top)}" width="${len+2}" height="${h}" rx="3" class="du-outline"/></svg>`;
-      // the plunger: stopper, rod and thumb rest, in a layer that slides along the barrel; the fluid's edge sits in the stopper's conical face
-      const sh=h-3, rw=Math.max(6,Math.round(h*.22)), plunger=`<svg viewBox="0 0 ${len+fl+40} ${HT}" width="${len+fl+40}" height="${HT}" aria-hidden="true" class="du-plg"><defs>
-          <linearGradient id="du-rb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a3c"/><stop offset=".3" stop-color="#5c5c5f"/><stop offset=".55" stop-color="#2b2b2d"/><stop offset="1" stop-color="#121214"/></linearGradient>
-          <linearGradient id="du-rod" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#d7d9dc"/><stop offset=".55" stop-color="#f4f5f7"/><stop offset="1" stop-color="#b9bcc1"/></linearGradient></defs>
-        <path d="M0 ${f2(cy)} L4 ${f2(cy-sh/2)} H6 V${f2(cy+sh/2)} H4z" class="du-wet"/>
-        <path d="M5 ${f2(cy-sh/2)} H16 V${f2(cy+sh/2)} H5 L1 ${f2(cy)}z" fill="url(#du-rb)"/><rect x="7" y="${f2(cy-sh/2)}" width="2.2" height="${sh}" fill="#777" fill-opacity=".55"/><rect x="12.5" y="${f2(cy-sh/2)}" width="2.2" height="${sh}" fill="#777" fill-opacity=".55"/>
-        <rect x="16" y="${f2(cy-rw/2)}" width="${len+fl+14}" height="${rw}" rx="1.5" fill="url(#du-rod)"/><rect x="16" y="${f2(cy-.8)}" width="${len+fl+14}" height="1.6" fill="#000" fill-opacity=".18"/>
-        <rect x="${len+fl+28}" y="${f2(top-6)}" width="7" height="${h+12}" rx="3.5" fill="url(#du-rod)"/><rect x="${len+fl+28}" y="${f2(top-6)}" width="7" height="${h+12}" rx="3.5" class="du-outline2"/></svg>`;
-      return {glass,plunger,x0,len,h,HT,top}; }
+          <linearGradient id="du-gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".05" stop-color="#fff" stop-opacity=".16"/><stop offset=".3" stop-color="#fff" stop-opacity=".02"/><stop offset=".7" stop-color="#000" stop-opacity=".02"/><stop offset=".9" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>
+          <linearGradient id="du-sp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".08" stop-color="#fff" stop-opacity=".75"/><stop offset=".85" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+          <linearGradient id="du-steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#55595f"/><stop offset=".32" stop-color="#f1f3f5"/><stop offset=".55" stop-color="#a7abb1"/><stop offset="1" stop-color="#3f4247"/></linearGradient>
+          <linearGradient id="du-hub" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7b3cf" stop-opacity=".9"/><stop offset=".28" stop-color="#e889ae" stop-opacity=".82"/><stop offset=".7" stop-color="#c95a86" stop-opacity=".8"/><stop offset="1" stop-color="#8e3658" stop-opacity=".92"/></linearGradient>
+          <linearGradient id="du-pl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".3" stop-color="#fff" stop-opacity=".26"/><stop offset=".7" stop-color="#e6e9ee" stop-opacity=".2"/><stop offset="1" stop-color="#9aa0a8" stop-opacity=".4"/></linearGradient></defs>
+        <path d="M${f2(7)} ${f2(cy-nd/2)} H${f2(nl+5)} V${f2(cy+nd/2)} H0z" fill="url(#du-steel)"/><path d="M${f2(7)} ${f2(cy-nd/2)} L0 ${f2(cy+nd/2)}" class="du-bev"/><path d="M9 ${f2(cy-nd*.18)} H${f2(nl)}" stroke="#fff" stroke-opacity=".7" stroke-width=".5"/>
+        <path d="M${f2(nl)} ${f2(cy-2.8)} L${f2(nl+hubW*.42)} ${f2(cy-rh*.78)} L${f2(nl+hubW*.5)} ${f2(cy-rh)} H${f2(xc+3)} V${f2(cy+rh)} H${f2(nl+hubW*.5)} L${f2(nl+hubW*.42)} ${f2(cy+rh*.78)} L${f2(nl)} ${f2(cy+2.8)}z" fill="url(#du-hub)" class="du-hubline"/>
+        <rect x="${f2(nl+hubW*.52)}" y="${f2(cy-rh-1.8)}" width="${f2(hubW*.42)}" height="1.8" rx=".8" fill="#c95a86"/><rect x="${f2(nl+hubW*.52)}" y="${f2(cy+rh)}" width="${f2(hubW*.42)}" height="1.8" rx=".8" fill="#8e3658"/>
+        <path d="M${f2(nl+hubW*.48)} ${f2(cy-rh*.72)} H${f2(xc+1)}" stroke="#fff" stroke-opacity=".55" stroke-width="1.2" stroke-linecap="round"/>
+        <rect x="${f2(xc)}" y="${f2(cy-rc)}" width="${colW}" height="${f2(rc*2)}" rx="2.2" fill="url(#du-pl)" class="du-edge"/>
+        <g class="du-thread">${[0,1,2,3].filter(i=>xc+2+i*3<xs0-2).map(i=>`<path d="M${f2(xc+2+i*2.8)} ${f2(cy-rc+1.2)} L${f2(xc+4.4+i*2.8)} ${f2(cy-rn-.5)} M${f2(xc+2+i*2.8)} ${f2(cy+rn+.5)} L${f2(xc+4.4+i*2.8)} ${f2(cy+rc-1.2)}"/>`).join("")}</g>
+        <path d="M${f2(xc+1)} ${f2(cy-rn)} H${f2(xs0)} M${f2(xc+1)} ${f2(cy+rn)} H${f2(xs0)}" class="du-inwall"/>
+        <path d="M${f2(xs0)} ${f2(cy-rn-1.3)} L${f2(x0)} ${f2(top)} V${f2(bot)} L${f2(xs0)} ${f2(cy+rn+1.3)}z" fill="url(#du-pl)" class="du-edge"/>
+        <rect x="${f2(x0)}" y="${f2(top)}" width="${f2(xb-x0)}" height="${h}" fill="url(#du-gl)"/>
+        <rect x="${f2(x0+3)}" y="${f2(top+h*.74)}" width="${f2(xb-x0-8)}" height="${f2(Math.max(1.3,h*.055))}" rx="1" fill="url(#du-sp)"/>
+        <rect x="${f2(x0+2)}" y="${f2(top+.9)}" width="${f2(xb-x0-4)}" height="1" fill="#fff" fill-opacity=".45"/>
+        <path d="M${f2(x0)} ${f2(top+wt)} H${f2(xb)} M${f2(x0)} ${f2(bot-wt)} H${f2(xb)}" class="du-inwall"/>
+        <g class="du-ticks">${ink}</g><g class="du-nums${inside?" in":" out"}" font-size="${f2(fs)}">${nums}</g>
+        <path d="M${f2(x0)} ${f2(top)} H${f2(xb)} M${f2(x0)} ${f2(bot)} H${f2(xb)}" class="du-wall"/>
+        <rect x="${f2(xb)}" y="${f2(cy-h*1.02)}" width="${fl}" height="${f2(h*2.04)}" rx="${f2(fl/2)}" fill="url(#du-pl)" class="du-edge"/><path d="M${f2(xb+fl*.35)} ${f2(cy-h*.95)} V${f2(cy+h*.95)}" stroke="#fff" stroke-opacity=".5" stroke-width=".9"/></svg>`;
+      // the plunger, drawn about its leading ring at PX; it slides along the bore by transform
+      const cone=shL*.86, PX=Math.ceil(cone+2), sl=Math.max(10,h*.62), a=PX, b=PX+sl*.3, c=PX+sl*.6, d=PX+sl*.9, e=PX+sl, r2=ri*.9, r3=ri*.8, thL=th0-x0+PX, PW=Math.ceil(thL+tw+2);
+      const stop=`M${f2(a)} ${f2(cy-ri)} H${f2(b)} V${f2(cy-r2)} H${f2(c)} V${f2(cy-ri)} H${f2(d)} V${f2(cy-r3)} H${f2(e)} V${f2(cy+r3)} H${f2(d)} V${f2(cy+ri)} H${f2(c)} V${f2(cy+r2)} H${f2(b)} V${f2(cy+ri)} H${f2(a)} L${f2(a-cone*.78)} ${f2(cy+ri*.24)} Q${f2(a-cone)} ${f2(cy)} ${f2(a-cone*.78)} ${f2(cy-ri*.24)}z`;
+      const rv=ri*.72, plunger=`<svg viewBox="0 0 ${PW} ${HT}" width="${PW}" height="${HT}" aria-hidden="true" class="du-plg"><defs>
+          <linearGradient id="du-rb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151517"/><stop offset=".2" stop-color="#4d4d52"/><stop offset=".34" stop-color="#2c2c30"/><stop offset=".78" stop-color="#0e0e10"/><stop offset="1" stop-color="#26262a"/></linearGradient>
+          <linearGradient id="du-rod" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9cdd2"/><stop offset=".14" stop-color="#fbfcfd"/><stop offset=".42" stop-color="#e4e7eb"/><stop offset=".58" stop-color="#f6f7f9"/><stop offset=".86" stop-color="#d2d6db"/><stop offset="1" stop-color="#a9aeb5"/></linearGradient></defs>
+        <rect x="${f2(e-1)}" y="${f2(cy-rv)}" width="${f2(thL-e+1)}" height="${f2(rv*2)}" fill="url(#du-rod)" class="du-rodl"/>
+        <rect x="${f2(e-1)}" y="${f2(cy-1.3)}" width="${f2(thL-e+1)}" height="2.6" fill="#b3b8bf"/><rect x="${f2(e-1)}" y="${f2(cy-1.3)}" width="${f2(thL-e+1)}" height=".8" fill="#fff" fill-opacity=".8"/>
+        <rect x="${f2(e)}" y="${f2(cy-ri*.86)}" width="2.6" height="${f2(ri*1.72)}" rx="1" fill="url(#du-rod)" class="du-rodl"/>
+        <rect x="${f2(thL-3)}" y="${f2(cy-rv*1.08)}" width="3" height="${f2(rv*2.16)}" fill="url(#du-rod)"/>
+        <rect x="${f2(thL)}" y="${f2(cy-h*.64)}" width="${tw}" height="${f2(h*1.28)}" rx="${tw/2}" fill="url(#du-rod)" class="du-rodl"/>
+        <path d="${stop}" fill="url(#du-rb)" stroke="#0a0a0b" stroke-width=".6" stroke-linejoin="round"/>
+        <path d="M${f2(a+.7)} ${f2(cy-ri+.8)} V${f2(cy+ri-.8)} M${f2(c+.7)} ${f2(cy-ri+.8)} V${f2(cy+ri-.8)}" stroke="#8a8a90" stroke-opacity=".55" stroke-width=".8"/>
+        <path d="M${f2(a)} ${f2(cy-ri+.5)} H${f2(b)} M${f2(c)} ${f2(cy-ri+.5)} H${f2(d)}" stroke="#000" stroke-width="1.1"/>
+        <path d="M${f2(a-cone*.62)} ${f2(cy-ri*.2)} L${f2(a-.5)} ${f2(cy-ri*.62)}" stroke="#fff" stroke-opacity=".28" stroke-width="1" stroke-linecap="round"/></svg>`;
+      return {back,glass,plunger,x0,len:L,h,HT,top,W,ri,cy,PX}; }
 
     Arcade.register("drawup",{
       how:["Read the order and the vial, and work out the volume.","Hold Pull to draw back: slow at first, faster the longer you hold. Short presses fine-tune; Push sends it back.","Read the syringe's own marks, then tap Give. Exact scores most; three misses ends the run."],
@@ -9975,12 +10021,12 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         return `<span class="pvdu"><span class="pvq">${o?esc(name(o.d)):"Adenosine"} ${fmt(dose,3)} ${st.u} · ${esc(st.l)}</span><svg class="pvdus" viewBox="0 0 150 26" aria-hidden="true"><path d="M1 13h12" class="n"/><rect x="12" y="9" width="7" height="8" rx="1.5" class="hb"/><path d="M19 10.5 L24 6 V20 L19 15.5z" class="g"/><rect x="24" y="6" width="100" height="14" rx="2" class="g"/><rect x="26" y="8" width="96" height="10" class="fl"/><g class="t">${Array.from({length:21},(_,i)=>`<path d="M${(28+i*4.6).toFixed(1)} 7v${i%5===0?6:i%5===2?4:2.5}"/>`).join("")}</g><rect x="124" y="2" width="4" height="22" rx="1.5" class="fg"/><rect x="128" y="11" width="18" height="4" rx="1" class="rd"/><path d="M46 8h4" class="st"/></svg></span>`; },
       start(stage,api){
         const R={i:0,lives:LIVES,score:0,exact:0,close:0,off:0,streak:0,best:0,o:null,vol:0,dir:0,held:0,live:false,t0:0};
-        if(window.navigator&&navigator.webdriver) window.__AR_DU={R,give:()=>give(),put:()=>put(),force:(id,lv,nv)=>{ for(let k=0;k<3000;k++){ const o=order(lv||0); if(o&&o.d.id===id&&(!nv||o.nv===nv)){ R.o=o; R.vol=0; show(); return o.st.l; } } return null; }};
+        if(window.navigator&&navigator.webdriver) window.__AR_DU={R,give:()=>give(),put:()=>put(),force:(id,lv,nv,cap)=>{ for(let k=0;k<3000;k++){ const o=order(lv||0); if(o&&(id==null||o.d.id===id)&&(!nv||o.nv===nv)&&(!cap||o.s.c===cap)){ R.o=o; R.vol=0; show(); return o.st.l; } } return null; }};
         stage.innerHTML=`<div class="du"><div class="du-card"><div class="du-ct"><span class="eyebrow du-n"></span><b class="du-drug"></b><span class="du-order"></span><span class="du-pt"></span><span class="du-stock"></span></div><div class="du-vial"></div></div>
-          <div class="du-mid"><div class="du-src"></div><div class="du-syr"><i class="du-shadow"></i><div class="du-fluid"></div><div class="du-clip"><div class="du-plunger"></div></div><div class="du-svg"></div><i class="du-target"></i></div>
+          <div class="du-mid"><div class="du-src"></div><div class="du-syr"><div class="du-back"></div><div class="du-fluid"></div><div class="du-plunger"></div><div class="du-svg"></div><i class="du-target"></i></div>
             <div class="du-review" hidden><div class="du-rh"><b class="du-rv"></b><span class="du-rs"></span></div><div class="du-rows"></div></div></div>
           <div class="du-ctl"><button type="button" class="btn alt du-push">Push</button><button type="button" class="btn du-pull">Hold to pull</button><button type="button" class="btn amber du-give">Give</button></div></div>`;
-        const $q=s=>stage.querySelector(s), mid=$q(".du-mid"), card=$q(".du-card"), src=$q(".du-src"), svgBox=$q(".du-svg"), fluid=$q(".du-fluid"), plg=$q(".du-plunger"), tgt=$q(".du-target"), giveB=$q(".du-give"), pullB=$q(".du-pull"), pushB=$q(".du-push"), review=$q(".du-review");
+        const $q=s=>stage.querySelector(s), mid=$q(".du-mid"), card=$q(".du-card"), src=$q(".du-src"), svgBox=$q(".du-svg"), backBox=$q(".du-back"), fluid=$q(".du-fluid"), plg=$q(".du-plunger"), tgt=$q(".du-target"), giveB=$q(".du-give"), pullB=$q(".du-pull"), pushB=$q(".du-push"), review=$q(".du-review");
         let G={x0:0,len:300,h:44};
         // the syringe is drawn for its capacity at the width of the stage
         // (upright, the syringe leaves room under its flange for the rod as it comes out)
@@ -9989,19 +10035,33 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         let vert=false;
         function draw(){ const o=R.o; if(!o) return; const sz=api.size(), land=sz.landscape&&sz.h<560; vert=!sz.landscape&&sz.w<720;
           $q(".du").classList.toggle("vert",vert); (vert?card:mid).appendChild(review);
-          let W, A; if(vert){ const Hm=mid.clientHeight||500, Wm=mid.clientWidth||360, amp=isAmp(o), ch=Math.round(Math.min(170,Math.max(110,Hm*.3))), cw=Math.round(ch*(amp?.35:.6)), cy0=4;
-              const tipY=cy0+ch*(amp?.7:.66); W=Math.max(240,Math.round(Hm-tipY-44)); A=syringeArt(o.s,W,false,true);
-              const sx=Math.round((Wm-A.HT)/2);
+          const sy=$q(".du-syr"); let A;
+          if(vert){ const Hm=mid.clientHeight||500, Wm=mid.clientWidth||360, amp=isAmp(o), ch=Math.round(Math.min(136,Math.max(80,Hm*.23))), cw=Math.round(ch*(amp?.35:.6)), cy0=2;
+              // the needle runs up through the stopper (or the snapped neck) to just inside, with a short length bare between
+              const tipY=cy0+ch*(amp?.68:.74), mouth=cy0+ch*(amp?.845:.93), nl=Math.round(mouth-tipY+18);
+              A=syringeArt(o.s,Hm-tipY-4,Math.min(80,Wm*.2),true,nl);
               Object.assign(src.style,{left:Math.round((Wm-cw)/2)+"px",top:cy0+"px",width:cw+"px",height:ch+"px"});
               const extra=Array.from({length:(o.nv||1)-1},(_,j)=>`<div class="du-more" style="left:${-Math.round(cw*.62*(j+1)+10)}px">${vialArt(o,false,"m"+j)}</div>`).join("");
               src.innerHTML=`<div class="du-on">${vialArt(o,true,"s")}</div>${extra}${(o.nv||1)>1?`<span class="du-nb">${o.nv} ${kindOf(o)}s</span>`:""}`;
-              const sy=$q(".du-syr"); Object.assign(sy.style,{left:sx+"px",top:Math.round(tipY-2)+"px"}); stage.style.setProperty("--du-vh2",W+"px"); }
-            else { W=Math.max(240,Math.min(land?sz.w*.6:sz.w-20,680)); A=syringeArt(o.s,W,land,false); src.innerHTML=""; const sy=$q(".du-syr"); sy.style.left=sy.style.top=""; }
-          G={x0:A.x0,len:A.len,h:A.h,W};
-          svgBox.innerHTML=A.glass; plg.innerHTML=A.plunger;
-          stage.style.setProperty("--du-w",W+"px"); stage.style.setProperty("--du-ht",A.HT+"px"); stage.style.setProperty("--du-x0",A.x0+"px"); stage.style.setProperty("--du-len",A.len+"px"); stage.style.setProperty("--du-h",A.h+"px"); stage.style.setProperty("--du-top",A.top+"px"); put(); }
+              Object.assign(sy.style,{left:Math.round(Wm/2-A.HT/2)+"px",top:Math.round(tipY)+"px"}); }
+            else { const Wm=mid.clientWidth||sz.w*.6, Hc=land?sz.h-150:Math.max(200,(mid.clientHeight||300)); A=syringeArt(o.s,Math.max(300,Math.min(Wm-8,760)),Math.max(30,Math.min(64,Hc*.3)),false,34); src.innerHTML=""; sy.style.left=sy.style.top=""; }
+          G={x0:A.x0,len:A.len,h:A.h,W:A.W};
+          backBox.innerHTML=A.back; svgBox.innerHTML=A.glass; plg.innerHTML=A.plunger;
+          const st=stage.style; st.setProperty("--du-w",A.W+"px"); st.setProperty("--du-ht",A.HT+"px"); st.setProperty("--du-x0",A.x0+"px"); st.setProperty("--du-len",A.len+"px"); st.setProperty("--du-h",A.h+"px"); st.setProperty("--du-top",A.top+"px");
+          st.setProperty("--du-ri",A.ri+"px"); st.setProperty("--du-cy",A.cy+"px"); st.setProperty("--du-px",A.PX+"px"); lastV=-1; put(); }
         // the fluid and the plunger follow the volume by transform alone
-        const put=()=>{ const o=R.o; if(!o) return; const f=R.vol/o.s.c; fluid.style.transform=`scaleX(${f.toFixed(4)})`; plg.style.transform=`translateX(${(G.len*f).toFixed(2)}px)`; };
+        let lastV=-1, flowT=0; const syEl=()=>$q(".du-syr");
+        // a container's fluid: its rect keeps its anchor (the stopper end when turned over, the base when upright) and the surface follows
+        const level=(svg,l)=>{ if(!svg) return; const r=svg.querySelector(".du-lv"), e=svg.querySelector(".du-ls"); if(!r) return; const a=+r.dataset.a, H=+r.dataset.h, d=+r.dataset.d, hh=H*Math.max(0,Math.min(1,l));
+          r.setAttribute("height",hh.toFixed(2)); r.setAttribute("y",(d>0?a:a-hh).toFixed(2)); if(e){ e.setAttribute("cy",(a+d*hh).toFixed(2)); e.style.opacity=l>.015?"":"0"; } };
+        const put=()=>{ const o=R.o; if(!o) return; const f=R.vol/o.s.c; fluid.style.transform=`scaleX(${f.toFixed(4)})`; plg.style.transform=`translateX(${(G.len*f).toFixed(2)}px)`;
+          const sy=syEl(); sy.classList.toggle("wet",R.vol>1e-6);
+          if(lastV>=0&&Math.abs(R.vol-lastV)>1e-6){ sy.classList.toggle("pull",R.vol>lastV); sy.classList.toggle("push",R.vol<lastV); flowT=api.now(); } lastV=R.vol;
+          // what has come out of the vials: the one on the needle drains, and when it is empty the next one takes its place
+          const ml=mlOf(o.st), nv=o.nv||1; let k=0, l;
+          if(ml>0){ k=R.vol>1e-6?Math.min(nv-1,Math.floor((R.vol-1e-6)/ml)):0; l=1-(R.vol-k*ml)/ml; } else l=1-R.vol/(o.s.c*1.5);
+          level(src.querySelector(".du-on svg"),l); level($q(".du-vial svg"),l);
+          src.querySelectorAll(".du-more").forEach((m,j)=>{ const used=j>=nv-1-k; m.classList.toggle("used",used); level(m.querySelector("svg"),used?0:1); }); };
         function show(){ const o=R.o; $q(".du-n").textContent=`Order ${R.i+1} of ${ROUNDS}`; $q(".du-drug").textContent=name(o.d); $q(".du-order").textContent=`Give ${fmt(o.dose,3)} ${u(o)} ${o.ds.route||"IV/IO"}`;
           $q(".du-pt").textContent=o.kg!=null&&R.i<3?"":o.kg!=null?`${o.ds.pop==="peds"?"Child":"Adult"}, ${fmt(o.kg,1)} kg: ${fmt(o.rate,3)} ${u(o)}/kg${o.ds.max&&o.rate*o.kg>o.ds.max?`, max ${fmt(o.ds.max,3)} ${u(o)}`:""}`:(o.ds.l||"");
           const K=kindOf(o), nv=o.nv||1; $q(".du-stock").innerHTML=`<i>${nv>1?`${nv} ${K}s`:K[0].toUpperCase()+K.slice(1)}</i><b>${esc(o.st.l)}</b><i>${nv>1?"each, ":""}${fmt(o.st.c,3)} ${u(o)}/mL</i>`;
@@ -10015,7 +10075,8 @@ html.gliding .mfx::before{animation-play-state:paused!important}
         // holding: slow, then faster the longer it is held
         const speed=t=>{ const s=R.o.s, slow=s.g*2.2, fast=s.c*.55; const q=Math.min(1,t/1300); return slow+(fast-slow)*q*q; };
         api.loop((dt)=>{ if(!R.live||!R.o) return; if(R.lim){ const left=R.lim-(api.now()-R.t0); api.clock(left); if(left<=0){ give(); return; } }
-          if(R.dir){ R.held+=dt; R.vol=Math.max(0,Math.min(R.o.s.c,R.vol+R.dir*speed(R.held)*dt/1000)); put(); } });
+          if(R.dir){ R.held+=dt; R.vol=Math.max(0,Math.min(R.o.s.c,R.vol+R.dir*speed(R.held)*dt/1000)); put(); }
+          if(flowT&&api.now()-flowT>140){ flowT=0; const sy=syEl(); sy.classList.remove("pull","push"); } });
         const hold=(b,dir)=>{ const down=e=>{ if(!R.live) return; e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(x){} R.dir=dir; R.held=0; b.classList.add("down"); };
           const up=()=>{ if(R.dir===dir){ R.dir=0; } b.classList.remove("down"); }; b.addEventListener("pointerdown",down); b.addEventListener("pointerup",up); b.addEventListener("pointercancel",up); b.addEventListener("lostpointercapture",up);
           b.addEventListener("keydown",e=>{ if((e.key===" "||e.key==="Enter")&&!e.repeat){ down(e); } }); b.addEventListener("keyup",e=>{ if(e.key===" "||e.key==="Enter") up(); }); };
